@@ -1,9 +1,9 @@
 {
-  "name": "app-name",
+  "name": "ngok3fyp-frontend",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "start": "node server.js",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
@@ -18,6 +18,8 @@
     "@angular/platform-browser": "^13.3.11",
     "@angular/platform-browser-dynamic": "^13.3.11",
     "@angular/router": "^13.3.11",
+    "express": "^4.18.1",
+    "path": "^0.12.7",
     "rxjs": "~7.5.5",
     "tslib": "^2.4.0",
     "zone.js": "~0.11.6"
