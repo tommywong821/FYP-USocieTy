@@ -1,0 +1,17 @@
+language: generic
+
+#script:
+#  - ./gradlew test
+
+deploy:
+  - provider: script
+    script: sudo bash deploy.sh
+    on:
+      branch: master
+
+notifications:
+  email:
+    recipients:
+      - tommywong821@gmail.com
+    on_success: never
+    on_failure: always
