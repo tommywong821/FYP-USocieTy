@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
+import {environment} from "../environments/environment";
 
 @Component({
   selector: 'app-root',
@@ -7,4 +8,11 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'appName';
+
+  constructor() {
+    console.log(`[${this.constructor.name}] constructor`);
+    console.log(`app_url: `, environment.app_url)
+    console.log(`cas_url: `, environment.cas_url)
+    console.log(`cas_validate_url: `, environment.cas_validate_url)
+  }
 }
