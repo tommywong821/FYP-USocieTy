@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  app_url: 'https://ngok3fyp-frontend.herokuapp.com', //Example: https://myapp.com
+  app_url: 'https://ngok3fyp-frontend.herokuapp.com/', //Example: https://myapp.com
   cas_url: 'https://cas.ust.hk/cas', //Example: https://mycas.com/cas
   cas_validate_url: 'https://cas.ust.hk/cas/serviceValidate' //Example: https://mycas.com/cas/serviceValidate
 };
