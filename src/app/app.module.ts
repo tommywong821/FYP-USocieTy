@@ -5,6 +5,7 @@ import {environment} from 'src/environments/environment';
 
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
+import {HttpClientModule} from "@angular/common/http";
 
 @NgModule({
   declarations: [
@@ -13,7 +14,8 @@ import {AppComponent} from './app.component';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    AuthCasModModule.forRoot(environment)
+    AuthCasModModule.forRoot(environment),
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]
