@@ -14,5 +14,8 @@ export class AppComponent {
     console.log(`app_url: `, environment.app_url)
     console.log(`cas_url: `, environment.cas_url)
     console.log(`cas_validate_url: `, environment.cas_validate_url)
+
+    console.log(`loginUser`, window.sessionStorage.getItem('loginUser'))
+    console.log(`ticketUser`, window.sessionStorage.getItem('ticketUser'))
   }
 }
