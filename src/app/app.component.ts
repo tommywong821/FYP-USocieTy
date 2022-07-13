@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
 import {environment} from "../environments/environment";
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpHeaders} from "@angular/common/http";
 
 @Component({
   selector: 'app-root',
@@ -21,13 +21,21 @@ export class AppComponent {
 
     const url = 'https://cas.ust.hk/cas/p3/serviceValidate?service=' + environment.app_url + '&ticket=' + window.sessionStorage.getItem('ticketUser')
     console.log(`login info url:`, url)
-    this.http.get(url).subscribe((response) => {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Access-Control-Allow-Origin': 'https://cas.ust.hk/cas',
+        'Access-Control-Allow-Methods': 'GET, PUT, POST, DELETE, OPTIONS',
+        'Access-Control-Max-Age': '86400'
+      })
+    };
+
+    this.http.get(url, httpOptions).subscribe((response) => {
       console.log(`url response: `, response)
     })
 
     const url2 = 'https://cas.ust.hk/cas/p3/serviceValidate?service=https://ngok3fyp-frontend.herokuapp.com&ticket=' + window.sessionStorage.getItem('ticketUser')
 
-    this.http.get(url2).subscribe((response) => {
+    this.http.get(url2, httpOptions).subscribe((response) => {
       console.log(`url2 response: `, response)
     })
   }
