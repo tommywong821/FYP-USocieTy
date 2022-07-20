@@ -23,7 +23,10 @@ dependencies {
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 
 	//send restful request
-	implementation("com.squareup.okhttp3:okhttp:4.10.0")
+	implementation("com.squareup.okhttp3:okhttp")
+	//xml convertor
+	implementation("org.json:json:20220320")
+	implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.13.3")
 }
 
 tasks.withType<KotlinCompile> {
