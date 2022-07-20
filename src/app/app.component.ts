@@ -1,6 +1,7 @@
 import {Component} from '@angular/core';
+import {HttpClient} from "@angular/common/http";
+import {ActivatedRoute} from "@angular/router";
 import {environment} from "../environments/environment";
-import {HttpClient, HttpHeaders} from "@angular/common/http";
 
 @Component({
   selector: 'app-root',
@@ -9,34 +10,45 @@ import {HttpClient, HttpHeaders} from "@angular/common/http";
 })
 export class AppComponent {
   title = 'appName';
+  params: any
 
-  constructor(private http: HttpClient) {
+  constructor(private restful: HttpClient,
+              private route: ActivatedRoute) {
     console.log(`[${this.constructor.name}] constructor`);
-    console.log(`app_url: `, environment.app_url)
-    console.log(`cas_url: `, environment.cas_url)
-    console.log(`cas_validate_url: `, environment.cas_validate_url)
-
-    console.log(`loginUser`, window.sessionStorage.getItem('loginUser'))
-    console.log(`ticketUser`, window.sessionStorage.getItem('ticketUser'))
-
-    const url = 'https://cas.ust.hk/cas/p3/serviceValidate?service=' + environment.app_url + '&ticket=' + window.sessionStorage.getItem('ticketUser')
-    console.log(`login info url:`, url)
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Access-Control-Allow-Origin': 'https://cas.ust.hk/cas',
-        'Access-Control-Allow-Methods': 'GET, PUT, POST, DELETE, OPTIONS',
-        'Access-Control-Max-Age': '86400'
-      })
-    };
-
-    this.http.get(url, httpOptions).subscribe((response) => {
-      console.log(`url response: `, response)
+    this.route.queryParams.subscribe({
+      next: (params) => {
+        this.params = params
+        if (this.params) {
+          this.restful.get(`${environment.backend_url}/auth/serviceValidate`, {
+            params: this.params
+          }).subscribe(
+            {
+              next: (res) => {
+                console.log(`result: `, res)
+              }
+            }
+          )
+        }
+      }
     })
+  }
 
-    const url2 = 'https://cas.ust.hk/cas/p3/serviceValidate?service=https://ngok3fyp-frontend.herokuapp.com&ticket=' + window.sessionStorage.getItem('ticketUser')
+  loginWithRedirect() {
+    console.log('loginWithRedirect button is clicking')
+    window.location.href = `${environment.cas_url}/login?service=${encodeURIComponent(environment.app_url)}`
+  }
 
-    this.http.get(url2, httpOptions).subscribe((response) => {
-      console.log(`url2 response: `, response)
-    })
+  serviceValidate() {
+    this.restful.get(`${environment.backend_url}/auth/serviceValidate`, {
+      params: {
+        ticket: "ST-1658309663545-VL1xWCZdhfUkaBfV9mjTThyQ8"
+      }
+    }).subscribe(
+      {
+        next: (res) => {
+          console.log(`result: `, res)
+        }
+      }
+    )
   }
 }

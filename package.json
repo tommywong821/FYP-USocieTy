@@ -18,14 +18,10 @@
     "@angular/platform-browser": "^13.3.11",
     "@angular/platform-browser-dynamic": "^13.3.11",
     "@angular/router": "^13.3.11",
-    "auth-cas-mod": "^1.5.4",
     "express": "^4.18.1",
     "path": "^0.12.7",
     "rxjs": "~7.5.5",
-    "stream-browserify": "^3.0.0",
-    "timers-browserify": "^2.0.12",
     "tslib": "^2.4.0",
-    "xml2js": "^0.4.23",
     "zone.js": "~0.11.6"
   },
   "devDependencies": {
