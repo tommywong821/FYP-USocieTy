@@ -27,6 +27,8 @@ export class AppComponent {
           }).subscribe({
             next: (res) => {
               console.log(`result: `, res)
+              console.log(`this.userInfo: `, this.userInfo)
+              this.userInfo = res
             }
           })
         }
