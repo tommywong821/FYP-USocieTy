@@ -1,5 +1,8 @@
 package ngok3.fyp.backend.authentication
 
+import com.fasterxml.jackson.dataformat.xml.XmlMapper
+import com.fasterxml.jackson.module.kotlin.readValue
+import ngok3.fyp.backend.authentication.model.ServiceResponse
 import okhttp3.*
 import okhttp3.ResponseBody.Companion.toResponseBody
 import okhttp3.internal.concurrent.TaskRunner.Companion.logger
@@ -11,7 +14,7 @@ import java.io.IOException
 class AuthService(
     private val webClient: OkHttpClient = OkHttpClient.Builder().addInterceptor(LoggingInterceptor()).build()
 ) {
-    fun itscSSOServiceValidate(ticket: String): Any {
+    fun itscSSOServiceValidate(ticket: String): ServiceResponse {
         val url: HttpUrl = HttpUrl.Builder()
             .scheme("https")
             .host("cas.ust.hk")
@@ -23,7 +26,8 @@ class AuthService(
             .build()
         val request: Request = Request.Builder().url(url).build()
         val response: Response = webClient.newCall(request).execute()
-        return response.body!!.string()
+        val xmlMapper = XmlMapper();
+        return xmlMapper.readValue(response.body!!.string())
     }
 }
 
