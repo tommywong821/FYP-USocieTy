@@ -13,7 +13,7 @@ class WebServerConfiguration {
             override fun addCorsMappings(registry: CorsRegistry) {
                 registry.addMapping("/**")
                     .allowedMethods("*")
-                    .allowedOriginPatterns("http://localhost:4200")
+                    .allowedOriginPatterns("http://localhost:4200", "https://ngok3fyp-frontend.herokuapp.com/")
                     .allowCredentials(true)
             }
         }
