@@ -1,17 +1,25 @@
-import { Injectable } from '@angular/core';
-import { environment } from 'src/environments/environment';
+import {Injectable} from '@angular/core';
+import {BehaviorSubject, Observable, of} from 'rxjs';
+import {User} from '../model/user';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  constructor() {}
+  private _user$ = new BehaviorSubject<User | null>(null);
 
-  authorizeSSO(): void {
-    const url = `${environment.cas_url}/login?service=${encodeURIComponent(
-      environment.app_url
-    )}`;
+  get user$(): Observable<User | null> {
+    return this._user$;
+  }
 
-    window.location.assign(url);
+  signIn(user: User): Observable<User> {
+    this._user$.next(user);
+    return of(user);
+  }
+
+  signOut(): Observable<boolean> {
+    this._user$.next(null);
+    window.location.reload();
+    return of(true);
   }
 }
