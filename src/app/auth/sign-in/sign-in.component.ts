@@ -1,7 +1,7 @@
 import {HttpClient} from '@angular/common/http';
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {CasResponse} from 'src/app/model/api';
+import {CasResponse} from 'src/app/api/api';
 import {AuthService} from 'src/app/services/auth.service';
 import {environment} from 'src/environments/environment';
 
@@ -24,7 +24,7 @@ export class SignInComponent implements OnInit {
         return;
       }
 
-      const url = `${environment.backend_url}/auth/serviceValidate`;
+      const url = `${environment.backendUrl}/auth/serviceValidate`;
       this.restful.get(url, {params}).subscribe({
         next: res => {
           const casResponse = res as CasResponse;
@@ -44,8 +44,8 @@ export class SignInComponent implements OnInit {
     });
   }
 
-  authenticateSSO(): void {
-    const url = `${environment.cas_url}/login?service=${encodeURIComponent(environment.app_url)}`;
+  authenticateCAS(): void {
+    const url = `${environment.casUrl}/login?service=${encodeURIComponent(environment.appUrl)}`;
 
     window.location.assign(url);
   }
