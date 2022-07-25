@@ -1,6 +1,3 @@
 heroku:
   frontend:
     url: https://ngok3fyp-frontend.herokuapp.com/
-
-cors:
-  domain: http://localhost:4200, https://ngok3fyp-frontend.herokuapp.com/
