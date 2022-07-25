@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonRootName
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
 
 
+//HKUST ITSC SSO Response
 @JsonRootName(namespace = "cas", value = "serviceResponse")
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class ServiceResponse(
