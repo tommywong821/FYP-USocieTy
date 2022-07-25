@@ -3,17 +3,21 @@ package ngok3.fyp.backend.authentication
 import com.fasterxml.jackson.dataformat.xml.XmlMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import ngok3.fyp.backend.authentication.model.ServiceResponse
-import okhttp3.*
-import okhttp3.ResponseBody.Companion.toResponseBody
-import okhttp3.internal.concurrent.TaskRunner.Companion.logger
-import okio.Buffer
+import ngok3.fyp.backend.webclient.OkHttpClientFactory
+import okhttp3.HttpUrl
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.Response
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
-import java.io.IOException
 
 @Service
 class AuthService(
-    private val webClient: OkHttpClient = OkHttpClient.Builder().addInterceptor(LoggingInterceptor()).build()
+    private val webClient: OkHttpClient = OkHttpClientFactory().webClient
 ) {
+    @Value("\${heroku.frontend.url}")
+    val frontendUrl: String? = null
+
     fun itscSSOServiceValidate(ticket: String): ServiceResponse {
         val url: HttpUrl = HttpUrl.Builder()
             .scheme("https")
@@ -21,7 +25,7 @@ class AuthService(
             .addPathSegment("cas")
             .addPathSegment("p3")
             .addPathSegment("serviceValidate")
-            .addQueryParameter("service", "https://ngok3fyp-frontend.herokuapp.com/")
+            .addQueryParameter("service", frontendUrl)
             .addQueryParameter("ticket", ticket)
             .build()
         val request: Request = Request.Builder().url(url).build()
@@ -31,24 +35,3 @@ class AuthService(
     }
 }
 
-internal class LoggingInterceptor : Interceptor {
-    @Throws(IOException::class)
-    override fun intercept(chain: Interceptor.Chain): Response {
-        val request: Request = chain.request()
-
-        logger.info("Sending request: Method: ${request.method} Url: ${request.url} headers: ${request.headers}")
-        val requestCopy = request.newBuilder().build()
-        val bodyBuffer = Buffer()
-        requestCopy.body?.writeTo(bodyBuffer)
-        logger.info("Request Body: ${bodyBuffer.readUtf8()}")
-        bodyBuffer.clear()
-
-        val response: Response = chain.proceed(request)
-        val contentType = response.body!!.contentType()
-        val body = response.body!!.string()
-        logger.info("Response Body: $body")
-
-        val wrappedBody = body.toResponseBody(contentType)
-        return response.newBuilder().body(wrappedBody).build()
-    }
-}

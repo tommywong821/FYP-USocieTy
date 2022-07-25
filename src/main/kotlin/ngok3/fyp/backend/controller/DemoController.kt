@@ -10,7 +10,7 @@ class DemoController {
     @GetMapping
     fun demo(): Demo {
         println("hello")
-        return Demo("hello")
+        return Demo("frontendUrl")
     }
 
 }
