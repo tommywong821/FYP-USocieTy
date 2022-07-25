@@ -1,6 +1,6 @@
 import {HttpClient} from '@angular/common/http';
 import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {CasResponse} from 'src/app/model/api';
 import {AuthService} from 'src/app/services/auth.service';
 import {environment} from 'src/environments/environment';
@@ -11,7 +11,12 @@ import {environment} from 'src/environments/environment';
   styleUrls: ['./sign-in.component.scss'],
 })
 export class SignInComponent implements OnInit {
-  constructor(private authService: AuthService, private route: ActivatedRoute, private restful: HttpClient) {}
+  constructor(
+    private authService: AuthService,
+    private route: ActivatedRoute,
+    private router: Router,
+    private restful: HttpClient
+  ) {}
 
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
@@ -25,13 +30,15 @@ export class SignInComponent implements OnInit {
           const casResponse = res as CasResponse;
           if (casResponse.authenticationFailure.value) {
             // TODO report login error
-            window.location.reload();
+            console.error(casResponse.authenticationFailure);
+            return;
           }
 
           const name = casResponse.authenticationSucess.user;
           const email = casResponse.authenticationSucess.attributes.mail;
 
           this.authService.signIn({name, email});
+          this.router.navigate(['/home']);
         },
       });
     });
