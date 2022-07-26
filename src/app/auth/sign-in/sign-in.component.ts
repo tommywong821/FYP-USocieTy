@@ -1,9 +1,9 @@
-import {HttpClient} from '@angular/common/http';
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {CasResponse} from 'src/app/api/api';
 import {AuthService} from 'src/app/services/auth.service';
+import {ApiService} from 'src/app/services/api.service';
 import {environment} from 'src/environments/environment';
+import {filter, Subject, switchMap, takeUntil} from 'rxjs';
 
 @Component({
   selector: 'app-sign-in',
@@ -12,36 +12,29 @@ import {environment} from 'src/environments/environment';
 })
 export class SignInComponent implements OnInit {
   constructor(
+    private ApiService: ApiService,
     private authService: AuthService,
     private route: ActivatedRoute,
-    private router: Router,
-    private restful: HttpClient
+    private router: Router
   ) {}
 
+  destroy$ = new Subject<void>();
+
   ngOnInit(): void {
-    this.route.queryParams.subscribe(params => {
-      if (!params) {
-        return;
-      }
-
-      const url = `${environment.backendUrl}/auth/serviceValidate`;
-      this.restful.get(url, {params}).subscribe({
-        next: res => {
-          const casResponse = res as CasResponse;
-          if (casResponse.authenticationFailure.value) {
-            // TODO report login error
-            console.error(casResponse.authenticationFailure);
-            return;
-          }
-
-          const name = casResponse.authenticationSucess.user;
-          const email = casResponse.authenticationSucess.attributes.mail;
-
-          this.authService.signIn({name, email});
-          this.router.navigate(['/home']);
-        },
+    this.route.queryParams
+      .pipe(
+        takeUntil(this.destroy$),
+        filter(params => !!params),
+        switchMap(params => this.ApiService.validateUser(params))
+      )
+      .subscribe(user => {
+        this.authService.signIn(user);
+        this.router.navigate(['/home']);
       });
-    });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
   }
 
   authenticateCAS(): void {
