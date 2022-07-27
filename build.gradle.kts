@@ -26,6 +26,13 @@ dependencies {
 	implementation("com.squareup.okhttp3:okhttp")
 	//xml convertor
 	implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.13.3")
+	//postgresql
+	runtimeOnly("org.postgresql:postgresql")
+	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+	//jwt generator
+	implementation("io.jsonwebtoken:jjwt-api:0.11.5")
+	runtimeOnly("io.jsonwebtoken:jjwt-impl:0.11.5")
+	runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.11.5")
 }
 
 tasks.withType<KotlinCompile> {

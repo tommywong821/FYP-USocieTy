@@ -2,7 +2,7 @@ package ngok3.fyp.backend.controller.authentication.model
 
 import com.fasterxml.jackson.dataformat.xml.XmlMapper
 import com.fasterxml.jackson.module.kotlin.readValue
-import ngok3.fyp.backend.authentication.model.ServiceResponse
+import ngok3.fyp.backend.authentication.model.CasServiceResponse
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -20,9 +20,9 @@ class AuthenticationModelTest @Autowired constructor() {
             </cas:serviceResponse>
         """.trimIndent()
 
-        val failureModelObj: ServiceResponse = xmlMapper.readValue(authenticationFailureXml)
+        val failureModelObj: CasServiceResponse = xmlMapper.readValue(authenticationFailureXml)
         assertNotNull(failureModelObj.authenticationSuccess)
-        assertNull(failureModelObj.authenticationSuccess!!.user)
+        assertNull(failureModelObj.authenticationSuccess!!.itsc)
         assertNull(failureModelObj.authenticationSuccess!!.attributes!!.mail)
         assertNull(failureModelObj.authenticationSuccess!!.attributes!!.name)
 
@@ -46,13 +46,13 @@ class AuthenticationModelTest @Autowired constructor() {
             </cas:serviceResponse>
         """.trimIndent()
 
-        val successModelObj: ServiceResponse = xmlMapper.readValue(authenticationSuccessXml)
+        val successModelObj: CasServiceResponse = xmlMapper.readValue(authenticationSuccessXml)
         assertNotNull(successModelObj.authenticationFailure)
         assertNull(successModelObj.authenticationFailure!!.code)
         assertNull(successModelObj.authenticationFailure!!.value)
 
         assertNotNull(successModelObj.authenticationSuccess)
-        assertEquals(successModelObj.authenticationSuccess!!.user, "dmchanxy")
+        assertEquals(successModelObj.authenticationSuccess!!.itsc, "dmchanxy")
         assertNotNull(successModelObj.authenticationSuccess!!.attributes)
         assertEquals(successModelObj.authenticationSuccess!!.attributes!!.mail, "dmchanxy@connect.ust.hk")
         assertEquals(successModelObj.authenticationSuccess!!.attributes!!.name, "CHAN, Dai Man")
