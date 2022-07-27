@@ -1,4 +1,4 @@
-package ngok3.fyp.backend.webclient
+package ngok3.fyp.backend.util.webclient
 
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient

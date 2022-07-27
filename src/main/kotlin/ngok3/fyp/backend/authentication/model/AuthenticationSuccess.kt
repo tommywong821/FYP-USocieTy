@@ -8,7 +8,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class AuthenticationSuccess(
     @set:JacksonXmlProperty(localName = "user")
-    var user: String? = null,
+    var itsc: String? = null,
 
     @set:JacksonXmlProperty(namespace = "cas", localName = "attributes")
     var attributes: CasAttributes? = CasAttributes()

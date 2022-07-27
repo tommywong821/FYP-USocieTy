@@ -1,3 +1,11 @@
 heroku:
   frontend:
-    url: https://ngok3fyp-frontend.herokuapp.com/
+    url: ${FRONTEND_URL}
+
+spring:
+  datasource:
+    url: ${JDBC_DATABASE_URL}
+    username: ${JDBC_DATABASE_USERNAME}
+    password: ${JDBC_DATABASE_PASSWORD}
+  jpa:
+    generate-ddl: true

@@ -8,7 +8,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
 //HKUST ITSC SSO Response
 @JsonRootName(namespace = "cas", value = "serviceResponse")
 @JsonIgnoreProperties(ignoreUnknown = true)
-data class ServiceResponse(
+data class CasServiceResponse(
     @set:JacksonXmlProperty(namespace = "cas", localName = "authenticationFailure")
     var authenticationFailure: AuthenticationFailure? = AuthenticationFailure(),
 
