@@ -13,8 +13,7 @@ import javax.servlet.http.HttpServletResponse
 class AuthController(
     @Autowired val authService: AuthService
 ) {
-    @GetMapping
-    @RequestMapping("/serviceValidate")
+    @GetMapping("/serviceValidate")
     fun itscSSOServiceValidate(
         @RequestParam("ticket") ticket: String,
         frontendResponse: HttpServletResponse
