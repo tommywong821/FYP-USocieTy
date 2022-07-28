@@ -1,11 +1,16 @@
 import {Injectable} from '@angular/core';
-import {BehaviorSubject, Observable, of} from 'rxjs';
+import {Params} from '@angular/router';
+import {BehaviorSubject, filter, map, Observable, of, tap} from 'rxjs';
+import {validateUserEndpoint, validateUserResponse} from '../api/auth';
 import {User} from '../model/user';
+import {ApiService} from './api.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
+  constructor(private apiService: ApiService) {}
+
   private _user$ = new BehaviorSubject<User | null>(null);
 
   get user$(): Observable<User | null> {
@@ -21,5 +26,21 @@ export class AuthService {
     this._user$.next(null);
     window.location.reload();
     return of(true);
+  }
+
+  validateUser(params: Params): Observable<User> {
+    const request = {endpoint: validateUserEndpoint, body: {params}};
+    return this.apiService.call<validateUserResponse>(request).pipe(
+      tap(res => {
+        if (res.authenticationFailure) {
+          console.error(res.authenticationFailure);
+        }
+      }),
+      filter(res => !!res.authenticationFailure),
+      map(res => ({
+        userId: res.authenticationSucess.user,
+        email: res.authenticationSucess.attributes.mail,
+      }))
+    );
   }
 }

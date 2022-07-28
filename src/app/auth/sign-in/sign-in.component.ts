@@ -1,7 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {AuthService} from 'src/app/services/auth.service';
-import {ApiService} from 'src/app/services/api.service';
 import {environment} from 'src/environments/environment';
 import {filter, Subject, switchMap, takeUntil} from 'rxjs';
 
@@ -11,12 +10,7 @@ import {filter, Subject, switchMap, takeUntil} from 'rxjs';
   styleUrls: ['./sign-in.component.scss'],
 })
 export class SignInComponent implements OnInit {
-  constructor(
-    private ApiService: ApiService,
-    private authService: AuthService,
-    private route: ActivatedRoute,
-    private router: Router
-  ) {}
+  constructor(private authService: AuthService, private route: ActivatedRoute, private router: Router) {}
 
   destroy$ = new Subject<void>();
 
@@ -25,7 +19,7 @@ export class SignInComponent implements OnInit {
       .pipe(
         takeUntil(this.destroy$),
         filter(params => !!params),
-        switchMap(params => this.ApiService.validateUser(params))
+        switchMap(params => this.authService.validateUser(params))
       )
       .subscribe(user => {
         this.authService.signIn(user);
