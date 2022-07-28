@@ -76,5 +76,15 @@ class AuthService(
 
         return servicesResponse;
     }
+
+    fun mockItscSSOServiceValidate(ticket: String, frontendResponse: HttpServletResponse) {
+        val student: Student = Student(null, "dmchanxy", "CHAN, Dai Man", "dmchanxy@connect.ust.hk", "student")
+
+        //return cookie to frontend with student information
+        val cookie: Cookie = Cookie("token", jwtUtil.generateToken(student))
+        //24 hours in second unit
+        cookie.maxAge = 24 * 60 * 60
+        frontendResponse.addCookie(cookie)
+    }
 }
 
