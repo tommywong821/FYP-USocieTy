@@ -8,17 +8,18 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 
 @Configuration
 class WebServerConfiguration {
-    @Value("\${heroku.frontend.url}")
-    val frontendUrl: String? = null
+    @Value("\${cors.originPatterns:default}")
+    private val corsOriginPatterns: String = ""
 
     @Bean
     fun addCorsConfig(): WebMvcConfigurer {
+        println("frontendUrl: $corsOriginPatterns")
+        val allowedOrigins = corsOriginPatterns.split(",").toTypedArray()
         return object : WebMvcConfigurer {
             override fun addCorsMappings(registry: CorsRegistry) {
                 registry.addMapping("/**")
                     .allowedMethods("*")
-                    .allowedOrigins(frontendUrl)
-                    .allowedOrigins("http://localhost:4200")
+                    .allowedOriginPatterns(*allowedOrigins)
                     .allowCredentials(true)
             }
         }

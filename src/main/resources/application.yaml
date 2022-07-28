@@ -5,6 +5,10 @@ spring:
     password: ${JDBC_DATABASE_PASSWORD}
   jpa:
     generate-ddl: true
+
 heroku:
   frontend:
     url: ${FRONTEND_URL}
+
+cors:
+  originPatterns: ${CORS_ORIGINS}
