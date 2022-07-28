@@ -13,7 +13,6 @@ class WebServerConfiguration {
 
     @Bean
     fun addCorsConfig(): WebMvcConfigurer {
-        println("frontendUrl: $corsOriginPatterns")
         val allowedOrigins = corsOriginPatterns.split(",").toTypedArray()
         return object : WebMvcConfigurer {
             override fun addCorsMappings(registry: CorsRegistry) {
