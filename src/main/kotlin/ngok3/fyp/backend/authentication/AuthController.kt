@@ -20,4 +20,12 @@ class AuthController(
     ): CasServiceResponse {
         return this.authService.itscSSOServiceValidate(ticket, frontendResponse);
     }
+
+    @GetMapping("/mockServiceValidate")
+    fun mockItscSSOServiceValidate(
+        @RequestParam("ticket") ticket: String,
+        frontendResponse: HttpServletResponse
+    ) {
+        return this.authService.mockItscSSOServiceValidate(ticket, frontendResponse);
+    }
 }
