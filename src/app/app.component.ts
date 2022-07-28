@@ -18,22 +18,22 @@ export class AppComponent {
     console.log(`[${this.constructor.name}] constructor`);
     this.userInfo = null
     this.params = null
-    this.route.queryParams.subscribe({
-      next: (params) => {
-        this.params = params
-        if (this.params) {
-          this.restful.get(`${environment.backend_url}/auth/serviceValidate`, {
-            params: this.params
-          }).subscribe({
-            next: (res) => {
-              console.log(`result: `, res)
-              console.log(`this.userInfo: `, this.userInfo)
-              this.userInfo = res
-            }
-          })
-        }
-      }
-    })
+    // this.route.queryParams.subscribe({
+    //   next: (params) => {
+    //     this.params = params
+    //     if (this.params) {
+    //       this.restful.get(`${environment.backend_url}/auth/serviceValidate`, {
+    //         params: this.params
+    //       }).subscribe({
+    //         next: (res) => {
+    //           console.log(`result: `, res)
+    //           console.log(`this.userInfo: `, this.userInfo)
+    //           this.userInfo = res
+    //         }
+    //       })
+    //     }
+    //   }
+    // })
   }
 
   loginWithRedirect() {
