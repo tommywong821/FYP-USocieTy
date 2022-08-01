@@ -3,7 +3,7 @@ package ngok3.fyp.backend.util.jwt
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.security.Keys
-import ngok3.fyp.backend.student.Student
+import ngok3.fyp.backend.student.StudentEntity
 import org.springframework.stereotype.Component
 import java.security.Key
 import java.util.*
@@ -12,12 +12,12 @@ import java.util.*
 class JWTUtil(
     private var KEY: String = "dPyvYoiMuI8jUsIbqL-m-Fw-mMhc149ey4fkdBxQK9o"
 ) {
-    fun generateToken(student: Student): String {
+    fun generateToken(studentEntity: StudentEntity): String {
         val claims: Claims = Jwts.claims()
-        claims["itsc"] = student.itsc
-        claims["name"] = student.name
-        claims["mail"] = student.mail
-        claims["role"] = student.role
+        claims["itsc"] = studentEntity.itsc
+        claims["name"] = studentEntity.name
+        claims["mail"] = studentEntity.mail
+        claims["role"] = studentEntity.role
 
         //set token only valid in 24 hours
         val calendar: Calendar = Calendar.getInstance()

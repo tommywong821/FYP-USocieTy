@@ -5,6 +5,6 @@ import org.springframework.stereotype.Repository
 import java.util.*
 
 @Repository
-interface StudentRepository : CrudRepository<Student, Long> {
-    fun findByItsc(itsc: String): Optional<Student>
+interface StudentRepository : CrudRepository<StudentEntity, Long> {
+    fun findByItsc(itsc: String): Optional<StudentEntity>
 }
