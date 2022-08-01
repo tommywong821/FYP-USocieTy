@@ -3,7 +3,7 @@ package ngok3.fyp.backend.authentication
 import com.fasterxml.jackson.dataformat.xml.XmlMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import ngok3.fyp.backend.authentication.model.CasServiceResponse
-import ngok3.fyp.backend.student.Student
+import ngok3.fyp.backend.student.StudentEntity
 import ngok3.fyp.backend.student.StudentRepository
 import ngok3.fyp.backend.util.exception.model.CASException
 import ngok3.fyp.backend.util.jwt.JWTUtil
@@ -49,27 +49,26 @@ class AuthService(
         val servicesResponse: CasServiceResponse = XmlMapper().readValue(response.body!!.string())
 
         //find student by itsc in db
-        val student: Student
+        val studentEntity: StudentEntity
         try {
-            val studentOptional: Optional<Student> =
+            val studentEntityOptional: Optional<StudentEntity> =
                 servicesResponse.authenticationSuccess!!.itsc!!.let { studentRepository.findByItsc(it) }
             //not exist: create new student and save in db
-            if (studentOptional.isPresent) {
-                student = studentOptional.get()
+            if (studentEntityOptional.isPresent) {
+                studentEntity = studentEntityOptional.get()
             } else {
-                student = Student(
-                    null,
+                studentEntity = StudentEntity(
                     servicesResponse.authenticationSuccess!!.itsc,
                     servicesResponse.authenticationSuccess!!.attributes!!.name,
                     servicesResponse.authenticationSuccess!!.attributes!!.mail
                 )
-                studentRepository.save(student)
+                studentRepository.save(studentEntity)
             }
         } catch (e: NullPointerException) {
             throw CASException("authenticationFailure from HKUST CAS code: ${servicesResponse.authenticationFailure?.code} msg:${servicesResponse.authenticationFailure?.value}")
         }
         //return cookie to frontend with student information
-        val cookie: Cookie = Cookie("token", jwtUtil.generateToken(student))
+        val cookie: Cookie = Cookie("token", jwtUtil.generateToken(studentEntity))
         //24 hours in second unit
         cookie.maxAge = 24 * 60 * 60
         frontendResponse.addCookie(cookie)
@@ -78,10 +77,11 @@ class AuthService(
     }
 
     fun mockItscSSOServiceValidate(ticket: String, frontendResponse: HttpServletResponse) {
-        val student: Student = Student(null, "dmchanxy", "CHAN, Dai Man", "dmchanxy@connect.ust.hk", "student")
+        val studentEntity: StudentEntity =
+            StudentEntity("dmchanxy", "CHAN, Dai Man", "dmchanxy@connect.ust.hk", "student")
 
         //return cookie to frontend with student information
-        val cookie: Cookie = Cookie("token", jwtUtil.generateToken(student))
+        val cookie: Cookie = Cookie("token", jwtUtil.generateToken(studentEntity))
         //24 hours in second unit
         cookie.maxAge = 24 * 60 * 60
         frontendResponse.addCookie(cookie)

@@ -16,19 +16,22 @@ repositories {
 }
 
 dependencies {
-	implementation("org.springframework.boot:spring-boot-starter-web")
-	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 
+	//spring rest controller
+	implementation("org.springframework.boot:spring-boot-starter-web")
 	//send restful request
 	implementation("com.squareup.okhttp3:okhttp")
 	//xml convertor
+	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.13.3")
 	//postgresql
 	runtimeOnly("org.postgresql:postgresql")
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+	//db data validation
+	implementation("org.springframework.boot:spring-boot-starter-validation")
 	//jwt generator
 	implementation("io.jsonwebtoken:jjwt-api:0.11.5")
 	runtimeOnly("io.jsonwebtoken:jjwt-impl:0.11.5")
