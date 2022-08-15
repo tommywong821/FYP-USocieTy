@@ -41,6 +41,14 @@ export class AppComponent {
     window.location.href = `${environment.cas_url}/login?service=${encodeURIComponent(environment.app_url)}`
   }
 
+  loginWithBackend() {
+    this.restful.get(`${environment.backend_url}auth/login`).subscribe({
+      next: (response) => {
+        console.log(response)
+      }
+    })
+  }
+
   serviceValidate() {
     this.restful.get(`${environment.backend_url}/auth/serviceValidate`, {
       params: {
