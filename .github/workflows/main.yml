@@ -2,9 +2,9 @@ name: springboot-docker-heroku CD
 
 on:
   push:
-    branches: [ feature/migrate-to-git-action ]
+    branches: [ master ]
   pull_request:
-    branches: [ feature/migrate-to-git-action ]
+    branches: [ master ]
 
 #set environment variables
 env:
@@ -16,7 +16,7 @@ jobs:
 
   deploy:
     name: Deploy to Heroku
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
     steps:
 
       # Clone the repository
