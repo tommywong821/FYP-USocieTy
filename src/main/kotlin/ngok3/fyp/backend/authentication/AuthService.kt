@@ -8,10 +8,7 @@ import ngok3.fyp.backend.student.StudentRepository
 import ngok3.fyp.backend.util.exception.model.CASException
 import ngok3.fyp.backend.util.jwt.JWTUtil
 import ngok3.fyp.backend.util.webclient.OkHttpClientFactory
-import okhttp3.HttpUrl
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import okhttp3.Response
+import okhttp3.*
 import okio.IOException
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
@@ -28,6 +25,15 @@ class AuthService(
 ) {
     @Value("\${heroku.frontend.url}")
     val frontendUrl: String? = null
+
+    @Value("\${itsc.tenantId}")
+    val tenantId: String = ""
+
+    @Value("\${itsc.clientId}")
+    val clientId: String = ""
+
+    @Value("\${itsc.clientSecret}")
+    val clientSecret: String = ""
 
     fun itscSSOServiceValidate(ticket: String, frontendResponse: HttpServletResponse): CasServiceResponse {
         val url: HttpUrl = HttpUrl.Builder()
@@ -85,6 +91,34 @@ class AuthService(
         //24 hours in second unit
         cookie.maxAge = 24 * 60 * 60
         frontendResponse.addCookie(cookie)
+    }
+
+    fun ROPCLogin(userinfo: Map<String, String>): String {
+        val url: HttpUrl = HttpUrl.Builder()
+            .scheme("https")
+            .host("login.microsoftonline.com")
+            .addPathSegment(tenantId)
+            .addPathSegment("oauth2")
+            .addPathSegment("v2.0")
+            .addPathSegment("token")
+            .build()
+
+        val requestBody: RequestBody = FormBody.Builder()
+            .add("client_id", clientId)
+            .add("scope", "user.read openid profile offline_access")
+            .add("client_secret", clientSecret)
+            .add("username", userinfo["username"].toString())
+            .add("password", userinfo["password"].toString())
+            .add("grant_type", "password").build()
+
+        val request: Request =
+            Request.Builder().header("Content-Type", "application/x-www-form-urlencoded").url(url).post(requestBody)
+                .build()
+        val response: Response = webClient.newCall(request).execute()
+        if (!response.isSuccessful) {
+            throw IOException("Unexpected code $response")
+        }
+        return response.body!!.string()
     }
 }
 

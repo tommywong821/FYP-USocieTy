@@ -2,10 +2,7 @@ package ngok3.fyp.backend.authentication
 
 import ngok3.fyp.backend.authentication.model.CasServiceResponse
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestParam
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 import javax.servlet.http.HttpServletResponse
 
 @RestController
@@ -27,5 +24,10 @@ class AuthController(
         frontendResponse: HttpServletResponse
     ) {
         return this.authService.mockItscSSOServiceValidate(ticket, frontendResponse);
+    }
+
+    @PostMapping("/login")
+    fun ITSCROPC(@RequestBody userinfo: Map<String, String>): String {
+        return authService.ROPCLogin(userinfo)
     }
 }
