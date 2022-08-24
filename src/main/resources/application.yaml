@@ -10,5 +10,10 @@ heroku:
   frontend:
     url: ${FRONTEND_URL}
 
+itsc:
+  tenantId: ${ITSC_TENANT_ID}
+  clientId: ${ITSC_CLIENT_ID}
+  clientSecret: ${ITSC_CLIENT_SECRET}
+
 cors:
   originPatterns: ${CORS_ORIGINS}
