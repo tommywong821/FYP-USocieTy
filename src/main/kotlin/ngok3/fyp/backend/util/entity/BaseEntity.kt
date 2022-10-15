@@ -1,28 +1,30 @@
 package ngok3.fyp.backend.util.entity
 
 import org.hibernate.annotations.GenericGenerator
+import java.time.LocalDateTime
 import java.util.*
 import javax.persistence.*
 
 @MappedSuperclass
-abstract class BaseEntity {
+abstract class BaseEntity(
     @Id
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(
         name = "UUID",
         strategy = "org.hibernate.id.UUIDGenerator",
     )
-    val uuid: UUID? = null
-    var updatedAt: Date? = null
-    var createdAt: Date? = null
+    open val uuid: UUID? = null,
+    open var updatedAt: LocalDateTime? = null,
+    open var createdAt: LocalDateTime? = null
+) {
 
     @PreUpdate
     fun updateUpdatedAt() {
-        this.updatedAt = Date()
+        this.updatedAt = LocalDateTime.now()
     }
 
     @PrePersist
     fun updateCreatedAt() {
-        this.createdAt = Date()
+        this.createdAt = LocalDateTime.now()
     }
 }
