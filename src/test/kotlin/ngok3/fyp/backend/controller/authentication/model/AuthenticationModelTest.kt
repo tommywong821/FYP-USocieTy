@@ -1,3 +1,4 @@
+/*
 package ngok3.fyp.backend.controller.authentication.model
 
 import com.fasterxml.jackson.dataformat.xml.XmlMapper
@@ -57,4 +58,4 @@ class AuthenticationModelTest @Autowired constructor() {
         assertEquals(successModelObj.authenticationSuccess!!.attributes!!.mail, "dmchanxy@connect.ust.hk")
         assertEquals(successModelObj.authenticationSuccess!!.attributes!!.name, "CHAN, Dai Man")
     }
-}
+}*/

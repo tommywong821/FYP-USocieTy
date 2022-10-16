@@ -18,7 +18,6 @@ repositories {
 dependencies {
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-	testImplementation("org.springframework.boot:spring-boot-starter-test")
 
 	//spring rest controller
 	implementation("org.springframework.boot:spring-boot-starter-web")
@@ -38,6 +37,9 @@ dependencies {
 	runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.11.5")
 	//openapi
 	implementation("org.springdoc:springdoc-openapi-ui:1.6.9")
+	//testing
+	testImplementation("org.springframework.boot:spring-boot-starter-test")
+	testImplementation("com.ninja-squad:springmockk:3.1.1")
 }
 
 tasks.withType<KotlinCompile> {
