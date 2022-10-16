@@ -13,11 +13,11 @@ class EventController(
 ) {
     @GetMapping
     fun getAllSocietyEvent(
-        @RequestParam("sid", required = false, defaultValue = "") sid: String,
+        @RequestParam("itsc", required = false, defaultValue = "") itsc: String,
         @RequestParam("pageNum", required = false, defaultValue = "0") pageNum: Int,
         @RequestParam("pageSize", required = false, defaultValue = "10") pageSize: Int
     ): List<EventDto> {
-        print("sid: $sid pageSize: $pageSize pageNum: $pageNum ")
-        return eventService.getAllSocietyEvent(sid, pageNum, pageSize)
+        print("itsc: $itsc pageSize: $pageSize pageNum: $pageNum ")
+        return eventService.getAllSocietyEvent(itsc, pageNum, pageSize)
     }
 }
