@@ -10,5 +10,7 @@ data class EventDto(
     val name: String? = null,
     val poster: String? = null,
     val maxParticipation: Int? = null,
-    val applyDeadline: LocalDateTime? = null
+    val applyDeadline: LocalDateTime? = null,
+    val location: String? = null,
+    var date: LocalDateTime? = null
 ) : Serializable
