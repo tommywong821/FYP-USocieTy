@@ -11,10 +11,10 @@ import org.springframework.web.bind.annotation.RestController
 class StudentController(
     @Autowired val studentService: StudentService
 ) {
-    @GetMapping("/profile")
+    @GetMapping()
     fun getStudentProfile(
         @RequestParam("itsc") itsc: String
-    ) {
+    ): StudentDto {
         return studentService.getStudentProfile(itsc)
     }
 }
