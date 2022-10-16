@@ -15,6 +15,6 @@ class StudentService(
             throw Exception("Student with $itsc is not found")
         }
         val studentEntity = studentEntityOpt.get()
-        return StudentDto(studentEntity.itsc, studentEntity.name, studentEntity.mail, studentEntity.role)
+        return StudentDto(studentEntity.itsc, studentEntity.nickname, studentEntity.mail, studentEntity.role)
     }
 }

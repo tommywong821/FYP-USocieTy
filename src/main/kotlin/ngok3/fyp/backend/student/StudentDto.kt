@@ -7,7 +7,7 @@ import java.io.Serializable
  */
 data class StudentDto(
     val itsc: String? = null,
-    val name: String? = null,
+    val nickname: String? = null,
     val mail: String? = null,
     val role: String? = null
 ) : Serializable

@@ -10,7 +10,7 @@ import javax.persistence.Table
 @Table(name = "student")
 class StudentEntity(
     var itsc: String? = null,
-    var name: String? = null,
+    var nickname: String? = null,
     var mail: String? = null,
     var role: String? = null,
 

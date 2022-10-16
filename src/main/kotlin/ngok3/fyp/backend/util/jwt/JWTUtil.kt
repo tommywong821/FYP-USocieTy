@@ -15,7 +15,7 @@ class JWTUtil(
     fun generateToken(studentEntity: StudentEntity): String {
         val claims: Claims = Jwts.claims()
         claims["itsc"] = studentEntity.itsc
-        claims["name"] = studentEntity.name
+        claims["name"] = studentEntity.nickname
         claims["mail"] = studentEntity.mail
         claims["role"] = studentEntity.role
 
