@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'home.dart';
 
 import 'package:aad_oauth/aad_oauth.dart';
 import 'package:aad_oauth/model/config.dart';
@@ -9,6 +10,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:ngok3fyp_frontend_flutter/Login.dart';
 import 'package:ngok3fyp_frontend_flutter/Profile.dart';
+import 'package:ngok3fyp_frontend_flutter/home.dart';
 
 // void main() => runApp(MyApp());
 void main() async {
@@ -25,7 +27,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'AAD OAuth Demo',
       theme: ThemeData(primarySwatch: Colors.blue),
-      home: MyHomePage(title: 'AAD OAuth Home'),
+      // home: MyHomePage(title: 'AAD OAuth Home'),
+      // changed to homePage for testing
+      home: homePage(),
       navigatorKey: navigatorKey,
     );
   }
