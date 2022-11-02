@@ -2,6 +2,7 @@ package ngok3.fyp.backend.authentication
 
 import com.fasterxml.jackson.dataformat.xml.XmlMapper
 import com.fasterxml.jackson.module.kotlin.readValue
+import ngok3.fyp.backend.authentication.model.AuthenticationSuccess
 import ngok3.fyp.backend.authentication.model.CasServiceResponse
 import ngok3.fyp.backend.student.StudentEntity
 import ngok3.fyp.backend.student.StudentRepository
@@ -60,16 +61,8 @@ class AuthService(
             val studentEntityOptional: Optional<StudentEntity> =
                 servicesResponse.authenticationSuccess!!.itsc!!.let { studentRepository.findByItsc(it) }
             //not exist: create new student and save in db
-            if (studentEntityOptional.isPresent) {
-                studentEntity = studentEntityOptional.get()
-            } else {
-                studentEntity = StudentEntity(
-                    servicesResponse.authenticationSuccess!!.itsc,
-                    servicesResponse.authenticationSuccess!!.attributes!!.name,
-                    servicesResponse.authenticationSuccess!!.attributes!!.mail
-                )
-                studentRepository.save(studentEntity)
-            }
+            studentEntity =
+                studentEntityOptional.orElseGet { createNewStudentEntityInDB(servicesResponse.authenticationSuccess!!) }
         } catch (e: NullPointerException) {
             throw CASException("authenticationFailure from HKUST CAS code: ${servicesResponse.authenticationFailure?.code} msg:${servicesResponse.authenticationFailure?.value}")
         }
@@ -80,6 +73,16 @@ class AuthService(
         frontendResponse.addCookie(cookie)
 
         return servicesResponse;
+    }
+
+    fun createNewStudentEntityInDB(authenticationSuccess: AuthenticationSuccess): StudentEntity {
+        return studentRepository.save(
+            StudentEntity(
+                authenticationSuccess.itsc,
+                authenticationSuccess.attributes!!.name,
+                authenticationSuccess.attributes!!.mail
+            )
+        )
     }
 
     fun mockItscSSOServiceValidate(ticket: String, frontendResponse: HttpServletResponse) {
