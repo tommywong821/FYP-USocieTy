@@ -4,6 +4,7 @@ import com.fasterxml.jackson.dataformat.xml.XmlMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import ngok3.fyp.backend.authentication.model.AuthenticationSuccess
 import ngok3.fyp.backend.authentication.model.CasServiceResponse
+import ngok3.fyp.backend.authentication.model.UserToken
 import ngok3.fyp.backend.student.StudentEntity
 import ngok3.fyp.backend.student.StudentRepository
 import ngok3.fyp.backend.util.exception.model.CASException
@@ -76,13 +77,16 @@ class AuthService(
     }
 
     fun createNewStudentEntityInDB(authenticationSuccess: AuthenticationSuccess): StudentEntity {
-        return studentRepository.save(
-            StudentEntity(
-                authenticationSuccess.itsc,
-                authenticationSuccess.attributes!!.name,
-                authenticationSuccess.attributes!!.mail
-            )
-        )
+        val itsc = authenticationSuccess.itsc ?: throw NullPointerException("itsc cannot be null to create new record")
+        val name = authenticationSuccess.attributes?.name
+            ?: throw NullPointerException("name cannot be null to create new record")
+        val mail = authenticationSuccess.attributes?.mail
+            ?: throw NullPointerException("mail cannot be null to create new record")
+        return createNewStudentEntityInDB(itsc, name, mail)
+    }
+
+    fun createNewStudentEntityInDB(itsc: String, name: String, mail: String): StudentEntity {
+        return studentRepository.save(StudentEntity(itsc, name, mail))
     }
 
     fun mockItscSSOServiceValidate(ticket: String, frontendResponse: HttpServletResponse) {
@@ -122,6 +126,28 @@ class AuthService(
             throw IOException("Unexpected code $response")
         }
         return response.body!!.string()
+    }
+
+    fun validateMobileLogin(userInfo: Map<String, String>): UserToken {
+        //find student by itsc in db
+        val studentEntity: StudentEntity
+        try {
+            val studentEntityOptional: Optional<StudentEntity> =
+                studentRepository.findByItsc(userInfo["itsc"].toString())
+            //not exist: create new student and save in db
+            studentEntity =
+                studentEntityOptional.orElseGet {
+                    createNewStudentEntityInDB(
+                        userInfo["itsc"].toString(),
+                        userInfo["name"].toString(),
+                        userInfo["email"].toString()
+                    )
+                }
+
+            return UserToken(jwtUtil.generateToken(studentEntity))
+        } catch (e: NullPointerException) {
+            throw e
+        }
     }
 }
 
