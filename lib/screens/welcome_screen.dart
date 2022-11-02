@@ -1,16 +1,14 @@
-import 'dart:convert';
-
 import 'package:aad_oauth/aad_oauth.dart';
 import 'package:aad_oauth/model/config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:http/http.dart' as http;
 import '../constants.dart';
 import 'package:ngok3fyp_frontend_flutter/services/storage_service.dart';
+import 'package:ngok3fyp_frontend_flutter/services/api_service.dart';
 
 import '../Profile.dart';
 import '../main.dart';
-import 'login_button.dart';
+import 'login_widget.dart';
 
 class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({Key? key, required this.title}) : super(key: key);
@@ -46,16 +44,12 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Image.asset('assets/images/red-bird-sundial.png'),
-            const Text(
-              'Read for your next adventure ?',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-            ),
             isBusy
                 ? const CircularProgressIndicator()
                 : isLoggedIn
-                    ? Profile(logout, name, email) //todo change to home page widget
-                    : LoginButton(login, errorMessage),
+                    ? Profile(
+                        logout, name, email) //todo change to home page widget
+                    : LoginWidget(login, errorMessage),
           ]),
     ));
   }
@@ -71,7 +65,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
       var accessToken = await oAuth.getAccessToken();
       debugPrint('Logged in successfully, your access token: $accessToken');
 
-      final profile = await getUserDetails(accessToken!);
+      final profile = await ApiService().getUserDetails(accessToken!);
 
       await _storageService.writeSecureData(ACCESS_TOKEN_KEY, accessToken);
 
@@ -119,20 +113,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     });
   }
 
-  Future<Map<String, dynamic>> getUserDetails(String accessToken) async {
-    final url = Uri.https('graph.microsoft.com', 'oidc/userinfo');
-    final response = await http.get(
-      url,
-      headers: {'Authorization': 'Bearer $accessToken'},
-    );
-
-    if (response.statusCode == 200) {
-      return jsonDecode(response.body);
-    } else {
-      throw Exception('Failed to get user details');
-    }
-  }
-
   @override
   void initState() {
     initAction();
@@ -149,7 +129,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     });
 
     try {
-      final profile = await getUserDetails(storedRefreshToken);
+      final profile = await ApiService().getUserDetails(storedRefreshToken);
 
       _storageService.writeSecureData('access_token', storedRefreshToken);
 
