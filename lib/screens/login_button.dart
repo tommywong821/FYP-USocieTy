@@ -1,13 +1,10 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 
-class Login extends StatelessWidget {
+class LoginButton extends StatelessWidget {
   final loginAction;
   final String loginError;
 
-  const Login(this.loginAction, this.loginError);
+  const LoginButton(this.loginAction, this.loginError, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -18,9 +15,9 @@ class Login extends StatelessWidget {
           onPressed: () {
             loginAction();
           },
-          child: Text('Login'),
+          child: const Text('Login via your itsc account'),
         ),
-        Text(loginError ?? '')
+        Text(loginError)
       ],
     );
   }

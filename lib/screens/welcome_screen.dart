@@ -8,9 +8,9 @@ import 'package:http/http.dart' as http;
 import '../constants.dart';
 import 'package:ngok3fyp_frontend_flutter/services/storage_service.dart';
 
-import '../Login.dart';
 import '../Profile.dart';
 import '../main.dart';
+import 'login_button.dart';
 
 class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({Key? key, required this.title}) : super(key: key);
@@ -54,8 +54,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             isBusy
                 ? const CircularProgressIndicator()
                 : isLoggedIn
-                    ? Profile(logout, name, email)
-                    : Login(login, errorMessage),
+                    ? Profile(logout, name, email) //todo change to home page widget
+                    : LoginButton(login, errorMessage),
           ]),
     ));
   }
