@@ -7,9 +7,6 @@ class DummyPage extends StatefulWidget {
   final String email;
 
   const DummyPage(this.logoutAction, this.name, this.email);
-  Object getLogoutAction() {
-    return this.logoutAction;
-  }
 
   @override
   _DummyPageState createState() => _DummyPageState();
