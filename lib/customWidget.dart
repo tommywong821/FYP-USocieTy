@@ -9,7 +9,8 @@ class CustomButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return Center(
+        child: Container(
       width: MediaQuery.of(context).size.width / 1.4,
       height: height,
       decoration: BoxDecoration(
@@ -25,6 +26,6 @@ class CustomButton extends StatelessWidget {
           ),
         ),
       ),
-    );
+    ));
   }
 }
