@@ -1,19 +1,14 @@
-import 'package:aad_oauth/aad_oauth.dart';
-import 'package:aad_oauth/model/config.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:ngok3fyp_frontend_flutter/screens/dummy_page.dart';
+import 'package:ngok3fyp_frontend_flutter/model/profile_screen_arguments.dart';
+import 'package:ngok3fyp_frontend_flutter/services/aad_oauth_service.dart';
 import '../constants.dart';
 import 'package:ngok3fyp_frontend_flutter/services/storage_service.dart';
 import 'package:ngok3fyp_frontend_flutter/services/api_service.dart';
 
-import '../Profile.dart';
-import '../main.dart';
 import 'login_widget.dart';
 
 class WelcomeScreen extends StatefulWidget {
-  const WelcomeScreen({Key? key, required this.title}) : super(key: key);
-  final String title;
+  const WelcomeScreen({Key? key}) : super(key: key);
 
   @override
   State<WelcomeScreen> createState() => _WelcomeScreenState();
@@ -21,15 +16,7 @@ class WelcomeScreen extends StatefulWidget {
 
 class _WelcomeScreenState extends State<WelcomeScreen> {
   final StorageService _storageService = StorageService();
-
-  static final Config config = Config(
-      tenant: dotenv.env['TENANT']!,
-      clientId: dotenv.env['CLIENTID']!,
-      redirectUri: dotenv.env['REDIRECTURI']!,
-      scope: dotenv.env['SCOPE']!,
-      clientSecret: dotenv.env['CLIENTSECRET']!,
-      navigatorKey: navigatorKey);
-  final AadOAuth oAuth = AadOAuth(config);
+  final AadOAuthService _aadOAuthService = AadOAuthService();
 
   bool isBusy = false;
   String errorMessage = '';
@@ -47,10 +34,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
           children: [
             isBusy
                 ? const CircularProgressIndicator()
-                : isLoggedIn
-                    ? DummyPage(
-                        logout, name, email) //todo change to home page widget
-                    : LoginWidget(login, errorMessage),
+                : LoginWidget(login, errorMessage),
           ]),
     ));
   }
@@ -62,8 +46,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     });
 
     try {
-      await oAuth.login();
-      var accessToken = await oAuth.getAccessToken();
+      await _aadOAuthService.login();
+      var accessToken = await _aadOAuthService.getAccessToken();
       debugPrint('Logged in successfully, your access token: $accessToken');
 
       final profile = await ApiService().getUserDetails(accessToken!);
@@ -71,19 +55,28 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
       await _storageService.writeSecureData(ACCESS_TOKEN_KEY, accessToken);
 
       setState(() {
-        isBusy = false;
         isLoggedIn = true;
         name = profile['name'];
         email = profile['email'];
       });
+
+      routeToHomePage();
     } catch (e) {
       showError(e);
       setState(() {
-        isBusy = false;
         isLoggedIn = false;
         errorMessage = e.toString();
       });
     }
+  }
+
+  void routeToHomePage() {
+    Navigator.pushNamedAndRemoveUntil(
+      context,
+      '/home',
+      ModalRoute.withName('/home'),
+      arguments: ProfileScreenArguments(name, email),
+    );
   }
 
   void showMessage(String text) {
@@ -102,16 +95,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
 
   void showError(dynamic ex) {
     showMessage(ex.toString());
-  }
-
-  void logout() async {
-    await oAuth.logout();
-    await _storageService.deleteSecureData(ACCESS_TOKEN_KEY);
-    debugPrint('Logged out');
-    setState(() {
-      isLoggedIn = false;
-      isBusy = false;
-    });
   }
 
   @override
@@ -142,7 +125,11 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
       });
     } catch (e, s) {
       showError('error on refresh token: $e - stack: $s');
-      logout();
+      await _aadOAuthService.logout();
+      setState(() {
+        isLoggedIn = false;
+        isBusy = false;
+      });
     }
   }
 }
