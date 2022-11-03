@@ -75,7 +75,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
       context,
       '/home',
       ModalRoute.withName('/home'),
-      arguments: ProfileScreenArguments(name, email),
+      arguments: ProfileScreenArguments(
+          name, email), //todo see if any arguments need to pass
     );
   }
 

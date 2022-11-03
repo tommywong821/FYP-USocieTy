@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:ngok3fyp_frontend_flutter/model/profile_screen_arguments.dart';
 
-import 'constants.dart';
-import 'services/aad_oauth_service.dart';
-import 'services/storage_service.dart';
+import '../constants.dart';
+import '../services/aad_oauth_service.dart';
+import '../services/storage_service.dart';
 
-class Profile extends StatefulWidget {
-  const Profile({
+class ProfileScreen extends StatefulWidget {
+  const ProfileScreen({
     Key? key,
   }) : super(key: key);
 
   @override
-  State<Profile> createState() => _ProfileState();
+  State<ProfileScreen> createState() => _ProfileScreenState();
 }
 
-class _ProfileState extends State<Profile> {
+class _ProfileScreenState extends State<ProfileScreen> {
   final AadOAuthService _aadOAuthService = AadOAuthService();
   final StorageService _storageService = StorageService();
 
