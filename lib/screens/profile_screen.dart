@@ -24,32 +24,34 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ModalRoute.of(context)!.settings.arguments as ProfileScreenArguments;
 
     return Scaffold(
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Container(
-            width: 150,
-            height: 150,
-          ),
-          SizedBox(
-            height: 24.0,
-          ),
-          Text('Name: ${args.name}'),
-          SizedBox(
-            height: 24.0,
-          ),
-          Text('email: ${args.email}'),
-          SizedBox(
-            height: 48.0,
-          ),
-          ElevatedButton(
-            onPressed: () {
-              // logoutAction();
-              logout();
-            },
-            child: Text('Logout'),
-          )
-        ],
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Container(
+              width: 150,
+              height: 150,
+            ),
+            SizedBox(
+              height: 24.0,
+            ),
+            Text('Name: ${args.name}'),
+            SizedBox(
+              height: 24.0,
+            ),
+            Text('email: ${args.email}'),
+            SizedBox(
+              height: 48.0,
+            ),
+            ElevatedButton(
+              onPressed: () {
+                // logoutAction();
+                logout();
+              },
+              child: Text('Logout'),
+            )
+          ],
+        ),
       ),
     );
   }

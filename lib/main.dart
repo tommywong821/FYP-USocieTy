@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:ngok3fyp_frontend_flutter/screens/profile_screen.dart';
 import 'package:ngok3fyp_frontend_flutter/screens/welcome_screen.dart';
+import 'package:ngok3fyp_frontend_flutter/screens/home_screen.dart';
 
 // void main() => runApp(MyApp());
 void main() async {
@@ -21,8 +22,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(primarySwatch: Colors.blue),
       routes: {
         '/': (context) => const WelcomeScreen(),
-        '/home': (context) =>
-            const ProfileScreen(), // todo update to real home page
+        '/home': (context) => const HomeScreen(),
         '/profile': (context) => const ProfileScreen(),
       },
       navigatorKey: navigatorKey,

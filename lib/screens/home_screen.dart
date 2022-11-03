@@ -1,26 +1,28 @@
 import 'package:flutter/material.dart';
-import 'package:ngok3fyp_frontend_flutter/services/custom_widget.dart';
+import 'package:ngok3fyp_frontend_flutter/screens/home_widget.dart';
+import 'package:ngok3fyp_frontend_flutter/model/profile_screen_arguments.dart';
+import 'package:ngok3fyp_frontend_flutter/screens/profile_screen.dart';
 
-class HomePage extends StatefulWidget {
-  final logoutAction;
-  final String name;
-  final String email;
-  const HomePage(this.logoutAction, this.name, this.email);
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({
+    Key? key,
+  }) : super(key: key);
+
   @override
-  _HomePageState createState() => _HomePageState();
+  _HomeScreenState createState() => _HomeScreenState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
-
   static const List<Widget> _pages = <Widget>[
-    CustomButton(
-      height: 30,
-      inputText: 'helloworld',
+    HomeWidget(),
+    Center(
+      child: Text("Widget 2"),
     ),
-    Text("Widget 1"),
-    Text("Widget 2"),
-    Text("Widget 3"),
+    Center(
+      child: Text("Widget 3"),
+    ),
+    ProfileScreen(),
   ];
 
   void _onItemTapped(int index) {
