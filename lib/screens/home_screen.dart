@@ -1,24 +1,28 @@
 import 'package:flutter/material.dart';
-import 'customWidget.dart';
+import 'package:ngok3fyp_frontend_flutter/screens/home_widget.dart';
+import 'package:ngok3fyp_frontend_flutter/model/profile_screen_arguments.dart';
+import 'package:ngok3fyp_frontend_flutter/screens/profile_screen.dart';
 
-class BasicBottomNavBar extends StatefulWidget {
-  const BasicBottomNavBar({Key? key}) : super(key: key);
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({
+    Key? key,
+  }) : super(key: key);
 
   @override
-  _BasicBottomNavBarState createState() => _BasicBottomNavBarState();
+  _HomeScreenState createState() => _HomeScreenState();
 }
 
-class _BasicBottomNavBarState extends State<BasicBottomNavBar> {
+class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
-
   static const List<Widget> _pages = <Widget>[
-    CustomButton(
-      height: 30,
-      inputText: 'helloworld',
+    HomeWidget(),
+    Center(
+      child: Text("Widget 2"),
     ),
-    Text("Widget 1"),
-    Text("Widget 2"),
-    Text("Widget 3"),
+    Center(
+      child: Text("Widget 3"),
+    ),
+    ProfileScreen(),
   ];
 
   void _onItemTapped(int index) {
