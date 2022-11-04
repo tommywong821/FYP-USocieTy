@@ -9,14 +9,14 @@ class AppBarWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final args =
         ModalRoute.of(context)!.settings.arguments as ProfileScreenArguments;
-    var now = new DateTime.now();
+    var now = new DateTime.now().toLocal();
     var formatter = new DateFormat('EEEE, MMMM d');
     String formattedDate = formatter.format(now);
     return Container(
       child: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.only(top: 10, left: 10),
+            padding: EdgeInsets.only(top: 10, left: 10),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -43,7 +43,7 @@ class AppBarWidget extends StatelessWidget {
                   ],
                 )),
                 Padding(
-                  padding: const EdgeInsets.only(right: 8.0),
+                  padding: EdgeInsets.only(right: 8.0),
                   child: CircleAvatar(
                     child: Icon(
                       Icons.person,
