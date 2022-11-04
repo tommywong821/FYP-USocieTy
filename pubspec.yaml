@@ -39,6 +39,8 @@ dependencies:
   flutter_secure_storage: ^5.1.2
   http: ^0.13.5
   flutter_dotenv: ^5.0.2
+  table_calendar: ^3.0.8
+  badges: ^2.0.3
 
 dev_dependencies:
   flutter_test:
