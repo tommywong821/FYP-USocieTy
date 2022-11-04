@@ -41,6 +41,9 @@ dependencies:
   flutter_dotenv: ^5.0.2
   table_calendar: ^3.0.8
   badges: ^2.0.3
+  google_fonts: ^2.1.0
+  intl: ^0.17.0
+  carousel_slider: ^4.1.1
 
 dev_dependencies:
   flutter_test:
