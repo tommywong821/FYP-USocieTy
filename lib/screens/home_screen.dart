@@ -44,11 +44,15 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         bottomNavigationBar: BottomNavigationBar(
           //animationed navigation bar
-          type: BottomNavigationBarType.shifting,
+          type: BottomNavigationBarType.fixed,
           items: _bottomNavigationBarItem,
-          selectedItemColor: Colors.blue,
-          unselectedItemColor: Colors.grey,
+          selectedItemColor: Colors.black54,
+          unselectedItemColor: Colors.grey.withOpacity(0.5),
+          backgroundColor: Colors.white,
+          showSelectedLabels: false,
+          showUnselectedLabels: false,
           currentIndex: _selectedIndex,
+          elevation: 0,
           onTap: _onItemTapped,
         ),
       ),
