@@ -51,7 +51,7 @@ class _CarouselSliderWidgetState extends State<CarouselSliderWidget> {
                         Navigator.pushNamed(
                           context,
                           '/event',
-                          arguments: i["title"],
+                          arguments: i["eventID"],
                         );
                       },
                     ),

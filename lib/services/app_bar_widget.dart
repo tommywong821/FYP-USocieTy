@@ -7,6 +7,7 @@ class AppBarWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Color hkustColor = Color.fromARGB(255, 0, 51, 102);
     final args =
         ModalRoute.of(context)!.settings.arguments as ProfileScreenArguments;
     var now = new DateTime.now().toLocal();
@@ -47,9 +48,9 @@ class AppBarWidget extends StatelessWidget {
                   child: CircleAvatar(
                     child: Icon(
                       Icons.person,
-                      color: Colors.black,
+                      color: Colors.white,
                     ),
-                    backgroundColor: Colors.black12,
+                    backgroundColor: hkustColor,
                   ),
                 ),
               ],

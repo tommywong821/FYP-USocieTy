@@ -3,7 +3,6 @@ import 'package:ngok3fyp_frontend_flutter/services/app_bar_widget.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ngok3fyp_frontend_flutter/services/carousel_slider_widget.dart';
 
-//for testing widget & will remove later
 class HomeWidget extends StatefulWidget {
   const HomeWidget({
     Key? key,
@@ -30,8 +29,11 @@ class _HomeWidget extends State<HomeWidget> {
               child: Container(
                 alignment: Alignment.centerLeft,
                 child: Text(
-                  "Recommandation",
-                  style: GoogleFonts.raleway(fontSize: 18),
+                  "Featured",
+                  style: GoogleFonts.ptSans(
+                      fontSize: 26,
+                      letterSpacing: 1,
+                      fontWeight: FontWeight.bold),
                 ),
               ),
             ),
@@ -47,7 +49,10 @@ class _HomeWidget extends State<HomeWidget> {
                 alignment: Alignment.centerLeft,
                 child: Text(
                   "Incoming",
-                  style: GoogleFonts.raleway(fontSize: 18),
+                  style: GoogleFonts.ptSans(
+                      fontSize: 26,
+                      letterSpacing: 1,
+                      fontWeight: FontWeight.bold),
                 ),
               ),
             ),
@@ -63,7 +68,10 @@ class _HomeWidget extends State<HomeWidget> {
                 alignment: Alignment.centerLeft,
                 child: Text(
                   "Society",
-                  style: GoogleFonts.raleway(fontSize: 18),
+                  style: GoogleFonts.ptSans(
+                      fontSize: 26,
+                      letterSpacing: 1,
+                      fontWeight: FontWeight.bold),
                 ),
               ),
             ),
