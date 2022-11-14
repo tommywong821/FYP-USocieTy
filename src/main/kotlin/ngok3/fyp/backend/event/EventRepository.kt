@@ -6,9 +6,13 @@ import org.springframework.data.domain.Pageable
 import org.springframework.data.repository.PagingAndSortingRepository
 import org.springframework.stereotype.Repository
 import java.time.LocalDateTime
+import java.util.*
 
 @Repository
 interface EventRepository : PagingAndSortingRepository<EventEntity, Long> {
+
+    fun findByName(name: String): Optional<EventEntity>
+
 
     fun findByApplyDeadlineGreaterThanEqualOrderByApplyDeadlineAsc(
         applyDeadline: LocalDateTime,
