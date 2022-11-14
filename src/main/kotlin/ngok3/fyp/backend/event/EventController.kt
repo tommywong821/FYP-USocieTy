@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
+import java.util.*
 
 @RestController
 @RequestMapping("/event")
@@ -19,5 +20,13 @@ class EventController(
     ): List<EventDto> {
         print("itsc: $itsc pageSize: $pageSize pageNum: $pageNum ")
         return eventService.getAllSocietyEvent(itsc, pageNum, pageSize)
+    }
+
+    @GetMapping
+    fun joinSocietyEvent(
+        @RequestParam("itsc", required = false, defaultValue = "") itsc: String,
+        @RequestParam("eventName", required = false, defaultValue = "") eventName: String,
+    ) {
+        eventService.joinSocietyEvent(itsc, eventName)
     }
 }
