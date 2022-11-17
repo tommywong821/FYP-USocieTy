@@ -2,7 +2,7 @@ import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:ngok3fyp_frontend_flutter/screens/home_widget.dart';
 import 'package:ngok3fyp_frontend_flutter/screens/profile_screen.dart';
-import 'package:table_calendar/table_calendar.dart';
+import 'package:ngok3fyp_frontend_flutter/screens/calendar_widget.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({
@@ -17,11 +17,7 @@ class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
   List<Widget> _pages = <Widget>[
     HomeWidget(),
-    TableCalendar(
-      firstDay: DateTime.utc(2010, 10, 16),
-      lastDay: DateTime.utc(2030, 3, 14),
-      focusedDay: DateTime.now(),
-    ),
+    CalendarWidget(),
     Center(
       child: Text("Widget 3"),
     ),
@@ -43,7 +39,6 @@ class _HomeScreenState extends State<HomeScreen> {
           children: _pages,
         ),
         bottomNavigationBar: BottomNavigationBar(
-          //animationed navigation bar
           type: BottomNavigationBarType.fixed,
           items: _bottomNavigationBarItem,
           selectedItemColor: Colors.black54,
