@@ -19,7 +19,7 @@ class _CarouselSliderWidgetState extends State<CarouselSliderWidget> {
               return Builder(
                 builder: (BuildContext context) {
                   return Container(
-                    width: MediaQuery.of(context).size.width - 50,
+                    width: MediaQuery.of(context).size.width - 100,
                     margin: EdgeInsets.symmetric(horizontal: 1.0),
                     child: GestureDetector(
                       //Card view
@@ -28,7 +28,7 @@ class _CarouselSliderWidgetState extends State<CarouselSliderWidget> {
                           children: [
                             //image
                             SizedBox(
-                              width: MediaQuery.of(context).size.width - 100,
+                              width: MediaQuery.of(context).size.width - 50,
                               height: 150,
                               child: Container(
                                   decoration: BoxDecoration(
@@ -46,7 +46,6 @@ class _CarouselSliderWidgetState extends State<CarouselSliderWidget> {
                                     borderRadius: BorderRadius.circular(20),
                                   )),
                             ),
-
                             //title
                             Text(i["title"]),
                           ],
@@ -55,7 +54,7 @@ class _CarouselSliderWidgetState extends State<CarouselSliderWidget> {
                           borderRadius: BorderRadius.circular(20.0),
                         ),
                         elevation: 0,
-                        margin: EdgeInsets.all(10),
+                        margin: EdgeInsets.all(5),
                       ),
                       onTap: () {
                         Navigator.pushNamed(
@@ -69,7 +68,11 @@ class _CarouselSliderWidgetState extends State<CarouselSliderWidget> {
                 },
               );
             }).toList(),
-            options: CarouselOptions(height: 250.0))
+            options: CarouselOptions(
+              height: 250.0,
+              viewportFraction: 0.5,
+              aspectRatio: 0.5,
+            ))
       ],
     );
   }
