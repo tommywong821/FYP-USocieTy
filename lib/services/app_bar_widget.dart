@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:ngok3fyp_frontend_flutter/model/profile_screen_arguments.dart';
 import 'package:intl/intl.dart';
+import 'package:ngok3fyp_frontend_flutter/services/styles.dart';
 
 class AppBarWidget extends StatelessWidget {
   const AppBarWidget({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    Color hkustColor = Color.fromARGB(255, 0, 51, 102);
     final args =
         ModalRoute.of(context)!.settings.arguments as ProfileScreenArguments;
     var now = new DateTime.now().toLocal();
@@ -17,7 +17,7 @@ class AppBarWidget extends StatelessWidget {
       child: Column(
         children: [
           Padding(
-            padding: EdgeInsets.only(top: 10, left: 10),
+            padding: EdgeInsets.only(top: 10, left: 15),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -27,46 +27,39 @@ class AppBarWidget extends StatelessWidget {
                   children: [
                     Text(
                       formattedDate,
-                      style: TextStyle(
-                          color: Colors.grey,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500),
+                      style: Styles.appBarDate,
                     ),
                     SizedBox(
                       height: 3,
                     ),
-                    Text("Hi! " + args.name,
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 20,
-                        )),
+                    Text("Hi! " + args.name, style: Styles.appBarName),
                   ],
                 )),
                 Padding(
-                  padding: EdgeInsets.only(right: 8.0),
-                  child: CircleAvatar(
-                    child: Icon(
-                      Icons.person,
-                      color: Colors.white,
-                    ),
-                    backgroundColor: hkustColor,
-                  ),
-                ),
+                    padding: EdgeInsets.only(right: 15),
+                    child: Container(
+                      height: 50,
+                      width: 50,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          image: DecorationImage(
+                              fit: BoxFit.cover,
+                              image: AssetImage("assets/images/avatar.png"))),
+                    )),
               ],
             ),
           ),
           SizedBox(
-            height: 5,
+            height: 10,
           ),
-          SizedBox(
-            child: Divider(
-              indent: 20,
-              endIndent: 20,
-              thickness: 0.5,
-              color: Colors.grey.withOpacity(0.5),
-            ),
-          )
+          // SizedBox(
+          //   child: Divider(
+          //     indent: 20,
+          //     endIndent: 20,
+          //     thickness: 0.5,
+          //     color: Colors.grey.withOpacity(0.5),
+          //   ),
+          // )
         ],
       ),
     );

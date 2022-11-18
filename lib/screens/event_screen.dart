@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ngok3fyp_frontend_flutter/model/data.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:ngok3fyp_frontend_flutter/services/styles.dart';
 
 class EventScreen extends StatefulWidget {
   const EventScreen({
@@ -14,7 +14,6 @@ class EventScreen extends StatefulWidget {
 class _EventScreenState extends State<EventScreen> {
   @override
   Widget build(BuildContext context) {
-    Color hkustColor = Color.fromARGB(255, 0, 51, 102);
     final int eventID =
         int.parse(ModalRoute.of(context)!.settings.arguments.toString()) - 1;
     String eventImage = data[eventID]["image"];
@@ -91,11 +90,7 @@ class _EventScreenState extends State<EventScreen> {
                             child: Container(
                               child: Text(
                                 eventTitle,
-                                style: GoogleFonts.ptSans(
-                                    fontSize: 40,
-                                    fontWeight: FontWeight.bold,
-                                    color: hkustColor,
-                                    height: 1),
+                                style: Styles.eventScreenTitle,
                               ),
                               alignment: Alignment.centerLeft,
                             ),
@@ -112,7 +107,7 @@ class _EventScreenState extends State<EventScreen> {
                                       Icons.groups,
                                       color: Colors.white,
                                     ),
-                                    backgroundColor: hkustColor,
+                                    backgroundColor: Styles.primaryColor,
                                   ),
                                   Column(
                                     crossAxisAlignment:
@@ -124,10 +119,7 @@ class _EventScreenState extends State<EventScreen> {
                                           left: 15,
                                         ),
                                         child: Text("Lorem ipsum Soceity",
-                                            style: GoogleFonts.ptSans(
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.bold,
-                                            )),
+                                            style: Styles.eventScreenBlackText),
                                       ),
                                       //Society events count
                                       Padding(
@@ -135,8 +127,7 @@ class _EventScreenState extends State<EventScreen> {
                                             const EdgeInsets.only(left: 15),
                                         child: Text(
                                           "10 Upcoming Events",
-                                          style: GoogleFonts.ptSans(
-                                              fontSize: 12, color: Colors.grey),
+                                          style: Styles.eventScreenGreyText,
                                         ),
                                       ),
                                     ],
@@ -169,18 +160,14 @@ class _EventScreenState extends State<EventScreen> {
                                         left: 15,
                                       ),
                                       child: Text("Mon, Nov 28",
-                                          style: GoogleFonts.ptSans(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.bold,
-                                          )),
+                                          style: Styles.eventScreenBlackText),
                                     ),
                                     //Event time
                                     Padding(
                                       padding: const EdgeInsets.only(left: 15),
                                       child: Text(
                                         "14:00 - 20:00 GMT+8",
-                                        style: GoogleFonts.ptSans(
-                                            fontSize: 12, color: Colors.grey),
+                                        style: Styles.eventScreenGreyText,
                                       ),
                                     ),
                                   ],
@@ -203,18 +190,14 @@ class _EventScreenState extends State<EventScreen> {
                                         left: 15,
                                       ),
                                       child: Text("HKUST Art Hall",
-                                          style: GoogleFonts.ptSans(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.bold,
-                                          )),
+                                          style: Styles.eventScreenBlackText),
                                     ),
                                     //Adrress
                                     Padding(
                                       padding: const EdgeInsets.only(left: 15),
                                       child: Text(
                                         "Lift 11",
-                                        style: GoogleFonts.ptSans(
-                                            fontSize: 12, color: Colors.grey),
+                                        style: Styles.eventScreenGreyText,
                                       ),
                                     ),
                                   ],
@@ -237,20 +220,16 @@ class _EventScreenState extends State<EventScreen> {
                                         left: 15,
                                       ),
                                       child: Text("\$100 per Member",
-                                          style: GoogleFonts.ptSans(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.bold,
-                                          )),
+                                          style: Styles.eventScreenBlackText),
                                     ),
                                     //Price details
                                     Padding(
-                                      padding: const EdgeInsets.only(left: 15),
-                                      child: Text(
-                                        "\$150 per Non-member",
-                                        style: GoogleFonts.ptSans(
-                                            fontSize: 12, color: Colors.grey),
-                                      ),
-                                    ),
+                                        padding:
+                                            const EdgeInsets.only(left: 15),
+                                        child: Text(
+                                          "\$150 per Non-member",
+                                          style: Styles.eventScreenGreyText,
+                                        )),
                                   ],
                                 ),
                               ],
@@ -259,18 +238,13 @@ class _EventScreenState extends State<EventScreen> {
                           Padding(
                             padding: const EdgeInsets.only(top: 20, left: 20),
                             child: Text("Description",
-                                style: GoogleFonts.ptSans(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                )),
+                                style: Styles.eventScreenBlackText),
                           ),
                           Padding(
                             padding: const EdgeInsets.only(
                                 top: 20, left: 20, bottom: 20),
                             child: Text(eventContent,
-                                style: GoogleFonts.ptSans(
-                                  fontSize: 14,
-                                )),
+                                style: Styles.eventScreenText),
                           ),
                         ]),
                   )),

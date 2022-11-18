@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:ngok3fyp_frontend_flutter/services/app_bar_widget.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:ngok3fyp_frontend_flutter/services/tab_bar_widget.dart';
 import 'package:ngok3fyp_frontend_flutter/services/carousel_slider_widget.dart';
+import 'package:ngok3fyp_frontend_flutter/services/styles.dart';
 
 class HomeWidget extends StatefulWidget {
   const HomeWidget({
@@ -15,7 +16,7 @@ class _HomeWidget extends State<HomeWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Styles.backGroundColor,
       body: Column(children: [
         //App Bar
         AppBarWidget(),
@@ -23,38 +24,46 @@ class _HomeWidget extends State<HomeWidget> {
             child: SingleChildScrollView(
                 child: Column(
           children: [
-            //Recommndation Title
+            //Feature Title
             Padding(
-              padding: const EdgeInsets.only(left: 10),
+              padding: const EdgeInsets.only(left: 15),
               child: Container(
                 alignment: Alignment.centerLeft,
                 child: Text(
                   "Featured",
-                  style: GoogleFonts.ptSans(
-                      fontSize: 26,
-                      letterSpacing: 1,
-                      fontWeight: FontWeight.bold),
+                  style: Styles.carouselTitle,
                 ),
               ),
             ),
             //TODO hero animation for carousel
-            //Recommndation Carousel
-            Padding(
-              padding: const EdgeInsets.only(top: 10),
-              child: CarouselSliderWidget(),
-            ),
+            //Tab Bar with Carousel slider
+            TabBarWidget(),
             //Incoming Title
             Padding(
-              padding: const EdgeInsets.only(left: 10, top: 10),
-              child: Container(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  "Incoming",
-                  style: GoogleFonts.ptSans(
-                      fontSize: 26,
-                      letterSpacing: 1,
-                      fontWeight: FontWeight.bold),
-                ),
+              padding: const EdgeInsets.only(left: 15, top: 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Container(
+                    alignment: Alignment.centerLeft,
+                    child: Text("Incoming", style: Styles.carouselTitle),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(right: 15),
+                    child: GestureDetector(
+                      onTap: () {
+                        print("see all");
+                      },
+                      child: Container(
+                        child: Text(
+                          "See All",
+                          style: Styles.seeAll,
+                        ),
+                      ),
+                    ),
+                  )
+                ],
               ),
             ),
             //Incoming Carousel
@@ -64,16 +73,32 @@ class _HomeWidget extends State<HomeWidget> {
             ),
             //Society Title
             Padding(
-              padding: const EdgeInsets.only(left: 10, top: 10),
-              child: Container(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  "Society",
-                  style: GoogleFonts.ptSans(
-                      fontSize: 26,
-                      letterSpacing: 1,
-                      fontWeight: FontWeight.bold),
-                ),
+              padding: const EdgeInsets.only(left: 15, top: 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Container(
+                    child: Text(
+                      "Society",
+                      style: Styles.carouselTitle,
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(right: 15),
+                    child: GestureDetector(
+                      onTap: () {
+                        print("see all");
+                      },
+                      child: Container(
+                        child: Text(
+                          "See All",
+                          style: Styles.seeAll,
+                        ),
+                      ),
+                    ),
+                  )
+                ],
               ),
             ),
             //Society Carousel

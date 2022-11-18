@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:ngok3fyp_frontend_flutter/screens/home_widget.dart';
 import 'package:ngok3fyp_frontend_flutter/screens/profile_screen.dart';
 import 'package:ngok3fyp_frontend_flutter/screens/calendar_widget.dart';
+import 'package:ngok3fyp_frontend_flutter/services/styles.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({
@@ -41,9 +42,9 @@ class _HomeScreenState extends State<HomeScreen> {
         bottomNavigationBar: BottomNavigationBar(
           type: BottomNavigationBarType.fixed,
           items: _bottomNavigationBarItem,
-          selectedItemColor: Colors.black54,
+          selectedItemColor: Styles.primaryColor,
           unselectedItemColor: Colors.grey.withOpacity(0.5),
-          backgroundColor: Colors.white,
+          backgroundColor: Styles.backGroundColor,
           showSelectedLabels: false,
           showUnselectedLabels: false,
           currentIndex: _selectedIndex,

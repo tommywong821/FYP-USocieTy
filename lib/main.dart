@@ -20,7 +20,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'AAD OAuth Demo',
-      theme: ThemeData(primarySwatch: Colors.blue),
+      theme: ThemeData(
+          scaffoldBackgroundColor: Color.fromARGB(255, 250, 250, 250)),
       routes: {
         '/': (context) => const WelcomeScreen(),
         '/home': (context) => const HomeScreen(),
