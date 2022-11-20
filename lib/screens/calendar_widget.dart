@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
-
 import 'package:ngok3fyp_frontend_flutter/services/calendar_utils.dart';
+import 'package:ngok3fyp_frontend_flutter/services/horizontal_card_widget.dart';
 
 class CalendarWidget extends StatefulWidget {
   @override
@@ -75,19 +75,22 @@ class _CalendarWidgetState extends State<CalendarWidget> {
                 return ListView.builder(
                   itemCount: value.length,
                   itemBuilder: (context, index) {
-                    return Container(
-                      margin: const EdgeInsets.symmetric(
-                        horizontal: 12.0,
-                        vertical: 4.0,
-                      ),
-                      decoration: BoxDecoration(
-                        border: Border.all(),
-                        borderRadius: BorderRadius.circular(12.0),
-                      ),
-                      child: ListTile(
-                        onTap: () => print('${value[index]}'),
-                        title: Text('${value[index]}'),
-                      ),
+                    // return Container(
+                    //   margin: const EdgeInsets.symmetric(
+                    //     horizontal: 12.0,
+                    //     vertical: 4.0,
+                    //   ),
+                    //   decoration: BoxDecoration(
+                    //     border: Border.all(),
+                    //     borderRadius: BorderRadius.circular(12.0),
+                    //   ),
+                    //   child: ListTile(
+                    //     onTap: () => print('${value[index]}'),
+                    //     title: Text('${value[index]}'),
+                    //   ),
+                    // );
+                    return HorizontalCardWidget(
+                      eventID: index,
                     );
                   },
                 );

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:ngok3fyp_frontend_flutter/services/app_bar_widget.dart';
 import 'package:ngok3fyp_frontend_flutter/services/tab_bar_widget.dart';
 import 'package:ngok3fyp_frontend_flutter/services/carousel_slider_widget.dart';
@@ -13,6 +14,8 @@ class HomeWidget extends StatefulWidget {
 }
 
 class _HomeWidget extends State<HomeWidget> {
+  var viewMorePressed1 = true;
+  var viewMorePressed2 = true;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,7 +29,7 @@ class _HomeWidget extends State<HomeWidget> {
           children: [
             //Feature Title
             Padding(
-              padding: const EdgeInsets.only(left: 15),
+              padding: const EdgeInsets.only(left: 15, bottom: 5),
               child: Container(
                 alignment: Alignment.centerLeft,
                 child: Text(
@@ -53,12 +56,30 @@ class _HomeWidget extends State<HomeWidget> {
                     padding: const EdgeInsets.only(right: 15),
                     child: GestureDetector(
                       onTap: () {
-                        print("see all");
+                        Navigator.pushNamed(
+                          context,
+                          '/inc',
+                        );
+                      },
+                      onTapUp: (details) => {
+                        setState(() {
+                          viewMorePressed1 = true;
+                        })
+                      },
+                      onTapDown: (details) => {
+                        setState(() {
+                          viewMorePressed1 = false;
+                        })
                       },
                       child: Container(
                         child: Text(
                           "See All",
-                          style: Styles.seeAll,
+                          style: GoogleFonts.ptSans(
+                              color: !viewMorePressed1
+                                  ? Styles.primaryColor
+                                  : Colors.grey,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600),
                         ),
                       ),
                     ),
@@ -88,12 +109,30 @@ class _HomeWidget extends State<HomeWidget> {
                     padding: const EdgeInsets.only(right: 15),
                     child: GestureDetector(
                       onTap: () {
-                        print("see all");
+                        Navigator.pushNamed(
+                          context,
+                          '/society',
+                        );
+                      },
+                      onTapUp: (details) => {
+                        setState(() {
+                          viewMorePressed2 = true;
+                        })
+                      },
+                      onTapDown: (details) => {
+                        setState(() {
+                          viewMorePressed2 = false;
+                        })
                       },
                       child: Container(
                         child: Text(
                           "See All",
-                          style: Styles.seeAll,
+                          style: GoogleFonts.ptSans(
+                              color: !viewMorePressed2
+                                  ? Styles.primaryColor
+                                  : Colors.grey,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600),
                         ),
                       ),
                     ),
@@ -103,7 +142,7 @@ class _HomeWidget extends State<HomeWidget> {
             ),
             //Society Carousel
             Padding(
-              padding: const EdgeInsets.only(top: 10),
+              padding: const EdgeInsets.only(top: 10, bottom: 10),
               child: CarouselSliderWidget(),
             ),
           ],

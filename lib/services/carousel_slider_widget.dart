@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:ngok3fyp_frontend_flutter/model/data.dart';
+import 'package:ngok3fyp_frontend_flutter/services/styles.dart';
 
 class CarouselSliderWidget extends StatefulWidget {
   const CarouselSliderWidget({Key? key}) : super(key: key);
@@ -46,9 +47,47 @@ class _CarouselSliderWidgetState extends State<CarouselSliderWidget> {
                                     borderRadius: BorderRadius.circular(20),
                                   )),
                             ),
+                            Padding(
+                              padding: const EdgeInsets.only(left: 15),
+                              child: Container(
+                                child: Text(
+                                  "Mon, Nov 28 · 13:30 - 15:00",
+                                  style: Styles.carouselSliderDate,
+                                ),
+                                alignment: Alignment.centerLeft,
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(left: 15, top: 5),
+                              child: Container(
+                                alignment: Alignment.centerLeft,
+                                child: Text(i["title"],
+                                    style: Styles.carouselSliderTitle,
+                                    overflow: TextOverflow.ellipsis),
+                              ),
+                            ),
 
-                            //title
-                            Text(i["title"]),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 7, left: 10),
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    Icons.location_pin,
+                                    color: Styles.primaryColor,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 5),
+                                    child: Container(
+                                      child: Text(
+                                        "HKUST Art Hall",
+                                        style: Styles.carouselSliderLocation,
+                                      ),
+                                      alignment: Alignment.centerLeft,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            )
                           ],
                         ),
                         shape: RoundedRectangleBorder(
