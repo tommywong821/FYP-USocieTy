@@ -67,13 +67,16 @@ class _TabBarWidgetState extends State<TabBarWidget>
                 ]),
           ),
         ),
-        Container(
-          height: 250,
-          child: TabBarView(controller: _tabController, children: [
-            CarouselSliderWidget(),
-            CarouselSliderWidget(),
-            CarouselSliderWidget()
-          ]),
+        Padding(
+          padding: const EdgeInsets.only(top: 10),
+          child: Container(
+            height: 250,
+            child: TabBarView(controller: _tabController, children: [
+              CarouselSliderWidget(),
+              CarouselSliderWidget(),
+              CarouselSliderWidget()
+            ]),
+          ),
         )
       ],
     );
