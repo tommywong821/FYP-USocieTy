@@ -1,10 +1,10 @@
-# name: springboot-docker-heroku CD
+name: springboot-docker-heroku CD
 
-# on:
-#   push:
-#     branches: [ master ]
-#   pull_request:
-#     branches: [ master ]
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
 
 # #set environment variables
 # env:
@@ -12,11 +12,11 @@
 #   HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
 #   APP_NAME: ${{ secrets.HEROKU_APP_NAME }}
 
-# jobs:
+jobs:
 
-#   deploy:
-#     name: Deploy to Heroku
-#     runs-on: ubuntu-latest
+  deploy:
+    name: Deploy to Heroku
+    runs-on: ubuntu-latest
 #     steps:
 
 #       # Clone the repository
