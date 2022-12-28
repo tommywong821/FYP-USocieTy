@@ -11,7 +11,7 @@ class StudentServiceTest {
     private val studentService: StudentService = StudentService(studentRepository)
 
     @Test
-    fun testGetStudentProfile() {
+    fun testGetStudentProfileService() {
         //create mock student entity
         val mockStudentEntity: StudentEntity = StudentEntity("test_itsc", "test_name", "test_mail", "test_role")
 

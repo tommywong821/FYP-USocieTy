@@ -21,7 +21,7 @@ class StudentControllerTest @Autowired constructor(
     private val studentDto: StudentDto = StudentDto("test_itsc", "test_name", "test_mail", "test_role")
 
     @Test
-    fun testGetStudentProfile() {
+    fun testGetStudentProfileController() {
         every { studentService.getStudentProfile("test_itsc") } returns studentDto
 
         mockMvc.perform(
