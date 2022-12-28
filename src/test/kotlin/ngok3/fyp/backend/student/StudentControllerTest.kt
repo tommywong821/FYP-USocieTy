@@ -2,36 +2,53 @@ package ngok3.fyp.backend.student
 
 import com.ninjasquad.springmockk.MockkBean
 import io.mockk.every
+import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers
+import org.springframework.test.web.servlet.get
 
 @SpringBootTest
 @AutoConfigureMockMvc
 class StudentControllerTest @Autowired constructor(
     val mockMvc: MockMvc
 ) {
+    private val mockStudentRepository: MockStudentRepository = MockStudentRepository()
+    private val mockStudentEntity = mockStudentRepository.testStudentEntity
+
     @MockkBean
     lateinit var studentService: StudentService
-    private val studentDto: StudentDto = StudentDto("test_itsc", "test_name", "test_mail", "test_role")
 
     @Test
-    fun testGetStudentProfileController() {
-        every { studentService.getStudentProfile("test_itsc") } returns studentDto
+    @DisplayName("GET /student?itsc={itsc}")
+    fun `should return test student profile`() {
+        every { studentService.getStudentProfile(mockStudentRepository.testStudentEntityItsc) } returns StudentDto(
+            mockStudentEntity.itsc,
+            mockStudentEntity.nickname,
+            mockStudentEntity.mail,
+            mockStudentEntity.role
+        )
 
-        mockMvc.perform(
-            MockMvcRequestBuilders.get("/student")
-                .param("itsc", "test_itsc")
-        ).andExpect(MockMvcResultMatchers.status().isOk)
-            .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
-            .andExpect(MockMvcResultMatchers.jsonPath("$.itsc").value(studentDto.itsc))
-            .andExpect(MockMvcResultMatchers.jsonPath("$.nickname").value(studentDto.nickname))
-            .andExpect(MockMvcResultMatchers.jsonPath("$.mail").value(studentDto.mail))
-            .andExpect(MockMvcResultMatchers.jsonPath("$.role").value(studentDto.role))
+        mockMvc.get("/student?itsc=${mockStudentRepository.testStudentEntityItsc}")
+            .andDo { print() }
+            .andExpect {
+                status { isOk() }
+                content { contentType(MediaType.APPLICATION_JSON) }
+                jsonPath("$.itsc") {
+                    value(mockStudentRepository.testStudentEntity.itsc)
+                }
+                jsonPath("$.nickname") {
+                    value(mockStudentRepository.testStudentEntity.nickname)
+                }
+                jsonPath("$.mail") {
+                    value(mockStudentRepository.testStudentEntity.mail)
+                }
+                jsonPath("$.role") {
+                    value(mockStudentRepository.testStudentEntity.role)
+                }
+            }
     }
 }
