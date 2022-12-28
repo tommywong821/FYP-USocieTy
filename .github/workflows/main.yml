@@ -17,17 +17,17 @@ jobs:
   deploy:
     name: Deploy to Heroku
     runs-on: ubuntu-latest
-#     steps:
+    steps:
 
-#       # Clone the repository
-#       - name: Checkout
-#         uses: actions/checkout@v3
+      # Clone the repository
+      - name: Checkout
+        uses: actions/checkout@v3
 
-#       # Build application jar
-#       - name: Build application jar
-#         run: |
-#           chmod +x gradlew
-#           ./gradlew bootJar
+      # Build application jar
+      - name: Build application jar
+        run: |
+          chmod +x gradlew
+          ./gradlew bootJar
 
 #       # Build Docker image
 #       - name: Docker build
