@@ -25,7 +25,7 @@ dependencies {
 	implementation("com.squareup.okhttp3:okhttp")
 	//xml convertor
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
-	implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.13.3")
+	implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.14.0")
 	//postgresql
 	runtimeOnly("org.postgresql:postgresql")
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
@@ -36,10 +36,11 @@ dependencies {
 	runtimeOnly("io.jsonwebtoken:jjwt-impl:0.11.5")
 	runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.11.5")
 	//openapi
-	implementation("org.springdoc:springdoc-openapi-ui:1.6.9")
+	implementation("org.springdoc:springdoc-openapi-ui:1.6.14")
 	//testing
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
-	testImplementation("com.ninja-squad:springmockk:3.1.1")
+	//springboot 2.X max version:3.x
+	testImplementation("com.ninja-squad:springmockk:3.1.2")
 }
 
 tasks.withType<KotlinCompile> {
