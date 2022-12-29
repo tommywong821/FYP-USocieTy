@@ -27,29 +27,29 @@ jobs:
       with:
         path: './src/main/resources/application.properties'
         property: |
-          'spring.h2.console.enabled'
-          'spring.h2.console.path'
-          'spring.datasource.url'
-          'spring.datasource.username'
-          'spring.datasource.password'
-          'heroku.frontend.url'
-          'heroku.backend.url'
-          'cors.originPatterns'
-          'itsc.tenantId'
-          'itsc.clientId'
-          'itsc.clientSecret'
+          spring.h2.console.enabled
+          spring.h2.console.path
+          spring.datasource.url
+          spring.datasource.username
+          spring.datasource.password
+          heroku.frontend.url
+          heroku.backend.url
+          cors.originPatterns
+          itsc.tenantId
+          itsc.clientId
+          itsc.clientSecret
         value: |
-          'true'
-          '/h2-console'
-          'jdbc:h2:mem:test;DB_CLOSE_DELAY=-1'
-          'test'
-          'Test1234'
-          'heroku.frontend.url'
-          'heroku.backend.url'
-          'cors.originPatterns'
-          'ITSC_TENANT_ID'
-          'ITSC_CLIENT_ID'
-          'ITSC_CLIENT_SECRET'
+          true
+          /h2-console
+          jdbc:h2:mem:test;DB_CLOSE_DELAY=-1
+          test
+          Test1234
+          heroku.frontend.url
+          heroku.backend.url
+          cors.originPatterns
+          ITSC_TENANT_ID
+          ITSC_CLIENT_ID
+          ITSC_CLIENT_SECRET
     
     # Run gradle test
     - name: Run gradle test
