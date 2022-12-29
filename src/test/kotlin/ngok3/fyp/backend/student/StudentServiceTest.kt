@@ -24,7 +24,7 @@ class StudentServiceTest() {
         val mockStudentDto: StudentDto = studentService.getStudentProfile(mockStudentEntityItsc)
 
         //test value
-        assertEquals(mockStudentDto.itsc, "mockStudentEntity.itsc")
+        assertEquals(mockStudentDto.itsc, mockStudentEntity.itsc)
         assertEquals(mockStudentDto.nickname, mockStudentEntity.nickname)
         assertEquals(mockStudentDto.mail, mockStudentEntity.mail)
         assertEquals(mockStudentDto.role, mockStudentEntity.role)
