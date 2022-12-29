@@ -23,33 +23,20 @@ jobs:
     
     # Create dummy test properties file
     - name: Write value to Properties-file
-      uses: christian-draeger/write-properties@1.1.0
-      with:
-        path: './src/main/resources/application.properties'
-        property: |
-          spring.h2.console.enabled
-          spring.h2.console.path
-          spring.datasource.url
-          spring.datasource.username
-          spring.datasource.password
-          heroku.frontend.url
-          heroku.backend.url
-          cors.originPatterns
-          itsc.tenantId
-          itsc.clientId
-          itsc.clientSecret
-        value: |
-          true
-          /h2-console
-          jdbc:h2:mem:test;DB_CLOSE_DELAY=-1
-          test
-          Test1234
-          heroku.frontend.url
-          heroku.backend.url
-          cors.originPatterns
-          ITSC_TENANT_ID
-          ITSC_CLIENT_ID
-          ITSC_CLIENT_SECRET
+      run: |
+        cd src/main/resources
+        touch application.properties
+        echo "spring.h2.console.enabled=true" > application.properties
+        echo "spring.h2.console.path=/h2-console" > application.properties
+        echo "spring.datasource.url=jdbc:h2:mem:test;DB_CLOSE_DELAY=-1" > application.properties
+        echo "spring.datasource.username=test" > application.properties
+        echo "spring.datasource.password=Test1234" > application.properties
+        echo "heroku.frontend.url=heroku.frontend.url" > application.properties
+        echo "heroku.backend.url=heroku.backend.url" > application.properties
+        echo "cors.originPatterns=cors.originPatterns" > application.properties
+        echo "itsc.tenantId=ITSC_TENANT_ID" > application.properties
+        echo "itsc.clientId=ITSC_CLIENT_ID" > application.properties
+        echo "itsc.clientSecret=ITSC_CLIENT_SECRET" > application.properties
     
     # Run gradle test
     - name: Run gradle test
