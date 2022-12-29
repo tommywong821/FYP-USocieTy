@@ -26,7 +26,7 @@ jobs:
       run: |
         cd src/main/resources
         touch application.properties
-        echo "spring.h2.console.enabled=true\n" >> application.properties
+        echo "spring.h2.console.enabled=true" >> application.properties
         echo "spring.h2.console.path=/h2-console" >> application.properties
         echo "spring.datasource.url=jdbc:h2:mem:test;DB_CLOSE_DELAY=-1" >> application.properties
         echo "spring.datasource.username=test" >> application.properties
