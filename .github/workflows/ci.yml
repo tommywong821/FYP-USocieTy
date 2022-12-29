@@ -54,5 +54,6 @@ jobs:
     # Run gradle test
     - name: Run gradle test
       run: |
+        cat src/main/resources/application.properties
         chmod +x gradlew
         ./gradlew test
