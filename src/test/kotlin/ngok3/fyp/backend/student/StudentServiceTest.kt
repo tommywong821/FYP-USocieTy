@@ -6,20 +6,22 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import java.util.*
 
-class StudentServiceTest {
+class StudentServiceTest() {
+    private val mockStudentRepository: MockStudentRepository = MockStudentRepository()
     private val studentRepository: StudentRepository = mockk()
     private val studentService: StudentService = StudentService(studentRepository)
 
     @Test
-    fun testGetStudentProfile() {
+    fun `should get test student profile`() {
         //create mock student entity
-        val mockStudentEntity: StudentEntity = StudentEntity("test_itsc", "test_name", "test_mail", "test_role")
+        val mockStudentEntity: StudentEntity = mockStudentRepository.testStudentEntity
+        val mockStudentEntityItsc: String = mockStudentRepository.testStudentEntityItsc
 
         //mock db operation
-        every { studentRepository.findByItsc("test_itsc") } returns Optional.of(mockStudentEntity)
+        every { studentRepository.findByItsc(mockStudentEntityItsc) } returns Optional.of(mockStudentEntity)
 
         //mock service operation
-        val mockStudentDto: StudentDto = studentService.getStudentProfile("test_itsc")
+        val mockStudentDto: StudentDto = studentService.getStudentProfile(mockStudentEntityItsc)
 
         //test value
         assertEquals(mockStudentDto.itsc, mockStudentEntity.itsc)
