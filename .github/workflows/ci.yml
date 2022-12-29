@@ -17,6 +17,36 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    # Create dummy test properties file
+    - name: Write value to Properties-file
+      uses: christian-draeger/write-properties@1.1.0
+      with:
+        path: './src/main/resources/application.properties'
+        property: |
+          'spring.h2.console.enabled'
+          'spring.h2.console.path'
+          'spring.datasource.url'
+          'spring.datasource.username'
+          'spring.datasource.password'
+          'heroku.frontend.url'
+          'heroku.backend.url'
+          'cors.originPatterns'
+          'itsc.tenantId'
+          'itsc.clientId'
+          'itsc.clientSecret'
+        value: |
+          'true'
+          '/h2-console'
+          'jdbc:h2:mem:test;DB_CLOSE_DELAY=-1'
+          'test'
+          'Test1234'
+          'heroku.frontend.url'
+          'heroku.backend.url'
+          'cors.originPatterns'
+          'ITSC_TENANT_ID'
+          'ITSC_CLIENT_ID'
+          'ITSC_CLIENT_SECRET'
+    
     # Clone the repository
     - name: Checkout
       uses: actions/checkout@v3
