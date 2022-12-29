@@ -39,9 +39,9 @@ jobs:
         echo "itsc.clientSecret=ITSC_CLIENT_SECRET" >> application.properties
         cd ../../..
     
-    # Run gradle test
-    - name: Run gradle test
+    # Assembles and tests this project.
+    - name: Run gradle build
       run: |
         cat src/main/resources/application.properties
         chmod +x gradlew
-        ./gradlew test
+        ./gradlew build
