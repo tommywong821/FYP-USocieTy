@@ -1,10 +1,7 @@
 package ngok3.fyp.backend.event
 
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestParam
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 import java.util.*
 
 @RestController
@@ -22,7 +19,7 @@ class EventController(
         return eventService.getAllSocietyEvent(itsc, pageNum, pageSize)
     }
 
-    @GetMapping
+    @PostMapping
     fun joinSocietyEvent(
         @RequestParam("itsc", required = false, defaultValue = "") itsc: String,
         @RequestParam("eventName", required = false, defaultValue = "") eventName: String,
