@@ -16,7 +16,11 @@ jobs:
     name: SpringBoot CI Test
     runs-on: ubuntu-latest
 
-    steps:
+    steps:    
+    # Clone the repository
+    - name: Checkout
+      uses: actions/checkout@v3
+    
     # Create dummy test properties file
     - name: Write value to Properties-file
       uses: christian-draeger/write-properties@1.1.0
@@ -46,10 +50,6 @@ jobs:
           'ITSC_TENANT_ID'
           'ITSC_CLIENT_ID'
           'ITSC_CLIENT_SECRET'
-    
-    # Clone the repository
-    - name: Checkout
-      uses: actions/checkout@v3
     
     # Run gradle test
     - name: Run gradle test
