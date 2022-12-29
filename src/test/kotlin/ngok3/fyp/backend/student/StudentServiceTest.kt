@@ -15,7 +15,7 @@ class StudentServiceTest() {
     fun `should get test student profile`() {
         //create mock student entity
         val mockStudentEntity: StudentEntity = mockStudentRepository.testStudentEntity
-        val mockStudentEntityItsc: String = mockStudentRepository.testStudentEntityItsc
+        val mockStudentEntityItsc: String = mockStudentRepository.testItsc
 
         //mock db operation
         every { studentRepository.findByItsc(mockStudentEntityItsc) } returns Optional.of(mockStudentEntity)

@@ -25,14 +25,14 @@ class StudentControllerTest @Autowired constructor(
     @Test
     @DisplayName("GET /student?itsc={itsc}")
     fun `should return test student profile`() {
-        every { studentService.getStudentProfile(mockStudentRepository.testStudentEntityItsc) } returns StudentDto(
+        every { studentService.getStudentProfile(mockStudentRepository.testItsc) } returns StudentDto(
             mockStudentEntity.itsc,
             mockStudentEntity.nickname,
             mockStudentEntity.mail,
             mockStudentEntity.role
         )
 
-        mockMvc.get("/student?itsc=${mockStudentRepository.testStudentEntityItsc}")
+        mockMvc.get("/student?itsc=${mockStudentRepository.testItsc}")
             .andDo { print() }
             .andExpect {
                 status { isOk() }
