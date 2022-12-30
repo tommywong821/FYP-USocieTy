@@ -10,15 +10,15 @@ import javax.persistence.Table
 
 @Entity
 @Table(name = "event")
-class EventEntity(
-    var name: String? = null,
-    var poster: String? = null,
-    var maxParticipation: Int? = null,
-    var applyDeadline: LocalDateTime? = null,
-    var location: String? = null,
-    var date: LocalDateTime? = null,
+open class EventEntity(
+    open var name: String? = null,
+    open var poster: String? = null,
+    open var maxParticipation: Int? = null,
+    open var applyDeadline: LocalDateTime? = null,
+    open var location: String? = null,
+    open var date: LocalDateTime? = null,
 
     @ManyToOne
     @JoinColumn(name = "society_entity_uuid")
-    var societyEntity: SocietyEntity? = null
+    open var societyEntity: SocietyEntity? = null
 ) : BaseEntity()
