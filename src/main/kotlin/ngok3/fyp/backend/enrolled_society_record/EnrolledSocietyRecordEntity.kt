@@ -8,19 +8,19 @@ import javax.persistence.*
 
 @Entity
 @Table(name = "enrolled_society_record")
-class EnrolledSocietyRecordEntity(
+open class EnrolledSocietyRecordEntity(
     @EmbeddedId
-    var id: EnrolledSocietyRecordKey? = null,
+    open var id: EnrolledSocietyRecordKey? = null,
 
     @ManyToOne
     @MapsId("studentUuid")
     @JoinColumn(name = "student_entity_uuid")
-    var studentEntity: StudentEntity? = null,
+    open var studentEntity: StudentEntity? = null,
 
     @ManyToOne
     @MapsId("societyUuid")
     @JoinColumn(name = "society_entity_uuid")
-    var societyEntity: SocietyEntity? = null
+    open var societyEntity: SocietyEntity? = null
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

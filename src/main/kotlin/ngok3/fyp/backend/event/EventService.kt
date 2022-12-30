@@ -1,6 +1,7 @@
 package ngok3.fyp.backend.event
 
 import ngok3.fyp.backend.enrolled_event_record.EnrolledEventRecordEntity
+import ngok3.fyp.backend.enrolled_event_record.EnrolledEventRecordKey
 import ngok3.fyp.backend.enrolled_event_record.EnrolledEventRepository
 import ngok3.fyp.backend.student.StudentEntity
 import ngok3.fyp.backend.student.StudentRepository
@@ -60,7 +61,11 @@ class EventService(
             throw Exception()
         }
 
-        val record = EnrolledEventRecordEntity(null, student.get(), event.get())
+        val studentObj = student.get()
+        val eventObj = event.get()
+
+        val record =
+            EnrolledEventRecordEntity(EnrolledEventRecordKey(studentObj.uuid, eventObj.uuid), studentObj, eventObj)
         enrolledEventRepository.save(record)
     }
 }
