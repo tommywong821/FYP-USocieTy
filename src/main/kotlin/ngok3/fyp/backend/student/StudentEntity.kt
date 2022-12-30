@@ -8,14 +8,14 @@ import javax.persistence.Table
 
 @Entity
 @Table(name = "student")
-class StudentEntity(
-    var itsc: String? = null,
-    var nickname: String? = null,
-    var mail: String? = null,
-    var role: String? = null,
+open class StudentEntity(
+    open var itsc: String? = null,
+    open var nickname: String? = null,
+    open var mail: String? = null,
+    open var role: String? = null,
 
     @OneToMany(mappedBy = "studentEntity", orphanRemoval = true)
-    var enrolledSocietyRecordEntities: MutableSet<EnrolledSocietyRecordEntity> = mutableSetOf()
+    open var enrolledSocietyRecordEntities: MutableSet<EnrolledSocietyRecordEntity> = mutableSetOf()
 ) : BaseEntity() {
 
 }
