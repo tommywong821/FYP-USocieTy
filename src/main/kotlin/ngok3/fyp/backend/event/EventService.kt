@@ -9,6 +9,7 @@ import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 
@@ -20,7 +21,7 @@ class EventService(
 ) {
     fun getAllSocietyEvent(itsc: String, pageNum: Int, pageSize: Int): List<EventDto> {
         val firstPageNumWithPageSizeElement: Pageable = PageRequest.of(pageNum, pageSize)
-
+        println("LocalDateTime.now(): ${LocalDateTime.now()}")
         val allEvent: List<EventEntity> = if (itsc.isBlank()) {
             //get all event
             eventRepository.findByApplyDeadlineGreaterThanEqualOrderByApplyDeadlineAsc(
@@ -44,8 +45,9 @@ class EventService(
                 event.name,
                 event.poster,
                 event.maxParticipation,
-                event.applyDeadline,
-                event.location
+                event.applyDeadline?.format(DateTimeFormatter.ofPattern("dd-MM-yyyy")),
+                event.location,
+                event.date?.format(DateTimeFormatter.ofPattern("dd-MM-yyyy"))
             )
         }
     }

@@ -10,6 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.get
+import java.time.format.DateTimeFormatter
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -35,8 +36,9 @@ class EventControllerTest @Autowired constructor(
                 eventEntity.name,
                 eventEntity.poster,
                 eventEntity.maxParticipation,
-                eventEntity.applyDeadline,
-                eventEntity.location
+                eventEntity.applyDeadline?.format(DateTimeFormatter.ofPattern("dd-MM-yyyy")),
+                eventEntity.location,
+                eventEntity.date?.format(DateTimeFormatter.ofPattern("dd-MM-yyyy"))
             )
         }
 
@@ -87,8 +89,9 @@ class EventControllerTest @Autowired constructor(
                 eventEntity.name,
                 eventEntity.poster,
                 eventEntity.maxParticipation,
-                eventEntity.applyDeadline,
-                eventEntity.location
+                eventEntity.applyDeadline?.format(DateTimeFormatter.ofPattern("dd-MM-yyyy")),
+                eventEntity.location,
+                eventEntity.date?.format(DateTimeFormatter.ofPattern("dd-MM-yyyy"))
             )
         }
 
