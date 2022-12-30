@@ -9,6 +9,7 @@ import ngok3.fyp.backend.student.StudentRepository
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 class EventServiceTest {
@@ -47,8 +48,9 @@ class EventServiceTest {
                 event.name,
                 event.poster,
                 event.maxParticipation,
-                event.applyDeadline,
-                event.location
+                event.applyDeadline?.format(DateTimeFormatter.ofPattern("dd-MM-yyyy")),
+                event.location,
+                event.date?.format(DateTimeFormatter.ofPattern("dd-MM-yyyy"))
             )
         }
 
@@ -96,8 +98,9 @@ class EventServiceTest {
                 event.name,
                 event.poster,
                 event.maxParticipation,
-                event.applyDeadline,
-                event.location
+                event.applyDeadline?.format(DateTimeFormatter.ofPattern("dd-MM-yyyy")),
+                event.location,
+                event.date?.format(DateTimeFormatter.ofPattern("dd-MM-yyyy"))
             )
         }
 
