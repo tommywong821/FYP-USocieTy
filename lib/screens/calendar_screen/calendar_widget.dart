@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:ngok3fyp_frontend_flutter/services/calendar_utils.dart';
-import 'package:ngok3fyp_frontend_flutter/screens/home_sceen/horizontal_card_widget.dart';
+import 'package:ngok3fyp_frontend_flutter/screens/calendar_screen/horizontal_card_widget.dart';
 
 class CalendarWidget extends StatefulWidget {
   @override

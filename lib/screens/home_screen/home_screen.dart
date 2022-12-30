@@ -1,8 +1,8 @@
 import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
-import 'package:ngok3fyp_frontend_flutter/screens/home_sceen/home_widget.dart';
+import 'package:ngok3fyp_frontend_flutter/screens/home_screen/home_widget.dart';
 import 'package:ngok3fyp_frontend_flutter/screens/profile_screen.dart';
-import 'package:ngok3fyp_frontend_flutter/screens/calendar_widget.dart';
+import 'package:ngok3fyp_frontend_flutter/screens/calendar_screen/calendar_widget.dart';
 import 'package:ngok3fyp_frontend_flutter/services/styles.dart';
 
 class HomeScreen extends StatefulWidget {

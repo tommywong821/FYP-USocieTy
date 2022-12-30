@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ngok3fyp_frontend_flutter/screens/home_sceen/horizontal_card_widget.dart';
+import 'package:ngok3fyp_frontend_flutter/screens/calendar_screen/horizontal_card_widget.dart';
 import 'package:ngok3fyp_frontend_flutter/services/styles.dart';
 
 class IncomingEvnetScreen extends StatefulWidget {

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ngok3fyp_frontend_flutter/screens/home_sceen/reduced_carousel_slider_widget.dart';
+import 'package:ngok3fyp_frontend_flutter/screens/home_screen/reduced_carousel_slider_widget.dart';
 import 'package:ngok3fyp_frontend_flutter/services/styles.dart';
 
 class TabBarWidget extends StatefulWidget {
