@@ -36,9 +36,9 @@ class EventControllerTest @Autowired constructor(
                 eventEntity.name,
                 eventEntity.poster,
                 eventEntity.maxParticipation,
-                eventEntity.applyDeadline?.format(DateTimeFormatter.ofPattern("dd-MM-yyyy")),
+                eventEntity.applyDeadline?.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")),
                 eventEntity.location,
-                eventEntity.date?.format(DateTimeFormatter.ofPattern("dd-MM-yyyy"))
+                eventEntity.date?.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
             )
         }
 
@@ -89,9 +89,9 @@ class EventControllerTest @Autowired constructor(
                 eventEntity.name,
                 eventEntity.poster,
                 eventEntity.maxParticipation,
-                eventEntity.applyDeadline?.format(DateTimeFormatter.ofPattern("dd-MM-yyyy")),
+                eventEntity.applyDeadline?.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")),
                 eventEntity.location,
-                eventEntity.date?.format(DateTimeFormatter.ofPattern("dd-MM-yyyy"))
+                eventEntity.date?.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
             )
         }
 
