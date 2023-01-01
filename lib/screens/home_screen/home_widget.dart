@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:ngok3fyp_frontend_flutter/services/app_bar_widget.dart';
-import 'package:ngok3fyp_frontend_flutter/services/tab_bar_widget.dart';
-import 'package:ngok3fyp_frontend_flutter/services/carousel_slider_widget.dart';
+import 'package:ngok3fyp_frontend_flutter/screens/home_screen/app_bar_widget.dart';
+import 'package:ngok3fyp_frontend_flutter/screens/home_screen/tab_bar_widget.dart';
+import 'package:ngok3fyp_frontend_flutter/screens/home_screen/carousel_slider_widget.dart';
 import 'package:ngok3fyp_frontend_flutter/services/styles.dart';
 
 class HomeWidget extends StatefulWidget {
