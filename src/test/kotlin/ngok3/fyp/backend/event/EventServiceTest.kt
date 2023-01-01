@@ -48,9 +48,9 @@ class EventServiceTest {
                 event.name,
                 event.poster,
                 event.maxParticipation,
-                event.applyDeadline?.format(DateTimeFormatter.ofPattern("dd-MM-yyyy")),
+                event.applyDeadline?.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")),
                 event.location,
-                event.date?.format(DateTimeFormatter.ofPattern("dd-MM-yyyy"))
+                event.date?.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
             )
         }
 
@@ -98,9 +98,9 @@ class EventServiceTest {
                 event.name,
                 event.poster,
                 event.maxParticipation,
-                event.applyDeadline?.format(DateTimeFormatter.ofPattern("dd-MM-yyyy")),
+                event.applyDeadline?.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")),
                 event.location,
-                event.date?.format(DateTimeFormatter.ofPattern("dd-MM-yyyy"))
+                event.date?.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
             )
         }
 
