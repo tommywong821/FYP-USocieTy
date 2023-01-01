@@ -46,29 +46,22 @@ class _CalendarWidgetState extends State<CalendarWidget> {
     enrolledEventListFutre = ApiService().getAllEnrolledEventByItsc();
     enrolledEventList = await enrolledEventListFutre;
     //count number to create flexible list dot in calendar
-    var numberOfEventInDate = Map();
+    final kEventSource = Map<DateTime, List<Event>>();
     enrolledEventList.forEach((element) {
-      if (!numberOfEventInDate.containsKey(element.date)) {
-        numberOfEventInDate[element.date] = 1;
+      DateTime elementDate =
+          DateFormat('dd-mm-yyyy').parse(element.date).toUtc();
+      if (!kEventSource.containsKey(elementDate)) {
+        kEventSource[elementDate] = List<Event>.generate(1, (index) => element);
       } else {
-        numberOfEventInDate[element.date] += 1;
+        kEventSource[elementDate]!.add(element);
       }
     });
-
-    final kEventSource = Map<DateTime, List<Event>>.fromIterable(
-        enrolledEventList,
-        key: ((element) =>
-            DateFormat('dd-mm-yyyy').parse(element.date).toUtc()),
-        value: ((element) => List<Event>.generate(
-            numberOfEventInDate[element.date], ((index) => element),
-            growable: false)));
-
     kEvents = LinkedHashMap(
       equals: isSameDay,
       hashCode: getHashCode,
     )..addAll(kEventSource);
 
-    print("kEvents: $kEvents");
+    // print("kEvents: $kEvents");
     //update choosen card view
     _selectedEvents = ValueNotifier(_getEventsForDay(_selectedDay!));
   }
@@ -139,26 +132,13 @@ class _CalendarWidgetState extends State<CalendarWidget> {
   Widget _buildEventList() {
     return ValueListenableBuilder<List<Event>>(
       valueListenable: _selectedEvents,
-      builder: (context, value, _) {
+      builder: (context, eventList, _) {
         return ListView.builder(
-          itemCount: value.length,
+          itemCount: eventList.length,
           itemBuilder: (context, index) {
-            // return Container(
-            //   margin: const EdgeInsets.symmetric(
-            //     horizontal: 12.0,
-            //     vertical: 4.0,
-            //   ),
-            //   decoration: BoxDecoration(
-            //     border: Border.all(),
-            //     borderRadius: BorderRadius.circular(12.0),
-            //   ),
-            //   child: ListTile(
-            //     onTap: () => print('${value[index]}'),
-            //     title: Text('${value[index]}'),
-            //   ),
-            // );
             return HorizontalCardWidget(
               eventID: index,
+              eventObj: eventList[index],
             );
           },
         );
