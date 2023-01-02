@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:ngok3fyp_frontend_flutter/screens/home_screen/reduced_carousel_slider_widget.dart';
+import 'package:ngok3fyp_frontend_flutter/screens/home_screen/carousel_slider_widget.dart';
 import 'package:ngok3fyp_frontend_flutter/services/styles.dart';
+import 'package:ngok3fyp_frontend_flutter/model/event.dart';
 
 class TabBarWidget extends StatefulWidget {
-  const TabBarWidget({Key? key}) : super(key: key);
+  final List<Event> event;
+  const TabBarWidget({Key? key, required this.event}) : super(key: key);
 
   @override
   _TabBarWidgetState createState() => _TabBarWidgetState();
@@ -72,9 +74,18 @@ class _TabBarWidgetState extends State<TabBarWidget>
           child: Container(
             height: 250,
             child: TabBarView(controller: _tabController, children: [
-              CarouselSliderWidget(),
-              CarouselSliderWidget(),
-              CarouselSliderWidget()
+              CarouselSliderWidget(
+                event: widget.event,
+                reducedForm: true,
+              ),
+              CarouselSliderWidget(
+                event: widget.event,
+                reducedForm: true,
+              ),
+              CarouselSliderWidget(
+                event: widget.event,
+                reducedForm: true,
+              )
             ]),
           ),
         )

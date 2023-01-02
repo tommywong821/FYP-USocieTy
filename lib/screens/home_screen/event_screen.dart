@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:ngok3fyp_frontend_flutter/model/data.dart';
 import 'package:ngok3fyp_frontend_flutter/services/styles.dart';
+import 'package:ngok3fyp_frontend_flutter/model/event.dart';
 
 class EventScreen extends StatefulWidget {
   const EventScreen({
@@ -14,11 +14,12 @@ class EventScreen extends StatefulWidget {
 class _EventScreenState extends State<EventScreen> {
   @override
   Widget build(BuildContext context) {
-    final int eventID =
-        int.parse(ModalRoute.of(context)!.settings.arguments.toString()) - 1;
-    String eventImage = data[eventID]["image"];
-    String eventTitle = data[eventID]["title"];
-    String eventContent = data[eventID]["content"];
+    final Event event = ModalRoute.of(context)!.settings.arguments as Event;
+    String eventImage = event.poster;
+    String eventTitle = event.name;
+    String eventContent = event.name;
+    String eventLocation = event.location;
+    String eventDate = event.date;
     return Scaffold(
         bottomNavigationBar: BottomRegisterButton(),
         body: Container(
@@ -189,14 +190,14 @@ class _EventScreenState extends State<EventScreen> {
                                       padding: const EdgeInsets.only(
                                         left: 15,
                                       ),
-                                      child: Text("HKUST Art Hall",
+                                      child: Text(eventLocation,
                                           style: Styles.eventScreenBlackText),
                                     ),
                                     //Adrress
                                     Padding(
                                       padding: const EdgeInsets.only(left: 15),
                                       child: Text(
-                                        "Lift 11",
+                                        "location details...",
                                         style: Styles.eventScreenGreyText,
                                       ),
                                     ),
