@@ -5,7 +5,12 @@ class Event {
   final String applyDeadline;
   final String location;
   final String date;
-
+/*missing parameters
+1. event start & finish time
+2. event category tag(e.g. sport, music..., maybe featured?)
+3. event description
+4. event fee(if any)
+*/
   const Event({
     required this.name,
     required this.poster,

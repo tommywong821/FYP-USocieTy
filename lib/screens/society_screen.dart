@@ -10,6 +10,6 @@ class SocietyScreen extends StatefulWidget {
 class _SocietyScreenState extends State<SocietyScreen> {
   @override
   Widget build(BuildContext context) {
-    return Container(child: Text("testing2"));
+    return Container(child: Text("Soceity List"));
   }
 }
