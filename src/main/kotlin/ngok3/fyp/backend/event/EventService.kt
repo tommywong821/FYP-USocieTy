@@ -10,7 +10,6 @@ import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 import java.util.*
 
 
@@ -42,14 +41,7 @@ class EventService(
         }
 
         return allEvent.map { event ->
-            EventDto(
-                event.name,
-                event.poster,
-                event.maxParticipation,
-                event.applyDeadline?.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")),
-                event.location,
-                event.date?.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
-            )
+            EventDto(event)
         }
     }
 

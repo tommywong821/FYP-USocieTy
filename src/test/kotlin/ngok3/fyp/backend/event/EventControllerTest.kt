@@ -10,7 +10,6 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.get
-import java.time.format.DateTimeFormatter
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -32,14 +31,7 @@ class EventControllerTest @Autowired constructor(
                 mockEventRepository.testPageSizeWithoutSid
             )
         } returns mockEventRepository.allTestEventList.map { eventEntity ->
-            EventDto(
-                eventEntity.name,
-                eventEntity.poster,
-                eventEntity.maxParticipation,
-                eventEntity.applyDeadline?.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")),
-                eventEntity.location,
-                eventEntity.date?.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
-            )
+            EventDto(eventEntity)
         }
 
         val allEventList = mockEventRepository.allTestEventList
@@ -85,14 +77,7 @@ class EventControllerTest @Autowired constructor(
             mockEventRepository.testFromIndex,
             mockEventRepository.testToIndex
         ).map { eventEntity ->
-            EventDto(
-                eventEntity.name,
-                eventEntity.poster,
-                eventEntity.maxParticipation,
-                eventEntity.applyDeadline?.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")),
-                eventEntity.location,
-                eventEntity.date?.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
-            )
+            EventDto(eventEntity)
         }
 
         val allEventList = mockEventRepository.allTestEventList.subList(
