@@ -9,7 +9,6 @@ import ngok3.fyp.backend.student.StudentRepository
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 import java.util.*
 
 class EventServiceTest {
@@ -43,15 +42,8 @@ class EventServiceTest {
         val expectedResult = mockEventRepository.allTestEventList.subList(
             mockEventRepository.testPageNumWithoutSid,
             mockEventRepository.testPageSizeWithoutSid
-        ).map { event ->
-            EventDto(
-                event.name,
-                event.poster,
-                event.maxParticipation,
-                event.applyDeadline?.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")),
-                event.location,
-                event.date?.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
-            )
+        ).map { eventEntity ->
+            EventDto(eventEntity)
         }
 
         assertIterableEquals(allEvent, expectedResult)
@@ -93,15 +85,8 @@ class EventServiceTest {
         val expectedResult = mockEventRepository.allTestEventList.subList(
             mockEventRepository.testFromIndex,
             mockEventRepository.testToIndex
-        ).map { event ->
-            EventDto(
-                event.name,
-                event.poster,
-                event.maxParticipation,
-                event.applyDeadline?.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")),
-                event.location,
-                event.date?.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
-            )
+        ).map { eventEntity ->
+            EventDto(eventEntity)
         }
 
         assertIterableEquals(allEvent, expectedResult)
