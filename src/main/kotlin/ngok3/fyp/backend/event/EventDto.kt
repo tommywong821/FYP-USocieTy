@@ -16,7 +16,7 @@ data class EventDto(
     val endDate: String? = null,
     val category: String? = null,
     val description: String? = null,
-    val fee: Long? = null,
+    val fee: Float? = null,
 ) : Serializable {
     constructor(eventEntity: EventEntity) : this(
         eventEntity.name, eventEntity.poster, eventEntity.maxParticipation, eventEntity.applyDeadline?.format(

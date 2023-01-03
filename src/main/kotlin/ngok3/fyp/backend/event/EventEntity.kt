@@ -20,7 +20,7 @@ open class EventEntity(
     open var endDate: LocalDateTime? = null,
     open var category: String? = null,
     open var description: String? = null,
-    open var fee: Long? = null,
+    open var fee: Float? = null,
 
     @ManyToOne
     @JoinColumn(name = "society_entity_uuid")
