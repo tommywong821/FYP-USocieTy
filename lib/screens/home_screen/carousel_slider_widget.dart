@@ -67,7 +67,7 @@ Widget regularCarousel(List<Event> event) {
                               child: Text(
                                 //"Mon, Nov 28 · 13:30 - 15:00",
                                 dateFormatter
-                                        .format(DateTime.parse(i.date))
+                                        .format(DateTime.parse(i.startDate))
                                         .toString() +
                                     time,
                                 style: Styles.carouselSliderDate,
@@ -181,7 +181,7 @@ Widget reducedCarousel(List<Event> event) {
                             child: Container(
                               child: Text(
                                 dateFormatter
-                                        .format(DateTime.parse(i.date))
+                                        .format(DateTime.parse(i.startDate))
                                         .toString() +
                                     time,
                                 style: Styles.carouselSliderDate,

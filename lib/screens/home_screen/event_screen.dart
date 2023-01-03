@@ -19,7 +19,7 @@ class _EventScreenState extends State<EventScreen> {
     String eventTitle = event.name;
     String eventContent = event.name;
     String eventLocation = event.location;
-    String eventDate = event.date;
+    String eventDate = event.startDate;
     return Scaffold(
         bottomNavigationBar: BottomRegisterButton(),
         body: Container(
