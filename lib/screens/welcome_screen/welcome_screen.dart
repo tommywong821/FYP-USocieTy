@@ -4,8 +4,8 @@ import 'package:ngok3fyp_frontend_flutter/services/aad_oauth_service.dart';
 import 'package:ngok3fyp_frontend_flutter/services/api_service.dart';
 import 'package:ngok3fyp_frontend_flutter/services/storage_service.dart';
 
-import '../constants.dart';
-import '../model/student.dart';
+import '../../constants.dart';
+import '../../model/student.dart';
 import 'login_widget.dart';
 
 class WelcomeScreen extends StatefulWidget {
