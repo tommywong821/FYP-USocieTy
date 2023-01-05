@@ -126,7 +126,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
 
     setState(() {
       isLoggedIn = true;
-      name = student.nickname;
+      name = student.nickname.isEmpty ? profile['name'] : student.nickname;
       email = student.mail;
       // TODO set joined society of student
     });
