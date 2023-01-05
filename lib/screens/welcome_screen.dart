@@ -5,6 +5,7 @@ import 'package:ngok3fyp_frontend_flutter/services/api_service.dart';
 import 'package:ngok3fyp_frontend_flutter/services/storage_service.dart';
 
 import '../constants.dart';
+import '../model/student.dart';
 import 'login_widget.dart';
 
 class WelcomeScreen extends StatefulWidget {
@@ -117,11 +118,17 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     final profile = await ApiService().getUserDetails(accessToken!);
     await _storageService.writeSecureData(ACCESS_TOKEN_KEY, accessToken);
 
+    // fetch user profile from backend
+    // get itsc from AAD
+    final String itsc = profile['email'].toString().split('@')[0];
+    final Student student = await ApiService().getStudentProfile(itsc);
+    await _storageService.writeSecureData(ITSC_KEY, itsc);
 
     setState(() {
       isLoggedIn = true;
-      name = profile['name'];
-      email = profile['email'];
+      name = student.nickname;
+      email = student.mail;
+      // TODO set joined society of student
     });
 
     routeToHomePage();
