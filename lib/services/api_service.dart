@@ -22,7 +22,7 @@ class ApiService {
     }
   }
 
-  Future<List<Event>> getAllEnrolledEventByItsc() async {
+  Future<List<Event>> getAllEvent() async {
     final url =
         Uri.https(backendDomain, '/event', {'pageNum': '0', 'pageSize': '10'});
     final response = await http.get(url);

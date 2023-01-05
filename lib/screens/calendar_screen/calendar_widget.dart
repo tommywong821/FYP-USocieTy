@@ -18,8 +18,8 @@ class _CalendarWidgetState extends State<CalendarWidget> {
   DateTime _focusedDay = DateTime.now();
   DateTime? _selectedDay;
 
-  late Future<List<Event>> enrolledEventListFutre;
-  late List<Event> enrolledEventList;
+  late Future<List<Event>> eventListFutre;
+  late List<Event> eventList;
   LinkedHashMap<DateTime, List<Event>> kEvents =
       LinkedHashMap<DateTime, List<Event>>();
 
@@ -43,11 +43,11 @@ class _CalendarWidgetState extends State<CalendarWidget> {
   }
 
   Future<void> initCalendarEvent() async {
-    enrolledEventListFutre = ApiService().getAllEnrolledEventByItsc();
-    enrolledEventList = await enrolledEventListFutre;
+    eventListFutre = ApiService().getAllEvent();
+    eventList = await eventListFutre;
     //count number to create flexible list dot in calendar
     final kEventSource = Map<DateTime, List<Event>>();
-    enrolledEventList.forEach((element) {
+    eventList.forEach((element) {
       DateTime elementDate =
           DateFormat('yyyy-mm-dd').parse(element.startDate).toUtc();
       if (!kEventSource.containsKey(elementDate)) {
@@ -81,7 +81,7 @@ class _CalendarWidgetState extends State<CalendarWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: FutureBuilder<List<Event>>(
-        future: enrolledEventListFutre,
+        future: eventListFutre,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return _buildFullUi();
