@@ -22,9 +22,11 @@ class ApiService {
     }
   }
 
-  Future<List<Event>> getAllEvent() async {
-    final url =
-        Uri.https(backendDomain, '/event', {'pageNum': '0', 'pageSize': '10'});
+  Future<List<Event>> getAllEvent([num pageNum = -1, num pageSize = -1]) async {
+    final url = Uri.https(backendDomain, '/event', {
+      'pageNum': pageNum == -1 ? '0' : pageNum.toString(),
+      'pageSize': pageSize == -1 ? '10' : pageSize.toString()
+    });
     final response = await http.get(url);
 
     if (response.statusCode == 200) {
