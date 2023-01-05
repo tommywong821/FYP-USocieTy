@@ -82,21 +82,11 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     });
 
     try {
-      final profile = await ApiService().getUserDetails(storedRefreshToken);
-      _storageService.writeSecureData('access_token', storedRefreshToken);
-
-      setState(() {
-        isLoggedIn = true;
-        name = profile['name'];
-        email = profile['email'];
-      });
-
-      routeToHomePage();
+      await loginProcess();
     } catch (e, s) {
-      showError('error on refresh token: $e - stack: $s');
+      // showError('error on refresh token: $e - stack: $s');
       await _aadOAuthService.logout();
       setState(() {
-        isLoggedIn = false;
         isBusy = false;
       });
     }
@@ -109,20 +99,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     });
 
     try {
-      await _aadOAuthService.login();
-      var accessToken = await _aadOAuthService.getAccessToken();
-      debugPrint('Logged in successfully, your access token: $accessToken');
-
-      final profile = await ApiService().getUserDetails(accessToken!);
-      await _storageService.writeSecureData(ACCESS_TOKEN_KEY, accessToken);
-
-      setState(() {
-        isLoggedIn = true;
-        name = profile['name'];
-        email = profile['email'];
-      });
-
-      routeToHomePage();
+      await loginProcess();
     } catch (e) {
       showError(e);
       setState(() {
@@ -130,5 +107,23 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
         errorMessage = e.toString();
       });
     }
+  }
+
+  Future<void> loginProcess() async {
+    await _aadOAuthService.login();
+    var accessToken = await _aadOAuthService.getAccessToken();
+    debugPrint('Logged in successfully, your access token: $accessToken');
+
+    final profile = await ApiService().getUserDetails(accessToken!);
+    await _storageService.writeSecureData(ACCESS_TOKEN_KEY, accessToken);
+
+
+    setState(() {
+      isLoggedIn = true;
+      name = profile['name'];
+      email = profile['email'];
+    });
+
+    routeToHomePage();
   }
 }
