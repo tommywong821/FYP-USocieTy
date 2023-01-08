@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:ngok3fyp_frontend_flutter/services/styles.dart';
-import 'package:ngok3fyp_frontend_flutter/model/event.dart';
+import 'package:ngok3fyp_frontend_flutter/model/event/event.dart';
 import 'package:intl/intl.dart';
 
 class CarouselSliderWidget extends StatefulWidget {

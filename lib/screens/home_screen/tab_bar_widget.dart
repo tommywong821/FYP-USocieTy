@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ngok3fyp_frontend_flutter/screens/home_screen/carousel_slider_widget.dart';
 import 'package:ngok3fyp_frontend_flutter/services/styles.dart';
-import 'package:ngok3fyp_frontend_flutter/model/event.dart';
+import 'package:ngok3fyp_frontend_flutter/model/event/event.dart';
 
 class TabBarWidget extends StatefulWidget {
   final List<Event> event;

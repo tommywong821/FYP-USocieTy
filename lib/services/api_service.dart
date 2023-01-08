@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-import 'package:ngok3fyp_frontend_flutter/model/event.dart';
+import 'package:ngok3fyp_frontend_flutter/model/event/event.dart';
 import 'package:ngok3fyp_frontend_flutter/model/student.dart';
 
 class ApiService {
