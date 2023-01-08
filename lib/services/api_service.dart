@@ -1,12 +1,16 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-import 'package:ngok3fyp_frontend_flutter/model/event/event.dart';
+import 'package:ngok3fyp_frontend_flutter/constants.dart';
+import 'package:ngok3fyp_frontend_flutter/model/enrolled_event/enrolled_event.dart';
+import 'package:ngok3fyp_frontend_flutter/model/event.dart';
 import 'package:ngok3fyp_frontend_flutter/model/student.dart';
+
+import 'storage_service.dart';
 
 class ApiService {
   final backendDomain = 'ngok3fyp-backend.herokuapp.com';
-  final localBackendDomain = '10.0.2.2:8080';
+  final StorageService _storageService = StorageService();
 
   Future<Map<String, dynamic>> getUserDetails(String accessToken) async {
     final url = Uri.https('graph.microsoft.com', 'oidc/userinfo');
@@ -30,20 +34,37 @@ class ApiService {
     final response = await http.get(url);
 
     if (response.statusCode == 200) {
-      List<dynamic> jsonList = jsonDecode(response.body);
-      return jsonList.map((eventJson) => Event.fromJson(eventJson)).toList();
+      List<dynamic> eventJsonList = jsonDecode(response.body);
+      return eventJsonList
+          .map((eventJson) => Event.fromJson(eventJson))
+          .toList();
     } else {
       throw Exception('Failed to load enrolled event by itsc:');
     }
   }
 
   Future<Student> getStudentProfile(String itsc) async {
-    final url = Uri.http(localBackendDomain, '/student', {'itsc': itsc});
+    final url = Uri.http(backendDomain, '/student', {'itsc': itsc});
     final response = await http.get(url);
 
     if (response.statusCode == 200) {
       dynamic studentJson = jsonDecode(response.body);
       return Student.fromJson(studentJson);
+    } else {
+      throw Exception('Failed to load enrolled event by itsc:');
+    }
+  }
+
+  Future<List<EnrolledEvent>> getAllEnrolledEvent() async {
+    final url = Uri.http(backendDomain, '/event/enrolled',
+        {'itsc': await _storageService.readSecureData(ITSC_KEY)});
+    final response = await http.get(url);
+
+    if (response.statusCode == 200) {
+      List<dynamic> enrolledEventJsonList = jsonDecode(response.body);
+      return enrolledEventJsonList
+          .map((eventJson) => EnrolledEvent.fromJson(eventJson))
+          .toList();
     } else {
       throw Exception('Failed to load enrolled event by itsc:');
     }

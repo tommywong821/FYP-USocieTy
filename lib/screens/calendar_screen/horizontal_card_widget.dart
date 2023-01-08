@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ngok3fyp_frontend_flutter/model/data.dart';
-import 'package:ngok3fyp_frontend_flutter/model/event/event.dart';
+import 'package:ngok3fyp_frontend_flutter/model/event.dart';
 import 'package:ngok3fyp_frontend_flutter/services/styles.dart';
 
 class HorizontalCardWidget extends StatefulWidget {

@@ -4,7 +4,7 @@ import 'package:ngok3fyp_frontend_flutter/screens/home_screen/app_bar_widget.dar
 import 'package:ngok3fyp_frontend_flutter/screens/home_screen/tab_bar_widget.dart';
 import 'package:ngok3fyp_frontend_flutter/screens/home_screen/carousel_slider_widget.dart';
 import 'package:ngok3fyp_frontend_flutter/services/styles.dart';
-import 'package:ngok3fyp_frontend_flutter/model/event/event.dart';
+import 'package:ngok3fyp_frontend_flutter/model/event.dart';
 import 'package:ngok3fyp_frontend_flutter/services/api_service.dart';
 
 class HomeWidget extends StatefulWidget {
