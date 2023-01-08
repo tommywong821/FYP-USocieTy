@@ -28,35 +28,36 @@ class _ProfileScreenState extends State<ProfileScreen> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         centerTitle: true,
-        title: Text("My Profile",style: Styles.carouselTitle,),
-        
+        title: Text(
+          "My Profile",
+          style: Styles.carouselTitle,
+        ),
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             SizedBox(
-      height: 115,
-      width: 115,
-      child: Stack(
-        fit: StackFit.expand,
-        clipBehavior: Clip.none,
-        children: [
-          CircleAvatar(
-            backgroundImage: AssetImage("assets/images/avatar.png"),
-          ),
-          Positioned(
-            right: -16,
-            bottom: 0,
-            child: SizedBox(
-              height: 46,
-              width: 46,
-
+              height: 115,
+              width: 115,
+              child: Stack(
+                fit: StackFit.expand,
+                clipBehavior: Clip.none,
+                children: [
+                  CircleAvatar(
+                    backgroundImage: AssetImage("assets/images/avatar.png"),
+                  ),
+                  Positioned(
+                    right: -16,
+                    bottom: 0,
+                    child: SizedBox(
+                      height: 46,
+                      width: 46,
+                    ),
+                  )
+                ],
+              ),
             ),
-          )
-        ],
-      ),
-    ),
             Padding(
                 padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                 child: TextButton(
@@ -64,32 +65,34 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     side: BorderSide(color: Styles.primaryColor),
                     padding: EdgeInsets.all(15),
                     shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20)),
-                    backgroundColor:Colors.white,
+                        borderRadius: BorderRadius.circular(20)),
+                    backgroundColor: Colors.white,
                   ),
                   onPressed: () {},
                   child: Row(children: [
-                    Icon(Icons.person_outlined,color: Styles.primaryColor),
+                    Icon(Icons.person_outlined, color: Styles.primaryColor),
                     SizedBox(width: 20),
                     Expanded(
                         child: Text("Name: ${args.name}",
-                        style: TextStyle(color: Styles.primaryColor))),
+                            style: TextStyle(color: Styles.primaryColor))),
                   ]),
                 )),
             Padding(
                 padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                 child: TextButton(
-                    style: TextButton.styleFrom(
-              
+                  style: TextButton.styleFrom(
                     side: BorderSide(color: Styles.primaryColor),
-                    padding:EdgeInsets.all(15),
+                    padding: EdgeInsets.all(15),
                     shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20)),
+                        borderRadius: BorderRadius.circular(20)),
                     backgroundColor: Colors.white,
                   ),
                   onPressed: () {},
                   child: Row(children: [
-                    Icon(Icons.email_outlined,color: Styles.primaryColor,),
+                    Icon(
+                      Icons.email_outlined,
+                      color: Styles.primaryColor,
+                    ),
                     SizedBox(width: 20),
                     Expanded(
                         child: Text("ITSC account: ${args.email}",
@@ -101,14 +104,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 child: TextButton(
                   style: TextButton.styleFrom(
                     side: BorderSide(color: Styles.primaryColor),
-                    padding:EdgeInsets.all(15),
+                    padding: EdgeInsets.all(15),
                     shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20)),
+                        borderRadius: BorderRadius.circular(20)),
                     backgroundColor: Colors.white,
                   ),
                   onPressed: () {},
-                  child: Row(children:[
-                    Icon(Icons.people_outline,color: Styles.primaryColor),
+                  child: Row(children: [
+                    Icon(Icons.people_outline, color: Styles.primaryColor),
                     SizedBox(width: 20),
                     Expanded(
                         child: Text("Joined Society:",
@@ -122,20 +125,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     side: BorderSide(color: Styles.primaryColor),
                     padding: EdgeInsets.all(10),
                     shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(35)),
+                        borderRadius: BorderRadius.circular(35)),
                     backgroundColor: Colors.white,
                   ),
                   //notice
                   onPressed: () {
                     logout();
                   },
-                  child: Row(children:[
-                    Icon(Icons.exit_to_app_outlined,color: Styles.primaryColor),
+                  child: Row(children: [
+                    Icon(Icons.exit_to_app_outlined,
+                        color: Styles.primaryColor),
                     SizedBox(width: 15),
                     Expanded(
                         child: Text("LOG OUT",
                             style: TextStyle(color: Colors.black))),
-                  ]), 
+                  ]),
                 )),
           ],
         ),
@@ -146,7 +150,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Future<void> logout() async {
     // route to profile page
     await _aadOAuthService.logout();
-    await _storageService.deleteSecureData(ACCESS_TOKEN_KEY);
+    await _storageService.deleteAllSecureData();
 
     //route to welcome page when logout
     routeToWelcomePage();
