@@ -57,7 +57,7 @@ class EventService(
         val eventObj = event.get()
 
         val record =
-            EnrolledEventRecordEntity(EnrolledEventRecordKey(studentObj.uuid, eventObj.uuid), studentObj, eventObj)
+            EnrolledEventRecordEntity(EnrolledEventRecordKey(studentObj.uuid, eventObj.uuid))
         enrolledEventRepository.save(record)
     }
 }

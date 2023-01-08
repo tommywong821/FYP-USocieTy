@@ -14,8 +14,7 @@ open class StudentEntity(
     open var mail: String? = null,
     open var role: String? = null,
 
+) : BaseEntity() {
     @OneToMany(mappedBy = "studentEntity", orphanRemoval = true)
     open var enrolledSocietyRecordEntities: MutableSet<EnrolledSocietyRecordEntity> = mutableSetOf()
-) : BaseEntity() {
-
 }

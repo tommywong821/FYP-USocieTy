@@ -22,7 +22,8 @@ open class EventEntity(
     open var description: String? = null,
     open var fee: Float? = null,
 
+    ) : BaseEntity() {
     @ManyToOne
     @JoinColumn(name = "society_entity_uuid")
     open var societyEntity: SocietyEntity? = null
-) : BaseEntity()
+}
