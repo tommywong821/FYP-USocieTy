@@ -27,8 +27,7 @@ class EventController(
         eventService.joinEvent(itsc, eventId)
     }
 
-    @GetMapping
-    @RequestMapping("/enrolled")
+    @GetMapping("/enrolled")
     fun getAllEnrolledEvent(
         @RequestParam("itsc", required = false, defaultValue = "") itsc: String,
         @RequestParam("pageNum", required = false, defaultValue = "0") pageNum: Int,
