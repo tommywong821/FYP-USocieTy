@@ -25,7 +25,7 @@ class EventControllerTest @Autowired constructor(
     @Test
     fun `should return all society event`() {
         every {
-            eventService.getAllSocietyEvent(
+            eventService.getAllEvent(
                 mockEventRepository.testPageNumWithoutSid,
                 mockEventRepository.testPageSizeWithoutSid
             )
@@ -67,7 +67,7 @@ class EventControllerTest @Autowired constructor(
     @Test
     fun `should return society event of student with sid`() {
         every {
-            eventService.getAllSocietyEvent(
+            eventService.getAllEvent(
                 mockEventRepository.testPageNumWithSid,
                 mockEventRepository.testPageSizeWithSid
             )

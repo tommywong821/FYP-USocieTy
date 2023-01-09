@@ -1,5 +1,6 @@
 package ngok3.fyp.backend.society
 
+import io.swagger.v3.oas.annotations.Operation
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
 
@@ -8,6 +9,7 @@ import org.springframework.web.bind.annotation.*
 class SocietyController(
     @Autowired val societyService: SocietyService
 ) {
+    @Operation(summary = "get all societies with pagination")
     @GetMapping
     fun getAllSocieties(
         @RequestParam("pageNum", required = false, defaultValue = "0") pageNum: Int,
@@ -16,6 +18,7 @@ class SocietyController(
         return societyService.getAllSocieties(pageNum, pageSize)
     }
 
+    @Operation(summary = "join society with student itsc and society id")
     @PostMapping
     fun joinSociety(
         @RequestParam("itsc", required = false, defaultValue = "") itsc: String,
