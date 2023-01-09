@@ -4,7 +4,8 @@ import 'package:ngok3fyp_frontend_flutter/services/aad_oauth_service.dart';
 import 'package:ngok3fyp_frontend_flutter/services/api_service.dart';
 import 'package:ngok3fyp_frontend_flutter/services/storage_service.dart';
 
-import '../constants.dart';
+import '../../constants.dart';
+import '../../model/student.dart';
 import 'login_widget.dart';
 
 class WelcomeScreen extends StatefulWidget {
@@ -82,21 +83,11 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     });
 
     try {
-      final profile = await ApiService().getUserDetails(storedRefreshToken);
-      _storageService.writeSecureData('access_token', storedRefreshToken);
-
-      setState(() {
-        isLoggedIn = true;
-        name = profile['name'];
-        email = profile['email'];
-      });
-
-      routeToHomePage();
+      await loginProcess();
     } catch (e, s) {
-      showError('error on refresh token: $e - stack: $s');
+      // showError('error on refresh token: $e - stack: $s');
       await _aadOAuthService.logout();
       setState(() {
-        isLoggedIn = false;
         isBusy = false;
       });
     }
@@ -109,20 +100,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     });
 
     try {
-      await _aadOAuthService.login();
-      var accessToken = await _aadOAuthService.getAccessToken();
-      debugPrint('Logged in successfully, your access token: $accessToken');
-
-      final profile = await ApiService().getUserDetails(accessToken!);
-      await _storageService.writeSecureData(ACCESS_TOKEN_KEY, accessToken);
-
-      setState(() {
-        isLoggedIn = true;
-        name = profile['name'];
-        email = profile['email'];
-      });
-
-      routeToHomePage();
+      await loginProcess();
     } catch (e) {
       showError(e);
       setState(() {
@@ -130,5 +108,29 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
         errorMessage = e.toString();
       });
     }
+  }
+
+  Future<void> loginProcess() async {
+    await _aadOAuthService.login();
+    var accessToken = await _aadOAuthService.getAccessToken();
+    debugPrint('Logged in successfully, your access token: $accessToken');
+
+    final profile = await ApiService().getUserDetails(accessToken!);
+    await _storageService.writeSecureData(ACCESS_TOKEN_KEY, accessToken);
+
+    // fetch user profile from backend
+    // get itsc from AAD
+    final String itsc = profile['email'].toString().split('@')[0];
+    final Student student = await ApiService().getStudentProfile(itsc);
+    await _storageService.writeSecureData(ITSC_KEY, itsc);
+
+    setState(() {
+      isLoggedIn = true;
+      name = student.nickname.isEmpty ? profile['name'] : student.nickname;
+      email = student.mail;
+      // TODO set joined society of student
+    });
+
+    routeToHomePage();
   }
 }

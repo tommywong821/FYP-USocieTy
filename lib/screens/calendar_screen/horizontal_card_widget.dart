@@ -61,23 +61,30 @@ class _HorizontalCardWidgetState extends State<HorizontalCardWidget> {
                       width: MediaQuery.of(context).size.width -
                           (cardImageWidth + 20),
                       alignment: Alignment.centerLeft,
-                      child: Text(
-                          eventObj != null
-                              ? eventObj.name
-                              : data[eventID]["title"],
-                          style: Styles.HCardTitle,
-                          overflow: TextOverflow.ellipsis),
+                      child: Row(
+                        children: <Widget>[
+                          Flexible(
+                            child: Text(
+                              eventObj != null
+                                  ? eventObj.name
+                                  : data[eventID]["title"],
+                              style: Styles.HCardTitle,
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
+                            ),
+                          ),
+                          Spacer(),
+                          Text(eventObj != null
+                              ? eventObj.category
+                              : "null category")
+                        ],
+                      ),
                     ),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(top: 15),
                     child: Container(
-                      child: Text(
-                        eventObj != null
-                            ? eventObj.date
-                            : "Mon, Nov 28 · 13:30 - 15:00",
-                        style: Styles.HCardDate,
-                      ),
+                      child: Text("date"),
                       alignment: Alignment.centerLeft,
                     ),
                   ),

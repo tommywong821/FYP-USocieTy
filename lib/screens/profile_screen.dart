@@ -4,6 +4,7 @@ import 'package:ngok3fyp_frontend_flutter/model/profile_screen_arguments.dart';
 import '../constants.dart';
 import '../services/aad_oauth_service.dart';
 import '../services/storage_service.dart';
+import '../services/styles.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({
@@ -24,32 +25,122 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ModalRoute.of(context)!.settings.arguments as ProfileScreenArguments;
 
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        centerTitle: true,
+        title: Text(
+          "My Profile",
+          style: Styles.carouselTitle,
+        ),
+      ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Container(
-              width: 150,
-              height: 150,
-            ),
             SizedBox(
-              height: 24.0,
+              height: 115,
+              width: 115,
+              child: Stack(
+                fit: StackFit.expand,
+                clipBehavior: Clip.none,
+                children: [
+                  CircleAvatar(
+                    backgroundImage: AssetImage("assets/images/avatar.png"),
+                  ),
+                  Positioned(
+                    right: -16,
+                    bottom: 0,
+                    child: SizedBox(
+                      height: 46,
+                      width: 46,
+                    ),
+                  )
+                ],
+              ),
             ),
-            Text('Name: ${args.name}'),
-            SizedBox(
-              height: 24.0,
-            ),
-            Text('email: ${args.email}'),
-            SizedBox(
-              height: 48.0,
-            ),
-            ElevatedButton(
-              onPressed: () {
-                // logoutAction();
-                logout();
-              },
-              child: Text('Logout'),
-            )
+            Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                child: TextButton(
+                  style: TextButton.styleFrom(
+                    side: BorderSide(color: Styles.primaryColor),
+                    padding: EdgeInsets.all(15),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20)),
+                    backgroundColor: Colors.white,
+                  ),
+                  onPressed: () {},
+                  child: Row(children: [
+                    Icon(Icons.person_outlined, color: Styles.primaryColor),
+                    SizedBox(width: 20),
+                    Expanded(
+                        child: Text("Name: ${args.name}",
+                            style: TextStyle(color: Styles.primaryColor))),
+                  ]),
+                )),
+            Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                child: TextButton(
+                  style: TextButton.styleFrom(
+                    side: BorderSide(color: Styles.primaryColor),
+                    padding: EdgeInsets.all(15),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20)),
+                    backgroundColor: Colors.white,
+                  ),
+                  onPressed: () {},
+                  child: Row(children: [
+                    Icon(
+                      Icons.email_outlined,
+                      color: Styles.primaryColor,
+                    ),
+                    SizedBox(width: 20),
+                    Expanded(
+                        child: Text("ITSC account: ${args.email}",
+                            style: TextStyle(color: Styles.primaryColor))),
+                  ]),
+                )),
+            Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                child: TextButton(
+                  style: TextButton.styleFrom(
+                    side: BorderSide(color: Styles.primaryColor),
+                    padding: EdgeInsets.all(15),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20)),
+                    backgroundColor: Colors.white,
+                  ),
+                  onPressed: () {},
+                  child: Row(children: [
+                    Icon(Icons.people_outline, color: Styles.primaryColor),
+                    SizedBox(width: 20),
+                    Expanded(
+                        child: Text("Joined Society:",
+                            style: TextStyle(color: Styles.primaryColor))),
+                  ]),
+                )),
+            Padding(
+                padding: EdgeInsets.symmetric(horizontal: 140, vertical: 10),
+                child: TextButton(
+                  style: TextButton.styleFrom(
+                    side: BorderSide(color: Styles.primaryColor),
+                    padding: EdgeInsets.all(10),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(35)),
+                    backgroundColor: Colors.white,
+                  ),
+                  //notice
+                  onPressed: () {
+                    logout();
+                  },
+                  child: Row(children: [
+                    Icon(Icons.exit_to_app_outlined,
+                        color: Styles.primaryColor),
+                    SizedBox(width: 15),
+                    Expanded(
+                        child: Text("LOG OUT",
+                            style: TextStyle(color: Colors.black))),
+                  ]),
+                )),
           ],
         ),
       ),
@@ -59,7 +150,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Future<void> logout() async {
     // route to profile page
     await _aadOAuthService.logout();
-    await _storageService.deleteSecureData(ACCESS_TOKEN_KEY);
+    await _storageService.deleteAllSecureData();
 
     //route to welcome page when logout
     routeToWelcomePage();

@@ -22,7 +22,7 @@ class _HomeWidget extends State<HomeWidget> {
   late List<Event> enrolledEventList;
 
   Future<void> initEvent() async {
-    enrolledEventListFutre = ApiService().getAllEnrolledEventByItsc();
+    enrolledEventListFutre = ApiService().getAllEvent();
     enrolledEventList = await enrolledEventListFutre;
   }
 

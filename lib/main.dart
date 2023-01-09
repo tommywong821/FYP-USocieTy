@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:ngok3fyp_frontend_flutter/screens/home_screen/event_screen.dart';
 import 'package:ngok3fyp_frontend_flutter/screens/profile_screen.dart';
-import 'package:ngok3fyp_frontend_flutter/screens/welcome_screen.dart';
+import 'package:ngok3fyp_frontend_flutter/screens/welcome_screen/welcome_screen.dart';
 import 'package:ngok3fyp_frontend_flutter/screens/home_screen/home_screen.dart';
 import 'package:ngok3fyp_frontend_flutter/screens/incoming_event_screen.dart';
 import 'package:ngok3fyp_frontend_flutter/screens/society_screen.dart';

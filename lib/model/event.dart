@@ -1,37 +1,48 @@
 class Event {
+  final String id;
   final String name;
   final String poster;
   final int maxParticipation;
   final String applyDeadline;
   final String location;
-  final String date;
-/*missing parameters
-1. event start & finish time
-2. event category tag(e.g. sport, music..., maybe featured?)
-3. event description
-4. event fee(if any)
-*/
+  final String startDate;
+  final String endDate;
+  final String category;
+  final String description;
+  final num fee;
+
   const Event({
+    required this.id,
     required this.name,
     required this.poster,
     required this.maxParticipation,
     required this.applyDeadline,
     required this.location,
-    required this.date,
+    required this.startDate,
+    required this.endDate,
+    required this.category,
+    required this.description,
+    required this.fee,
   });
 
   factory Event.fromJson(Map<String, dynamic> json) {
     return Event(
-        name: json['name'],
-        poster: json['poster'],
-        maxParticipation: json['maxParticipation'],
-        applyDeadline: json['applyDeadline'],
-        location: json['location'],
-        date: json['date']);
+      id: json['id'],
+      name: json['name'],
+      poster: json['poster'],
+      maxParticipation: json['maxParticipation'],
+      applyDeadline: json['applyDeadline'],
+      location: json['location'],
+      startDate: json['startDate'],
+      endDate: json['endDate'],
+      category: json['category'],
+      description: json['description'],
+      fee: json['fee'],
+    );
   }
 
   @override
   String toString() {
-    return "(name: $name, poster: $poster, maxParticipation: $maxParticipation, applyDeadline: $applyDeadline, location: $location, date: $date)";
+    return "(id: $id, name: $name, poster: $poster, maxParticipation: $maxParticipation, applyDeadline: $applyDeadline, location: $location, startDate: $startDate, endDate: $endDate, category: $category, description: $description, fee: $fee)";
   }
 }
