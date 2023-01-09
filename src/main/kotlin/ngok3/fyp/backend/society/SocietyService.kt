@@ -22,12 +22,9 @@ class SocietyService(
         val firstPageNumWithPageSizeElement: Pageable = PageRequest.of(pageNum, pageSize)
         val allSocieties = societyRepository.findByOrderByNameAsc(firstPageNumWithPageSizeElement).content
 
-        return allSocieties.map { society ->
+        return allSocieties.map { societyEntity ->
             SocietyDto(
-                society.uuid,
-                society.updatedAt,
-                society.createdAt,
-                society.name,
+                societyEntity
             )
         }
     }
