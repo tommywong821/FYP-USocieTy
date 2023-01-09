@@ -33,7 +33,7 @@ class EventServiceTest {
             )
         } returns mockEventRepository.withoutSidTestEventPage
 
-        val allEvent: List<EventDto> = eventService.getAllSocietyEvent(
+        val allEvent: List<EventDto> = eventService.getAllEvent(
             mockEventRepository.testPageNumWithoutSid,
             mockEventRepository.testPageSizeWithoutSid
         )
