@@ -1,27 +1,22 @@
 package ngok3.fyp.backend.event
 
-import ngok3.fyp.backend.student.StudentEntity
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
+import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.PagingAndSortingRepository
 import org.springframework.stereotype.Repository
 import java.time.LocalDateTime
 import java.util.*
 
 @Repository
-interface EventRepository : PagingAndSortingRepository<EventEntity, Long> {
+interface EventRepository : PagingAndSortingRepository<EventEntity, UUID> {
 
     fun findByName(name: String): Optional<EventEntity>
 
 
+    @Query("select e from EventEntity e where e.applyDeadline >= ?1 order by e.applyDeadline")
     fun findByApplyDeadlineGreaterThanEqualOrderByApplyDeadlineAsc(
         applyDeadline: LocalDateTime,
-        pageable: Pageable
-    ): Page<EventEntity>
-
-
-    fun findBySocietyEntity_EnrolledSocietyRecordEntities_StudentEntityOrderByApplyDeadlineAsc(
-        studentEntity: StudentEntity,
         pageable: Pageable
     ): Page<EventEntity>
 

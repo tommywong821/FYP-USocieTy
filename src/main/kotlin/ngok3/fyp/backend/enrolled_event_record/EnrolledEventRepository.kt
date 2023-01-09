@@ -3,6 +3,7 @@ package ngok3.fyp.backend.enrolled_event_record
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.CrudRepository
 import java.time.LocalDateTime
+import java.util.*
 
 interface EnrolledEventRepository : CrudRepository<EnrolledEventRecordEntity, EnrolledEventRecordKey> {
 
@@ -15,5 +16,9 @@ order by e.eventEntity.startDate"""
         itsc: String,
         startDate: LocalDateTime
     ): List<EnrolledEventRecordEntity>
+
+
+    @Query("select count(e) from EnrolledEventRecordEntity e where e.id.eventUuid = ?1")
+    fun countById_EventUuid(eventUuid: UUID): Long
 
 }

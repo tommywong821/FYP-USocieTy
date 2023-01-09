@@ -5,7 +5,6 @@ import java.time.format.DateTimeFormatter
 
 data class EnrolledEventDto(
     val name: String? = "",
-    val poster: String? = "",
     val location: String? = "",
     val startDate: String? = "",
     val endDate: String? = "",
@@ -14,7 +13,6 @@ data class EnrolledEventDto(
 ) : Serializable {
     constructor(enrolledEventRecordEntity: EnrolledEventRecordEntity) : this(
         enrolledEventRecordEntity.eventEntity?.name,
-        enrolledEventRecordEntity.eventEntity?.poster,
         enrolledEventRecordEntity.eventEntity?.location,
         enrolledEventRecordEntity.eventEntity?.startDate?.format(
             DateTimeFormatter.ofPattern("yyyy-MM-dd")
