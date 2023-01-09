@@ -15,7 +15,7 @@ import java.util.*
 class EventService(
     @Autowired val eventRepository: EventRepository,
     @Autowired val studentRepository: StudentRepository,
-    @Autowired val enrolledEventRepository: EnrolledEventRepository
+    @Autowired val enrolledEventRecordRepository: EnrolledEventRecordRepository
 ) {
     fun getAllSocietyEvent(pageNum: Int, pageSize: Int): List<EventDto> {
         val firstPageNumWithPageSizeElement: Pageable = PageRequest.of(pageNum, pageSize)
@@ -44,7 +44,7 @@ class EventService(
 
         val eventEntity: EventEntity = eventEntityOptional.get()
 //        check maxParticipation and apply deadline
-        val numberOfParticipation: Long = enrolledEventRepository.countById_EventUuid(UUID.fromString(eventId));
+        val numberOfParticipation: Long = enrolledEventRecordRepository.countById_EventUuid(UUID.fromString(eventId));
         if (LocalDateTime.now()
                 .isAfter(eventEntity.applyDeadline) || numberOfParticipation >= eventEntity.maxParticipation!!
         ) {
@@ -53,16 +53,16 @@ class EventService(
 
         val studentEntity: StudentEntity = studentEntityOptional.get()
         val enrolledEventRecordEntity = EnrolledEventRecordEntity(
-            EnrolledEventRecordKey(studentEntity.uuid, eventEntity.uuid), EnrolledEventStatus.PENDING
+            EnrolledEventRecordKey(studentEntity.uuid, eventEntity.uuid), EnrolledStatus.PENDING
         )
         enrolledEventRecordEntity.studentEntity = studentEntity
         enrolledEventRecordEntity.eventEntity = eventEntity
-        enrolledEventRepository.save(enrolledEventRecordEntity)
+        enrolledEventRecordRepository.save(enrolledEventRecordEntity)
         return true;
     }
 
     fun getAllEnrolledEvent(itsc: String, pageNum: Int, pageSize: Int): List<EnrolledEventDto> {
-        return enrolledEventRepository.findByStudentEntity_ItscAndEventEntity_StartDateGreaterThanEqualOrderByEventEntity_StartDateAsc(
+        return enrolledEventRecordRepository.findByStudentEntity_ItscAndEventEntity_StartDateGreaterThanEqualOrderByEventEntity_StartDateAsc(
             itsc,
             LocalDateTime.now()
         ).map { enrolledEventEntity -> EnrolledEventDto(enrolledEventEntity) }

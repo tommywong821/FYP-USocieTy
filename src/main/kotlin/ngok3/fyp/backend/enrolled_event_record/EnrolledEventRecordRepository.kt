@@ -5,7 +5,7 @@ import org.springframework.data.repository.CrudRepository
 import java.time.LocalDateTime
 import java.util.*
 
-interface EnrolledEventRepository : CrudRepository<EnrolledEventRecordEntity, EnrolledEventRecordKey> {
+interface EnrolledEventRecordRepository : CrudRepository<EnrolledEventRecordEntity, EnrolledEventRecordKey> {
 
     @Query(
         """select e from EnrolledEventRecordEntity e
