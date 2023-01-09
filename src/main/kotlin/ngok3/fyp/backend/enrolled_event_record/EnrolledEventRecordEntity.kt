@@ -13,7 +13,7 @@ open class EnrolledEventRecordEntity(
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
-    open var status: EnrolledEventStatus? = null
+    open var status: EnrolledStatus? = null
 ) {
 
     @ManyToOne
