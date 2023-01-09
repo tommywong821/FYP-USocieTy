@@ -3,7 +3,7 @@ package ngok3.fyp.backend.event
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
-import ngok3.fyp.backend.enrolled_event_record.EnrolledEventRepository
+import ngok3.fyp.backend.enrolled_event_record.EnrolledEventRecordRepository
 import ngok3.fyp.backend.student.MockStudentRepository
 import ngok3.fyp.backend.student.StudentRepository
 import org.junit.jupiter.api.Assertions.assertIterableEquals
@@ -17,8 +17,9 @@ class EventServiceTest {
 
     private val eventRepository: EventRepository = mockk()
     private val studentRepository: StudentRepository = mockk()
-    private val enrolledEventRepository: EnrolledEventRepository = mockk()
-    private val eventService: EventService = EventService(eventRepository, studentRepository, enrolledEventRepository)
+    private val enrolledEventRecordRepository: EnrolledEventRecordRepository = mockk()
+    private val eventService: EventService =
+        EventService(eventRepository, studentRepository, enrolledEventRecordRepository)
 
     @Test
     fun `should get all event without sid`() {

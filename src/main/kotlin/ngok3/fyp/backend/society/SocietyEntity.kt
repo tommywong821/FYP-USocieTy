@@ -13,6 +13,6 @@ open class SocietyEntity(
 
     ) : BaseEntity() {
 
-    @OneToMany(mappedBy = "societyEntity", orphanRemoval = true)
+    @OneToMany(mappedBy = "societyEntity")
     open var enrolledSocietyRecordEntities: MutableSet<EnrolledSocietyRecordEntity> = mutableSetOf()
 }

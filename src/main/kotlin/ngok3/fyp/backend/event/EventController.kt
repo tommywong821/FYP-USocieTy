@@ -23,8 +23,8 @@ class EventController(
     fun joinEvent(
         @RequestParam("itsc", required = false, defaultValue = "") itsc: String,
         @RequestParam("eventId", required = false, defaultValue = "") eventId: String,
-    ) {
-        eventService.joinEvent(itsc, eventId)
+    ): Boolean {
+        return eventService.joinEvent(itsc, eventId)
     }
 
     @GetMapping("/enrolled")
