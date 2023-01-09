@@ -63,12 +63,16 @@ class _HorizontalCardWidgetState extends State<HorizontalCardWidget> {
                       alignment: Alignment.centerLeft,
                       child: Row(
                         children: <Widget>[
-                          Text(
+                          Flexible(
+                            child: Text(
                               eventObj != null
                                   ? eventObj.name
                                   : data[eventID]["title"],
                               style: Styles.HCardTitle,
-                              overflow: TextOverflow.ellipsis),
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
+                            ),
+                          ),
                           Spacer(),
                           Text(eventObj != null
                               ? eventObj.category
@@ -80,10 +84,7 @@ class _HorizontalCardWidgetState extends State<HorizontalCardWidget> {
                   Padding(
                     padding: const EdgeInsets.only(top: 15),
                     child: Container(
-                      child: Text(
-                        "${eventObj != null ? eventObj.startDate : "Mon, Nov 28 · 13:30 - 15:00"} - ${eventObj != null ? eventObj.endDate : "Mon, Nov 29 · 13:30 - 15:00"}",
-                        style: Styles.HCardDate,
-                      ),
+                      child: Text("date"),
                       alignment: Alignment.centerLeft,
                     ),
                   ),
