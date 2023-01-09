@@ -4,9 +4,9 @@
 
 export const environment = {
   production: false,
-  appUrl: 'https://ngok3fyp-frontend.herokuapp.com/', //Example: https://myapp.com
-  casUrl: 'https://cas.ust.hk/cas', //Example: https://mycas.com/cas
-  backendUrl: 'https://ngok3fyp-backend.herokuapp.com',
+  app_url: 'https://ngok3fyp-frontend.herokuapp.com/', //Example: https://myapp.com
+  cas_url: 'https://cas.ust.hk/cas', //Example: https://mycas.com/cas
+  backend_url: 'http://localhost:8080/'
 };
 
 /*
