@@ -11,7 +11,7 @@ export class ApiService {
   constructor(private restful: HttpClient) {}
 
   call<Response>(request: Request): Observable<Response> {
-    const url = `${environment.backendUrl}${request.endpoint}`;
+    const url = `${environment.backend_url}${request.endpoint}`;
 
     return this.restful.post(url, request.body).pipe(map(res => res as Response));
   }
