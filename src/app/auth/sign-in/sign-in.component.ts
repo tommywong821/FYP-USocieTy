@@ -32,7 +32,7 @@ export class SignInComponent implements OnInit {
   }
 
   authenticateCAS(): void {
-    const url = `${environment.casUrl}/login?service=${encodeURIComponent(environment.appUrl)}`;
+    const url = `${environment.cas_url}/login?service=${encodeURIComponent(environment.app_url)}`;
 
     window.location.assign(url);
   }
