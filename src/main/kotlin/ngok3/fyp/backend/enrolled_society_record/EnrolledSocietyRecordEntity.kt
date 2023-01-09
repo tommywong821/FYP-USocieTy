@@ -11,17 +11,17 @@ import javax.persistence.*
 open class EnrolledSocietyRecordEntity(
     @EmbeddedId
     open var id: EnrolledSocietyRecordKey? = null,
-
+) {
     @ManyToOne
     @MapsId("studentUuid")
     @JoinColumn(name = "student_entity_uuid")
-    open var studentEntity: StudentEntity? = null,
+    open var studentEntity: StudentEntity? = null
 
     @ManyToOne
     @MapsId("societyUuid")
     @JoinColumn(name = "society_entity_uuid")
     open var societyEntity: SocietyEntity? = null
-) {
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other == null || Hibernate.getClass(this) != Hibernate.getClass(other)) return false

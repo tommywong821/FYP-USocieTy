@@ -12,7 +12,8 @@ class StudentService(
     fun getStudentProfile(itsc: String): StudentDto {
         val studentEntityOpt: Optional<StudentEntity> = studentRepository.findByItsc(itsc)
         if (studentEntityOpt.isEmpty) {
-            throw Exception("Student with $itsc is not found")
+            //create record when 1st login
+            return StudentDto(studentRepository.save(StudentEntity(itsc, "", "itsc@connect.ust.hk", "")))
         }
         val studentEntity = studentEntityOpt.get()
         return StudentDto(studentEntity.itsc, studentEntity.nickname, studentEntity.mail, studentEntity.role)

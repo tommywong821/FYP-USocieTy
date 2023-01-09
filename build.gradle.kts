@@ -30,6 +30,7 @@ dependencies {
 	//postgresql
 	runtimeOnly("org.postgresql:postgresql")
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+	implementation("org.jetbrains.kotlin:kotlin-maven-noarg:1.6.21")
 	//db data validation
 	implementation("org.springframework.boot:spring-boot-starter-validation")
 	//jwt generator

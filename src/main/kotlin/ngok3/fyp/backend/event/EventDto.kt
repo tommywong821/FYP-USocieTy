@@ -7,25 +7,35 @@ import java.time.format.DateTimeFormatter
  * A DTO for the {@link ngok3.fyp.backend.event.EventEntity} entity
  */
 data class EventDto(
-    val name: String? = null,
-    val poster: String? = null,
-    val maxParticipation: Int? = null,
-    val applyDeadline: String? = null,
-    val location: String? = null,
-    val startDate: String? = null,
-    val endDate: String? = null,
-    val category: String? = null,
-    val description: String? = null,
-    val fee: Float? = null,
+    val id: String? = "",
+    val name: String? = "",
+    val poster: String? = "",
+    val maxParticipation: Int? = -1,
+    val applyDeadline: String? = "",
+    val location: String? = "",
+    val startDate: String? = "",
+    val endDate: String? = "",
+    val category: String? = "",
+    val description: String? = "",
+    val fee: Float? = -1.0f,
 ) : Serializable {
     constructor(eventEntity: EventEntity) : this(
-        eventEntity.name, eventEntity.poster, eventEntity.maxParticipation, eventEntity.applyDeadline?.format(
+        eventEntity.uuid.toString(),
+        eventEntity.name,
+        eventEntity.poster,
+        eventEntity.maxParticipation,
+        eventEntity.applyDeadline?.format(
             DateTimeFormatter.ofPattern("yyyy-MM-dd")
-        ), eventEntity.location,
+        ),
+        eventEntity.location,
         eventEntity.startDate?.format(
             DateTimeFormatter.ofPattern("yyyy-MM-dd")
-        ), eventEntity.endDate?.format(
+        ),
+        eventEntity.endDate?.format(
             DateTimeFormatter.ofPattern("yyyy-MM-dd")
-        ), eventEntity.category, eventEntity.description, eventEntity.fee
+        ),
+        eventEntity.category,
+        eventEntity.description,
+        eventEntity.fee
     )
 }

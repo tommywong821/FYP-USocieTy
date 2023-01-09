@@ -11,6 +11,8 @@ import javax.persistence.Table
 open class SocietyEntity(
     open var name: String? = null,
 
+    ) : BaseEntity() {
+
     @OneToMany(mappedBy = "societyEntity", orphanRemoval = true)
     open var enrolledSocietyRecordEntities: MutableSet<EnrolledSocietyRecordEntity> = mutableSetOf()
-) : BaseEntity()
+}
