@@ -44,7 +44,7 @@ class ApiService {
   }
 
   Future<Student> getStudentProfile(String itsc) async {
-    final url = Uri.http(backendDomain, '/student', {'itsc': itsc});
+    final url = Uri.https(backendDomain, '/student', {'itsc': itsc});
     final response = await http.get(url);
 
     if (response.statusCode == 200) {
@@ -56,7 +56,7 @@ class ApiService {
   }
 
   Future<List<EnrolledEvent>> getAllEnrolledEvent() async {
-    final url = Uri.http(backendDomain, '/event/enrolled',
+    final url = Uri.https(backendDomain, '/event/enrolled',
         {'itsc': await _storageService.readSecureData(ITSC_KEY)});
     final response = await http.get(url);
 

@@ -1,6 +1,5 @@
 class EnrolledEvent {
   final String name;
-  final String poster;
   final String location;
   final String startDate;
   final String endDate;
@@ -9,7 +8,6 @@ class EnrolledEvent {
 
   const EnrolledEvent({
     required this.name,
-    required this.poster,
     required this.location,
     required this.startDate,
     required this.endDate,
@@ -20,7 +18,6 @@ class EnrolledEvent {
   factory EnrolledEvent.fromJson(Map<String, dynamic> json) {
     return EnrolledEvent(
       name: json['name'],
-      poster: json['poster'],
       location: json['location'],
       startDate: json['startDate'],
       endDate: json['endDate'],
@@ -31,6 +28,6 @@ class EnrolledEvent {
 
   @override
   String toString() {
-    return "(name: $name, poster: $poster, maxParticipation: $location, startDate: $startDate, endDate: $endDate, category: $category, status: $status)";
+    return "(name: $name, location: $location, startDate: $startDate, endDate: $endDate, category: $category, status: $status)";
   }
 }

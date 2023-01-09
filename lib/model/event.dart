@@ -1,4 +1,5 @@
 class Event {
+  final String id;
   final String name;
   final String poster;
   final int maxParticipation;
@@ -11,6 +12,7 @@ class Event {
   final num fee;
 
   const Event({
+    required this.id,
     required this.name,
     required this.poster,
     required this.maxParticipation,
@@ -25,6 +27,7 @@ class Event {
 
   factory Event.fromJson(Map<String, dynamic> json) {
     return Event(
+      id: json['id'],
       name: json['name'],
       poster: json['poster'],
       maxParticipation: json['maxParticipation'],
@@ -40,6 +43,6 @@ class Event {
 
   @override
   String toString() {
-    return "(name: $name, poster: $poster, maxParticipation: $maxParticipation, applyDeadline: $applyDeadline, location: $location, startDate: $startDate, endDate: $endDate, category: $category, description: $description, fee: $fee)";
+    return "(id: $id, name: $name, poster: $poster, maxParticipation: $maxParticipation, applyDeadline: $applyDeadline, location: $location, startDate: $startDate, endDate: $endDate, category: $category, description: $description, fee: $fee)";
   }
 }
