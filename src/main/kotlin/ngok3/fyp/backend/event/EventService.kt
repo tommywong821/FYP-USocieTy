@@ -17,7 +17,7 @@ class EventService(
     @Autowired val studentRepository: StudentRepository,
     @Autowired val enrolledEventRecordRepository: EnrolledEventRecordRepository
 ) {
-    fun getAllSocietyEvent(pageNum: Int, pageSize: Int): List<EventDto> {
+    fun getAllEvent(pageNum: Int, pageSize: Int): List<EventDto> {
         val firstPageNumWithPageSizeElement: Pageable = PageRequest.of(pageNum, pageSize)
         println("LocalDateTime.now(): ${LocalDateTime.now()}")
 
