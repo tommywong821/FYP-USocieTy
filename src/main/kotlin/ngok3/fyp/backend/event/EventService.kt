@@ -1,8 +1,6 @@
 package ngok3.fyp.backend.event
 
-import ngok3.fyp.backend.enrolled_event_record.EnrolledEventRecordEntity
-import ngok3.fyp.backend.enrolled_event_record.EnrolledEventRecordKey
-import ngok3.fyp.backend.enrolled_event_record.EnrolledEventRepository
+import ngok3.fyp.backend.enrolled_event_record.*
 import ngok3.fyp.backend.student.StudentEntity
 import ngok3.fyp.backend.student.StudentRepository
 import org.springframework.beans.factory.annotation.Autowired
@@ -19,45 +17,54 @@ class EventService(
     @Autowired val studentRepository: StudentRepository,
     @Autowired val enrolledEventRepository: EnrolledEventRepository
 ) {
-    fun getAllSocietyEvent(itsc: String, pageNum: Int, pageSize: Int): List<EventDto> {
+    fun getAllSocietyEvent(pageNum: Int, pageSize: Int): List<EventDto> {
         val firstPageNumWithPageSizeElement: Pageable = PageRequest.of(pageNum, pageSize)
         println("LocalDateTime.now(): ${LocalDateTime.now()}")
-        val allEvent: List<EventEntity> = if (itsc.isBlank()) {
-            //get all event
-            eventRepository.findByApplyDeadlineGreaterThanEqualOrderByApplyDeadlineAsc(
-                LocalDateTime.now(), firstPageNumWithPageSizeElement
-            ).content
 
-        } else {
-            //get all event from sid
-            val studentEntity: Optional<StudentEntity> = studentRepository.findByItsc(itsc)
-            if (studentEntity.isEmpty) {
-                throw Exception("Student with $itsc not found")
-            }
-            eventRepository.findBySocietyEntity_EnrolledSocietyRecordEntities_StudentEntityOrderByApplyDeadlineAsc(
-                studentEntity.get(),
-                firstPageNumWithPageSizeElement
-            ).content
-        }
+        //get all event
+        val allEvent: List<EventEntity> = eventRepository.findByApplyDeadlineGreaterThanEqualOrderByApplyDeadlineAsc(
+            LocalDateTime.now(), firstPageNumWithPageSizeElement
+        ).content
 
         return allEvent.map { event ->
             EventDto(event)
         }
     }
 
-    fun joinSocietyEvent(itsc: String, eventName: String) {
-        val student = studentRepository.findByItsc(itsc)
-        val event = eventRepository.findByName(eventName)
-
-        if (student.isEmpty || event.isEmpty) {
-            throw Exception()
+    fun joinEvent(itsc: String, eventId: String): Boolean {
+        val studentEntityOptional: Optional<StudentEntity> = studentRepository.findByItsc(itsc)
+        if (studentEntityOptional.isEmpty) {
+            throw Exception("student with itsc:$itsc is not found")
         }
 
-        val studentObj = student.get()
-        val eventObj = event.get()
+        val eventEntityOptional: Optional<EventEntity> = eventRepository.findById(UUID.fromString(eventId))
+        if (eventEntityOptional.isEmpty) {
+            throw Exception("Event with id:$eventId is not found")
+        }
 
-        val record =
-            EnrolledEventRecordEntity(EnrolledEventRecordKey(studentObj.uuid, eventObj.uuid), studentObj, eventObj)
-        enrolledEventRepository.save(record)
+        val eventEntity: EventEntity = eventEntityOptional.get()
+//        check maxParticipation and apply deadline
+        val numberOfParticipation: Long = enrolledEventRepository.countById_EventUuid(UUID.fromString(eventId));
+        if (LocalDateTime.now()
+                .isAfter(eventEntity.applyDeadline) || numberOfParticipation >= eventEntity.maxParticipation!!
+        ) {
+            throw Exception("Event is not able to register")
+        }
+
+        val studentEntity: StudentEntity = studentEntityOptional.get()
+        val enrolledEventRecordEntity = EnrolledEventRecordEntity(
+            EnrolledEventRecordKey(studentEntity.uuid, eventEntity.uuid), EnrolledEventStatus.PENDING
+        )
+        enrolledEventRecordEntity.studentEntity = studentEntity
+        enrolledEventRecordEntity.eventEntity = eventEntity
+        enrolledEventRepository.save(enrolledEventRecordEntity)
+        return true;
+    }
+
+    fun getAllEnrolledEvent(itsc: String, pageNum: Int, pageSize: Int): List<EnrolledEventDto> {
+        return enrolledEventRepository.findByStudentEntity_ItscAndEventEntity_StartDateGreaterThanEqualOrderByEventEntity_StartDateAsc(
+            itsc,
+            LocalDateTime.now()
+        ).map { enrolledEventEntity -> EnrolledEventDto(enrolledEventEntity) }
     }
 }
