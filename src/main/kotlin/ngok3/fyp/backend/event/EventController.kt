@@ -1,5 +1,6 @@
 package ngok3.fyp.backend.event
 
+import ngok3.fyp.backend.enrolled_event_record.EnrolledEventDto
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
 import java.util.*
@@ -11,19 +12,29 @@ class EventController(
 ) {
     @GetMapping
     fun getAllSocietyEvent(
-        @RequestParam("itsc", required = false, defaultValue = "") itsc: String,
         @RequestParam("pageNum", required = false, defaultValue = "0") pageNum: Int,
         @RequestParam("pageSize", required = false, defaultValue = "10") pageSize: Int
     ): List<EventDto> {
-        print("itsc: $itsc pageSize: $pageSize pageNum: $pageNum ")
-        return eventService.getAllSocietyEvent(itsc, pageNum, pageSize)
+        print("pageSize: $pageSize pageNum: $pageNum ")
+        return eventService.getAllSocietyEvent(pageNum, pageSize)
     }
 
     @PostMapping
-    fun joinSocietyEvent(
+    fun joinEvent(
         @RequestParam("itsc", required = false, defaultValue = "") itsc: String,
-        @RequestParam("eventName", required = false, defaultValue = "") eventName: String,
+        @RequestParam("eventId", required = false, defaultValue = "") eventId: String,
     ) {
-        eventService.joinSocietyEvent(itsc, eventName)
+        eventService.joinEvent(itsc, eventId)
+    }
+
+    @GetMapping
+    @RequestMapping("/enrolled")
+    fun getAllEnrolledEvent(
+        @RequestParam("itsc", required = false, defaultValue = "") itsc: String,
+        @RequestParam("pageNum", required = false, defaultValue = "0") pageNum: Int,
+        @RequestParam("pageSize", required = false, defaultValue = "10") pageSize: Int
+    ): List<EnrolledEventDto> {
+        print("itsc: $itsc pageSize: $pageSize pageNum: $pageNum ")
+        return eventService.getAllEnrolledEvent(itsc, pageNum, pageSize)
     }
 }
