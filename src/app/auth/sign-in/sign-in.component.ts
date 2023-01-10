@@ -24,7 +24,7 @@ export class SignInComponent implements OnInit {
     this.route.queryParams
       .pipe(
         takeUntil(this.destroy$),
-        filter(params => !!params),
+        filter(params => Object.keys(params).length != 0),
         switchMap(queryParams => this.authService.validateUser(queryParams))
       )
       .subscribe(user => {
