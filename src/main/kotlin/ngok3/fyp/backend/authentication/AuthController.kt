@@ -11,19 +11,19 @@ import javax.servlet.http.HttpServletResponse
 class AuthController(
     @Autowired val authService: AuthService
 ) {
-    @GetMapping("/serviceValidate")
+    @PostMapping("/serviceValidate")
     fun itscSSOServiceValidate(
-        @RequestParam("ticket") ticket: String,
+        @RequestBody ticket: Map<String, String>,
         frontendResponse: HttpServletResponse
     ): CasServiceResponse {
         return this.authService.itscSSOServiceValidate(ticket, frontendResponse);
     }
 
-    @GetMapping("/mockServiceValidate")
+    @PostMapping("/mockServiceValidate")
     fun mockItscSSOServiceValidate(
-        @RequestParam("ticket") ticket: String,
+        @RequestBody ticket: Map<String, String>,
         frontendResponse: HttpServletResponse
-    ) {
+    ): CasServiceResponse {
         return this.authService.mockItscSSOServiceValidate(ticket, frontendResponse);
     }
 
