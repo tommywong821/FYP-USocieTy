@@ -13,7 +13,7 @@ export class ApiService {
   call<Response>(request: Request): Observable<Response> {
     const url = `${environment.backend_url}${request.endpoint}`;
 
-    return this.restful.get(url, request.body).pipe(map(res => res as Response));
+    return this.restful.get(url, {params: request.queryParam}).pipe(map(res => res as Response));
   }
 
   healthCheck() {

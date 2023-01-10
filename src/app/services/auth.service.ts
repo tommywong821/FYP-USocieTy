@@ -1,3 +1,4 @@
+import {HttpParams} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {Params} from '@angular/router';
 import {BehaviorSubject, filter, map, Observable, of, tap} from 'rxjs';
@@ -28,8 +29,12 @@ export class AuthService {
     return of(true);
   }
 
-  validateUser(params: Params): Observable<User> {
-    const request = {endpoint: validateUserEndpoint, body: {params}};
+  validateUser(queryParams: Params): Observable<User> {
+    const request = {
+      endpoint: validateUserEndpoint,
+      queryParam: new HttpParams().set('ticket', queryParams['ticket']),
+      body: null,
+    };
     return this.apiService.call<validateUserResponse>(request).pipe(
       tap(res => {
         if (res.authenticationFailure) {

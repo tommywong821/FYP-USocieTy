@@ -25,7 +25,7 @@ export class SignInComponent implements OnInit {
       .pipe(
         takeUntil(this.destroy$),
         filter(params => !!params),
-        switchMap(params => this.authService.validateUser(params))
+        switchMap(queryParams => this.authService.validateUser(queryParams))
       )
       .subscribe(user => {
         this.authService.signIn(user);
