@@ -2,9 +2,7 @@ package ngok3.fyp.backend.authentication
 
 import com.fasterxml.jackson.dataformat.xml.XmlMapper
 import com.fasterxml.jackson.module.kotlin.readValue
-import ngok3.fyp.backend.authentication.model.AuthenticationSuccess
-import ngok3.fyp.backend.authentication.model.CasServiceResponse
-import ngok3.fyp.backend.authentication.model.UserToken
+import ngok3.fyp.backend.authentication.model.*
 import ngok3.fyp.backend.student.StudentEntity
 import ngok3.fyp.backend.student.StudentRepository
 import ngok3.fyp.backend.util.exception.model.CASException
@@ -37,7 +35,7 @@ class AuthService(
     @Value("\${itsc.clientSecret}")
     val clientSecret: String = ""
 
-    fun itscSSOServiceValidate(ticket: String, frontendResponse: HttpServletResponse): CasServiceResponse {
+    fun itscSSOServiceValidate(ticket: Map<String, String>, frontendResponse: HttpServletResponse): CasServiceResponse {
         val url: HttpUrl = HttpUrl.Builder()
             .scheme("https")
             .host("cas.ust.hk")
@@ -45,7 +43,7 @@ class AuthService(
             .addPathSegment("p3")
             .addPathSegment("serviceValidate")
             .addQueryParameter("service", frontendUrl)
-            .addQueryParameter("ticket", ticket)
+            .addQueryParameter("ticket", ticket["ticket"])
             .build()
         val request: Request = Request.Builder().url(url).build()
         //get user info from ust cas server
@@ -71,6 +69,9 @@ class AuthService(
         val cookie: Cookie = Cookie("token", jwtUtil.generateToken(studentEntity))
         //24 hours in second unit
         cookie.maxAge = 24 * 60 * 60
+        cookie.isHttpOnly = true
+        cookie.secure = false
+        cookie.path = "/"
         frontendResponse.addCookie(cookie)
 
         return servicesResponse;
@@ -89,7 +90,11 @@ class AuthService(
         return studentRepository.save(StudentEntity(itsc, name, mail))
     }
 
-    fun mockItscSSOServiceValidate(ticket: String, frontendResponse: HttpServletResponse) {
+    fun mockItscSSOServiceValidate(
+        ticket: Map<String, String>,
+        frontendResponse: HttpServletResponse
+    ): CasServiceResponse {
+        print(ticket["ticket"])
         val studentEntity: StudentEntity =
             StudentEntity("dmchanxy", "CHAN, Dai Man", "dmchanxy@connect.ust.hk", "student")
 
@@ -97,7 +102,16 @@ class AuthService(
         val cookie: Cookie = Cookie("token", jwtUtil.generateToken(studentEntity))
         //24 hours in second unit
         cookie.maxAge = 24 * 60 * 60
+        cookie.isHttpOnly = true
+        cookie.secure = false
+        cookie.path = "/"
         frontendResponse.addCookie(cookie)
+
+        val mockResponse = CasServiceResponse()
+        mockResponse.authenticationFailure = AuthenticationFailure(null, null)
+        mockResponse.authenticationSuccess =
+            AuthenticationSuccess("tkwongax", CasAttributes("tkwongax@connect.ust.hk", "WONG, Tsz Kit"))
+        return mockResponse
     }
 
     fun ROPCLogin(userinfo: Map<String, String>): String {
