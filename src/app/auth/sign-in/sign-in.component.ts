@@ -1,8 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
+import {filter, Subject, switchMap, takeUntil} from 'rxjs';
+import {ApiService} from 'src/app/services/api.service';
 import {AuthService} from 'src/app/services/auth.service';
 import {environment} from 'src/environments/environment';
-import {filter, Subject, switchMap, takeUntil} from 'rxjs';
 
 @Component({
   selector: 'app-sign-in',
@@ -10,7 +11,12 @@ import {filter, Subject, switchMap, takeUntil} from 'rxjs';
   styleUrls: ['./sign-in.component.scss'],
 })
 export class SignInComponent implements OnInit {
-  constructor(private authService: AuthService, private route: ActivatedRoute, private router: Router) {}
+  constructor(
+    private authService: AuthService,
+    private route: ActivatedRoute,
+    private router: Router,
+    private apiService: ApiService
+  ) {}
 
   destroy$ = new Subject<void>();
 
@@ -35,5 +41,14 @@ export class SignInComponent implements OnInit {
     const url = `${environment.cas_url}/login?service=${encodeURIComponent(environment.app_url)}`;
 
     window.location.assign(url);
+  }
+
+  healthCheck(): void {
+    console.log('health check');
+    this.apiService.healthCheck().subscribe({
+      next: () => {
+        console.log('health check done');
+      },
+    });
   }
 }
