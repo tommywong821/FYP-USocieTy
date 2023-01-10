@@ -12,9 +12,11 @@ import okhttp3.*
 import okio.IOException
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.http.HttpHeaders
+import org.springframework.http.ResponseCookie
 import org.springframework.stereotype.Service
+import java.time.Duration
 import java.util.*
-import javax.servlet.http.Cookie
 import javax.servlet.http.HttpServletResponse
 
 @Service
@@ -66,13 +68,12 @@ class AuthService(
             throw CASException("authenticationFailure from HKUST CAS code: ${servicesResponse.authenticationFailure?.code} msg:${servicesResponse.authenticationFailure?.value}")
         }
         //return cookie to frontend with student information
-        val cookie: Cookie = Cookie("token", jwtUtil.generateToken(studentEntity))
-        //24 hours in second unit
-        cookie.maxAge = 24 * 60 * 60
-        cookie.isHttpOnly = true
-        cookie.secure = false
-        cookie.path = "/"
-        frontendResponse.addCookie(cookie)
+        val cookie: ResponseCookie =
+            ResponseCookie.from("token", jwtUtil.generateToken(studentEntity)).httpOnly(true).secure(true).path("/")
+                .maxAge(
+                    Duration.ofDays(1)
+                ).sameSite("None").build()
+        frontendResponse.setHeader(HttpHeaders.SET_COOKIE, cookie.toString())
 
         return servicesResponse;
     }
@@ -99,13 +100,12 @@ class AuthService(
             StudentEntity("dmchanxy", "CHAN, Dai Man", "dmchanxy@connect.ust.hk", "student")
 
         //return cookie to frontend with student information
-        val cookie: Cookie = Cookie("token", jwtUtil.generateToken(studentEntity))
-        //24 hours in second unit
-        cookie.maxAge = 24 * 60 * 60
-        cookie.isHttpOnly = true
-        cookie.secure = false
-        cookie.path = "/"
-        frontendResponse.addCookie(cookie)
+        val cookie: ResponseCookie =
+            ResponseCookie.from("token", jwtUtil.generateToken(studentEntity)).httpOnly(true).secure(false).path("/")
+                .maxAge(
+                    Duration.ofDays(1)
+                ).sameSite("None").build()
+        frontendResponse.setHeader(HttpHeaders.SET_COOKIE, cookie.toString())
 
         val mockResponse = CasServiceResponse()
         mockResponse.authenticationFailure = AuthenticationFailure(null, null)
