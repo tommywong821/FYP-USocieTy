@@ -42,10 +42,12 @@ export class AuthService {
         }
       }),
       filter(res => !!res.authenticationFailure),
-      map(res => ({
-        userId: res.authenticationSucess.user,
-        email: res.authenticationSucess.attributes.mail,
-      }))
+      map(res => {
+        return {
+          name: res.authenticationSuccess.attributes.name,
+          email: res.authenticationSuccess.attributes.mail,
+        };
+      })
     );
   }
 }
