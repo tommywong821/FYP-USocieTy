@@ -1,4 +1,3 @@
-import {HttpParams} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {Params} from '@angular/router';
 import {BehaviorSubject, filter, map, Observable, of, tap} from 'rxjs';
@@ -26,14 +25,17 @@ export class AuthService {
   signOut(): Observable<boolean> {
     this._user$.next(null);
     window.location.reload();
+
     return of(true);
   }
 
   validateUser(queryParams: Params): Observable<User> {
     const request = {
       endpoint: validateUserEndpoint,
-      queryParam: new HttpParams().set('ticket', queryParams['ticket']),
-      body: null,
+      queryParam: null,
+      body: {
+        ticket: queryParams['ticket'],
+      },
     };
     return this.apiService.call<validateUserResponse>(request).pipe(
       tap(res => {
