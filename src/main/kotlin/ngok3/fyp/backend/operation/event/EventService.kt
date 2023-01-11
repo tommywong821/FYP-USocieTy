@@ -1,8 +1,8 @@
-package ngok3.fyp.backend.event
+package ngok3.fyp.backend.operation.event
 
-import ngok3.fyp.backend.enrolled_event_record.*
-import ngok3.fyp.backend.student.StudentEntity
-import ngok3.fyp.backend.student.StudentRepository
+import ngok3.fyp.backend.operation.enrolled_event_record.*
+import ngok3.fyp.backend.operation.student.StudentEntity
+import ngok3.fyp.backend.operation.student.StudentRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable

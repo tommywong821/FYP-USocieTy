@@ -1,9 +1,9 @@
-package ngok3.fyp.backend.util.jwt
+package ngok3.fyp.backend.authentication.jwt
 
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.security.Keys
-import ngok3.fyp.backend.student.StudentEntity
+import ngok3.fyp.backend.operation.student.StudentEntity
 import org.springframework.stereotype.Component
 import java.security.Key
 import java.util.*

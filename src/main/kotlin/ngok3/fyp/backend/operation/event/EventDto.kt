@@ -1,4 +1,4 @@
-package ngok3.fyp.backend.event
+package ngok3.fyp.backend.operation.event
 
 import java.io.Serializable
 import java.time.format.DateTimeFormatter

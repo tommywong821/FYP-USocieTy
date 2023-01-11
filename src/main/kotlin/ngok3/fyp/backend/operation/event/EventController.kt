@@ -1,7 +1,7 @@
-package ngok3.fyp.backend.event
+package ngok3.fyp.backend.operation.event
 
 import io.swagger.v3.oas.annotations.Operation
-import ngok3.fyp.backend.enrolled_event_record.EnrolledEventDto
+import ngok3.fyp.backend.operation.enrolled_event_record.EnrolledEventDto
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
 import java.util.*

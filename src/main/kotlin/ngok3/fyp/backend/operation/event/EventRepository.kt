@@ -1,4 +1,4 @@
-package ngok3.fyp.backend.event
+package ngok3.fyp.backend.operation.event
 
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable

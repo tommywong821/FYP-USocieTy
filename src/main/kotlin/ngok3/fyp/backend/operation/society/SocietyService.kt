@@ -1,11 +1,11 @@
-package ngok3.fyp.backend.society
+package ngok3.fyp.backend.operation.society
 
-import ngok3.fyp.backend.enrolled_event_record.EnrolledStatus
-import ngok3.fyp.backend.enrolled_society_record.EnrolledSocietyRecordEntity
-import ngok3.fyp.backend.enrolled_society_record.EnrolledSocietyRecordKey
-import ngok3.fyp.backend.enrolled_society_record.EnrolledSocietyRecordRepository
-import ngok3.fyp.backend.student.StudentEntity
-import ngok3.fyp.backend.student.StudentRepository
+import ngok3.fyp.backend.operation.enrolled_event_record.EnrolledStatus
+import ngok3.fyp.backend.operation.enrolled_society_record.EnrolledSocietyRecordEntity
+import ngok3.fyp.backend.operation.enrolled_society_record.EnrolledSocietyRecordKey
+import ngok3.fyp.backend.operation.enrolled_society_record.EnrolledSocietyRecordRepository
+import ngok3.fyp.backend.operation.student.StudentEntity
+import ngok3.fyp.backend.operation.student.StudentRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable

@@ -1,7 +1,7 @@
-package ngok3.fyp.backend.enrolled_event_record
+package ngok3.fyp.backend.operation.enrolled_event_record
 
-import ngok3.fyp.backend.event.EventEntity
-import ngok3.fyp.backend.student.StudentEntity
+import ngok3.fyp.backend.operation.event.EventEntity
+import ngok3.fyp.backend.operation.student.StudentEntity
 import java.util.*
 import javax.persistence.*
 
