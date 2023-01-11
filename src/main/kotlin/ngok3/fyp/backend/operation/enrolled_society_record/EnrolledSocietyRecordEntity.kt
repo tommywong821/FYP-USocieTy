@@ -14,7 +14,7 @@ open class EnrolledSocietyRecordEntity(
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
-    open var status: EnrolledStatus? = null
+    open var status: EnrolledStatus = EnrolledStatus.PENDING
 ) {
     @ManyToOne
     @MapsId("studentUuid")
