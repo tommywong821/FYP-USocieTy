@@ -97,11 +97,11 @@ class AuthService(
     ): CasServiceResponse {
         print(ticket["ticket"])
         val studentEntity: StudentEntity =
-            StudentEntity("dmchanxy", "CHAN, Dai Man", "dmchanxy@connect.ust.hk")
+            studentRepository.findByItsc("tkwongax").get()
 
         //return cookie to frontend with student information
         val cookie: ResponseCookie =
-            ResponseCookie.from("token", jwtUtil.generateToken(studentEntity)).httpOnly(true).secure(false).path("/")
+            ResponseCookie.from("token", jwtUtil.generateToken(studentEntity)).httpOnly(true).secure(true).path("/")
                 .maxAge(
                     Duration.ofDays(1)
                 ).sameSite("None").build()
