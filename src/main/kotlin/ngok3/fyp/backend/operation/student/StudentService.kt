@@ -13,9 +13,9 @@ class StudentService(
         val studentEntityOpt: Optional<StudentEntity> = studentRepository.findByItsc(itsc)
         if (studentEntityOpt.isEmpty) {
             //create record when 1st login
-            return StudentDto(studentRepository.save(StudentEntity(itsc, "", "itsc@connect.ust.hk", "")))
+            return StudentDto(studentRepository.save(StudentEntity(itsc, "", "itsc@connect.ust.hk")))
         }
         val studentEntity = studentEntityOpt.get()
-        return StudentDto(studentEntity.itsc, studentEntity.nickname, studentEntity.mail, studentEntity.role)
+        return StudentDto(studentEntity.itsc, studentEntity.nickname, studentEntity.mail)
     }
 }

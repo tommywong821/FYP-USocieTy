@@ -11,5 +11,5 @@ open class RoleEntity(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     open var id: Int? = null,
     @Enumerated(EnumType.STRING)
-    open var role: Role = Role.ROLE_STUDENT
+    open var role: Role? = null
 )
