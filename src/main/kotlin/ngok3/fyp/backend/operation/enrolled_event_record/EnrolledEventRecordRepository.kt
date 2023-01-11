@@ -1,4 +1,4 @@
-package ngok3.fyp.backend.enrolled_event_record
+package ngok3.fyp.backend.operation.enrolled_event_record
 
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.CrudRepository

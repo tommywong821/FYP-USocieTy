@@ -1,4 +1,4 @@
-package ngok3.fyp.backend.enrolled_society_record
+package ngok3.fyp.backend.operation.enrolled_society_record
 
 import org.springframework.data.repository.CrudRepository
 

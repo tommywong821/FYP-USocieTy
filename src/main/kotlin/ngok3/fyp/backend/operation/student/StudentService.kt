@@ -1,4 +1,4 @@
-package ngok3.fyp.backend.student
+package ngok3.fyp.backend.operation.student
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service

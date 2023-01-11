@@ -1,4 +1,4 @@
-package ngok3.fyp.backend.student
+package ngok3.fyp.backend.operation.student
 
 import java.io.Serializable
 

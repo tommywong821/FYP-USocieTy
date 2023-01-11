@@ -1,4 +1,4 @@
-package ngok3.fyp.backend.society
+package ngok3.fyp.backend.operation.society
 
 import io.swagger.v3.oas.annotations.Operation
 import org.springframework.beans.factory.annotation.Autowired

@@ -1,7 +1,7 @@
-package ngok3.fyp.backend.student
+package ngok3.fyp.backend.operation.student
 
-import ngok3.fyp.backend.enrolled_event_record.EnrolledEventRecordEntity
-import ngok3.fyp.backend.enrolled_society_record.EnrolledSocietyRecordEntity
+import ngok3.fyp.backend.operation.enrolled_event_record.EnrolledEventRecordEntity
+import ngok3.fyp.backend.operation.enrolled_society_record.EnrolledSocietyRecordEntity
 import ngok3.fyp.backend.util.entity.BaseEntity
 import javax.persistence.Entity
 import javax.persistence.OneToMany

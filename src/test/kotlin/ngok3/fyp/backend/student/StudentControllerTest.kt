@@ -2,6 +2,8 @@ package ngok3.fyp.backend.student
 
 import com.ninjasquad.springmockk.MockkBean
 import io.mockk.every
+import ngok3.fyp.backend.operation.student.StudentDto
+import ngok3.fyp.backend.operation.student.StudentService
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired

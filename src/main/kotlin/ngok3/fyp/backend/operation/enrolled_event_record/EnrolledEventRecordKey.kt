@@ -1,4 +1,4 @@
-package ngok3.fyp.backend.enrolled_society_record
+package ngok3.fyp.backend.operation.enrolled_event_record
 
 import org.hibernate.Hibernate
 import java.io.Serializable
@@ -7,21 +7,21 @@ import javax.persistence.Column
 import javax.persistence.Embeddable
 
 @Embeddable
-class EnrolledSocietyRecordKey(
+class EnrolledEventRecordKey(
     @Column(name = "student_entity_uuid")
     var studentUuid: UUID? = null,
 
-    @Column(name = "society_entity_uuid")
-    var societyUuid: UUID? = null
+    @Column(name = "event_entity_uuid")
+    var eventUuid: UUID? = null
 ) : Serializable {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other == null || Hibernate.getClass(this) != Hibernate.getClass(other)) return false
-        other as EnrolledSocietyRecordKey
+        other as EnrolledEventRecordKey
 
         return studentUuid == other.studentUuid
-                && societyUuid == other.societyUuid
+                && eventUuid == other.eventUuid
     }
 
-    override fun hashCode(): Int = Objects.hash(studentUuid, societyUuid);
+    override fun hashCode(): Int = Objects.hash(studentUuid, eventUuid);
 }

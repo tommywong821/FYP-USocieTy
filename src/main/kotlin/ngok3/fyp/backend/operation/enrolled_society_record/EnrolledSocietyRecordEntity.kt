@@ -1,8 +1,8 @@
-package ngok3.fyp.backend.enrolled_society_record
+package ngok3.fyp.backend.operation.enrolled_society_record
 
-import ngok3.fyp.backend.enrolled_event_record.EnrolledStatus
-import ngok3.fyp.backend.society.SocietyEntity
-import ngok3.fyp.backend.student.StudentEntity
+import ngok3.fyp.backend.operation.enrolled_event_record.EnrolledStatus
+import ngok3.fyp.backend.operation.society.SocietyEntity
+import ngok3.fyp.backend.operation.student.StudentEntity
 import java.util.*
 import javax.persistence.*
 

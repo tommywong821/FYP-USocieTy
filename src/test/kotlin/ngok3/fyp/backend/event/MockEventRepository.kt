@@ -1,5 +1,6 @@
 package ngok3.fyp.backend.event
 
+import ngok3.fyp.backend.operation.event.EventEntity
 import org.springframework.data.domain.PageImpl
 import org.springframework.data.domain.PageRequest
 

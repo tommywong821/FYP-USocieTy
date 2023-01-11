@@ -1,4 +1,4 @@
-package ngok3.fyp.backend.society
+package ngok3.fyp.backend.operation.society
 
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
