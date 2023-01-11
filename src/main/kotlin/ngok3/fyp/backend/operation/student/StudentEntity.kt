@@ -1,11 +1,10 @@
 package ngok3.fyp.backend.operation.student
 
+import ngok3.fyp.backend.authentication.role.RoleEntity
 import ngok3.fyp.backend.operation.enrolled_event_record.EnrolledEventRecordEntity
 import ngok3.fyp.backend.operation.enrolled_society_record.EnrolledSocietyRecordEntity
 import ngok3.fyp.backend.util.entity.BaseEntity
-import javax.persistence.Entity
-import javax.persistence.OneToMany
-import javax.persistence.Table
+import javax.persistence.*
 
 @Entity
 @Table(name = "student")
@@ -13,12 +12,18 @@ open class StudentEntity(
     open var itsc: String? = null,
     open var nickname: String? = null,
     open var mail: String? = null,
-    open var role: String? = null,
-
 ) : BaseEntity() {
     @OneToMany(mappedBy = "eventEntity")
     open var enrolledEventRecordEntity: MutableSet<EnrolledEventRecordEntity> = mutableSetOf()
 
     @OneToMany(mappedBy = "societyEntity")
     open var enrolledSocietyRecordEntity: MutableSet<EnrolledSocietyRecordEntity> = mutableSetOf()
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+        name = "student_roles",
+        joinColumns = [JoinColumn(name = "student_uuid")],
+        inverseJoinColumns = [JoinColumn(name = "role_id")]
+    )
+    open var roles: MutableSet<RoleEntity> = mutableSetOf()
 }

@@ -17,7 +17,6 @@ class JWTUtil(
         claims["itsc"] = studentEntity.itsc
         claims["name"] = studentEntity.nickname
         claims["mail"] = studentEntity.mail
-        claims["role"] = studentEntity.role
 
         //set token only valid in 24 hours
         val calendar: Calendar = Calendar.getInstance()

@@ -97,7 +97,7 @@ class AuthService(
     ): CasServiceResponse {
         print(ticket["ticket"])
         val studentEntity: StudentEntity =
-            StudentEntity("dmchanxy", "CHAN, Dai Man", "dmchanxy@connect.ust.hk", "student")
+            StudentEntity("dmchanxy", "CHAN, Dai Man", "dmchanxy@connect.ust.hk")
 
         //return cookie to frontend with student information
         val cookie: ResponseCookie =
