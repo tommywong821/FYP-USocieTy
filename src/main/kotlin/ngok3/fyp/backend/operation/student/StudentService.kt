@@ -11,11 +11,16 @@ class StudentService(
 
     fun getStudentProfile(itsc: String): StudentDto {
         val studentEntityOpt: Optional<StudentEntity> = studentRepository.findByItsc(itsc)
-        if (studentEntityOpt.isEmpty) {
-            //create record when 1st login
-            return StudentDto(studentRepository.save(StudentEntity(itsc, "", "itsc@connect.ust.hk")))
+        val studentEntity = studentEntityOpt.orElseGet {
+            studentRepository.save(StudentEntity(itsc, "", "${itsc}@connect.ust.hk"))
         }
-        val studentEntity = studentEntityOpt.get()
-        return StudentDto(studentEntity.itsc, studentEntity.nickname, studentEntity.mail)
+        val enrolledSocietyList: StringBuilder = StringBuilder()
+        var prefix = ""
+        for (enrolledSociety in studentEntity.enrolledSocietyRecordEntity) {
+            enrolledSocietyList.append(prefix)
+            prefix = ","
+            enrolledSocietyList.append(enrolledSociety.societyEntity?.name)
+        }
+        return StudentDto(studentEntity, enrolledSocietyList.toString())
     }
 }
