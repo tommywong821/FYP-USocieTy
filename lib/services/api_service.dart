@@ -24,6 +24,7 @@ class ApiService {
   initializeInterceptors() {
     _dio.interceptors.add(InterceptorsWrapper(
       onRequest: (options, handler) async {
+        print("Request:");
         print("${options.method} ${options.path}");
         options.headers['Content-Type'] = 'application/json';
         options.headers['Cookie'] =
@@ -34,6 +35,7 @@ class ApiService {
         return handler.next(options);
       },
       onResponse: (response, handler) {
+        print("Response:");
         print("${response.statusCode} ${response.data}");
         return handler.next(response);
       },
