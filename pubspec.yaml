@@ -37,13 +37,13 @@ dependencies:
   cupertino_icons: ^1.0.2
   aad_oauth: ^0.4.0
   flutter_secure_storage: ^5.1.2
-  http: ^0.13.5
   flutter_dotenv: ^5.0.2
   table_calendar: ^3.0.8
   badges: ^2.0.3
   google_fonts: ^2.1.0
   intl: ^0.17.0
   carousel_slider: ^4.1.1
+  dio: ^4.0.6
 
 dev_dependencies:
   flutter_test:

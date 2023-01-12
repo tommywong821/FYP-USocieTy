@@ -73,7 +73,29 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     Icon(Icons.person_outlined, color: Styles.primaryColor),
                     SizedBox(width: 20),
                     Expanded(
-                        child: Text("Name: ${args.name}",
+                        child: Text("Name: ${args.fullname}",
+                            style: TextStyle(color: Styles.primaryColor))),
+                  ]),
+                )),
+            Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                child: TextButton(
+                  style: TextButton.styleFrom(
+                    side: BorderSide(color: Styles.primaryColor),
+                    padding: EdgeInsets.all(15),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20)),
+                    backgroundColor: Colors.white,
+                  ),
+                  onPressed: () {},
+                  child: Row(children: [
+                    Icon(
+                      Icons.email_outlined,
+                      color: Styles.primaryColor,
+                    ),
+                    SizedBox(width: 20),
+                    Expanded(
+                        child: Text("Nickname: ${args.nickname}",
                             style: TextStyle(color: Styles.primaryColor))),
                   ]),
                 )),
@@ -114,7 +136,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     Icon(Icons.people_outline, color: Styles.primaryColor),
                     SizedBox(width: 20),
                     Expanded(
-                        child: Text("Joined Society:",
+                        child: Text("Joined Society: ${args.enrolledSocieties}",
                             style: TextStyle(color: Styles.primaryColor))),
                   ]),
                 )),
