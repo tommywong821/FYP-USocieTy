@@ -24,8 +24,10 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   bool isBusy = false;
   String errorMessage = '';
   bool isLoggedIn = false;
-  String name = '';
+  String fullname = '';
+  String nickname = '';
   String email = '';
+  String enrolledSocieties = '';
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +49,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
       context,
       '/home',
       ModalRoute.withName('/home'),
-      arguments: ProfileScreenArguments(name, email),
+      arguments:
+          ProfileScreenArguments(fullname, nickname, email, enrolledSocieties),
     );
   }
 
@@ -135,9 +138,10 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
 
     setState(() {
       isLoggedIn = true;
-      name = student.nickname.isEmpty ? aadProfile.name : student.nickname;
+      fullname = aadProfile.name;
+      nickname = student.nickname;
       email = student.mail;
-      // TODO set joined society of student
+      enrolledSocieties = student.enrolledSocieties;
     });
 
     routeToHomePage();

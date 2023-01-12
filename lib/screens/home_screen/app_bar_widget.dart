@@ -32,7 +32,7 @@ class AppBarWidget extends StatelessWidget {
                     SizedBox(
                       height: 3,
                     ),
-                    Text("Hi! " + args.name, style: Styles.appBarName),
+                    Text("Hi! " + args.fullname, style: Styles.appBarName),
                   ],
                 )),
                 Padding(
