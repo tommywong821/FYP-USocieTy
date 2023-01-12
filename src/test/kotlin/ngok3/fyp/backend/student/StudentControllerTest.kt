@@ -2,6 +2,7 @@ package ngok3.fyp.backend.student
 
 import com.ninjasquad.springmockk.MockkBean
 import io.mockk.every
+import ngok3.fyp.backend.controller.authentication.model.MockAuthRepository
 import ngok3.fyp.backend.operation.student.StudentDto
 import ngok3.fyp.backend.operation.student.StudentService
 import org.junit.jupiter.api.DisplayName
@@ -12,6 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.get
+import javax.servlet.http.Cookie
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -20,6 +22,8 @@ class StudentControllerTest @Autowired constructor(
 ) {
     private val mockStudentRepository: MockStudentRepository = MockStudentRepository()
     private val mockStudentEntity = mockStudentRepository.testStudentEntity
+
+    private val mockAuthRepository: MockAuthRepository = MockAuthRepository()
 
     @MockkBean
     lateinit var studentService: StudentService
@@ -31,10 +35,11 @@ class StudentControllerTest @Autowired constructor(
             mockStudentEntity.itsc,
             mockStudentEntity.nickname,
             mockStudentEntity.mail,
-            mockStudentEntity.role
         )
 
-        mockMvc.get("/student?itsc=${mockStudentRepository.testItsc}")
+        mockMvc.get("/student?itsc=${mockStudentRepository.testItsc}") {
+            cookie(Cookie("token", mockAuthRepository.cookieToken))
+        }
             .andDo { print() }
             .andExpect {
                 status { isOk() }
@@ -47,9 +52,6 @@ class StudentControllerTest @Autowired constructor(
                 }
                 jsonPath("$.mail") {
                     value(mockStudentRepository.testStudentEntity.mail)
-                }
-                jsonPath("$.role") {
-                    value(mockStudentRepository.testStudentEntity.role)
                 }
             }
     }
