@@ -13,6 +13,7 @@ abstract class BaseEntity(
         name = "UUID",
         strategy = "org.hibernate.id.UUIDGenerator",
     )
+    @Column(name = "uuid", nullable = false)
     open val uuid: UUID? = null,
     open var updatedAt: LocalDateTime? = null,
     open var createdAt: LocalDateTime? = null

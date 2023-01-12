@@ -1,5 +1,6 @@
 package ngok3.fyp.backend.authentication
 
+import ngok3.fyp.backend.authentication.model.AADProfile
 import ngok3.fyp.backend.authentication.model.CasServiceResponse
 import ngok3.fyp.backend.authentication.model.UserToken
 import org.springframework.beans.factory.annotation.Autowired
@@ -27,13 +28,8 @@ class AuthController(
         return this.authService.mockItscSSOServiceValidate(ticket, frontendResponse);
     }
 
-    @PostMapping("/login")
-    fun ITSCROPC(@RequestBody userinfo: Map<String, String>): String {
-        return authService.ROPCLogin(userinfo)
-    }
-
     @PostMapping("/mobileLogin")
-    fun validateMobileLogin(@RequestBody userInfo: Map<String, String>): UserToken {
-        return authService.validateMobileLogin(userInfo)
+    fun validateMobileLogin(@RequestBody aadProfile: AADProfile): UserToken {
+        return authService.validateMobileLogin(aadProfile)
     }
 }

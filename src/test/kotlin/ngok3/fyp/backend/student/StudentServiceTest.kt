@@ -2,6 +2,10 @@ package ngok3.fyp.backend.student
 
 import io.mockk.every
 import io.mockk.mockk
+import ngok3.fyp.backend.operation.student.StudentDto
+import ngok3.fyp.backend.operation.student.StudentEntity
+import ngok3.fyp.backend.operation.student.StudentRepository
+import ngok3.fyp.backend.operation.student.StudentService
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import java.util.*
@@ -27,6 +31,5 @@ class StudentServiceTest() {
         assertEquals(mockStudentDto.itsc, mockStudentEntity.itsc)
         assertEquals(mockStudentDto.nickname, mockStudentEntity.nickname)
         assertEquals(mockStudentDto.mail, mockStudentEntity.mail)
-        assertEquals(mockStudentDto.role, mockStudentEntity.role)
     }
 }

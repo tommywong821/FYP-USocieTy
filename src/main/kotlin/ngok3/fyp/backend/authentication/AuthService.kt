@@ -2,11 +2,13 @@ package ngok3.fyp.backend.authentication
 
 import com.fasterxml.jackson.dataformat.xml.XmlMapper
 import com.fasterxml.jackson.module.kotlin.readValue
+import ngok3.fyp.backend.authentication.jwt.JWTUtil
 import ngok3.fyp.backend.authentication.model.*
-import ngok3.fyp.backend.student.StudentEntity
-import ngok3.fyp.backend.student.StudentRepository
+import ngok3.fyp.backend.authentication.role.Role
+import ngok3.fyp.backend.authentication.role.RoleEntityRepository
+import ngok3.fyp.backend.operation.student.StudentEntity
+import ngok3.fyp.backend.operation.student.StudentRepository
 import ngok3.fyp.backend.util.exception.model.CASException
-import ngok3.fyp.backend.util.jwt.JWTUtil
 import ngok3.fyp.backend.util.webclient.OkHttpClientFactory
 import okhttp3.*
 import okio.IOException
@@ -23,19 +25,11 @@ import javax.servlet.http.HttpServletResponse
 class AuthService(
     private val webClient: OkHttpClient = OkHttpClientFactory().webClient,
     @Autowired val studentRepository: StudentRepository,
+    @Autowired val roleEntityRepository: RoleEntityRepository,
     @Autowired val jwtUtil: JWTUtil
 ) {
     @Value("\${heroku.frontend.url}")
     val frontendUrl: String? = null
-
-    @Value("\${itsc.tenantId}")
-    val tenantId: String = ""
-
-    @Value("\${itsc.clientId}")
-    val clientId: String = ""
-
-    @Value("\${itsc.clientSecret}")
-    val clientSecret: String = ""
 
     fun itscSSOServiceValidate(ticket: Map<String, String>, frontendResponse: HttpServletResponse): CasServiceResponse {
         val url: HttpUrl = HttpUrl.Builder()
@@ -88,7 +82,9 @@ class AuthService(
     }
 
     fun createNewStudentEntityInDB(itsc: String, name: String, mail: String): StudentEntity {
-        return studentRepository.save(StudentEntity(itsc, name, mail))
+        val newStudentEntity = StudentEntity(itsc, name, mail)
+        newStudentEntity.roles = mutableSetOf(roleEntityRepository.findByRole(Role.ROLE_STUDENT))
+        return studentRepository.save(newStudentEntity)
     }
 
     fun mockItscSSOServiceValidate(
@@ -97,11 +93,11 @@ class AuthService(
     ): CasServiceResponse {
         print(ticket["ticket"])
         val studentEntity: StudentEntity =
-            StudentEntity("dmchanxy", "CHAN, Dai Man", "dmchanxy@connect.ust.hk", "student")
+            studentRepository.findByItsc("tkwongax").get()
 
         //return cookie to frontend with student information
         val cookie: ResponseCookie =
-            ResponseCookie.from("token", jwtUtil.generateToken(studentEntity)).httpOnly(true).secure(false).path("/")
+            ResponseCookie.from("token", jwtUtil.generateToken(studentEntity)).httpOnly(true).secure(true).path("/")
                 .maxAge(
                     Duration.ofDays(1)
                 ).sameSite("None").build()
@@ -114,47 +110,19 @@ class AuthService(
         return mockResponse
     }
 
-    fun ROPCLogin(userinfo: Map<String, String>): String {
-        val url: HttpUrl = HttpUrl.Builder()
-            .scheme("https")
-            .host("login.microsoftonline.com")
-            .addPathSegment(tenantId)
-            .addPathSegment("oauth2")
-            .addPathSegment("v2.0")
-            .addPathSegment("token")
-            .build()
-
-        val requestBody: RequestBody = FormBody.Builder()
-            .add("client_id", clientId)
-            .add("scope", "user.read openid profile offline_access")
-            .add("client_secret", clientSecret)
-            .add("username", userinfo["username"].toString())
-            .add("password", userinfo["password"].toString())
-            .add("grant_type", "password").build()
-
-        val request: Request =
-            Request.Builder().header("Content-Type", "application/x-www-form-urlencoded").url(url).post(requestBody)
-                .build()
-        val response: Response = webClient.newCall(request).execute()
-        if (!response.isSuccessful) {
-            throw IOException("Unexpected code $response")
-        }
-        return response.body!!.string()
-    }
-
-    fun validateMobileLogin(userInfo: Map<String, String>): UserToken {
+    fun validateMobileLogin(aadProfile: AADProfile): UserToken {
         //find student by itsc in db
         val studentEntity: StudentEntity
         try {
             val studentEntityOptional: Optional<StudentEntity> =
-                studentRepository.findByItsc(userInfo["itsc"].toString())
+                studentRepository.findByItsc(aadProfile.itsc)
             //not exist: create new student and save in db
             studentEntity =
                 studentEntityOptional.orElseGet {
                     createNewStudentEntityInDB(
-                        userInfo["itsc"].toString(),
-                        userInfo["name"].toString(),
-                        userInfo["email"].toString()
+                        aadProfile.itsc,
+                        aadProfile.email,
+                        aadProfile.name
                     )
                 }
 
