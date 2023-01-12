@@ -15,11 +15,14 @@ import okio.IOException
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpHeaders
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseCookie
+import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
 import java.time.Duration
 import java.util.*
 import javax.servlet.http.HttpServletResponse
+
 
 @Service
 class AuthService(
@@ -130,6 +133,16 @@ class AuthService(
         } catch (e: NullPointerException) {
             throw e
         }
+    }
+
+    fun logout(frontendResponse: HttpServletResponse): ResponseEntity<HashMap<String, String>> {
+//        clear frontend cookie
+        val cookie: ResponseCookie =
+            ResponseCookie.from("token", "").httpOnly(true).secure(true).path("/")
+                .maxAge(0).sameSite("None").build()
+        frontendResponse.setHeader(HttpHeaders.SET_COOKIE, cookie.toString())
+
+        return ResponseEntity(hashMapOf("message" to "You are logged out"), HttpStatus.OK)
     }
 }
 
