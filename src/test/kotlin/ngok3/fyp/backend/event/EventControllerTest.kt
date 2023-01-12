@@ -2,6 +2,7 @@ package ngok3.fyp.backend.event
 
 import com.ninjasquad.springmockk.MockkBean
 import io.mockk.every
+import ngok3.fyp.backend.controller.authentication.model.MockAuthRepository
 import ngok3.fyp.backend.operation.event.EventDto
 import ngok3.fyp.backend.operation.event.EventService
 import ngok3.fyp.backend.student.MockStudentRepository
@@ -12,6 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.get
+import javax.servlet.http.Cookie
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -20,6 +22,8 @@ class EventControllerTest @Autowired constructor(
 ) {
     private val mockEventRepository: MockEventRepository = MockEventRepository()
     private val mockStudentRepository: MockStudentRepository = MockStudentRepository()
+    private val mockAuthRepository: MockAuthRepository = MockAuthRepository()
+
 
     @MockkBean
     lateinit var eventService: EventService
@@ -37,7 +41,9 @@ class EventControllerTest @Autowired constructor(
 
         val allEventList = mockEventRepository.allTestEventList
 
-        mockMvc.get("/event?pageNum=${mockEventRepository.testPageNumWithoutSid}&pageSize=${mockEventRepository.testPageSizeWithoutSid}")
+        mockMvc.get("/event?pageNum=${mockEventRepository.testPageNumWithoutSid}&pageSize=${mockEventRepository.testPageSizeWithoutSid}") {
+            cookie(Cookie("token", mockAuthRepository.cookieToken))
+        }
             .andDo { print() }
             .andExpect {
                 status { isOk() }
@@ -85,7 +91,9 @@ class EventControllerTest @Autowired constructor(
             mockEventRepository.testToIndex
         )
 
-        mockMvc.get("/event?itsc=${mockStudentRepository.testItsc}&pageNum=${mockEventRepository.testPageNumWithSid}&pageSize=${mockEventRepository.testPageSizeWithSid}")
+        mockMvc.get("/event?itsc=${mockStudentRepository.testItsc}&pageNum=${mockEventRepository.testPageNumWithSid}&pageSize=${mockEventRepository.testPageSizeWithSid}") {
+            cookie(Cookie("token", mockAuthRepository.cookieToken))
+        }
             .andDo { print() }
             .andExpect {
                 status { isOk() }

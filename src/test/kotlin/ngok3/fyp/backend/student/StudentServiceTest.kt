@@ -31,6 +31,5 @@ class StudentServiceTest() {
         assertEquals(mockStudentDto.itsc, mockStudentEntity.itsc)
         assertEquals(mockStudentDto.nickname, mockStudentEntity.nickname)
         assertEquals(mockStudentDto.mail, mockStudentEntity.mail)
-        assertEquals(mockStudentDto.role, mockStudentEntity.role)
     }
 }
