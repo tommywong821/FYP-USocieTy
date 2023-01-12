@@ -1,7 +1,10 @@
 import 'dart:convert';
 
+import 'package:dio/dio.dart';
 import 'package:http/http.dart' as http;
 import 'package:ngok3fyp_frontend_flutter/constants.dart';
+import 'package:ngok3fyp_frontend_flutter/model/auth/aad_profile.dart';
+import 'package:ngok3fyp_frontend_flutter/model/auth/jwt_token.dart';
 import 'package:ngok3fyp_frontend_flutter/model/enrolled_event/enrolled_event.dart';
 import 'package:ngok3fyp_frontend_flutter/model/event.dart';
 import 'package:ngok3fyp_frontend_flutter/model/student.dart';
@@ -9,10 +12,38 @@ import 'package:ngok3fyp_frontend_flutter/model/student.dart';
 import 'storage_service.dart';
 
 class ApiService {
+  late Dio _dio;
+
   final backendDomain = 'ngok3fyp-backend.herokuapp.com';
   final StorageService _storageService = StorageService();
 
-  Future<Map<String, dynamic>> getUserDetails(String accessToken) async {
+  ApiService() {
+    _dio = Dio();
+    initializeInterceptors();
+  }
+
+  initializeInterceptors() {
+    _dio.interceptors.add(InterceptorsWrapper(
+      onRequest: (options, handler) async {
+        print("${options.method} ${options.path}");
+        options.headers['Content-Type'] = 'application/json';
+        options.headers['Cookie'] =
+            await _storageService.readSecureData(COOKIE_KEY);
+        options.responseType = ResponseType.plain;
+        print("headers: ${options.headers}");
+        print("body: ${options.data}");
+        return handler.next(options);
+      },
+      onResponse: (response, handler) {
+        print("${response.statusCode} ${response.data}");
+        return handler.next(response);
+      },
+      onError: (DioError e, handler) {
+        print(e);
+        return handler.next(e);
+      },
+    ));
+  }
     final url = Uri.https('graph.microsoft.com', 'oidc/userinfo');
     final response = await http.get(
       url,
@@ -21,6 +52,7 @@ class ApiService {
 
     if (response.statusCode == 200) {
       return jsonDecode(response.body);
+      return AADProfile.fromJson(jsonDecode(response.body));
     } else {
       throw Exception('Failed to get user details');
     }
@@ -67,6 +99,18 @@ class ApiService {
           .toList();
     } else {
       throw Exception('Failed to load enrolled event by itsc:');
+    }
+  }
+
+  Future<JWTToken> signCookieFromBackend(AADProfile aadProfile) async {
+    final uri = Uri.https(backendDomain, '/auth/mobileLogin');
+    // final response = await http.post(url, body: jsonEncode(aadProfile));
+    final response = await _dio.postUri(uri, data: jsonEncode(aadProfile));
+
+    if (response.statusCode == 200) {
+      return JWTToken.fromJson(jsonDecode(response.data));
+    } else {
+      throw Exception('Failed to sign cookie from backend');
     }
   }
 }

@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:ngok3fyp_frontend_flutter/model/auth/jwt_token.dart';
 import 'package:ngok3fyp_frontend_flutter/model/profile_screen_arguments.dart';
 import 'package:ngok3fyp_frontend_flutter/services/aad_oauth_service.dart';
 import 'package:ngok3fyp_frontend_flutter/services/api_service.dart';
 import 'package:ngok3fyp_frontend_flutter/services/storage_service.dart';
 
 import '../../constants.dart';
+import '../../model/auth/aad_profile.dart';
 import '../../model/student.dart';
 import 'login_widget.dart';
 
@@ -115,18 +117,25 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     var accessToken = await _aadOAuthService.getAccessToken();
     debugPrint('Logged in successfully, your access token: $accessToken');
 
-    final profile = await ApiService().getUserDetails(accessToken!);
+    final AADProfile aadProfile =
+        await ApiService().getUserDetails(accessToken!);
     await _storageService.writeSecureData(ACCESS_TOKEN_KEY, accessToken);
+
+    // get cookie from backend
+    final JWTToken jwtToken =
+        await ApiService().signCookieFromBackend(aadProfile);
+    await _storageService.writeSecureData(
+        COOKIE_KEY, "token=${jwtToken.jwtToken}");
 
     // fetch user profile from backend
     // get itsc from AAD
-    final String itsc = profile['email'].toString().split('@')[0];
+    final String itsc = aadProfile.itsc;
     final Student student = await ApiService().getStudentProfile(itsc);
     await _storageService.writeSecureData(ITSC_KEY, itsc);
 
     setState(() {
       isLoggedIn = true;
-      name = student.nickname.isEmpty ? profile['name'] : student.nickname;
+      name = student.nickname.isEmpty ? aadProfile.name : student.nickname;
       email = student.mail;
       // TODO set joined society of student
     });
