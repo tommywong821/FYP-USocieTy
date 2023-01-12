@@ -5,7 +5,7 @@ export interface validateUserRequestBody {
   params: Params;
 }
 export interface validateUserResponse {
-  authenticationSucess: {
+  authenticationSuccess: {
     user: string;
     attributes: {
       mail: string;

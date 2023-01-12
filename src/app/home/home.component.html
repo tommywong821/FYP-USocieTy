@@ -1,1 +1,16 @@
 <p>home works!</p>
+<button
+  class="rounded bg-red-500 py-2 px-4 font-bold text-white"
+  (click)="signOut()"
+>
+  sign out
+</button>
+<button
+  class="rounded bg-green-500 py-2 px-4 font-bold text-white"
+  (click)="healthCheck()"
+>
+  health Check
+</button>
+
+<p>email: {{ user?.email }}</p>
+<p>name: {{ user?.name }}</p>
