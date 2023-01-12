@@ -31,24 +31,28 @@ class JWTAuthenticationFilter(
             //allow angular preflight
             if (HttpMethod.OPTIONS.toString() != request.method) {
                 //handle normal restful
-                val cookies: Array<Cookie> = request.cookies
-                for (cookie in cookies) {
-                    if ("token" == cookie.name) {
-                        val jwtToken: String = cookie.value
-                        //decode jwt token
-                        val claims: Claims = jwtUtil.verifyToken(jwtToken)
-                        //extract role from cookies
-                        val userRoleList: List<String> = claims["role"].toString().split(",")
-                        //form authority from role list
-                        val authorities: List<GrantedAuthority> =
-                            userRoleList.map { role -> SimpleGrantedAuthority(role) }
-                        val authentication: UsernamePasswordAuthenticationToken =
-                            UsernamePasswordAuthenticationToken(claims, null, authorities)
+                if (request.cookies != null) {
+                    val cookies: Array<Cookie> = request.cookies
+                    for (cookie in cookies) {
+                        if ("token" == cookie.name) {
+                            val jwtToken: String = cookie.value
+                            //decode jwt token
+                            val claims: Claims = jwtUtil.verifyToken(jwtToken)
+                            //extract role from cookies
+                            val userRoleList: List<String> = claims["role"].toString().split(",")
+                            //form authority from role list
+                            val authorities: List<GrantedAuthority> =
+                                userRoleList.map { role -> SimpleGrantedAuthority(role) }
+                            val authentication: UsernamePasswordAuthenticationToken =
+                                UsernamePasswordAuthenticationToken(claims, null, authorities)
 
-                        authentication.details = WebAuthenticationDetailsSource().buildDetails(request)
-                        SecurityContextHolder.getContext().authentication = authentication
+                            authentication.details = WebAuthenticationDetailsSource().buildDetails(request)
+                            SecurityContextHolder.getContext().authentication = authentication
+                            break;
+                        }
                     }
                 }
+
             }
             filterChain.doFilter(request, response)
 
