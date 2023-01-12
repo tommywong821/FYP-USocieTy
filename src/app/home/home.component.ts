@@ -1,4 +1,6 @@
 import {Component, OnInit} from '@angular/core';
+import {environment} from 'src/environments/environment';
+import {User} from '../model/user';
 import {ApiService} from '../services/api.service';
 import {AuthService} from '../services/auth.service';
 
@@ -10,10 +12,25 @@ import {AuthService} from '../services/auth.service';
 export class HomeComponent implements OnInit {
   constructor(private authService: AuthService, private apiService: ApiService) {}
 
-  ngOnInit(): void {}
+  user: User | null = null;
+
+  ngOnInit(): void {
+    this.authService.user$.subscribe({
+      next: user => {
+        this.user = user;
+      },
+    });
+  }
 
   signOut() {
+    //remove cookie
+    this.apiService.signOutFromBackend().subscribe();
+    //remove user in guard service
     this.authService.signOut();
+    //logout from hkust cas server
+    const url = `${environment.cas_url}/logout?service=${encodeURIComponent(environment.app_url)}`;
+
+    window.location.assign(url);
   }
 
   healthCheck() {

@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {filter, Subject, switchMap, takeUntil} from 'rxjs';
+import {User} from 'src/app/model/user';
 import {ApiService} from 'src/app/services/api.service';
 import {AuthService} from 'src/app/services/auth.service';
 import {environment} from 'src/environments/environment';
@@ -27,7 +28,7 @@ export class SignInComponent implements OnInit {
         filter(params => Object.keys(params).length != 0),
         switchMap(queryParams => this.authService.validateUser(queryParams))
       )
-      .subscribe(user => {
+      .subscribe((user: User) => {
         this.authService.signIn(user);
         this.router.navigate(['/home']);
       });
@@ -41,14 +42,5 @@ export class SignInComponent implements OnInit {
     const url = `${environment.cas_url}/login?service=${encodeURIComponent(environment.app_url)}`;
 
     window.location.assign(url);
-  }
-
-  healthCheck(): void {
-    console.log('health check');
-    this.apiService.healthCheck().subscribe({
-      next: () => {
-        console.log('health check done');
-      },
-    });
   }
 }

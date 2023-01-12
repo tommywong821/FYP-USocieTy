@@ -24,8 +24,6 @@ export class AuthService {
 
   signOut(): Observable<boolean> {
     this._user$.next(null);
-    window.location.reload();
-
     return of(true);
   }
 
