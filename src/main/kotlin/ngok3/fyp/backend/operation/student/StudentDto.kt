@@ -8,9 +8,10 @@ import java.io.Serializable
 data class StudentDto(
     val itsc: String? = "",
     val nickname: String? = "",
-    val mail: String? = ""
+    val mail: String? = "",
+    val enrolledSocieties: String? = ""
 ) : Serializable {
-    constructor(studentEntity: StudentEntity) : this(
-        studentEntity.itsc, studentEntity.nickname, studentEntity.mail
+    constructor(studentEntity: StudentEntity, enrolledSocietyList: String?) : this(
+        studentEntity.itsc, studentEntity.nickname, studentEntity.mail, enrolledSocieties = enrolledSocietyList
     )
 }

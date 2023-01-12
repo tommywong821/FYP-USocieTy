@@ -13,10 +13,10 @@ open class StudentEntity(
     open var nickname: String? = null,
     open var mail: String? = null,
 ) : BaseEntity() {
-    @OneToMany(mappedBy = "eventEntity")
+    @OneToMany(mappedBy = "studentEntity")
     open var enrolledEventRecordEntity: MutableSet<EnrolledEventRecordEntity> = mutableSetOf()
 
-    @OneToMany(mappedBy = "societyEntity")
+    @OneToMany(mappedBy = "studentEntity")
     open var enrolledSocietyRecordEntity: MutableSet<EnrolledSocietyRecordEntity> = mutableSetOf()
 
     @ManyToMany(fetch = FetchType.LAZY)
