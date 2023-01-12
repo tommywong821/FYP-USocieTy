@@ -1,4 +1,5 @@
 import {Component, OnInit} from '@angular/core';
+import {mergeMap} from 'rxjs';
 import {environment} from 'src/environments/environment';
 import {User} from '../model/user';
 import {ApiService} from '../services/api.service';
@@ -24,13 +25,20 @@ export class HomeComponent implements OnInit {
 
   signOut() {
     //remove cookie
-    this.apiService.signOutFromBackend().subscribe();
-    //remove user in guard service
-    this.authService.signOut();
-    //logout from hkust cas server
-    const url = `${environment.cas_url}/logout?service=${encodeURIComponent(environment.app_url)}`;
+    this.apiService
+      .signOutFromBackend()
+      .pipe(
+        mergeMap(() => {
+          //remove user in guard service
+          return this.authService.signOut();
+        })
+      )
+      .subscribe(() => {
+        //logout from hkust cas server
+        const url = `${environment.cas_url}/logout?service=${encodeURIComponent(environment.app_url)}`;
 
-    window.location.assign(url);
+        window.location.assign(url);
+      });
   }
 
   healthCheck() {
