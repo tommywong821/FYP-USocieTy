@@ -3,9 +3,12 @@ package ngok3.fyp.backend.event
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
-import ngok3.fyp.backend.enrolled_event_record.EnrolledEventRecordRepository
+import ngok3.fyp.backend.operation.enrolled_event_record.EnrolledEventRecordRepository
+import ngok3.fyp.backend.operation.event.EventDto
+import ngok3.fyp.backend.operation.event.EventRepository
+import ngok3.fyp.backend.operation.event.EventService
+import ngok3.fyp.backend.operation.student.StudentRepository
 import ngok3.fyp.backend.student.MockStudentRepository
-import ngok3.fyp.backend.student.StudentRepository
 import org.junit.jupiter.api.Assertions.assertIterableEquals
 import org.junit.jupiter.api.Test
 import java.time.LocalDateTime

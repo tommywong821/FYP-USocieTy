@@ -6,6 +6,7 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.security.access.AccessDeniedException
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
 
@@ -21,6 +22,16 @@ class ExceptionHandler {
             "CAS Server Error"
         )
         return ResponseEntity(errorMessage, HttpStatus.SERVICE_UNAVAILABLE)
+    }
+
+    @ExceptionHandler
+    fun handleException(ex: AccessDeniedException): ResponseEntity<ErrorMessage> {
+        logger.error("handleException: ${ex.message}")
+        val errorMessage = ErrorMessage(
+            HttpStatus.UNAUTHORIZED.value(),
+            "Unauthorized Access"
+        )
+        return ResponseEntity(errorMessage, HttpStatus.UNAUTHORIZED)
     }
 
     @ExceptionHandler

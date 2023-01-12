@@ -44,6 +44,8 @@ dependencies {
 	//springboot 2.X max version:3.x
 	testImplementation("com.ninja-squad:springmockk:3.1.2")
 	testImplementation("com.h2database:h2")
+	//spring security role based login
+	implementation("org.springframework.boot:spring-boot-starter-security")
 }
 
 tasks.withType<KotlinCompile> {
