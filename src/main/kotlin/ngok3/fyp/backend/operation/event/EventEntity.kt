@@ -22,6 +22,6 @@ open class EventEntity(
     open var fee: Float? = null,
 
     ) : BaseEntity() {
-    @OneToMany(mappedBy = "studentEntity")
+    @OneToMany(mappedBy = "eventEntity")
     open var enrolledEventRecordEntity: MutableSet<EnrolledEventRecordEntity> = mutableSetOf()
 }
