@@ -26,4 +26,9 @@ class HealthCheckController {
     fun healthCheck2(): String {
         return "OK"
     }
+
+    @GetMapping()
+    fun healthCheck3(): String {
+        return "OK"
+    }
 }
