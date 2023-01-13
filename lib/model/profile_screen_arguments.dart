@@ -1,6 +1,9 @@
 class ProfileScreenArguments {
-  final String name;
+  final String fullname;
+  final String nickname;
   final String email;
+  final String enrolledSocieties;
 
-  ProfileScreenArguments(this.name, this.email);
+  ProfileScreenArguments(
+      this.fullname, this.nickname, this.email, this.enrolledSocieties);
 }
