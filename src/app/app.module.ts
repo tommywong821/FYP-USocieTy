@@ -1,3 +1,4 @@
+import {NgZorroAntdModule} from './ng-zorro-antd.module';
 import {NgModule} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
 
@@ -8,18 +9,35 @@ import {HomeComponent} from './home/home.component';
 import {SignInComponent} from './auth/sign-in/sign-in.component';
 import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
 import {EventCreateComponent} from './event/event-create/event-create.component';
-import {AuthService} from './services/auth.service';
 import {NetworkInterceptor} from './interceptor/network-interceptor';
+import {NZ_I18N} from 'ng-zorro-antd/i18n';
+import {en_US} from 'ng-zorro-antd/i18n';
+import {registerLocaleData} from '@angular/common';
+import en from '@angular/common/locales/en';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+
+registerLocaleData(en);
 
 @NgModule({
   declarations: [AppComponent, HomeComponent, SignInComponent, EventCreateComponent],
-  imports: [BrowserModule, AppRoutingModule, HttpClientModule, FontAwesomeModule],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    HttpClientModule,
+    FontAwesomeModule,
+    FormsModule,
+    ReactiveFormsModule,
+    BrowserAnimationsModule,
+    NgZorroAntdModule,
+  ],
   providers: [
     {
       provide: HTTP_INTERCEPTORS,
       useClass: NetworkInterceptor,
       multi: true,
     },
+    {provide: NZ_I18N, useValue: en_US},
   ],
   bootstrap: [AppComponent],
 })

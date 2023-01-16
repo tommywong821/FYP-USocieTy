@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {faHome, faUsers} from '@fortawesome/free-solid-svg-icons';
 import {SidebarOption} from './home/home';
+import {User} from './model/user';
 import {AuthService} from './services/auth.service';
 
 @Component({
@@ -22,9 +23,15 @@ export class AppComponent implements OnInit {
     },
   ];
 
+  user: User | null = null;
+
   constructor(private authService: AuthService) {}
 
   ngOnInit(): void {
-    // Dummy
+    this.authService.user$.subscribe({
+      next: user => {
+        this.user = user;
+      },
+    });
   }
 }
