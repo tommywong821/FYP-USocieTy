@@ -24,12 +24,17 @@ export class AuthService {
 
   signOut(): Observable<boolean> {
     this._user$.next(null);
-    window.location.reload();
     return of(true);
   }
 
-  validateUser(params: Params): Observable<User> {
-    const request = {endpoint: validateUserEndpoint, body: {params}};
+  validateUser(queryParams: Params): Observable<User> {
+    const request = {
+      endpoint: validateUserEndpoint,
+      queryParam: null,
+      body: {
+        ticket: queryParams['ticket'],
+      },
+    };
     return this.apiService.call<validateUserResponse>(request).pipe(
       tap(res => {
         if (res.authenticationFailure) {
@@ -37,10 +42,12 @@ export class AuthService {
         }
       }),
       filter(res => !!res.authenticationFailure),
-      map(res => ({
-        userId: res.authenticationSucess.user,
-        email: res.authenticationSucess.attributes.mail,
-      }))
+      map(res => {
+        return {
+          name: res.authenticationSuccess.attributes.name,
+          email: res.authenticationSuccess.attributes.mail,
+        };
+      })
     );
   }
 }

@@ -15,4 +15,12 @@ export class ApiService {
 
     return this.restful.post(url, request.body).pipe(map(res => res as Response));
   }
+
+  signOutFromBackend(): Observable<any> {
+    return this.restful.post(`${environment.backend_url}/auth/logout`, null);
+  }
+
+  healthCheck(): Observable<any> {
+    return this.restful.get(`${environment.backend_url}/health`);
+  }
 }

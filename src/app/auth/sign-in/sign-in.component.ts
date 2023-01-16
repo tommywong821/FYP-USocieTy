@@ -1,8 +1,10 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
+import {filter, Subject, switchMap, takeUntil} from 'rxjs';
+import {User} from 'src/app/model/user';
+import {ApiService} from 'src/app/services/api.service';
 import {AuthService} from 'src/app/services/auth.service';
 import {environment} from 'src/environments/environment';
-import {filter, Subject, switchMap, takeUntil} from 'rxjs';
 
 @Component({
   selector: 'app-sign-in',
@@ -10,7 +12,12 @@ import {filter, Subject, switchMap, takeUntil} from 'rxjs';
   styleUrls: ['./sign-in.component.scss'],
 })
 export class SignInComponent implements OnInit {
-  constructor(private authService: AuthService, private route: ActivatedRoute, private router: Router) {}
+  constructor(
+    private authService: AuthService,
+    private route: ActivatedRoute,
+    private router: Router,
+    private apiService: ApiService
+  ) {}
 
   destroy$ = new Subject<void>();
 
@@ -18,10 +25,10 @@ export class SignInComponent implements OnInit {
     this.route.queryParams
       .pipe(
         takeUntil(this.destroy$),
-        filter(params => !!params),
-        switchMap(params => this.authService.validateUser(params))
+        filter(params => Object.keys(params).length != 0),
+        switchMap(queryParams => this.authService.validateUser(queryParams))
       )
-      .subscribe(user => {
+      .subscribe((user: User) => {
         this.authService.signIn(user);
         this.router.navigate(['/home']);
       });
