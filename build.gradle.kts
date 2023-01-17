@@ -46,6 +46,8 @@ dependencies {
 	testImplementation("com.h2database:h2")
 	//spring security role based login
 	implementation("org.springframework.boot:spring-boot-starter-security")
+	//model mapper: convert dto to entity
+	implementation("org.modelmapper:modelmapper:3.1.1")
 }
 
 tasks.withType<KotlinCompile> {

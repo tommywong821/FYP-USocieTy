@@ -1,4 +1,4 @@
-package ngok3.fyp.backend.operation.event
+package ngok3.fyp.backend.operation.event.dto
 
 data class JoinEventDto(
     val itsc: String = "",

@@ -29,7 +29,7 @@ class ExceptionHandler {
         logger.error("handleException: ${ex.message}")
         val errorMessage = ErrorMessage(
             HttpStatus.UNAUTHORIZED.value(),
-            "Unauthorized Access"
+            "Unauthorized Access: ${ex.message}"
         )
         return ResponseEntity(errorMessage, HttpStatus.UNAUTHORIZED)
     }

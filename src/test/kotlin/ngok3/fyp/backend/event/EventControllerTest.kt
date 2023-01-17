@@ -3,8 +3,8 @@ package ngok3.fyp.backend.event
 import com.ninjasquad.springmockk.MockkBean
 import io.mockk.every
 import ngok3.fyp.backend.controller.authentication.model.MockAuthRepository
-import ngok3.fyp.backend.operation.event.EventDto
 import ngok3.fyp.backend.operation.event.EventService
+import ngok3.fyp.backend.operation.event.dto.EventDto
 import ngok3.fyp.backend.student.MockStudentRepository
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
