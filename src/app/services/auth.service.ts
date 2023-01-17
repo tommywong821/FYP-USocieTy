@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {Params} from '@angular/router';
-import {BehaviorSubject, filter, map, Observable, of, tap} from 'rxjs';
-import {validateUserEndpoint, validateUserResponse} from '../api/auth';
+import {BehaviorSubject, Observable, of} from 'rxjs';
+import {validateUserEndpoint} from '../api/auth';
 import {User} from '../model/user';
 import {ApiService} from './api.service';
 
@@ -35,19 +35,6 @@ export class AuthService {
         ticket: queryParams['ticket'],
       },
     };
-    return this.apiService.call<validateUserResponse>(request).pipe(
-      tap(res => {
-        if (res.authenticationFailure) {
-          console.error(res.authenticationFailure);
-        }
-      }),
-      filter(res => !!res.authenticationFailure),
-      map(res => {
-        return {
-          name: res.authenticationSuccess.attributes.name,
-          email: res.authenticationSuccess.attributes.mail,
-        };
-      })
-    );
+    return this.apiService.call<User>(request);
   }
 }
