@@ -16,7 +16,7 @@ import org.springframework.test.web.servlet.get
 import javax.servlet.http.Cookie
 
 @SpringBootTest
-@AutoConfigureMockMvc
+@AutoConfigureMockMvc(addFilters = false)
 class StudentControllerTest @Autowired constructor(
     val mockMvc: MockMvc
 ) {
