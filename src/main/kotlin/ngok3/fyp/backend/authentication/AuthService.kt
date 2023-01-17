@@ -6,6 +6,7 @@ import ngok3.fyp.backend.authentication.jwt.JWTUtil
 import ngok3.fyp.backend.authentication.model.*
 import ngok3.fyp.backend.authentication.role.Role
 import ngok3.fyp.backend.authentication.role.RoleEntityRepository
+import ngok3.fyp.backend.operation.student.StudentDto
 import ngok3.fyp.backend.operation.student.StudentEntity
 import ngok3.fyp.backend.operation.student.StudentRepository
 import ngok3.fyp.backend.util.exception.model.CASException
@@ -34,7 +35,7 @@ class AuthService(
     @Value("\${heroku.frontend.url}")
     val frontendUrl: String? = null
 
-    fun itscSSOServiceValidate(ticket: Map<String, String>, frontendResponse: HttpServletResponse): CasServiceResponse {
+    fun itscSSOServiceValidate(ticket: Map<String, String>, frontendResponse: HttpServletResponse): StudentDto {
         val url: HttpUrl = HttpUrl.Builder()
             .scheme("https")
             .host("cas.ust.hk")
@@ -72,7 +73,24 @@ class AuthService(
                 ).sameSite("None").build()
         frontendResponse.setHeader(HttpHeaders.SET_COOKIE, cookie.toString())
 
-        return servicesResponse;
+        //create society list string
+        val enrolledSocietyList: StringBuilder = StringBuilder()
+        var prefix = ""
+        for (enrolledSociety in studentEntity.enrolledSocietyRecordEntity) {
+            enrolledSocietyList.append(prefix)
+            prefix = ","
+            enrolledSocietyList.append(enrolledSociety.societyEntity?.name)
+        }
+
+        // create role list string
+        prefix = ""
+        val roleList: StringBuilder = StringBuilder()
+        for (role in studentEntity.roles) {
+            roleList.append(prefix)
+            prefix = ","
+            roleList.append(role.role)
+        }
+        return StudentDto(studentEntity, enrolledSocietyList.toString(), roleList.toString())
     }
 
     fun createNewStudentEntityInDB(authenticationSuccess: AuthenticationSuccess): StudentEntity {
@@ -93,7 +111,7 @@ class AuthService(
     fun mockItscSSOServiceValidate(
         ticket: Map<String, String>,
         frontendResponse: HttpServletResponse
-    ): CasServiceResponse {
+    ): StudentDto {
         print(ticket["ticket"])
         val studentEntity: StudentEntity =
             studentRepository.findByItsc("tkwongax").get()
@@ -106,11 +124,29 @@ class AuthService(
                 ).sameSite("None").build()
         frontendResponse.setHeader(HttpHeaders.SET_COOKIE, cookie.toString())
 
+//        create society list string
+        val enrolledSocietyList: StringBuilder = StringBuilder()
+        var prefix = ""
+        for (enrolledSociety in studentEntity.enrolledSocietyRecordEntity) {
+            enrolledSocietyList.append(prefix)
+            prefix = ","
+            enrolledSocietyList.append(enrolledSociety.societyEntity?.name)
+        }
+
+        //        create role list string
+        prefix = ""
+        val roleList: StringBuilder = StringBuilder()
+        for (role in studentEntity.roles) {
+            roleList.append(prefix)
+            prefix = ","
+            roleList.append(role.role)
+        }
+
         val mockResponse = CasServiceResponse()
         mockResponse.authenticationFailure = AuthenticationFailure(null, null)
         mockResponse.authenticationSuccess =
             AuthenticationSuccess("tkwongax", CasAttributes("tkwongax@connect.ust.hk", "WONG, Tsz Kit"))
-        return mockResponse
+        return StudentDto(studentEntity, enrolledSocietyList.toString(), roleList.toString())
     }
 
     fun validateMobileLogin(aadProfile: AADProfile): UserToken {

@@ -9,9 +9,18 @@ data class StudentDto(
     val itsc: String? = "",
     val nickname: String? = "",
     val mail: String? = "",
-    val enrolledSocieties: String? = ""
+    val enrolledSocieties: String? = "",
+    val roles: String? = ""
 ) : Serializable {
     constructor(studentEntity: StudentEntity, enrolledSocietyList: String?) : this(
         studentEntity.itsc, studentEntity.nickname, studentEntity.mail, enrolledSocieties = enrolledSocietyList
+    )
+
+    constructor(studentEntity: StudentEntity, enrolledSocietyList: String?, roles: String?) : this(
+        studentEntity.itsc,
+        studentEntity.nickname,
+        studentEntity.mail,
+        enrolledSocieties = enrolledSocietyList,
+        roles = roles
     )
 }
