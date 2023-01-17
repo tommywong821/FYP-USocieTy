@@ -21,9 +21,8 @@ class SocietyController(
     @Operation(summary = "join society with student itsc and society id")
     @PostMapping
     fun joinSociety(
-        @RequestParam("itsc", required = false, defaultValue = "") itsc: String,
-        @RequestParam("societyId", required = false, defaultValue = "") societyId: String,
+        @RequestBody joinSocietyDto: JoinSocietyDto
     ): Boolean {
-        return societyService.joinSociety(itsc, societyId)
+        return societyService.joinSociety(joinSocietyDto.itsc, joinSocietyDto.eventId)
     }
 }

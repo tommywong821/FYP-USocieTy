@@ -22,12 +22,9 @@ class EventController(
     }
 
     @Operation(summary = "join event with student itsc and event id")
-    @PostMapping
-    fun joinEvent(
-        @RequestParam("itsc", required = false, defaultValue = "") itsc: String,
-        @RequestParam("eventId", required = false, defaultValue = "") eventId: String,
-    ): Boolean {
-        return eventService.joinEvent(itsc, eventId)
+    @PostMapping("/join")
+    fun joinEvent(@RequestBody joinEventDto: JoinEventDto): Boolean {
+        return eventService.joinEvent(joinEventDto.itsc, joinEventDto.eventId)
     }
 
     @Operation(summary = "get all enrolled event of student with itsc")
