@@ -2,6 +2,7 @@ package ngok3.fyp.backend.operation.enrolled_event_record
 
 import ngok3.fyp.backend.operation.event.EventEntity
 import ngok3.fyp.backend.operation.student.StudentEntity
+import java.time.LocalDateTime
 import java.util.*
 import javax.persistence.*
 
@@ -13,7 +14,9 @@ open class EnrolledEventRecordEntity(
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
-    open var status: EnrolledStatus = EnrolledStatus.PENDING
+    open var status: EnrolledStatus = EnrolledStatus.PENDING,
+    open var updatedAt: LocalDateTime? = null,
+    open var createdAt: LocalDateTime? = null
 ) {
 
     @ManyToOne
@@ -26,4 +29,13 @@ open class EnrolledEventRecordEntity(
     @JoinColumn(name = "event_entity_uuid")
     open var eventEntity: EventEntity? = null
 
+    @PreUpdate
+    fun updateUpdatedAt() {
+        this.updatedAt = LocalDateTime.now()
+    }
+
+    @PrePersist
+    fun updateCreatedAt() {
+        this.createdAt = LocalDateTime.now()
+    }
 }

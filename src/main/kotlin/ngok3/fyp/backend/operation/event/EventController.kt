@@ -2,6 +2,9 @@ package ngok3.fyp.backend.operation.event
 
 import io.swagger.v3.oas.annotations.Operation
 import ngok3.fyp.backend.operation.enrolled_event_record.EnrolledEventDto
+import ngok3.fyp.backend.operation.event.dto.CreateEventDto
+import ngok3.fyp.backend.operation.event.dto.EventDto
+import ngok3.fyp.backend.operation.event.dto.JoinEventDto
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
 import java.util.*
@@ -22,12 +25,9 @@ class EventController(
     }
 
     @Operation(summary = "join event with student itsc and event id")
-    @PostMapping
-    fun joinEvent(
-        @RequestParam("itsc", required = false, defaultValue = "") itsc: String,
-        @RequestParam("eventId", required = false, defaultValue = "") eventId: String,
-    ): Boolean {
-        return eventService.joinEvent(itsc, eventId)
+    @PostMapping("/join")
+    fun joinEvent(@RequestBody joinEventDto: JoinEventDto): Boolean {
+        return eventService.joinEvent(joinEventDto.itsc, joinEventDto.eventId)
     }
 
     @Operation(summary = "get all enrolled event of student with itsc")
@@ -39,5 +39,13 @@ class EventController(
     ): List<EnrolledEventDto> {
         print("itsc: $itsc pageSize: $pageSize pageNum: $pageNum ")
         return eventService.getAllEnrolledEvent(itsc, pageNum, pageSize)
+    }
+
+    @Operation(summary = "create event with detail")
+    @PostMapping
+    fun createEvent(
+        @RequestBody createEventDto: CreateEventDto,
+    ): EventEntity {
+        return eventService.createEvent(createEventDto)
     }
 }
