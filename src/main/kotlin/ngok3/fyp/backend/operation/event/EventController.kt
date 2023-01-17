@@ -2,6 +2,9 @@ package ngok3.fyp.backend.operation.event
 
 import io.swagger.v3.oas.annotations.Operation
 import ngok3.fyp.backend.operation.enrolled_event_record.EnrolledEventDto
+import ngok3.fyp.backend.operation.event.dto.CreateEventDto
+import ngok3.fyp.backend.operation.event.dto.EventDto
+import ngok3.fyp.backend.operation.event.dto.JoinEventDto
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
 import java.util.*
@@ -36,5 +39,13 @@ class EventController(
     ): List<EnrolledEventDto> {
         print("itsc: $itsc pageSize: $pageSize pageNum: $pageNum ")
         return eventService.getAllEnrolledEvent(itsc, pageNum, pageSize)
+    }
+
+    @Operation(summary = "create event with detail")
+    @PostMapping
+    fun createEvent(
+        @RequestBody createEventDto: CreateEventDto,
+    ): EventEntity {
+        return eventService.createEvent(createEventDto)
     }
 }

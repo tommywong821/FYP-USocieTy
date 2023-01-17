@@ -21,4 +21,5 @@ order by e.eventEntity.startDate"""
     @Query("select count(e) from EnrolledEventRecordEntity e where e.id.eventUuid = ?1")
     fun countById_EventUuid(eventUuid: UUID): Long
 
+
 }
