@@ -10,8 +10,7 @@ export enum CreateEventFormFields {
   Location = 'location',
   MaxParticipations = 'maxParticipations',
   ApplyDeadline = 'applyDeadline',
-  StartDate = 'startDate',
-  EndDate = 'endDate',
+  Date = 'date',
   Category = 'category',
   Description = 'description',
   Fee = 'fee',
@@ -39,8 +38,7 @@ export class EventCreateComponent implements OnInit {
       location: [''],
       maxParticipations: [''],
       applyDeadline: [''],
-      startDate: [''],
-      endDate: [''],
+      date: [''],
       category: [''],
       description: [''],
       fee: [''],
@@ -48,19 +46,21 @@ export class EventCreateComponent implements OnInit {
   }
 
   createEvent(): void {
-    if (!this.pictureFile.originFileObj) {
-      this.message.error('Error');
-      return;
-    }
+    // if (!this.pictureFile.originFileObj) {
+    //   this.message.error('Error');
+    //   return;
+    // }
 
-    const fileReader = new FileReader();
-    const fileBuffer = fileReader.readAsBinaryString(this.pictureFile.originFileObj);
+    // const fileReader = new FileReader();
+    // const fileBuffer = fileReader.readAsBinaryString(this.pictureFile.originFileObj);
 
     this.isProcessing = true;
     const onLoading = this.message.loading('Request in progress...', {nzDuration: 0}).messageId;
 
     // TODO error response handling
-    this.ApiService.createEvent({...this.createEventForm.value, poster: fileBuffer}).subscribe();
+    console.log(this.createEventForm.value);
+
+    // this.ApiService.createEvent({...this.createEventForm.value, poster: fileBuffer}).subscribe();
 
     this.isProcessing = false;
     this.message.remove(onLoading);

@@ -105,27 +105,15 @@
           </div>
           <div class="col-span-6 flex flex-row gap-x-4 sm:col-span-4">
             <div>
-              <label class="mb-2 block text-sm font-medium text-gray-700">Start Date</label>
+              <label class="mb-2 block text-sm font-medium text-gray-700">Event Date</label>
               <nz-form-control
                 nzHasFeedback
                 nzErrorTip="Input is required"
               >
-                <nz-date-picker
+                <nz-range-picker
                   required
-                  [formControlName]="CreateEventFormFields.StartDate"
-                ></nz-date-picker>
-              </nz-form-control>
-            </div>
-            <div>
-              <label class="mb-2 block text-sm font-medium text-gray-700">End Date</label>
-              <nz-form-control
-                nzHasFeedback
-                nzErrorTip="Input is required"
-              >
-                <nz-date-picker
-                  required
-                  [formControlName]="CreateEventFormFields.EndDate"
-                ></nz-date-picker>
+                  [formControlName]="CreateEventFormFields.Date"
+                ></nz-range-picker>
               </nz-form-control>
             </div>
             <div>
