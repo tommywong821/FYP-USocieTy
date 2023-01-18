@@ -9,7 +9,7 @@
         <div class="space-y-6 bg-white px-4 py-5 sm:p-6">
           <h1 class="text-xl">Create Event</h1>
           <div class="col-span-6 sm:col-span-4">
-            <label class="block text-sm font-medium text-gray-700">Event Title</label>
+            <label class="mb-2 block text-sm font-medium text-gray-700">Event Title</label>
             <nz-form-control
               nzHasFeedback
               [nzSpan]="14"
@@ -20,14 +20,13 @@
                 required
                 type="text"
                 [formControlName]="CreateEventFormFields.EventTitle"
-                class="mt-2"
               />
             </nz-form-control>
           </div>
           <div class="col-span-6 sm:col-span-4">
             <label
               for="location"
-              class="block text-sm font-medium text-gray-700"
+              class="mb-2 block text-sm font-medium text-gray-700"
               >Location</label
             >
             <nz-form-control
@@ -41,48 +40,98 @@
                 name="location"
                 type="text"
                 [formControlName]="CreateEventFormFields.Location"
-                class="mt-2"
               />
             </nz-form-control>
           </div>
           <div class="col-span-6 sm:col-span-4">
             <label
-              for="max-participations"
-              class="block text-sm font-medium text-gray-700"
-              >Max Participants</label
+              for="category"
+              class="mb-2 block text-sm font-medium text-gray-700"
+              >Category</label
             >
             <nz-form-control
               nzHasFeedback
+              [nzSpan]="4"
               nzErrorTip="Input is required"
             >
-              <input
-                nz-input
-                required
-                name="max-particaipants"
-                type="number"
-                [formControlName]="CreateEventFormFields.MaxParticipations"
-                class="mt-2 w-28"
-              />
+              <nz-select>
+                <nz-option
+                  *ngFor="let category of EventCategory | keyvalue"
+                  [nzLabel]="category.value"
+                  [nzValue]="category.value"
+                ></nz-option>
+              </nz-select>
             </nz-form-control>
           </div>
           <div class="col-span-6 flex flex-row gap-x-4 sm:col-span-4">
             <div>
-              <label class="block text-sm font-medium text-gray-700">Date</label>
+              <label
+                for="max-participations"
+                class="mb-2 block text-sm font-medium text-gray-700"
+                >Max Participants</label
+              >
+              <nz-form-control
+                nzHasFeedback
+                nzErrorTip="Input is required"
+              >
+                <input
+                  nz-input
+                  required
+                  type="number"
+                  [formControlName]="CreateEventFormFields.MaxParticipations"
+                  class="w-28"
+                />
+              </nz-form-control>
+            </div>
+            <div>
+              <label
+                for="fee"
+                class="mb-2 block text-sm font-medium text-gray-700"
+                >Fee(HKD)</label
+              >
+              <nz-form-control
+                nzHasFeedback
+                nzErrorTip="Input is required"
+              >
+                <input
+                  nz-input
+                  required
+                  type="number"
+                  [formControlName]="CreateEventFormFields.Fee"
+                  class="w-28"
+                />
+              </nz-form-control>
+            </div>
+          </div>
+          <div class="col-span-6 flex flex-row gap-x-4 sm:col-span-4">
+            <div>
+              <label class="mb-2 block text-sm font-medium text-gray-700">Start Date</label>
               <nz-form-control
                 nzHasFeedback
                 nzErrorTip="Input is required"
               >
                 <nz-date-picker
-                  class="mt-2"
                   required
-                  [formControlName]="CreateEventFormFields.Date"
+                  [formControlName]="CreateEventFormFields.StartDate"
+                ></nz-date-picker>
+              </nz-form-control>
+            </div>
+            <div>
+              <label class="mb-2 block text-sm font-medium text-gray-700">End Date</label>
+              <nz-form-control
+                nzHasFeedback
+                nzErrorTip="Input is required"
+              >
+                <nz-date-picker
+                  required
+                  [formControlName]="CreateEventFormFields.EndDate"
                 ></nz-date-picker>
               </nz-form-control>
             </div>
             <div>
               <label
                 for="application-deadline"
-                class="block text-sm font-medium text-gray-700"
+                class="mb-2 block text-sm font-medium text-gray-700"
                 >Application Deadline</label
               >
               <nz-form-control
@@ -90,7 +139,6 @@
                 nzErrorTip="Input is required"
               >
                 <nz-date-picker
-                  class="mt-2"
                   required
                   [formControlName]="CreateEventFormFields.ApplyDeadline"
                 ></nz-date-picker>
@@ -98,8 +146,26 @@
             </div>
           </div>
           <div>
-            <label class="block text-sm font-medium text-gray-700">Cover Picture</label>
-            <div class="mt-2">
+            <label
+              for="description"
+              class="mb-2 block text-sm font-medium text-gray-700"
+              >Description</label
+            >
+            <nz-form-control
+              nzHasFeedback
+              [nzSpan]="14"
+              nzErrorTip="Input is required"
+            >
+              <textarea
+                [formControlName]="CreateEventFormFields.Description"
+                nz-input
+                rows="4"
+              ></textarea>
+            </nz-form-control>
+          </div>
+          <div>
+            <label class="mb-2 block text-sm font-medium text-gray-700">Cover Picture</label>
+            <div>
               <nz-upload
                 nzType="drag"
                 [nzLimit]="1"

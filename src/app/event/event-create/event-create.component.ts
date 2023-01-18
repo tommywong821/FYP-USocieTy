@@ -3,13 +3,18 @@ import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {NzMessageService} from 'ng-zorro-antd/message';
 import {NzUploadChangeParam, NzUploadFile} from 'ng-zorro-antd/upload';
+import {EventCategory} from 'src/app/model/event';
 
 export enum CreateEventFormFields {
   EventTitle = 'eventTitle',
   Location = 'location',
   MaxParticipations = 'maxParticipations',
-  Date = 'date',
   ApplyDeadline = 'applyDeadline',
+  StartDate = 'startDate',
+  EndDate = 'endDate',
+  Category = 'category',
+  Description = 'description',
+  Fee = 'fee',
 }
 
 @Component({
@@ -19,6 +24,8 @@ export enum CreateEventFormFields {
 })
 export class EventCreateComponent implements OnInit {
   CreateEventFormFields = CreateEventFormFields;
+  EventCategory = EventCategory;
+
   createEventForm!: FormGroup;
   pictureFile!: NzUploadFile;
 
@@ -31,8 +38,12 @@ export class EventCreateComponent implements OnInit {
       eventTitle: [''],
       location: [''],
       maxParticipations: [''],
-      date: [''],
       applyDeadline: [''],
+      startDate: [''],
+      endDate: [''],
+      category: [''],
+      description: [''],
+      fee: [''],
     });
   }
 
