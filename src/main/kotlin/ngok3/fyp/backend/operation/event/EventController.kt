@@ -6,6 +6,7 @@ import ngok3.fyp.backend.operation.event.dto.CreateEventDto
 import ngok3.fyp.backend.operation.event.dto.EventDto
 import ngok3.fyp.backend.operation.event.dto.JoinEventDto
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.*
 import java.util.*
 
@@ -50,6 +51,7 @@ class EventController(
         return eventService.countEnrolledEvent(itsc)
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_SOCIETY_MEMBER')")
     @Operation(summary = "create event with detail")
     @PostMapping
     fun createEvent(
