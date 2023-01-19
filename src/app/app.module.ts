@@ -16,7 +16,8 @@ import {registerLocaleData} from '@angular/common';
 import en from '@angular/common/locales/en';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import { FinanceComponent } from './finance/finance.component';
+import {FinanceComponent} from './finance/finance.component';
+import {NgxChartsModule} from '@swimlane/ngx-charts';
 
 registerLocaleData(en);
 
@@ -31,6 +32,7 @@ registerLocaleData(en);
     ReactiveFormsModule,
     BrowserAnimationsModule,
     NgZorroAntdModule,
+    NgxChartsModule,
   ],
   providers: [
     {
