@@ -22,4 +22,10 @@ order by e.eventEntity.startDate"""
     fun countById_EventUuid(eventUuid: UUID): Long
 
 
+    @Query(
+        """select count(e) from EnrolledEventRecordEntity e
+where e.studentEntity.itsc = ?1 and e.eventEntity.startDate >= ?2"""
+    )
+    fun countByStudentEntity_ItscAndEventEntity_StartDateGreaterThanEqual(itsc: String, startDate: LocalDateTime): Long
+
 }

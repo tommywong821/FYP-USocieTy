@@ -93,4 +93,11 @@ class EventService(
         val savedEventEntity: EventEntity = model.map(createEventDto.eventDto, EventEntity::class.java)
         return eventRepository.save(savedEventEntity)
     }
+
+    fun countEnrolledEvent(itsc: String): Long {
+        return enrolledEventRecordRepository.countByStudentEntity_ItscAndEventEntity_StartDateGreaterThanEqual(
+            itsc,
+            LocalDateTime.now()
+        )
+    }
 }
