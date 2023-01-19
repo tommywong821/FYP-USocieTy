@@ -1,7 +1,7 @@
 import {ApiService} from './../../services/api.service';
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {NzMessageService} from 'ng-zorro-antd/message';
+import {NzMessageRef, NzMessageService} from 'ng-zorro-antd/message';
 import {NzUploadChangeParam, NzUploadFile} from 'ng-zorro-antd/upload';
 import {EventCategory} from 'src/app/model/event';
 import {convertFiletoBase64, convertFormDataToEvent} from 'src/util/event.util';
@@ -29,9 +29,11 @@ export class EventCreateComponent implements OnInit {
   EventCategory = EventCategory;
 
   createEventForm!: FormGroup;
-  pictureFile!: File;
+  pictureFile: File | undefined;
 
   createEventRequest$ = new Subject<Event>();
+
+  loadingMessage: string | undefined;
 
   isProcessing = false;
 
@@ -55,7 +57,8 @@ export class EventCreateComponent implements OnInit {
         switchMap(event => this.ApiService.createEvent(event))
       )
       .subscribe(() => {
-        this.isProcessing = true;
+        this.isProcessing = false;
+        this.message.remove(this.loadingMessage);
       });
   }
 
@@ -70,12 +73,14 @@ export class EventCreateComponent implements OnInit {
       });
       return;
     }
+
+    this.loadingMessage = this.message.loading('Request in progress...', {nzDuration: 0}).messageId;
     convertFiletoBase64(this.pictureFile)
       .pipe(map(fileBuffer => convertFormDataToEvent({...this.createEventForm.value, poster: fileBuffer})))
       .subscribe(event => this.createEventRequest$.next(event));
   }
 
   saveFileBuffer({file}: NzUploadChangeParam): void {
-    this.pictureFile = file.originFileObj!;
+    this.pictureFile = file.originFileObj;
   }
 }
