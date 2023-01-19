@@ -54,7 +54,10 @@
               [nzSpan]="4"
               nzErrorTip="Input is required"
             >
-              <nz-select>
+              <nz-select
+                required
+                [formControlName]="CreateEventFormFields.Category"
+              >
                 <nz-option
                   *ngFor="let category of EventCategory | keyvalue"
                   [nzLabel]="category.value"
@@ -157,10 +160,10 @@
             <label class="mb-2 block text-sm font-medium text-gray-700">Cover Picture</label>
             <div>
               <nz-upload
+                [nzAction]="''"
                 nzType="drag"
                 [nzLimit]="1"
-                nzAction="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-                (nzChange)="uploadPicture($event)"
+                (nzChange)="saveFileBuffer($event)"
               >
                 <p class="ant-upload-drag-icon">
                   <span
