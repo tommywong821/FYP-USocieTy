@@ -41,6 +41,15 @@ class EventController(
         return eventService.getAllEnrolledEvent(itsc, pageNum, pageSize)
     }
 
+    @Operation(summary = "count all enrolled event of student with itsc")
+    @GetMapping("/enrolled/count")
+    fun countAllEnrolledEvent(
+        @RequestParam("itsc", required = false, defaultValue = "") itsc: String
+    ): Long {
+        print("itsc: $itsc")
+        return eventService.countEnrolledEvent(itsc)
+    }
+
     @Operation(summary = "create event with detail")
     @PostMapping
     fun createEvent(
