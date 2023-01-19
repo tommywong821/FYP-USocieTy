@@ -3,6 +3,7 @@ import {Injectable} from '@angular/core';
 import {Observable, map} from 'rxjs';
 import {environment} from 'src/environments/environment';
 import {Request} from '../api/common';
+import {Event} from 'src/app/model/event';
 
 @Injectable({
   providedIn: 'root',

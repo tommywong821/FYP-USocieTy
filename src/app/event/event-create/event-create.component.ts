@@ -1,9 +1,10 @@
 import {ApiService} from './../../services/api.service';
 import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup} from '@angular/forms';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {NzMessageService} from 'ng-zorro-antd/message';
 import {NzUploadChangeParam, NzUploadFile} from 'ng-zorro-antd/upload';
 import {EventCategory} from 'src/app/model/event';
+import {convertFormDataToEvent} from 'src/util/event.util';
 
 export enum CreateEventFormFields {
   EventTitle = 'eventTitle',
@@ -34,36 +35,36 @@ export class EventCreateComponent implements OnInit {
 
   ngOnInit(): void {
     this.createEventForm = this.formBuilder.group({
-      eventTitle: [''],
-      location: [''],
-      maxParticipations: [''],
-      applyDeadline: [''],
-      date: [''],
-      category: [''],
-      description: [''],
-      fee: [''],
+      eventTitle: ['', [Validators.required]],
+      location: ['', [Validators.required]],
+      maxParticipations: ['', [Validators.required]],
+      applyDeadline: ['', [Validators.required]],
+      date: ['', [Validators.required]],
+      category: ['', [Validators.required]],
+      description: ['', [Validators.required]],
+      fee: ['', [Validators.required]],
     });
   }
 
   createEvent(): void {
-    // if (!this.pictureFile.originFileObj) {
-    //   this.message.error('Error');
-    //   return;
-    // }
+    if (!this.pictureFile) {
+      this.message.error('Cover photo is required');
+      return;
+    }
 
-    // const fileReader = new FileReader();
-    // const fileBuffer = fileReader.readAsBinaryString(this.pictureFile.originFileObj);
-
-    this.isProcessing = true;
-    const onLoading = this.message.loading('Request in progress...', {nzDuration: 0}).messageId;
+    // this.isProcessing = true;
+    // const onLoading = this.message.loading('Request in progress...', {nzDuration: 0}).messageId;
 
     // TODO error response handling
-    console.log(this.createEventForm.value);
+    console.log(
+      convertFormDataToEvent({...this.createEventForm.value, poster: this.pictureFile.originFileObj?.arrayBuffer})
+    );
+    // this.ApiService.createEvent(
+    //   convertFormDataToEvent({...this.createEventForm.value, poster: this.pictureFile.originFileObj?.arrayBuffer})
+    // ).subscribe();
 
-    // this.ApiService.createEvent({...this.createEventForm.value, poster: fileBuffer}).subscribe();
-
-    this.isProcessing = false;
-    this.message.remove(onLoading);
+    // this.isProcessing = false;
+    // this.message.remove(onLoading);
   }
 
   uploadPicture({file}: NzUploadChangeParam): void {
