@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {faHome, faUsers} from '@fortawesome/free-solid-svg-icons';
+import {faHome, faPiggyBank, faUsers} from '@fortawesome/free-solid-svg-icons';
 import {SidebarOption} from './home/home';
 import {User} from './model/user';
 import {AuthService} from './services/auth.service';
@@ -20,6 +20,11 @@ export class AppComponent implements OnInit {
       name: 'Event',
       link: 'events/create',
       icon: faUsers,
+    },
+    {
+      name: 'Finance',
+      link: 'finance',
+      icon: faPiggyBank,
     },
   ];
 
