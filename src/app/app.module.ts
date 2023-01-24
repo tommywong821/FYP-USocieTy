@@ -18,11 +18,23 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {FinanceComponent} from './finance/finance.component';
 import {NgxChartsModule} from '@swimlane/ngx-charts';
+import {FinanceBarChartComponent} from './finance/finance-bar-chart/finance-bar-chart.component';
+import {FinancePieChartComponent} from './finance/finance-pie-chart/finance-pie-chart.component';
+import {FinanceTableComponent} from './finance/finance-table/finance-table.component';
 
 registerLocaleData(en);
 
 @NgModule({
-  declarations: [AppComponent, HomeComponent, SignInComponent, EventCreateComponent, FinanceComponent],
+  declarations: [
+    AppComponent,
+    HomeComponent,
+    SignInComponent,
+    EventCreateComponent,
+    FinanceComponent,
+    FinanceBarChartComponent,
+    FinancePieChartComponent,
+    FinanceTableComponent,
+  ],
   imports: [
     BrowserModule,
     AppRoutingModule,

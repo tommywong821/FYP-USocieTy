@@ -1,0 +1,22 @@
+<ngx-charts-bar-vertical
+  [scheme]="'cool'"
+  [results]="barChartData"
+  [gradient]="false"
+  [xAxis]="true"
+  [yAxis]="true"
+  [legend]="true"
+  [legendTitle]="'Month'"
+  [showXAxisLabel]="true"
+  [showYAxisLabel]="true"
+  [xAxisLabel]="'Month'"
+  [yAxisLabel]="'HKD'"
+  (select)="onSelect($event)"
+>
+  <!-- pop up animation dialog text -->
+  <ng-template
+    #tooltipTemplate
+    let-model="model"
+  >
+    <div>${{ model.value }}</div>
+  </ng-template>
+</ngx-charts-bar-vertical>

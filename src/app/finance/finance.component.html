@@ -2,51 +2,20 @@
   <div class="grid grid-cols-12 gap-8">
     <div class="col-span-6">
       <div class="flex justify-center font-bold">Monthly Expense Report</div>
-      <ngx-charts-bar-vertical
-        [scheme]="'cool'"
-        [results]="barChartData"
-        [gradient]="false"
-        [xAxis]="true"
-        [yAxis]="true"
-        [legend]="true"
-        [legendTitle]="'Month'"
-        [showXAxisLabel]="true"
-        [showYAxisLabel]="true"
-        [xAxisLabel]="'Month'"
-        [yAxisLabel]="'HKD'"
-        (select)="onSelect($event)"
-      >
-        <!-- pop up animation dialog text -->
-        <ng-template
-          #tooltipTemplate
-          let-model="model"
-        >
-          <div>${{ model.value }}</div>
-        </ng-template>
-      </ngx-charts-bar-vertical>
+      <app-finance-bar-chart></app-finance-bar-chart>
     </div>
     <div class="col-span-6">
       <div class="flex justify-center font-bold">Expense By Category</div>
-      <ngx-charts-advanced-pie-chart
-        [scheme]="'cool'"
-        [results]="pieChartData"
-        [gradient]="gradient"
-        [valueFormatting]="valueFormatting"
-        [label]="'Total(HKD)'"
-        [animations]="false"
-        (select)="onSelect($event)"
-        (activate)="onActivate($event)"
-        (deactivate)="onDeactivate($event)"
+      <!-- fix css hard code -->
+      <div
+        id="pie-chart-parent"
+        class="h-5/6"
       >
-        <!-- pop up animation dialog text -->
-        <ng-template
-          #tooltipTemplate
-          let-model="model"
-        >
-          <div>{{ model.name }}</div>
-          <div>${{ model.value }}</div>
-        </ng-template>
-      </ngx-charts-advanced-pie-chart>
+        <app-finance-pie-chart></app-finance-pie-chart>
+      </div>
+    </div>
+    <div class="col-span-12">
+      <app-finance-table></app-finance-table>
     </div>
   </div>
 </div>
