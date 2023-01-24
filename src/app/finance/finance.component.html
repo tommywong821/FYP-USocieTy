@@ -1,26 +1,52 @@
-<ngx-charts-advanced-pie-chart
-  [view]="view"
-  [scheme]="'cool'"
-  [results]="pieChartData"
-  [gradient]="gradient"
-  [valueFormatting]="valueFormatting"
-  [animations]="false"
-  (select)="onSelect($event)"
-  (activate)="onActivate($event)"
-  (deactivate)="onDeactivate($event)"
->
-</ngx-charts-advanced-pie-chart>
-
-<ngx-charts-bar-vertical
-  [scheme]="'cool'"
-  [results]="barChartData"
-  [gradient]="false"
-  [xAxis]="true"
-  [yAxis]="true"
-  [legend]="true"
-  [showXAxisLabel]="true"
-  [showYAxisLabel]="true"
-  [xAxisLabel]="'Country'"
-  [yAxisLabel]="'Population'"
-  (select)="onSelect($event)">
-</ngx-charts-bar-vertical>
+<div class="py-16">
+  <div class="grid grid-cols-12 gap-8">
+    <div class="col-span-6">
+      <div class="flex justify-center font-bold">Monthly Expense Report</div>
+      <ngx-charts-bar-vertical
+        [scheme]="'cool'"
+        [results]="barChartData"
+        [gradient]="false"
+        [xAxis]="true"
+        [yAxis]="true"
+        [legend]="true"
+        [legendTitle]="'Month'"
+        [showXAxisLabel]="true"
+        [showYAxisLabel]="true"
+        [xAxisLabel]="'Month'"
+        [yAxisLabel]="'HKD'"
+        (select)="onSelect($event)"
+      >
+        <!-- pop up animation dialog text -->
+        <ng-template
+          #tooltipTemplate
+          let-model="model"
+        >
+          <div>${{ model.value }}</div>
+        </ng-template>
+      </ngx-charts-bar-vertical>
+    </div>
+    <div class="col-span-6">
+      <div class="flex justify-center font-bold">Expense By Category</div>
+      <ngx-charts-advanced-pie-chart
+        [scheme]="'cool'"
+        [results]="pieChartData"
+        [gradient]="gradient"
+        [valueFormatting]="valueFormatting"
+        [label]="'Total(HKD)'"
+        [animations]="false"
+        (select)="onSelect($event)"
+        (activate)="onActivate($event)"
+        (deactivate)="onDeactivate($event)"
+      >
+        <!-- pop up animation dialog text -->
+        <ng-template
+          #tooltipTemplate
+          let-model="model"
+        >
+          <div>{{ model.name }}</div>
+          <div>${{ model.value }}</div>
+        </ng-template>
+      </ngx-charts-advanced-pie-chart>
+    </div>
+  </div>
+</div>

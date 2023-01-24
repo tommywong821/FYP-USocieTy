@@ -9,37 +9,73 @@ export class FinanceComponent implements OnInit {
   view: [number, number] = [700, 400];
   pieChartData = [
     {
-      name: 'Germany',
-      value: 8940000,
+      name: 'Souvenir',
+      value: 5740,
     },
     {
-      name: 'USA',
-      value: 5000000,
+      name: 'Supplies',
+      value: 4736,
     },
     {
-      name: 'France',
-      value: 7200000,
+      name: 'Daily Expenses',
+      value: 5301,
     },
     {
-      name: 'UK',
-      value: 6200000,
+      name: 'Maintenance ',
+      value: 7913,
     },
   ];
   gradient: boolean = true;
 
-  barChartData  = [
+  barChartData = [
     {
-      "name": "Germany",
-      "value": 8940000
+      name: 'January',
+      value: 7187,
     },
     {
-      "name": "USA",
-      "value": 5000000
+      name: 'February',
+      value: 8738,
     },
     {
-      "name": "France",
-      "value": 7200000
-    }
+      name: 'March',
+      value: 408,
+    },
+    {
+      name: 'April',
+      value: 5490,
+    },
+    {
+      name: 'May',
+      value: 9057,
+    },
+    {
+      name: 'June',
+      value: 4117,
+    },
+    {
+      name: 'July',
+      value: 7331,
+    },
+    {
+      name: 'August',
+      value: 8421,
+    },
+    {
+      name: 'September',
+      value: 4450,
+    },
+    {
+      name: 'October',
+      value: 1852,
+    },
+    {
+      name: 'November',
+      value: 6738,
+    },
+    {
+      name: 'December',
+      value: 2062,
+    },
   ];
 
   constructor() {}
@@ -49,7 +85,7 @@ export class FinanceComponent implements OnInit {
   }
 
   valueFormatting(value: number) {
-    return `HKD: ${value}`;
+    return `$${value}`;
   }
 
   onSelect(data: EventEmitter<any>): void {
