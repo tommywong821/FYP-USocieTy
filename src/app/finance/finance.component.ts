@@ -7,7 +7,7 @@ import {Component, EventEmitter, OnInit} from '@angular/core';
 })
 export class FinanceComponent implements OnInit {
   view: [number, number] = [700, 400];
-  data = [
+  pieChartData = [
     {
       name: 'Germany',
       value: 8940000,
@@ -26,6 +26,21 @@ export class FinanceComponent implements OnInit {
     },
   ];
   gradient: boolean = true;
+
+  barChartData  = [
+    {
+      "name": "Germany",
+      "value": 8940000
+    },
+    {
+      "name": "USA",
+      "value": 5000000
+    },
+    {
+      "name": "France",
+      "value": 7200000
+    }
+  ];
 
   constructor() {}
 

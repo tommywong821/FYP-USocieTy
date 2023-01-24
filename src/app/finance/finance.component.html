@@ -1,7 +1,7 @@
 <ngx-charts-advanced-pie-chart
   [view]="view"
   [scheme]="'cool'"
-  [results]="data"
+  [results]="pieChartData"
   [gradient]="gradient"
   [valueFormatting]="valueFormatting"
   [animations]="false"
@@ -10,3 +10,17 @@
   (deactivate)="onDeactivate($event)"
 >
 </ngx-charts-advanced-pie-chart>
+
+<ngx-charts-bar-vertical
+  [scheme]="'cool'"
+  [results]="barChartData"
+  [gradient]="false"
+  [xAxis]="true"
+  [yAxis]="true"
+  [legend]="true"
+  [showXAxisLabel]="true"
+  [showYAxisLabel]="true"
+  [xAxisLabel]="'Country'"
+  [yAxisLabel]="'Population'"
+  (select)="onSelect($event)">
+</ngx-charts-bar-vertical>
