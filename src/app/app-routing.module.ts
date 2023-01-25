@@ -19,12 +19,17 @@ const routes: Routes = [
       {
         path: Path.Home,
         component: HomeComponent,
+        outlet: 'aux',
       },
-      {path: Path.CreateEvent, component: EventCreateComponent},
+      {
+        path: Path.CreateEvent,
+        component: EventCreateComponent,
+        outlet: 'aux',
+      },
     ],
-    // canActivate: [AuthGuard],
+    canActivate: [AuthGuard],
   },
-  // {path: Path.SignIn, component: SignInComponent},
+  {path: Path.SignIn, component: SignInComponent},
 ];
 
 @NgModule({

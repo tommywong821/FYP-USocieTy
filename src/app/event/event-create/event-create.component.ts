@@ -1,17 +1,18 @@
+import {AuthService} from 'src/app/services/auth.service';
 import {ApiService} from './../../services/api.service';
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {NzMessageRef, NzMessageService} from 'ng-zorro-antd/message';
-import {NzUploadChangeParam, NzUploadFile} from 'ng-zorro-antd/upload';
+import {NzMessageService} from 'ng-zorro-antd/message';
+import {NzUploadChangeParam} from 'ng-zorro-antd/upload';
 import {EventCategory} from 'src/app/model/event';
-import {convertFiletoBase64, convertFormDataToEvent} from 'src/util/event.util';
-import {buffer, finalize, map, Observable, Subject, switchMap, tap} from 'rxjs';
+import {convertFiletoBase64, convertFormDataToEvent, getCreateEventRequest} from 'src/util/event.util';
+import {filter, forkJoin, map, Subject, switchMap, tap, zip} from 'rxjs';
 import {Event} from '../../model/event';
 
 export enum CreateEventFormFields {
   EventTitle = 'eventTitle',
   Location = 'location',
-  MaxParticipations = 'maxParticipations',
+  MaxParticipation = 'maxParticipation',
   ApplyDeadline = 'applyDeadline',
   Date = 'date',
   Category = 'category',
@@ -31,19 +32,24 @@ export class EventCreateComponent implements OnInit {
   createEventForm!: FormGroup;
   pictureFile: File | undefined;
 
-  createEventRequest$ = new Subject<Event>();
+  event$ = new Subject<Event>();
 
   loadingMessage: string | undefined;
 
   isProcessing = false;
 
-  constructor(private ApiService: ApiService, private formBuilder: FormBuilder, private message: NzMessageService) {}
+  constructor(
+    private ApiService: ApiService,
+    private formBuilder: FormBuilder,
+    private message: NzMessageService,
+    private AuthService: AuthService
+  ) {}
 
   ngOnInit(): void {
     this.createEventForm = this.formBuilder.group({
       eventTitle: ['', [Validators.required]],
       location: ['', [Validators.required]],
-      maxParticipations: ['', [Validators.required]],
+      maxParticipation: ['', [Validators.required]],
       applyDeadline: ['', [Validators.required]],
       date: ['', [Validators.required]],
       category: ['', [Validators.required]],
@@ -51,12 +57,16 @@ export class EventCreateComponent implements OnInit {
       fee: ['', [Validators.required]],
     });
 
-    this.createEventRequest$
+    zip([this.event$, this.AuthService.user$])
       .pipe(
         tap(() => (this.isProcessing = true)),
-        switchMap(event => this.ApiService.createEvent(event))
+        filter(([event, user]) => !!user),
+        map(([event, user]) => getCreateEventRequest(event, user!)),
+        switchMap(request => this.ApiService.createEvent(request))
       )
-      .subscribe(() => {
+      .subscribe(res => {
+        console.log(res);
+
         this.isProcessing = false;
         this.message.remove(this.loadingMessage);
       });
@@ -77,7 +87,7 @@ export class EventCreateComponent implements OnInit {
     this.loadingMessage = this.message.loading('Request in progress...', {nzDuration: 0}).messageId;
     convertFiletoBase64(this.pictureFile)
       .pipe(map(fileBuffer => convertFormDataToEvent({...this.createEventForm.value, poster: fileBuffer})))
-      .subscribe(event => this.createEventRequest$.next(event));
+      .subscribe(event => this.event$.next(event));
   }
 
   saveFileBuffer({file}: NzUploadChangeParam): void {
