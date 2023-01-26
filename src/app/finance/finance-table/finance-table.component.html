@@ -1,13 +1,12 @@
 <div class="flex justify-between">
   <!-- header -->
-  <div>
-    <button
-      nz-button
-      nzType="primary"
-    >
-      Add New Record(s)
-    </button>
-  </div>
+  <button
+    nz-button
+    nzType="primary"
+    (click)="routeToCreateRecordPage()"
+  >
+    Add New Record(s)
+  </button>
   <div>
     <nz-form-control
       nzHasFeedback

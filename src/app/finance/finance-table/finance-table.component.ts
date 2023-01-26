@@ -1,4 +1,5 @@
 import {Component, OnInit} from '@angular/core';
+import {Router} from '@angular/router';
 
 export interface Data {
   id: number;
@@ -21,7 +22,7 @@ export class FinanceTableComponent implements OnInit {
   listOfCurrentPageData: readonly Data[] = [];
   setOfCheckedId = new Set<number>();
 
-  constructor() {}
+  constructor(private router: Router) {}
 
   ngOnInit(): void {
     this.listOfData = new Array(100).fill(0).map((_, index) => ({
@@ -72,5 +73,9 @@ export class FinanceTableComponent implements OnInit {
   onItemChecked(id: number, checked: boolean): void {
     this.updateCheckedSet(id, checked);
     this.refreshCheckedStatus();
+  }
+
+  routeToCreateRecordPage() {
+    this.router.navigate(['/finance/create']);
   }
 }

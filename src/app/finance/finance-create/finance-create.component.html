@@ -1,0 +1,90 @@
+<div class="m-5">
+  <div class="mb-2 text-xl font-bold">Create Finance Recrod(s)</div>
+  <form
+    nz-form
+    [formGroup]="validateForm"
+    (ngSubmit)="submitForm()"
+  >
+    <div class="grid grid-cols-12 gap-4">
+      <label class="col-start-2 flex justify-center"> Amount </label>
+      <label class="flex justify-center"> Description </label>
+      <label class="flex justify-center"> Date </label>
+
+      <div class="col-span-12">
+        <div *ngFor="let financeRecord of listOfFinanceRecord; let i = index">
+          <div class="grid grid-cols-12 py-4">
+            <label class="flex justify-center">{{ i + 1 }}</label>
+            <nz-form-control
+              nzHasFeedback
+              nzErrorTip="Please input amount of this record."
+            >
+              <input
+                nz-input
+                required
+                placeholder="Amount(HKD)"
+                [attr.id]="financeRecord.id"
+                [formControlName]="financeRecord.amount"
+              />
+            </nz-form-control>
+            <nz-form-control
+              nzHasFeedback
+              nzErrorTip="Please input description of this record."
+            >
+              <input
+                nz-input
+                required
+                placeholder="Description"
+                [attr.id]="financeRecord.id"
+                [formControlName]="financeRecord.description"
+              />
+            </nz-form-control>
+            <nz-form-control
+              nzHasFeedback
+              nzErrorTip="Please input date of this record."
+            >
+              <nz-date-picker
+                required
+                [nzShowTime]="true"
+                [formControlName]="financeRecord.date"
+              ></nz-date-picker>
+            </nz-form-control>
+            <button (click)="removeField(financeRecord, $event)">
+              <fa-icon [icon]="faMinus"></fa-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="col-start-4">
+        <nz-form-item>
+          <nz-form-control
+            [nzXs]="{span: 24, offset: 0}"
+            [nzSm]="{span: 20, offset: 4}"
+          >
+            <button
+              nz-button
+              nzType="primary"
+            >
+              Submit
+            </button>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <nz-form-control
+        [nzXs]="{span: 24, offset: 0}"
+        [nzSm]="{span: 20, offset: 4}"
+      >
+        <button
+          nz-button
+          nzType="dashed"
+          (click)="addField($event)"
+        >
+          <i
+            nz-icon
+            nzType="plus"
+          ></i>
+          Add field
+        </button>
+      </nz-form-control>
+    </div>
+  </form>
+</div>

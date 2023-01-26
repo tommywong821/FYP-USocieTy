@@ -10,11 +10,11 @@ export interface IFinanceRecordForm {
   date: string;
 }
 @Component({
-  selector: 'app-finance-create-dialog',
-  templateUrl: './finance-create-dialog.component.html',
-  styleUrls: ['./finance-create-dialog.component.scss'],
+  selector: 'app-finance-create',
+  templateUrl: './finance-create.component.html',
+  styleUrls: ['./finance-create.component.scss'],
 })
-export class FinanceCreateDialogComponent implements OnInit {
+export class FinanceCreateComponent implements OnInit {
   validateForm!: FormGroup;
   listOfFinanceRecord: Array<IFinanceRecordForm> = [];
   faMinus: IconProp = faMinus;
