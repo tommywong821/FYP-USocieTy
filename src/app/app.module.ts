@@ -21,6 +21,7 @@ import {NgxChartsModule} from '@swimlane/ngx-charts';
 import {FinanceBarChartComponent} from './finance/finance-bar-chart/finance-bar-chart.component';
 import {FinancePieChartComponent} from './finance/finance-pie-chart/finance-pie-chart.component';
 import {FinanceTableComponent} from './finance/finance-table/finance-table.component';
+import { FinanceCreateDialogComponent } from './finance/finance-create-dialog/finance-create-dialog.component';
 
 registerLocaleData(en);
 
@@ -34,6 +35,7 @@ registerLocaleData(en);
     FinanceBarChartComponent,
     FinancePieChartComponent,
     FinanceTableComponent,
+    FinanceCreateDialogComponent,
   ],
   imports: [
     BrowserModule,
