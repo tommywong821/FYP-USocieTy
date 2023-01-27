@@ -1,7 +1,16 @@
-<router-outlet></router-outlet>
-
 <div class="py-16">
   <div class="grid grid-cols-12 gap-8">
+    <div class="col-span-8 col-start-6">
+      <nz-form-control
+        nzHasFeedback
+        nzErrorTip="Input is required"
+      >
+        <nz-range-picker
+          required
+          [nzShowTime]="false"
+        ></nz-range-picker>
+      </nz-form-control>
+    </div>
     <div class="col-span-6">
       <div class="flex justify-center font-bold">Monthly Expense Report</div>
       <app-finance-bar-chart></app-finance-bar-chart>
