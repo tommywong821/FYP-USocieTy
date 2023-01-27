@@ -1,6 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ngok3fyp_frontend_flutter/services/styles.dart';
 import 'package:ngok3fyp_frontend_flutter/model/event.dart';
+import 'package:ngok3fyp_frontend_flutter/services/api_service.dart';
 
 class EventScreen extends StatefulWidget {
   const EventScreen({
@@ -21,7 +23,7 @@ class _EventScreenState extends State<EventScreen> {
     String eventLocation = event.location;
     String eventDate = event.startDate;
     return Scaffold(
-        bottomNavigationBar: BottomRegisterButton(),
+        bottomNavigationBar: BottomRegisterButton(context, event),
         body: Container(
           width: double.maxFinite,
           height: double.maxFinite,
@@ -255,7 +257,7 @@ class _EventScreenState extends State<EventScreen> {
   }
 }
 
-Widget BottomRegisterButton() {
+Widget BottomRegisterButton(BuildContext context, Event event) {
   Color hkustColor = Color.fromARGB(255, 0, 51, 102);
   return Material(
       color: Colors.white,
@@ -266,7 +268,34 @@ Widget BottomRegisterButton() {
           child: Center(
               child: ElevatedButton(
             child: Text("Register"),
-            onPressed: () {/* TODO */},
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (context) => AlertDialog(
+                  title: Text('Are you sure?'),
+                  content: Text('***'),
+                  actions: [
+                    ElevatedButton(
+                        onPressed: () async {
+                          bool response =
+                              await ApiService().registerEvent(event.id);
+                          if (response) {
+                            print("success");
+                          } else {
+                            print("fail");
+                          }
+                          Navigator.pop(context);
+                        },
+                        child: Text('Yes')),
+                    ElevatedButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: Text('No'))
+                  ],
+                ),
+              );
+            },
             style: ElevatedButton.styleFrom(
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(25),

@@ -88,7 +88,6 @@ class _HomeWidget extends State<HomeWidget> {
                               onTapUp: (details) => {
                                 setState(() {
                                   seeAllTextColor1 = true;
-                                  print(enrolledEventList);
                                 })
                               },
                               onTapDown: (details) => {

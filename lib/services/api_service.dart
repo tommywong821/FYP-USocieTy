@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:ffi';
 
 import 'package:dio/dio.dart';
 import 'package:ngok3fyp_frontend_flutter/constants.dart';
@@ -110,5 +111,19 @@ class ApiService {
     } else {
       throw Exception('Failed to sign cookie from backend');
     }
+  }
+
+  Future<bool> registerEvent(String eventID) async {
+    final uri = Uri.https(backendDomain, '/event', {
+      'itsc': await _storageService.readSecureData(ITSC_KEY),
+      'eventId': eventID
+    });
+    final response = await _dio.postUri(
+      uri,
+    );
+    if (response.statusCode == 200)
+      return true;
+    else
+      return false;
   }
 }
