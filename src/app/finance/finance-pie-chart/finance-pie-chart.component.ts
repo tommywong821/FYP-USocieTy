@@ -1,4 +1,5 @@
-import {Component, ElementRef, EventEmitter, OnInit, ViewContainerRef} from '@angular/core';
+import {Component, ElementRef, EventEmitter, Input, OnInit} from '@angular/core';
+import {FinanceChartRecord} from '../IFinanceChartRecord';
 
 @Component({
   selector: 'app-finance-pie-chart',
@@ -6,24 +7,7 @@ import {Component, ElementRef, EventEmitter, OnInit, ViewContainerRef} from '@an
   styleUrls: ['./finance-pie-chart.component.scss'],
 })
 export class FinancePieChartComponent implements OnInit {
-  pieChartData = [
-    {
-      name: 'Souvenir',
-      value: 5740,
-    },
-    {
-      name: 'Supplies',
-      value: 4736,
-    },
-    {
-      name: 'Daily Expenses',
-      value: 5301,
-    },
-    {
-      name: 'Maintenance ',
-      value: 7913,
-    },
-  ];
+  @Input() pieChartData: FinanceChartRecord[] = [];
   constructor(public elementRef: ElementRef) {}
 
   ngOnInit(): void {}

@@ -1,19 +1,16 @@
 <div class="py-16">
   <div class="grid grid-cols-12 gap-8">
     <div class="col-span-8 col-start-6">
-      <nz-form-control
-        nzHasFeedback
-        nzErrorTip="Input is required"
-      >
-        <nz-range-picker
-          required
-          [nzShowTime]="false"
-        ></nz-range-picker>
-      </nz-form-control>
+      <nz-range-picker
+        required
+        [nzShowTime]="false"
+        [(ngModel)]="date"
+        (ngModelChange)="onDateChange($event)"
+      ></nz-range-picker>
     </div>
     <div class="col-span-6">
       <div class="flex justify-center font-bold">Monthly Expense Report</div>
-      <app-finance-bar-chart></app-finance-bar-chart>
+      <app-finance-bar-chart [barChartData]="barChartData"></app-finance-bar-chart>
     </div>
     <div class="col-span-6">
       <div class="flex justify-center font-bold">Expense By Category</div>
@@ -22,11 +19,11 @@
         id="pie-chart-parent"
         class="h-5/6"
       >
-        <app-finance-pie-chart></app-finance-pie-chart>
+        <app-finance-pie-chart [pieChartData]="pieChartData"></app-finance-pie-chart>
       </div>
     </div>
     <div class="col-span-12">
-      <app-finance-table></app-finance-table>
+      <app-finance-table [tableData]="tableData"></app-finance-table>
     </div>
   </div>
 </div>

@@ -1,39 +1,24 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
+import {FinanceTableRecord} from '../IFinanceTableRecord';
 
-export interface Data {
-  id: number;
-  date: string;
-  amount: number;
-  description: string;
-  editBy: string;
-  disabled: boolean;
-}
 @Component({
   selector: 'app-finance-table',
   templateUrl: './finance-table.component.html',
   styleUrls: ['./finance-table.component.scss'],
 })
 export class FinanceTableComponent implements OnInit {
+  @Input() tableData: FinanceTableRecord[] = [];
+
   checked = false;
   loading = false;
   indeterminate = false;
-  listOfData: readonly Data[] = [];
-  listOfCurrentPageData: readonly Data[] = [];
+  listOfCurrentPageData: readonly FinanceTableRecord[] = [];
   setOfCheckedId = new Set<number>();
 
   constructor(private router: Router) {}
 
-  ngOnInit(): void {
-    this.listOfData = new Array(100).fill(0).map((_, index) => ({
-      id: index,
-      date: `Edward King ${index}`,
-      amount: 32,
-      description: `London, Park Lane no. ${index}`,
-      editBy: `edit by ${index}`,
-      disabled: index % 2 === 0,
-    }));
-  }
+  ngOnInit(): void {}
 
   updateCheckedSet(id: number, checked: boolean): void {
     if (checked) {
@@ -43,7 +28,7 @@ export class FinanceTableComponent implements OnInit {
     }
   }
 
-  onCurrentPageDataChange(listOfCurrentPageData: readonly Data[]): void {
+  onCurrentPageDataChange(listOfCurrentPageData: readonly FinanceTableRecord[]): void {
     this.listOfCurrentPageData = listOfCurrentPageData;
     this.refreshCheckedStatus();
   }
@@ -61,7 +46,7 @@ export class FinanceTableComponent implements OnInit {
 
   sendRequest(): void {
     this.loading = true;
-    const requestData = this.listOfData.filter(data => this.setOfCheckedId.has(data.id));
+    const requestData = this.tableData.filter(data => this.setOfCheckedId.has(data.id));
     console.log(requestData);
     setTimeout(() => {
       this.setOfCheckedId.clear();
