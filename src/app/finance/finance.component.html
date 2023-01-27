@@ -2,9 +2,8 @@
   <div class="grid grid-cols-12 gap-8">
     <div class="col-span-8 col-start-6">
       <nz-range-picker
-        required
         [nzShowTime]="false"
-        [(ngModel)]="date"
+        [(ngModel)]="defaultDate"
         (ngModelChange)="onDateChange($event)"
       ></nz-range-picker>
     </div>

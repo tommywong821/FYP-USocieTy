@@ -8,19 +8,24 @@ import {FinanceTableRecord} from './IFinanceTableRecord';
   styleUrls: ['./finance.component.scss'],
 })
 export class FinanceComponent implements OnInit {
-  date = null;
+  currentDate: Date;
+  defaultDate: Date[] = [];
   barChartData: FinanceChartRecord[] = [];
   pieChartData: FinanceChartRecord[] = [];
   tableData: FinanceTableRecord[] = [];
 
-  constructor() {}
+  constructor() {
+    this.currentDate = new Date();
+  }
 
   ngOnInit(): void {
     // dummy
+    this.defaultDate = [this.getFirstDayOfYear(this.currentDate), this.getLastDayOfYear(this.currentDate)];
+    //TODO change to call api with default date
   }
 
   onDateChange(result: Date[]): void {
-    //TODO change to call api
+    //TODO change to call api with change date
     this.barChartData = [
       {
         name: 'January',
@@ -99,5 +104,13 @@ export class FinanceComponent implements OnInit {
       editBy: `edit by ${index}`,
       disabled: index % 2 === 0,
     }));
+  }
+
+  getFirstDayOfYear(date: Date): Date {
+    return new Date(date.getFullYear(), 0, 1);
+  }
+
+  getLastDayOfYear(date: Date): Date {
+    return new Date(date.getFullYear(), 11, 31);
   }
 }
