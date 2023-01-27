@@ -25,6 +25,6 @@ export class FinancePieChartComponent implements OnInit {
   }
 
   valueFormatting(value: number) {
-    return `$${value}`;
+    return `$${value.toLocaleString('en-US')}`;
   }
 }

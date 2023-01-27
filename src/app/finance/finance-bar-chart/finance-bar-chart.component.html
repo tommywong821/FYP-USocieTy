@@ -17,6 +17,6 @@
     #tooltipTemplate
     let-model="model"
   >
-    <div>${{ model.value }}</div>
+    <div>${{ model.value.toLocaleString('en-US') }}</div>
   </ng-template>
 </ngx-charts-bar-vertical>

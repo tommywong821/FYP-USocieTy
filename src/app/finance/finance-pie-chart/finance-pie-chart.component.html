@@ -14,6 +14,6 @@
     let-model="model"
   >
     <div>{{ model.name }}</div>
-    <div>${{ model.value }}</div>
+    <div>${{ model.value.toLocaleString('en-US') }}</div>
   </ng-template>
 </ngx-charts-advanced-pie-chart>
