@@ -6,7 +6,7 @@ import {NzMessageService} from 'ng-zorro-antd/message';
 import {NzUploadChangeParam} from 'ng-zorro-antd/upload';
 import {EventCategory} from 'src/app/model/event';
 import {convertFiletoBase64, convertFormDataToEvent, getCreateEventRequest} from 'src/util/event.util';
-import {filter, forkJoin, map, Subject, switchMap, tap, zip} from 'rxjs';
+import {filter, map, Subject, switchMap, tap, zip, takeUntil, pipe} from 'rxjs';
 import {Event} from '../../model/event';
 
 export enum CreateEventFormFields {
@@ -34,6 +34,8 @@ export class EventCreateComponent implements OnInit {
 
   event$ = new Subject<Event>();
 
+  destroy$ = new Subject<void>();
+
   loadingMessage: string | undefined;
 
   isProcessing = false;
@@ -59,6 +61,7 @@ export class EventCreateComponent implements OnInit {
 
     zip([this.event$, this.AuthService.user$])
       .pipe(
+        takeUntil(this.destroy$),
         tap(() => (this.isProcessing = true)),
         filter(([event, user]) => !!user),
         map(([event, user]) => getCreateEventRequest(event, user!)),
@@ -70,6 +73,10 @@ export class EventCreateComponent implements OnInit {
         this.isProcessing = false;
         this.message.remove(this.loadingMessage);
       });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
   }
 
   createEvent(): void {

@@ -16,11 +16,12 @@ import {registerLocaleData} from '@angular/common';
 import en from '@angular/common/locales/en';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import { MainComponent } from './main/main.component';
 
 registerLocaleData(en);
 
 @NgModule({
-  declarations: [AppComponent, HomeComponent, SignInComponent, EventCreateComponent],
+  declarations: [AppComponent, HomeComponent, SignInComponent, EventCreateComponent, MainComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,

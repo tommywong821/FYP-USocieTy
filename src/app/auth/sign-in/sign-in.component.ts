@@ -1,3 +1,4 @@
+import {Path} from './../../app-routing.module';
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {filter, Subject, switchMap, takeUntil} from 'rxjs';
@@ -24,7 +25,7 @@ export class SignInComponent implements OnInit {
       )
       .subscribe((user: User) => {
         this.authService.signIn(user);
-        this.router.navigate(['/home']);
+        this.router.navigate([Path.Home]);
       });
   }
 

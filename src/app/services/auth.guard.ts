@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
-import {CanActivate, Router} from '@angular/router';
-import {first, map, Observable, tap} from 'rxjs';
+import {ActivatedRouteSnapshot, CanActivate, Router, UrlTree} from '@angular/router';
+import {first, map, Observable, of, switchMap, tap} from 'rxjs';
+import {Path} from '../app-routing.module';
 import {AuthService} from './auth.service';
 
 @Injectable({
@@ -9,15 +10,15 @@ import {AuthService} from './auth.service';
 export class AuthGuard implements CanActivate {
   constructor(private authService: AuthService, private router: Router) {}
 
-  canActivate(): Observable<boolean> {
+  canActivate(route: ActivatedRouteSnapshot): Observable<boolean | UrlTree> {
     return this.authService.user$.pipe(
       first(),
-      map(user => !!user),
-      tap(pass => {
-        if (pass) {
-          return;
-        }
-        this.router.navigate(['sign-in']);
+      switchMap(user => {
+        const ticket = route.queryParams['ticket'];
+        return ticket ? this.authService.validateUser(ticket) : of(user);
+      }),
+      map(user => {
+        return this.router.parseUrl(user ? Path.Main : Path.SignIn);
       })
     );
   }
