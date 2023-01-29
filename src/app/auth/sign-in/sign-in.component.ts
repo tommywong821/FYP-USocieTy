@@ -25,7 +25,7 @@ export class SignInComponent implements OnInit {
       )
       .subscribe((user: User) => {
         this.authService.saveUserToLocalStorage(user);
-        this.router.navigate([Path.Home]);
+        this.router.navigate([Path.Main]);
       });
   }
 
