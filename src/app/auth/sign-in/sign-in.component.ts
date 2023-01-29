@@ -24,7 +24,7 @@ export class SignInComponent implements OnInit {
         switchMap(queryParams => this.authService.validateUser(queryParams))
       )
       .subscribe((user: User) => {
-        this.authService.signIn(user);
+        this.authService.saveUserToLocalStorage(user);
         this.router.navigate([Path.Home]);
       });
   }
