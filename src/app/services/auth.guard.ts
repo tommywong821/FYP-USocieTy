@@ -17,7 +17,7 @@ export class AuthGuard implements CanActivate {
     if (userInfo) {
       return true;
     }
-    this.router.navigate([Path.SignIn], {queryParamsHandling: 'merge'});
+    this.router.navigate([Path.SignIn], {queryParams: route.queryParams});
     return false;
     // return this.authService.user$.pipe(
     //   first(),
