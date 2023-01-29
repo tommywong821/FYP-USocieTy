@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "serve": "ng serve --ssl",
-    "start": "node server.js",
+    "start": "node ./src/scripts/server.js",
     "purgescss": "node ./src/scripts/purgecss.js",
     "obfuscate": "node ./src/scripts/obfuscate.js",
     "postbuild": "npm run purgescss && npm run obfuscate",
@@ -42,6 +42,7 @@
     "@typescript-eslint/eslint-plugin": "^5.30.7",
     "@typescript-eslint/parser": "^5.30.7",
     "autoprefixer": "^10.4.13",
+    "child_process": "^1.0.2",
     "fs-extra": "^11.1.0",
     "jasmine-core": "~4.0.1",
     "javascript-obfuscator": "^4.0.0",
