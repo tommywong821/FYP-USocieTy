@@ -47,9 +47,9 @@ export class AuthService {
 
   loadUserFromLocalStorage(): User | null {
     if (!this._user$.value) {
-      let fromLocalStorage = localStorage.getItem(environment.user_key);
+      const fromLocalStorage = localStorage.getItem(environment.user_key);
       if (fromLocalStorage) {
-        let user = JSON.parse(fromLocalStorage);
+        const user = JSON.parse(fromLocalStorage);
         this._user$.next(user);
       }
     }

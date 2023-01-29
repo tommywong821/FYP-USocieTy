@@ -26,7 +26,6 @@ export class ApiService {
   }
 
   createEvent(request: CreateEventRequest): Observable<any> {
-    console.log(request);
     return this.restful.post(`${environment.backend_url}/${request.endpoint}`, request.body);
   }
 }

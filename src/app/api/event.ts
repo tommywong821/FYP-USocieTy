@@ -1,6 +1,6 @@
 import {Request} from './common';
 
-export const createEventEndpoint = '/event';
+export const createEventEndpoint = 'event';
 
 export interface EventDto {
   id: string;

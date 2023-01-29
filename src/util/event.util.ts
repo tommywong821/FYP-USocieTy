@@ -44,10 +44,6 @@ export function convertEventToEventDto(event: Event): EventDto {
 }
 
 export function getCreateEventRequest(event: Event, user: User): CreateEventRequest {
-  console.groupCollapsed('user');
-  console.log(user);
-  console.groupEnd();
-
   const body: CreateEventRequestBody = {
     eventDto: convertEventToEventDto(event),
     itsc: user.itsc,
