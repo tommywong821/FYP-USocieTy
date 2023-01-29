@@ -13,21 +13,11 @@ export class AuthGuard implements CanActivate {
 
   canActivate(route: ActivatedRouteSnapshot): Observable<boolean | UrlTree> | boolean {
     let userInfo = this.authService.loadUserFromLocalStorage();
-    console.log(`AuthGuard local userInfo from localStorage: ${JSON.stringify(userInfo)}`);
     if (userInfo) {
+      this.router.navigate([Path.Main]);
       return true;
     }
     this.router.navigate([Path.SignIn], {queryParams: route.queryParams});
     return false;
-    // return this.authService.user$.pipe(
-    //   first(),
-    //   switchMap(user => {
-    //     const ticket = route.queryParams['ticket'];
-    //     return ticket ? this.authService.validateUser(ticket) : of(user);
-    //   }),
-    //   map(user => {
-    //     return this.router.parseUrl(user ? Path.Main : Path.SignIn);
-    //   })
-    // );
   }
 }

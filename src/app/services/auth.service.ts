@@ -25,6 +25,7 @@ export class AuthService {
 
   signOut(): Observable<boolean> {
     this._user$.next(null);
+    localStorage.removeItem(environment.user_key);
     return of(true);
   }
 
@@ -40,21 +41,18 @@ export class AuthService {
   }
 
   saveUserToLocalStorage(user: User) {
-    console.log(`saveUserToLocalStorage: ${JSON.stringify(user)}`);
     this._user$.next(user);
     localStorage.setItem(environment.user_key, JSON.stringify(user));
   }
 
   loadUserFromLocalStorage(): User | null {
     if (!this._user$.value) {
-      console.log(`loadUserFromLocalStorage: this._user$.value is null`);
       let fromLocalStorage = localStorage.getItem(environment.user_key);
       if (fromLocalStorage) {
         let user = JSON.parse(fromLocalStorage);
         this._user$.next(user);
       }
     }
-    console.log(`loadUserFromLocalStorage: this._user$.value is not null`);
     return this._user$.value;
   }
 }
