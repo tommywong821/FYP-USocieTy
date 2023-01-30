@@ -12,6 +12,7 @@ import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.config.web.servlet.invoke
 import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
+import org.springframework.web.cors.CorsUtils
 
 
 @Configuration
@@ -39,6 +40,7 @@ class WebSecurityConfig(
             }
             sessionManagement { sessionCreationPolicy = SessionCreationPolicy.STATELESS }
             authorizeRequests {
+                authorize(CorsUtils::isPreFlightRequest, permitAll)
                 authorize("/swagger-ui/**", permitAll)
                 authorize("/v3/api-docs/**", permitAll)
                 //web login endpoint
