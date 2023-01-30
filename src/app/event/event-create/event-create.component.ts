@@ -65,7 +65,7 @@ export class EventCreateComponent implements OnInit {
         tap(() => (this.isProcessing = true)),
         filter(([event, user]) => !!user),
         map(([event, user]) => getCreateEventRequest(event, user!)),
-        switchMap(request => this.ApiService.createEvent(request))
+        switchMap(request => this.ApiService.call(request))
       )
       .subscribe(res => {
         console.log(res);
