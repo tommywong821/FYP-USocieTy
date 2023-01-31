@@ -1,4 +1,4 @@
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {Observable, map} from 'rxjs';
 import {environment} from 'src/environments/environment';
@@ -13,8 +13,15 @@ export class ApiService {
 
   call<Response>(request: Request): Observable<Response> {
     const url = `${environment.backend_url}${request.endpoint}`;
+    const options = {
+      headers: new HttpHeaders({
+        'Access-Control-Allow-Origin': environment.backend_url,
+        'Access-Control-Request-Method': 'POST',
+        'Access-Control-Max-Age': '86400',
+      }),
+    };
 
-    return this.restful.post(url, request.body).pipe(map(res => res as Response));
+    return this.restful.post(url, request.body, options).pipe(map(res => res as Response));
   }
 
   signOutFromBackend(): Observable<any> {
