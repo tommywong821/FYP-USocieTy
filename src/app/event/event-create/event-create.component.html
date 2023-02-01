@@ -46,29 +46,6 @@
           <div class="col-span-6 flex flex-row gap-4 sm:col-span-4">
             <div class="flex-1">
               <label
-                for="society"
-                class="mb-2 block text-sm font-medium text-gray-700"
-                >Society</label
-              >
-              <nz-form-control
-                nzHasFeedback
-                [nzSpan]="24"
-                nzErrorTip="Input is required"
-              >
-                <nz-select
-                  required
-                  [formControlName]="CreateEventFormFields.Society"
-                >
-                  <nz-option
-                    *ngFor="let society of enrolledSocieties"
-                    [nzLabel]="society"
-                    [nzValue]="society"
-                  ></nz-option>
-                </nz-select>
-              </nz-form-control>
-            </div>
-            <div class="flex-1">
-              <label
                 for="category"
                 class="mb-2 block text-sm font-medium text-gray-700"
                 >Category</label
@@ -90,7 +67,30 @@
                 </nz-select>
               </nz-form-control>
             </div>
-            <div class="basis-1/2"></div>
+            <div class="flex-1">
+              <label
+                for="society"
+                class="mb-2 block text-sm font-medium text-gray-700"
+                >Society</label
+              >
+              <nz-form-control
+                nzHasFeedback
+                [nzSpan]="24"
+                nzErrorTip="Input is required"
+              >
+                <nz-select
+                  required
+                  [formControlName]="CreateEventFormFields.Society"
+                >
+                  <nz-option
+                    *ngFor="let society of enrolledSocieties"
+                    [nzLabel]="society"
+                    [nzValue]="society"
+                  ></nz-option>
+                </nz-select>
+              </nz-form-control>
+            </div>
+            <div class="basis-9/12"></div>
           </div>
           <div class="col-span-6 flex flex-row gap-x-4 sm:col-span-4">
             <div>
