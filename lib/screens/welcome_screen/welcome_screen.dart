@@ -90,8 +90,9 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     try {
       await loginProcess();
     } catch (e, s) {
-      // showError('error on refresh token: $e - stack: $s');
+      showError("Login fail. Please try again.");
       await _aadOAuthService.logout();
+      await _storageService.deleteAllSecureData();
       setState(() {
         isBusy = false;
       });
@@ -107,7 +108,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     try {
       await loginProcess();
     } catch (e) {
-      showError(e);
+      showError("Login fail. Please try again.");
       setState(() {
         isLoggedIn = false;
         errorMessage = e.toString();
