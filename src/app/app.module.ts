@@ -1,27 +1,26 @@
-import {NgZorroAntdModule} from './ng-zorro-antd.module';
+import {registerLocaleData} from '@angular/common';
+import {HttpClientModule, HTTP_INTERCEPTORS} from '@angular/common/http';
+import en from '@angular/common/locales/en';
 import {NgModule} from '@angular/core';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {BrowserModule} from '@angular/platform-browser';
-
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
+import {NgxChartsModule} from '@swimlane/ngx-charts';
+import {en_US, NZ_I18N} from 'ng-zorro-antd/i18n';
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
-import {HttpClientModule, HTTP_INTERCEPTORS} from '@angular/common/http';
-import {HomeComponent} from './home/home.component';
 import {SignInComponent} from './auth/sign-in/sign-in.component';
-import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
 import {EventCreateComponent} from './event/event-create/event-create.component';
-import {NetworkInterceptor} from './interceptor/network-interceptor';
-import {NZ_I18N} from 'ng-zorro-antd/i18n';
-import {en_US} from 'ng-zorro-antd/i18n';
-import {registerLocaleData} from '@angular/common';
-import en from '@angular/common/locales/en';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {FinanceComponent} from './finance/finance.component';
-import {NgxChartsModule} from '@swimlane/ngx-charts';
 import {FinanceBarChartComponent} from './finance/finance-bar-chart/finance-bar-chart.component';
+import {FinanceCreateComponent} from './finance/finance-create/finance-create.component';
 import {FinancePieChartComponent} from './finance/finance-pie-chart/finance-pie-chart.component';
 import {FinanceTableComponent} from './finance/finance-table/finance-table.component';
-import {FinanceCreateComponent} from './finance/finance-create/finance-create.component';
+import {FinanceComponent} from './finance/finance.component';
+import {HomeComponent} from './home/home.component';
+import {NetworkRequestInterceptor} from './interceptor/network-request-interceptor';
+import {NetworkResponseInterceptor} from './interceptor/network-response-interceptor';
+import {NgZorroAntdModule} from './ng-zorro-antd.module';
 
 registerLocaleData(en);
 
@@ -51,7 +50,12 @@ registerLocaleData(en);
   providers: [
     {
       provide: HTTP_INTERCEPTORS,
-      useClass: NetworkInterceptor,
+      useClass: NetworkRequestInterceptor,
+      multi: true,
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: NetworkResponseInterceptor,
       multi: true,
     },
     {provide: NZ_I18N, useValue: en_US},
