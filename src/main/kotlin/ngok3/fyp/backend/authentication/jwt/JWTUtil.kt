@@ -1,6 +1,7 @@
 package ngok3.fyp.backend.authentication.jwt
 
 import io.jsonwebtoken.Claims
+import io.jsonwebtoken.ExpiredJwtException
 import io.jsonwebtoken.JwtException
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.security.Keys
@@ -36,6 +37,9 @@ class JWTUtil(
         try {
             return Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJws(jwtToken).body
         } catch (e: JwtException) {
+            throw e
+        } catch (e: ExpiredJwtException) {
+            print("JWT token is expired: ${e.message}")
             throw e
         }
     }
