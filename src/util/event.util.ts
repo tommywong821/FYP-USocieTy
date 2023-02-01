@@ -43,11 +43,11 @@ export function convertEventToEventDto(event: Event): EventDto {
   };
 }
 
-export function getCreateEventRequest(event: Event, user: User): CreateEventRequest {
+export function getCreateEventRequest(event: Event, society: string, user: User): CreateEventRequest {
   const body: CreateEventRequestBody = {
     eventDto: convertEventToEventDto(event),
     itsc: user.itsc,
-    society: user.enrolledSocieties, // TODO check
+    society,
   };
 
   const request: CreateEventRequest = {

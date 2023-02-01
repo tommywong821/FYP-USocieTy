@@ -6,12 +6,13 @@ import {NzMessageService} from 'ng-zorro-antd/message';
 import {NzUploadChangeParam} from 'ng-zorro-antd/upload';
 import {EventCategory} from 'src/app/model/event';
 import {convertFiletoBase64, convertFormDataToEvent, getCreateEventRequest} from 'src/util/event.util';
-import {filter, map, Subject, switchMap, tap, zip, takeUntil, pipe} from 'rxjs';
+import {filter, map, Subject, switchMap, tap, zip, takeUntil} from 'rxjs';
 import {Event} from '../../model/event';
 
 export enum CreateEventFormFields {
   EventTitle = 'eventTitle',
   Location = 'location',
+  Society = 'society',
   MaxParticipation = 'maxParticipation',
   ApplyDeadline = 'applyDeadline',
   Date = 'date',
@@ -32,6 +33,8 @@ export class EventCreateComponent implements OnInit {
   createEventForm!: FormGroup;
   pictureFile: File | undefined;
 
+  enrolledSocieties: string[] = [];
+
   event$ = new Subject<Event>();
 
   destroy$ = new Subject<void>();
@@ -51,6 +54,7 @@ export class EventCreateComponent implements OnInit {
     this.createEventForm = this.formBuilder.group({
       eventTitle: ['', [Validators.required]],
       location: ['', [Validators.required]],
+      society: ['', [Validators.required]],
       maxParticipation: ['', [Validators.required]],
       applyDeadline: ['', [Validators.required]],
       date: ['', [Validators.required]],
@@ -59,12 +63,16 @@ export class EventCreateComponent implements OnInit {
       fee: ['', [Validators.required]],
     });
 
+    this.AuthService.user$
+      .pipe(filter(user => !!user))
+      .subscribe(user => (this.enrolledSocieties = [...user!.enrolledSocieties]));
+
     zip([this.event$, this.AuthService.user$])
       .pipe(
         takeUntil(this.destroy$),
         tap(() => (this.isProcessing = true)),
         filter(([event, user]) => !!user),
-        map(([event, user]) => getCreateEventRequest(event, user!)),
+        map(([event, user]) => getCreateEventRequest(event, this.createEventForm.value.society, user!)),
         switchMap(request => this.ApiService.call(request))
       )
       .subscribe(res => {
