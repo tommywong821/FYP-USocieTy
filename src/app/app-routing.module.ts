@@ -1,3 +1,4 @@
+import {EventUpdateComponent} from './event/event-update/event-update.component';
 import {AppComponent} from './app.component';
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
@@ -6,19 +7,21 @@ import {EventCreateComponent} from './event/event-create/event-create.component'
 import {HomeComponent} from './home/home.component';
 import {AuthGuard} from './services/auth.guard';
 import {MainComponent} from './main/main.component';
+import {EventComponent} from './event/event.component';
 
 export enum Path {
   Main = 'main',
   Home = 'home',
   SignIn = 'sign-in',
-  CreateEvent = 'event/create',
+  Event = 'event',
+  CreateEvent = 'create',
+  UpdateEvent = 'update',
   Finance = 'finance',
 }
 
 const routes: Routes = [
   {
     path: '',
-    pathMatch: 'full',
     component: AppComponent,
     canActivate: [AuthGuard],
   },
@@ -31,8 +34,21 @@ const routes: Routes = [
         component: HomeComponent,
       },
       {
-        path: Path.CreateEvent,
-        component: EventCreateComponent,
+        path: Path.Event,
+        children: [
+          {
+            path: '',
+            component: EventComponent,
+          },
+          {
+            path: Path.CreateEvent,
+            component: EventCreateComponent,
+          },
+          {
+            path: Path.UpdateEvent,
+            component: EventUpdateComponent,
+          },
+        ],
       },
     ],
   },

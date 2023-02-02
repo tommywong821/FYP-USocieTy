@@ -19,7 +19,7 @@ export class MainComponent implements OnInit {
     },
     {
       name: 'Event',
-      link: Path.CreateEvent,
+      link: Path.Event,
       icon: faUsers,
     },
   ];
