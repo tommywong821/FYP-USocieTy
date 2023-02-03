@@ -3,7 +3,9 @@ package ngok3.fyp.backend.operation.society
 import ngok3.fyp.backend.operation.enrolled_society_record.EnrolledSocietyRecordEntity
 import ngok3.fyp.backend.operation.finance.FinanceEntity
 import ngok3.fyp.backend.util.entity.BaseEntity
-import javax.persistence.*
+import javax.persistence.Entity
+import javax.persistence.OneToMany
+import javax.persistence.Table
 
 @Entity
 @Table(name = "society")
@@ -15,11 +17,6 @@ open class SocietyEntity(
     @OneToMany(mappedBy = "societyEntity")
     open var enrolledSocietyRecordEntities: MutableSet<EnrolledSocietyRecordEntity> = mutableSetOf()
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-        name = "society_finance",
-        joinColumns = [JoinColumn(name = "society_uuid")],
-        inverseJoinColumns = [JoinColumn(name = "finance_uuid")]
-    )
+    @OneToMany(mappedBy = "societyEntity")
     open var financeRecords: MutableSet<FinanceEntity> = mutableSetOf()
 }
