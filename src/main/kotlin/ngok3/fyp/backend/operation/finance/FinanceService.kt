@@ -1,5 +1,6 @@
 package ngok3.fyp.backend.operation.finance
 
+import ngok3.fyp.backend.operation.finance.model.FinanceChartDto
 import ngok3.fyp.backend.operation.finance.model.FinanceTableDto
 import ngok3.fyp.backend.util.DateUtil
 import org.springframework.beans.factory.annotation.Autowired
@@ -19,12 +20,17 @@ class FinanceService(
         )
 
         return financeEntityTableList.map { financeEntity ->
-            FinanceTableDto(financeEntity.uuid.toString(),
+            FinanceTableDto(
+                financeEntity.uuid.toString(),
                 financeEntity.date?.let { dateUtil.convertLocalDateTimeToString(it) },
                 financeEntity.amount,
                 financeEntity.description,
                 financeEntity.studentEntity?.nickname
             )
         }
+    }
+
+    fun getPieChartData(societyName: String, fromDateString: String, toDateString: String): List<FinanceChartDto> {
+        return listOf<FinanceChartDto>()
     }
 }

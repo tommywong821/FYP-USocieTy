@@ -2,6 +2,7 @@ package ngok3.fyp.backend.operation.finance
 
 import com.ninjasquad.springmockk.MockkBean
 import io.mockk.every
+import ngok3.fyp.backend.operation.finance.model.FinanceChartDto
 import ngok3.fyp.backend.operation.finance.model.FinanceTableDto
 import ngok3.fyp.backend.util.DateUtil
 import org.junit.jupiter.api.Test
@@ -76,6 +77,42 @@ class FinanceControllerTest @Autowired constructor(
             }
             jsonPath("$[*].editBy") {
                 value(tableData.map { financeTableDto -> financeTableDto.editBy })
+            }
+        }
+    }
+
+    @Test
+    fun `should return finance record to pie chart format`() {
+        val pieChartData: List<FinanceChartDto> = listOf(
+            FinanceChartDto("Souvenir", 5740),
+            FinanceChartDto("Supplies", 4736)
+        )
+
+        every { financeService.getPieChartData("test society", "03-02-2023", "04-02-2023") } returns pieChartData
+
+        mockMvc.get("/finance/pieChart") {
+            headers {
+                contentType = MediaType.APPLICATION_JSON
+            }
+            params = LinkedMultiValueMap<String, String>().apply {
+                add("societyName", "test society")
+                add("fromDate", "03-02-2023")
+                add("toDate", "04-02-2023")
+            }
+        }.andDo { print() }.andExpect {
+            status { isOk() }
+            content { contentType(MediaType.APPLICATION_JSON) }
+            jsonPath("$") {
+                isArray()
+            }
+            jsonPath("$.size()") {
+                value(pieChartData.size)
+            }
+            jsonPath("$[*].name") {
+                value(pieChartData.map { financeChartDto -> financeChartDto.name })
+            }
+            jsonPath("$[*].value") {
+                value(pieChartData.map { financeChartDto -> financeChartDto.value })
             }
         }
     }
