@@ -19,7 +19,7 @@ import java.util.*
 @AutoConfigureMockMvc(addFilters = false)
 class FinanceControllerTest @Autowired constructor(
     val mockMvc: MockMvc,
-    val dateUtil: DateUtil
+    @Autowired val dateUtil: DateUtil
 ) {
     @MockkBean
     lateinit var financeService: FinanceService
