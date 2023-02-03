@@ -3,6 +3,7 @@ package ngok3.fyp.backend.operation.finance
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.Parameters
+import ngok3.fyp.backend.operation.finance.model.FinanceChartDto
 import ngok3.fyp.backend.operation.finance.model.FinanceTableDto
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.GetMapping
@@ -31,4 +32,12 @@ class FinanceController(
         return financeService.getTableData(societyName, fromDateString, toDateString)
     }
 
+    @GetMapping("/pieChart")
+    fun getFinancePieChartData(
+        @RequestParam("societyName") societyName: String,
+        @RequestParam("fromDate") fromDateString: String,
+        @RequestParam("toDate") toDateString: String,
+    ): List<FinanceChartDto> {
+        return financeService.getPieChartData(societyName, fromDateString, toDateString)
+    }
 }
