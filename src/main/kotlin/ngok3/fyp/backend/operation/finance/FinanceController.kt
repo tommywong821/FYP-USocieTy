@@ -32,10 +32,11 @@ class FinanceController(
 
     @GetMapping("/pieChart")
     fun getFinancePieChartData(
+        @CookieValue("token") jwtToken: String,
         @RequestParam("societyName") societyName: String,
         @RequestParam("fromDate") fromDateString: String,
         @RequestParam("toDate") toDateString: String,
     ): List<FinanceChartDto> {
-        return financeService.getPieChartData(societyName, fromDateString, toDateString)
+        return financeService.getPieChartData(jwtToken, societyName, fromDateString, toDateString)
     }
 }
