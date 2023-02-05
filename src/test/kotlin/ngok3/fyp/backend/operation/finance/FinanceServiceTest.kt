@@ -139,4 +139,38 @@ class FinanceServiceTest(
         assertEquals(financePieChartData[1].value, 4736)
 
     }
+
+    @Test
+    fun `should not get all finance pie chart record from database with itsc not joining the society`() {
+        val itsc: String = mockAuthRepository.invalidUserItsc
+        val societyName: String = mockAuthRepository.testSociety
+
+        every {
+            enrolledSocietyRecordRepository.findByItscAndSocietyNameAndEnrolledStatus(
+                itsc,
+                societyName,
+                EnrolledStatus.SUCCESS
+            )
+        } returns Optional.empty()
+
+        val exception: AccessDeniedException = assertThrows {
+            financeService.getPieChartData(
+                mockAuthRepository.invalidUserCookieToken,
+                societyName,
+                "03-02-2023",
+                "04-02-2023"
+            )
+        }
+
+        assertEquals("student with itsc: ${itsc} do not belong to this society: ${societyName}", exception.message)
+    }
+
+    @Test
+    fun `should not get all finance pie chart record from database with invalid jwt token`() {
+        val exception: Exception = assertThrows {
+            financeService.getPieChartData("dummy", mockAuthRepository.testSociety, "03-02-2023", "04-02-2023")
+        }
+
+        assertEquals(MalformedJwtException::class, exception::class)
+    }
 }
