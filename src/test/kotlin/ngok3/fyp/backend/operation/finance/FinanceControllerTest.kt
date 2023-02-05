@@ -71,7 +71,7 @@ class FinanceControllerTest @Autowired constructor(
         every {
             financeService.getTableData(
                 mockAuthRepository.validUserCookieToken,
-                "test society",
+                mockAuthRepository.testSociety,
                 "03-02-2023",
                 "04-02-2023"
             )
@@ -83,7 +83,7 @@ class FinanceControllerTest @Autowired constructor(
                 cookie(Cookie("token", mockAuthRepository.validUserCookieToken))
             }
             params = LinkedMultiValueMap<String, String>().apply {
-                add("societyName", "test society")
+                add("societyName", mockAuthRepository.testSociety)
                 add("fromDate", "03-02-2023")
                 add("toDate", "04-02-2023")
             }
@@ -116,8 +116,8 @@ class FinanceControllerTest @Autowired constructor(
 
     @Test
     fun `should return 401 error when user no belong to that society and try to get finance record to table format`() {
-        val societyName: String = "test society"
-        val itsc: String = "invalid itsc"
+        val societyName: String = mockAuthRepository.testSociety
+        val itsc: String = mockAuthRepository.invalidUserItsc
         every {
             financeService.getTableData(
                 mockAuthRepository.invalidUserCookieToken,
@@ -133,7 +133,7 @@ class FinanceControllerTest @Autowired constructor(
                 cookie(Cookie("token", mockAuthRepository.invalidUserCookieToken))
             }
             params = LinkedMultiValueMap<String, String>().apply {
-                add("societyName", "test society")
+                add("societyName", mockAuthRepository.testSociety)
                 add("fromDate", "03-02-2023")
                 add("toDate", "04-02-2023")
             }
@@ -150,7 +150,7 @@ class FinanceControllerTest @Autowired constructor(
 
     @Test
     fun `should return 401 error when invalid cookie token to get finance table data`() {
-        val societyName: String = "test society"
+        val societyName: String = mockAuthRepository.testSociety
         every {
             financeService.getTableData(
                 "dummy",
@@ -166,7 +166,7 @@ class FinanceControllerTest @Autowired constructor(
                 cookie(Cookie("token", "dummy"))
             }
             params = LinkedMultiValueMap<String, String>().apply {
-                add("societyName", "test society")
+                add("societyName", mockAuthRepository.testSociety)
                 add("fromDate", "03-02-2023")
                 add("toDate", "04-02-2023")
             }
@@ -191,7 +191,7 @@ class FinanceControllerTest @Autowired constructor(
         every {
             financeService.getPieChartData(
                 mockAuthRepository.validUserCookieToken,
-                "test society",
+                mockAuthRepository.testSociety,
                 "03-02-2023",
                 "04-02-2023"
             )
@@ -203,7 +203,7 @@ class FinanceControllerTest @Autowired constructor(
                 cookie(Cookie("token", mockAuthRepository.validUserCookieToken))
             }
             params = LinkedMultiValueMap<String, String>().apply {
-                add("societyName", "test society")
+                add("societyName", mockAuthRepository.testSociety)
                 add("fromDate", "03-02-2023")
                 add("toDate", "04-02-2023")
             }
@@ -221,6 +221,73 @@ class FinanceControllerTest @Autowired constructor(
             }
             jsonPath("$[*].value") {
                 value(pieChartData.map { financeChartDto -> financeChartDto.value })
+            }
+        }
+    }
+
+    @Test
+    fun `should return 401 error when user no belong to that society and try to get finance record to pie chart format`() {
+        val societyName: String = mockAuthRepository.testSociety
+        val itsc: String = mockAuthRepository.invalidUserItsc
+        every {
+            financeService.getPieChartData(
+                mockAuthRepository.invalidUserCookieToken,
+                societyName,
+                "03-02-2023",
+                "04-02-2023"
+            )
+        } throws AccessDeniedException("student with itsc: ${itsc} do not belong to this society: ${societyName}")
+
+        mockMvc.get("/finance/pieChart") {
+            headers {
+                contentType = MediaType.APPLICATION_JSON
+                cookie(Cookie("token", mockAuthRepository.invalidUserCookieToken))
+            }
+            params = LinkedMultiValueMap<String, String>().apply {
+                add("societyName", mockAuthRepository.testSociety)
+                add("fromDate", "03-02-2023")
+                add("toDate", "04-02-2023")
+            }
+        }.andDo { print() }.andExpect {
+            status { isUnauthorized() }
+            jsonPath("$.status") {
+                value(401)
+            }
+            jsonPath("$.message") {
+                value("Unauthorized Access: student with itsc: ${itsc} do not belong to this society: ${societyName}")
+            }
+        }
+    }
+
+    @Test
+    fun `should return 401 error when invalid cookie token to get finance pie chart data`() {
+        val societyName: String = mockAuthRepository.testSociety
+        every {
+            financeService.getPieChartData(
+                "dummy",
+                societyName,
+                "03-02-2023",
+                "04-02-2023"
+            )
+        } throws MalformedJwtException("Invalid JWT token")
+
+        mockMvc.get("/finance/pieChart") {
+            headers {
+                contentType = MediaType.APPLICATION_JSON
+                cookie(Cookie("token", "dummy"))
+            }
+            params = LinkedMultiValueMap<String, String>().apply {
+                add("societyName", mockAuthRepository.testSociety)
+                add("fromDate", "03-02-2023")
+                add("toDate", "04-02-2023")
+            }
+        }.andDo { print() }.andExpect {
+            status { isUnauthorized() }
+            jsonPath("$.status") {
+                value(401)
+            }
+            jsonPath("$.message") {
+                value("Invalid JWT token")
             }
         }
     }
