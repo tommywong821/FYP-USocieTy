@@ -2,19 +2,26 @@ package ngok3.fyp.backend.operation.finance
 
 import io.mockk.every
 import io.mockk.mockk
+import ngok3.fyp.backend.operation.enrolled_event_record.EnrolledStatus
+import ngok3.fyp.backend.operation.enrolled_society_record.EnrolledSocietyRecordRepository
 import ngok3.fyp.backend.operation.finance.model.FinanceChartDto
 import ngok3.fyp.backend.util.DateUtil
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.security.access.AccessDeniedException
+import java.util.*
 
 @SpringBootTest
 class FinanceServiceTest(
     @Autowired private val dateUtil: DateUtil
 ) {
     private val financeEntityRepository: FinanceEntityRepository = mockk(relaxed = true)
-    private val financeService: FinanceService = FinanceService(financeEntityRepository, dateUtil)
+    private val enrolledSocietyRecordRepository: EnrolledSocietyRecordRepository = mockk(relaxed = true)
+    private val financeService: FinanceService =
+        FinanceService(financeEntityRepository, enrolledSocietyRecordRepository, dateUtil)
 
     @Test
     fun `should get all finance tbale record from database with society name`() {
@@ -30,7 +37,7 @@ class FinanceServiceTest(
             FinanceEntity(2.2, "description 2", dateUtil.currentLocalDateTime.plusDays(1)),
         )
 
-        val financeTableData = financeService.getTableData("valid user", "test society", "03-02-2023", "04-02-2023")
+        val financeTableData = financeService.getTableData("valid itsc", "test society", "03-02-2023", "04-02-2023")
 
         assertEquals(financeTableData[0].amount, 1)
         assertEquals(financeTableData[0].description, "description 1")
@@ -42,6 +49,26 @@ class FinanceServiceTest(
             financeTableData[1].date,
             dateUtil.convertLocalDateTimeToString(dateUtil.currentLocalDateTime.plusDays(1))
         )
+    }
+
+    @Test
+    fun `should not get all finance tbale record from database with itsc not joining the society`() {
+        val itsc: String = "invalid itsc"
+        val societyName: String = "test society"
+
+        every {
+            enrolledSocietyRecordRepository.findByItscAndSocietyNameAndEnrolledStatus(
+                itsc,
+                societyName,
+                EnrolledStatus.SUCCESS
+            )
+        } returns Optional.empty()
+
+        val exception: AccessDeniedException = assertThrows {
+            financeService.getTableData(itsc, societyName, "03-02-2023", "04-02-2023")
+        }
+
+        assertEquals("student with itsc: ${itsc} do not belong to this society: ${societyName}", exception.message)
     }
 
     @Test
