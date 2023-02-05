@@ -10,7 +10,7 @@ import javax.persistence.Table
 @Entity
 @Table(name = "society")
 open class SocietyEntity(
-    open var name: String? = null,
+    open var name: String? = "",
 
     ) : BaseEntity() {
 
