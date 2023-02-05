@@ -3,6 +3,7 @@ package ngok3.fyp.backend.operation.finance
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.Parameters
+import io.swagger.v3.oas.annotations.responses.ApiResponse
 import ngok3.fyp.backend.operation.finance.model.FinanceChartDto
 import ngok3.fyp.backend.operation.finance.model.FinanceTableDto
 import org.springframework.beans.factory.annotation.Autowired
@@ -30,6 +31,7 @@ class FinanceController(
         return financeService.getTableData(jwtToken, societyName, fromDateString, toDateString)
     }
 
+    @ApiResponse(description = "FinanceChartDto: name === category meaning")
     @GetMapping("/pieChart")
     fun getFinancePieChartData(
         @CookieValue("token") jwtToken: String,
