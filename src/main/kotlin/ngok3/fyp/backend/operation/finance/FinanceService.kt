@@ -52,4 +52,13 @@ class FinanceService(
             dateUtil.convertStringToLocalDateTime(toDateString)
         )
     }
+
+    fun getBarChartData(
+        validUserCookieToken: String,
+        testSociety: String,
+        fromDate: String,
+        toDate: String
+    ): List<FinanceChartDto> {
+        return listOf<FinanceChartDto>()
+    }
 }

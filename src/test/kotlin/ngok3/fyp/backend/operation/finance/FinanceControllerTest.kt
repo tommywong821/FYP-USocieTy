@@ -291,4 +291,48 @@ class FinanceControllerTest @Autowired constructor(
             }
         }
     }
+
+    @Test
+    fun `should return finance record to bar chart format`() {
+        val barChartData: List<FinanceChartDto> = listOf(
+            FinanceChartDto("January", 7187),
+            FinanceChartDto("February", 8738)
+        )
+
+        every {
+            financeService.getBarChartData(
+                mockAuthRepository.validUserCookieToken,
+                mockAuthRepository.testSociety,
+                "03-02-2023",
+                "04-02-2023"
+            )
+        } returns barChartData
+
+        mockMvc.get("/finance/barChart") {
+            headers {
+                contentType = MediaType.APPLICATION_JSON
+                cookie(Cookie("token", mockAuthRepository.validUserCookieToken))
+            }
+            params = LinkedMultiValueMap<String, String>().apply {
+                add("societyName", mockAuthRepository.testSociety)
+                add("fromDate", "03-02-2023")
+                add("toDate", "04-02-2023")
+            }
+        }.andDo { print() }.andExpect {
+            status { isOk() }
+            content { contentType(MediaType.APPLICATION_JSON) }
+            jsonPath("$") {
+                isArray()
+            }
+            jsonPath("$.size()") {
+                value(barChartData.size)
+            }
+            jsonPath("$[*].name") {
+                value(barChartData.map { financeChartDto -> financeChartDto.name })
+            }
+            jsonPath("$[*].value") {
+                value(barChartData.map { financeChartDto -> financeChartDto.value })
+            }
+        }
+    }
 }

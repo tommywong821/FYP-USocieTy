@@ -41,4 +41,15 @@ class FinanceController(
     ): List<FinanceChartDto> {
         return financeService.getPieChartData(jwtToken, societyName, fromDateString, toDateString)
     }
+
+    @ApiResponse(description = "FinanceChartDto: name === month meaning")
+    @GetMapping("/barChart")
+    fun getFinanceBarChartData(
+        @CookieValue("token") jwtToken: String,
+        @RequestParam("societyName") societyName: String,
+        @RequestParam("fromDate") fromDateString: String,
+        @RequestParam("toDate") toDateString: String,
+    ): List<FinanceChartDto> {
+        return financeService.getBarChartData(jwtToken, societyName, fromDateString, toDateString)
+    }
 }
