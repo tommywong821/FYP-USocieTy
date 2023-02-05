@@ -12,10 +12,10 @@ import javax.persistence.Table
 @Entity
 @Table(name = "finance")
 open class FinanceEntity(
-    open var amount: Double? = null,
-    open var description: String? = null,
-    open var date: LocalDateTime? = null,
-    open var category: String? = null,
+    open var amount: Double? = -1.0,
+    open var description: String? = "",
+    open var date: LocalDateTime? = LocalDateTime.MIN,
+    open var category: String? = "",
 ) : BaseEntity() {
     @ManyToOne
     @JoinColumn(name = "society_uuid", nullable = false)

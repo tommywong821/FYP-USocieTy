@@ -10,9 +10,9 @@ import javax.persistence.*
 @Entity
 @Table(name = "student")
 open class StudentEntity(
-    open var itsc: String? = null,
-    open var nickname: String? = null,
-    open var mail: String? = null,
+    open var itsc: String? = "",
+    open var nickname: String? = "",
+    open var mail: String? = "",
 ) : BaseEntity() {
     @OneToMany(mappedBy = "studentEntity")
     open var enrolledEventRecordEntity: MutableSet<EnrolledEventRecordEntity> = mutableSetOf()
