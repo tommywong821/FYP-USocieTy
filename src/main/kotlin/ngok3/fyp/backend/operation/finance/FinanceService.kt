@@ -11,7 +11,12 @@ class FinanceService(
     @Autowired val financeEntityRepository: FinanceEntityRepository,
     @Autowired val dateUtil: DateUtil
 ) {
-    fun getTableData(societyName: String, fromDateString: String, toDateString: String): List<FinanceTableDto> {
+    fun getTableData(
+        itsc: String,
+        societyName: String,
+        fromDateString: String,
+        toDateString: String
+    ): List<FinanceTableDto> {
 
         val financeEntityTableList: List<FinanceEntity> = financeEntityRepository.findFinanceTableDataWithSocietyName(
             societyName,

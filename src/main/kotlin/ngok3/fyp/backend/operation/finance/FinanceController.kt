@@ -25,11 +25,12 @@ class FinanceController(
     )
     @GetMapping("/table")
     fun getFinanceTableData(
+        @RequestParam("itsc") itsc: String,
         @RequestParam("societyName") societyName: String,
         @RequestParam("fromDate") fromDateString: String,
         @RequestParam("toDate") toDateString: String,
     ): List<FinanceTableDto> {
-        return financeService.getTableData(societyName, fromDateString, toDateString)
+        return financeService.getTableData(itsc, societyName, fromDateString, toDateString)
     }
 
     @GetMapping("/pieChart")

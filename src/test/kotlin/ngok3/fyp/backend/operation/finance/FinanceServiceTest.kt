@@ -30,7 +30,7 @@ class FinanceServiceTest(
             FinanceEntity(2.2, "description 2", dateUtil.currentLocalDateTime.plusDays(1)),
         )
 
-        val financeTableData = financeService.getTableData("test society", "03-02-2023", "04-02-2023")
+        val financeTableData = financeService.getTableData("valid user", "test society", "03-02-2023", "04-02-2023")
 
         assertEquals(financeTableData[0].amount, 1)
         assertEquals(financeTableData[0].description, "description 1")
