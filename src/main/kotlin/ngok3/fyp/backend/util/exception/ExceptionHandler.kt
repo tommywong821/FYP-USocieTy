@@ -1,5 +1,6 @@
 package ngok3.fyp.backend.util.exception
 
+import io.jsonwebtoken.MalformedJwtException
 import ngok3.fyp.backend.util.exception.model.CASException
 import ngok3.fyp.backend.util.exception.model.ErrorMessage
 import org.slf4j.Logger
@@ -13,6 +14,16 @@ import org.springframework.web.bind.annotation.ExceptionHandler
 @ControllerAdvice
 class ExceptionHandler {
     val logger: Logger = LoggerFactory.getLogger(this::class.java)
+
+    @ExceptionHandler
+    fun handleJWTException(ex: MalformedJwtException): ResponseEntity<ErrorMessage> {
+        logger.error("handleException: ${ex.message}")
+        val errorMessage = ErrorMessage(
+            HttpStatus.UNAUTHORIZED.value(),
+            "Invalid JWT token"
+        )
+        return ResponseEntity(errorMessage, HttpStatus.UNAUTHORIZED)
+    }
 
     @ExceptionHandler
     fun handleCASException(ex: CASException): ResponseEntity<ErrorMessage> {

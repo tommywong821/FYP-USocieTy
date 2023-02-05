@@ -1,10 +1,14 @@
 package ngok3.fyp.backend.operation.finance
 
 import com.ninjasquad.springmockk.MockkBean
+import io.jsonwebtoken.MalformedJwtException
 import io.mockk.every
+import io.mockk.mockkStatic
+import ngok3.fyp.backend.controller.authentication.model.MockAuthRepository
 import ngok3.fyp.backend.operation.finance.model.FinanceChartDto
 import ngok3.fyp.backend.operation.finance.model.FinanceTableDto
 import ngok3.fyp.backend.util.DateUtil
+import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
@@ -14,7 +18,13 @@ import org.springframework.security.access.AccessDeniedException
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.get
 import org.springframework.util.LinkedMultiValueMap
+import java.time.Clock
+import java.time.Instant
+import java.time.LocalDateTime
+import java.time.ZoneId
 import java.util.*
+import javax.servlet.http.Cookie
+
 
 @SpringBootTest
 @AutoConfigureMockMvc(addFilters = false)
@@ -24,6 +34,20 @@ class FinanceControllerTest @Autowired constructor(
 ) {
     @MockkBean
     lateinit var financeService: FinanceService
+
+    private val mockAuthRepository: MockAuthRepository = MockAuthRepository()
+
+    companion object {
+        @BeforeAll
+        @JvmStatic
+        fun setUp() {
+            val clock: Clock = Clock.fixed(Instant.parse("2014-12-22T10:15:30.00Z"), ZoneId.of("UTC"))
+            val dateTime: LocalDateTime = LocalDateTime.now(clock)
+            mockkStatic(LocalDateTime::class)
+            every { LocalDateTime.now() } returns dateTime
+        }
+    }
+
 
     @Test
     fun `should return finance record to table format`() {
@@ -46,7 +70,7 @@ class FinanceControllerTest @Autowired constructor(
 
         every {
             financeService.getTableData(
-                "valid itsc",
+                mockAuthRepository.validUserCookieToken,
                 "test society",
                 "03-02-2023",
                 "04-02-2023"
@@ -56,9 +80,9 @@ class FinanceControllerTest @Autowired constructor(
         mockMvc.get("/finance/table") {
             headers {
                 contentType = MediaType.APPLICATION_JSON
+                cookie(Cookie("token", mockAuthRepository.validUserCookieToken))
             }
             params = LinkedMultiValueMap<String, String>().apply {
-                add("itsc", "valid itsc")
                 add("societyName", "test society")
                 add("fromDate", "03-02-2023")
                 add("toDate", "04-02-2023")
@@ -96,7 +120,7 @@ class FinanceControllerTest @Autowired constructor(
         val itsc: String = "invalid itsc"
         every {
             financeService.getTableData(
-                itsc,
+                mockAuthRepository.invalidUserCookieToken,
                 societyName,
                 "03-02-2023",
                 "04-02-2023"
@@ -106,9 +130,9 @@ class FinanceControllerTest @Autowired constructor(
         mockMvc.get("/finance/table") {
             headers {
                 contentType = MediaType.APPLICATION_JSON
+                cookie(Cookie("token", mockAuthRepository.invalidUserCookieToken))
             }
             params = LinkedMultiValueMap<String, String>().apply {
-                add("itsc", "invalid itsc")
                 add("societyName", "test society")
                 add("fromDate", "03-02-2023")
                 add("toDate", "04-02-2023")
@@ -120,6 +144,39 @@ class FinanceControllerTest @Autowired constructor(
             }
             jsonPath("$.message") {
                 value("Unauthorized Access: student with itsc: ${itsc} do not belong to this society: ${societyName}")
+            }
+        }
+    }
+
+    @Test
+    fun `should return 401 error when invalid cookie token to get finance table data`() {
+        val societyName: String = "test society"
+        every {
+            financeService.getTableData(
+                "dummy",
+                societyName,
+                "03-02-2023",
+                "04-02-2023"
+            )
+        } throws MalformedJwtException("Invalid JWT token")
+
+        mockMvc.get("/finance/table") {
+            headers {
+                contentType = MediaType.APPLICATION_JSON
+                cookie(Cookie("token", "dummy"))
+            }
+            params = LinkedMultiValueMap<String, String>().apply {
+                add("societyName", "test society")
+                add("fromDate", "03-02-2023")
+                add("toDate", "04-02-2023")
+            }
+        }.andDo { print() }.andExpect {
+            status { isUnauthorized() }
+            jsonPath("$.status") {
+                value(401)
+            }
+            jsonPath("$.message") {
+                value("Invalid JWT token")
             }
         }
     }

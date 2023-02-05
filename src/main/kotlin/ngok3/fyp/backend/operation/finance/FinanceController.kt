@@ -6,10 +6,7 @@ import io.swagger.v3.oas.annotations.Parameters
 import ngok3.fyp.backend.operation.finance.model.FinanceChartDto
 import ngok3.fyp.backend.operation.finance.model.FinanceTableDto
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestParam
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/finance")
@@ -25,12 +22,12 @@ class FinanceController(
     )
     @GetMapping("/table")
     fun getFinanceTableData(
-        @RequestParam("itsc") itsc: String,
+        @CookieValue("token") jwtToken: String,
         @RequestParam("societyName") societyName: String,
         @RequestParam("fromDate") fromDateString: String,
         @RequestParam("toDate") toDateString: String,
     ): List<FinanceTableDto> {
-        return financeService.getTableData(itsc, societyName, fromDateString, toDateString)
+        return financeService.getTableData(jwtToken, societyName, fromDateString, toDateString)
     }
 
     @GetMapping("/pieChart")
