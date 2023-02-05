@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType
+import org.springframework.security.access.AccessDeniedException
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.get
 import org.springframework.util.LinkedMultiValueMap
@@ -43,13 +44,21 @@ class FinanceControllerTest @Autowired constructor(
             )
         )
 
-        every { financeService.getTableData("test society", "03-02-2023", "04-02-2023") } returns tableData
+        every {
+            financeService.getTableData(
+                "valid itsc",
+                "test society",
+                "03-02-2023",
+                "04-02-2023"
+            )
+        } returns tableData
 
         mockMvc.get("/finance/table") {
             headers {
                 contentType = MediaType.APPLICATION_JSON
             }
             params = LinkedMultiValueMap<String, String>().apply {
+                add("itsc", "valid itsc")
                 add("societyName", "test society")
                 add("fromDate", "03-02-2023")
                 add("toDate", "04-02-2023")
@@ -77,6 +86,40 @@ class FinanceControllerTest @Autowired constructor(
             }
             jsonPath("$[*].editBy") {
                 value(tableData.map { financeTableDto -> financeTableDto.editBy })
+            }
+        }
+    }
+
+    @Test
+    fun `should return 401 error when user no belong to that society and try to get finance record to table format`() {
+        val societyName: String = "test society"
+        val itsc: String = "invalid itsc"
+        every {
+            financeService.getTableData(
+                itsc,
+                societyName,
+                "03-02-2023",
+                "04-02-2023"
+            )
+        } throws AccessDeniedException("student with itsc: ${itsc} do not belong to this society: ${societyName}")
+
+        mockMvc.get("/finance/table") {
+            headers {
+                contentType = MediaType.APPLICATION_JSON
+            }
+            params = LinkedMultiValueMap<String, String>().apply {
+                add("itsc", "invalid itsc")
+                add("societyName", "test society")
+                add("fromDate", "03-02-2023")
+                add("toDate", "04-02-2023")
+            }
+        }.andDo { print() }.andExpect {
+            status { isUnauthorized() }
+            jsonPath("$.status") {
+                value(401)
+            }
+            jsonPath("$.message") {
+                value("Unauthorized Access: student with itsc: ${itsc} do not belong to this society: ${societyName}")
             }
         }
     }
