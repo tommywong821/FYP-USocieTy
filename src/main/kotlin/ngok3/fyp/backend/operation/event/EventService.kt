@@ -82,7 +82,7 @@ class EventService(
             throw AccessDeniedException("User ${createEventDto.itsc} do not have right to create event")
         }
 //        check if user is in that society
-        if (enrolledSocietyRecordRepository.findByStudentEntity_ItscAndSocietyEntity_NameAndStatus(
+        if (enrolledSocietyRecordRepository.findByItscAndSocietyNameAndEnrolledStatus(
                 createEventDto.itsc,
                 createEventDto.society,
                 EnrolledStatus.SUCCESS
