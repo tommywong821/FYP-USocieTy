@@ -184,8 +184,8 @@ class FinanceControllerTest @Autowired constructor(
     @Test
     fun `should return finance record to pie chart format`() {
         val pieChartData: List<FinanceChartDto> = listOf(
-            FinanceChartDto("Souvenir", 5740),
-            FinanceChartDto("Supplies", 4736)
+            FinanceChartDto("Souvenir", 5740.0),
+            FinanceChartDto("Supplies", 4736.0)
         )
 
         every {
@@ -295,8 +295,8 @@ class FinanceControllerTest @Autowired constructor(
     @Test
     fun `should return finance record to bar chart format`() {
         val barChartData: List<FinanceChartDto> = listOf(
-            FinanceChartDto("January", 7187),
-            FinanceChartDto("February", 8738)
+            FinanceChartDto("Jan-2023", 7187.0),
+            FinanceChartDto("Feb-2023", 8738.0)
         )
 
         every {
@@ -332,6 +332,73 @@ class FinanceControllerTest @Autowired constructor(
             }
             jsonPath("$[*].value") {
                 value(barChartData.map { financeChartDto -> financeChartDto.value })
+            }
+        }
+    }
+
+    @Test
+    fun `should return 401 error when user no belong to that society and try to get finance record to bar chart format`() {
+        val societyName: String = mockAuthRepository.testSociety
+        val itsc: String = mockAuthRepository.invalidUserItsc
+        every {
+            financeService.getBarChartData(
+                mockAuthRepository.invalidUserCookieToken,
+                societyName,
+                "03-02-2023",
+                "04-02-2023"
+            )
+        } throws AccessDeniedException("student with itsc: ${itsc} do not belong to this society: ${societyName}")
+
+        mockMvc.get("/finance/barChart") {
+            headers {
+                contentType = MediaType.APPLICATION_JSON
+                cookie(Cookie("token", mockAuthRepository.invalidUserCookieToken))
+            }
+            params = LinkedMultiValueMap<String, String>().apply {
+                add("societyName", mockAuthRepository.testSociety)
+                add("fromDate", "03-02-2023")
+                add("toDate", "04-02-2023")
+            }
+        }.andDo { print() }.andExpect {
+            status { isUnauthorized() }
+            jsonPath("$.status") {
+                value(401)
+            }
+            jsonPath("$.message") {
+                value("Unauthorized Access: student with itsc: ${itsc} do not belong to this society: ${societyName}")
+            }
+        }
+    }
+
+    @Test
+    fun `should return 401 error when invalid cookie token to get finance bar chart data`() {
+        val societyName: String = mockAuthRepository.testSociety
+        every {
+            financeService.getBarChartData(
+                "dummy",
+                societyName,
+                "03-02-2023",
+                "04-02-2023"
+            )
+        } throws MalformedJwtException("Invalid JWT token")
+
+        mockMvc.get("/finance/barChart") {
+            headers {
+                contentType = MediaType.APPLICATION_JSON
+                cookie(Cookie("token", "dummy"))
+            }
+            params = LinkedMultiValueMap<String, String>().apply {
+                add("societyName", mockAuthRepository.testSociety)
+                add("fromDate", "03-02-2023")
+                add("toDate", "04-02-2023")
+            }
+        }.andDo { print() }.andExpect {
+            status { isUnauthorized() }
+            jsonPath("$.status") {
+                value(401)
+            }
+            jsonPath("$.message") {
+                value("Invalid JWT token")
             }
         }
     }
