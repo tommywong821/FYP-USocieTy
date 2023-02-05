@@ -1,5 +1,7 @@
 package ngok3.fyp.backend.operation.finance
 
+import io.jsonwebtoken.Claims
+import ngok3.fyp.backend.authentication.jwt.JWTUtil
 import ngok3.fyp.backend.operation.enrolled_event_record.EnrolledStatus
 import ngok3.fyp.backend.operation.enrolled_society_record.EnrolledSocietyRecordRepository
 import ngok3.fyp.backend.operation.finance.model.FinanceChartDto
@@ -13,14 +15,17 @@ import org.springframework.stereotype.Service
 class FinanceService(
     @Autowired val financeEntityRepository: FinanceEntityRepository,
     @Autowired val enrolledSocietyRecordRepository: EnrolledSocietyRecordRepository,
-    @Autowired val dateUtil: DateUtil
+    @Autowired val dateUtil: DateUtil,
+    @Autowired val jwtUtil: JWTUtil
 ) {
     fun getTableData(
-        itsc: String,
+        jwtToken: String,
         societyName: String,
         fromDateString: String,
         toDateString: String
     ): List<FinanceTableDto> {
+        val claims: Claims = jwtUtil.verifyToken(jwtToken)
+        val itsc: String = claims["itsc"].toString()
 
         if (enrolledSocietyRecordRepository.findByItscAndSocietyNameAndEnrolledStatus(
                 itsc,

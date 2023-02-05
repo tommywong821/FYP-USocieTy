@@ -1,7 +1,10 @@
 package ngok3.fyp.backend.operation.finance
 
+import io.jsonwebtoken.MalformedJwtException
 import io.mockk.every
 import io.mockk.mockk
+import ngok3.fyp.backend.authentication.jwt.JWTUtil
+import ngok3.fyp.backend.controller.authentication.model.MockAuthRepository
 import ngok3.fyp.backend.operation.enrolled_event_record.EnrolledStatus
 import ngok3.fyp.backend.operation.enrolled_society_record.EnrolledSocietyRecordRepository
 import ngok3.fyp.backend.operation.finance.model.FinanceChartDto
@@ -16,12 +19,15 @@ import java.util.*
 
 @SpringBootTest
 class FinanceServiceTest(
-    @Autowired private val dateUtil: DateUtil
+    @Autowired private val dateUtil: DateUtil,
+    @Autowired private val jwtUtil: JWTUtil
 ) {
     private val financeEntityRepository: FinanceEntityRepository = mockk(relaxed = true)
     private val enrolledSocietyRecordRepository: EnrolledSocietyRecordRepository = mockk(relaxed = true)
     private val financeService: FinanceService =
-        FinanceService(financeEntityRepository, enrolledSocietyRecordRepository, dateUtil)
+        FinanceService(financeEntityRepository, enrolledSocietyRecordRepository, dateUtil, jwtUtil)
+
+    private val mockAuthRepository: MockAuthRepository = MockAuthRepository()
 
     @Test
     fun `should get all finance tbale record from database with society name`() {
@@ -37,7 +43,12 @@ class FinanceServiceTest(
             FinanceEntity(2.2, "description 2", dateUtil.currentLocalDateTime.plusDays(1)),
         )
 
-        val financeTableData = financeService.getTableData("valid itsc", "test society", "03-02-2023", "04-02-2023")
+        val financeTableData = financeService.getTableData(
+            mockAuthRepository.validUserCookieToken,
+            "test society",
+            "03-02-2023",
+            "04-02-2023"
+        )
 
         assertEquals(financeTableData[0].amount, 1)
         assertEquals(financeTableData[0].description, "description 1")
@@ -52,7 +63,7 @@ class FinanceServiceTest(
     }
 
     @Test
-    fun `should not get all finance tbale record from database with itsc not joining the society`() {
+    fun `should not get all finance table record from database with itsc not joining the society`() {
         val itsc: String = "invalid itsc"
         val societyName: String = "test society"
 
@@ -65,10 +76,24 @@ class FinanceServiceTest(
         } returns Optional.empty()
 
         val exception: AccessDeniedException = assertThrows {
-            financeService.getTableData(itsc, societyName, "03-02-2023", "04-02-2023")
+            financeService.getTableData(
+                mockAuthRepository.invalidUserCookieToken,
+                societyName,
+                "03-02-2023",
+                "04-02-2023"
+            )
         }
 
         assertEquals("student with itsc: ${itsc} do not belong to this society: ${societyName}", exception.message)
+    }
+
+    @Test
+    fun `should not get all finance table record from database with invalid jwt token`() {
+        val exception: Exception = assertThrows {
+            financeService.getTableData("dummy", "societyName", "03-02-2023", "04-02-2023")
+        }
+
+        assertEquals(MalformedJwtException::class, exception::class)
     }
 
     @Test
