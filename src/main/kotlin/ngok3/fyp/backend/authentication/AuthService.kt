@@ -2,13 +2,13 @@ package ngok3.fyp.backend.authentication
 
 import com.fasterxml.jackson.dataformat.xml.XmlMapper
 import com.fasterxml.jackson.module.kotlin.readValue
-import ngok3.fyp.backend.authentication.jwt.JWTUtil
 import ngok3.fyp.backend.authentication.model.*
 import ngok3.fyp.backend.authentication.role.Role
 import ngok3.fyp.backend.authentication.role.RoleEntityRepository
 import ngok3.fyp.backend.operation.student.StudentDto
 import ngok3.fyp.backend.operation.student.StudentEntity
 import ngok3.fyp.backend.operation.student.StudentRepository
+import ngok3.fyp.backend.util.JWTUtil
 import ngok3.fyp.backend.util.exception.model.CASException
 import ngok3.fyp.backend.util.webclient.OkHttpClientFactory
 import okhttp3.*

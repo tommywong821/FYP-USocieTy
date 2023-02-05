@@ -188,11 +188,19 @@ class FinanceControllerTest @Autowired constructor(
             FinanceChartDto("Supplies", 4736)
         )
 
-        every { financeService.getPieChartData("test society", "03-02-2023", "04-02-2023") } returns pieChartData
+        every {
+            financeService.getPieChartData(
+                mockAuthRepository.validUserCookieToken,
+                "test society",
+                "03-02-2023",
+                "04-02-2023"
+            )
+        } returns pieChartData
 
         mockMvc.get("/finance/pieChart") {
             headers {
                 contentType = MediaType.APPLICATION_JSON
+                cookie(Cookie("token", mockAuthRepository.validUserCookieToken))
             }
             params = LinkedMultiValueMap<String, String>().apply {
                 add("societyName", "test society")
