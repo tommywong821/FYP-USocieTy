@@ -2,6 +2,7 @@ package ngok3.fyp.backend.operation.finance
 
 import io.mockk.every
 import io.mockk.mockk
+import ngok3.fyp.backend.operation.finance.model.FinanceChartDto
 import ngok3.fyp.backend.util.DateUtil
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
@@ -16,7 +17,7 @@ class FinanceServiceTest(
     private val financeService: FinanceService = FinanceService(financeEntityRepository, dateUtil)
 
     @Test
-    fun `should get all finance record from database with society name`() {
+    fun `should get all finance tbale record from database with society name`() {
 
         every {
             financeEntityRepository.findFinanceTableDataWithSocietyName(
@@ -41,5 +42,28 @@ class FinanceServiceTest(
             financeTableData[1].date,
             dateUtil.convertLocalDateTimeToString(dateUtil.currentLocalDateTime.plusDays(1))
         )
+    }
+
+    @Test
+    fun `should get all finance pie chart record from database with society name`() {
+        every {
+            financeEntityRepository.findFinanceChartData(
+                "test society",
+                dateUtil.convertStringToLocalDateTime("05-02-2023"),
+                dateUtil.convertStringToLocalDateTime("06-02-2023")
+            )
+        } returns listOf(
+            FinanceChartDto("Souvenir", 5740),
+            FinanceChartDto("Supplies", 4736)
+        )
+
+        val financePieChartData = financeService.getPieChartData("test society", "05-02-2023", "06-02-2023")
+
+        assertEquals(financePieChartData[0].name, "Souvenir")
+        assertEquals(financePieChartData[0].value, 5740)
+
+        assertEquals(financePieChartData[1].name, "Supplies")
+        assertEquals(financePieChartData[1].value, 4736)
+
     }
 }

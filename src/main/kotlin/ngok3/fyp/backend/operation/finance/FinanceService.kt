@@ -31,6 +31,11 @@ class FinanceService(
     }
 
     fun getPieChartData(societyName: String, fromDateString: String, toDateString: String): List<FinanceChartDto> {
-        return listOf<FinanceChartDto>()
+
+        return financeEntityRepository.findFinanceChartData(
+            societyName,
+            dateUtil.convertStringToLocalDateTime(fromDateString),
+            dateUtil.convertStringToLocalDateTime(toDateString)
+        )
     }
 }
