@@ -46,7 +46,7 @@ class FinanceService(
     ): List<FinanceChartDto> {
         jwtUtil.verifyUserEnrolledSociety(jwtToken, societyName)
 
-        return financeEntityRepository.findFinanceChartData(
+        return financeEntityRepository.findFinancePieChartData(
             societyName,
             dateUtil.convertStringToLocalDateTime(fromDateString),
             dateUtil.convertStringToLocalDateTime(toDateString)
@@ -54,11 +54,18 @@ class FinanceService(
     }
 
     fun getBarChartData(
-        validUserCookieToken: String,
-        testSociety: String,
+        jwtToken: String,
+        societyName: String,
         fromDate: String,
         toDate: String
     ): List<FinanceChartDto> {
-        return listOf<FinanceChartDto>()
+        jwtUtil.verifyUserEnrolledSociety(jwtToken, societyName)
+
+        return financeEntityRepository.findFinanceBarChartData(
+            societyName,
+            dateUtil.convertStringToLocalDateTime(fromDate),
+            dateUtil.convertStringToLocalDateTime(toDate)
+        )
     }
+
 }

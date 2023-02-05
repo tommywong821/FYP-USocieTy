@@ -18,7 +18,7 @@ data class EventDto(
     val endDate: String? = "",
     val category: String? = "",
     val description: String? = "",
-    val fee: Float? = -1.0f,
+    val fee: Double? = 0.0,
 ) : Serializable {
     constructor(eventEntity: EventEntity) : this(
         eventEntity.uuid.toString(),

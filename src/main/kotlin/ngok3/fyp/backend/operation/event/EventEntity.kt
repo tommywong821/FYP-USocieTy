@@ -19,7 +19,7 @@ open class EventEntity(
     open var endDate: LocalDateTime? = null,
     open var category: String? = null,
     open var description: String? = null,
-    open var fee: Float? = null,
+    open var fee: Double? = null,
 
     ) : BaseEntity() {
     @OneToMany(mappedBy = "eventEntity")

@@ -12,7 +12,7 @@ import javax.persistence.Table
 @Entity
 @Table(name = "finance")
 open class FinanceEntity(
-    open var amount: Number? = 0.0,
+    open var amount: Double? = null,
     open var description: String? = null,
     open var date: LocalDateTime? = null,
     open var category: String? = null,
