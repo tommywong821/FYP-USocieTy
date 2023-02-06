@@ -31,6 +31,7 @@ class FinanceController(
         return financeService.getTableData(jwtToken, societyName, fromDateString, toDateString)
     }
 
+    @Operation(summary = "get all finance record with society name group by category")
     @ApiResponse(description = "FinanceChartDto: name === category meaning")
     @GetMapping("/pieChart")
     fun getFinancePieChartData(
@@ -42,6 +43,7 @@ class FinanceController(
         return financeService.getPieChartData(jwtToken, societyName, fromDateString, toDateString)
     }
 
+    @Operation(summary = "get all finance record with society name group by month and year")
     @ApiResponse(description = "FinanceChartDto: name === month meaning")
     @GetMapping("/barChart")
     fun getFinanceBarChartData(
