@@ -19,6 +19,7 @@ export enum Path {
   CreateEvent = 'create',
   UpdateEvent = 'update',
   Finance = 'finance',
+  CreateFinance = 'create',
 }
 
 const routes: Routes = [
@@ -53,8 +54,17 @@ const routes: Routes = [
         ],
       },
       {
-        path: 'finance',
-        component: FinanceComponent,
+        path: Path.Finance,
+        children: [
+          {
+            path: '',
+            component: FinanceComponent,
+          },
+          {
+            path: Path.CreateFinance,
+            component: FinanceCreateComponent,
+          },
+        ],
       },
     ],
   },

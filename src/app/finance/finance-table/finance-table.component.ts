@@ -1,5 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
+import {Path} from 'src/app/app-routing.module';
 import {FinanceTableRecord} from '../IFinanceTableRecord';
 
 @Component({
@@ -61,6 +62,6 @@ export class FinanceTableComponent implements OnInit {
   }
 
   routeToCreateRecordPage() {
-    this.router.navigate(['/finance/create']);
+    this.router.navigate([Path.Main, Path.Finance, Path.CreateFinance]);
   }
 }
