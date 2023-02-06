@@ -13,6 +13,7 @@
     />
     <div class="grid grid-cols-12 gap-4">
       <label class="col-start-2 flex justify-center"> Amount </label>
+      <label class="flex justify-center"> Category </label>
       <label class="flex justify-center"> Description </label>
       <label class="flex justify-center"> Date </label>
 
@@ -34,6 +35,18 @@
                   placeholder="Amount(HKD)"
                   formControlName="amount"
                   type="number"
+                />
+              </nz-form-control>
+              <nz-form-control
+                nzHasFeedback
+                nzErrorTip="Please input category of this record."
+              >
+                <input
+                  nz-input
+                  required
+                  placeholder="Category"
+                  formControlName="category"
+                  type="text"
                 />
               </nz-form-control>
               <nz-form-control

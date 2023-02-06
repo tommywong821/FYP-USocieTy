@@ -25,10 +25,11 @@ export class FinanceComponent implements OnInit {
   }
 
   onDateChange(result: Date[]): void {
+    console.log(result[0].toLocaleDateString());
     //TODO change to call api with change date
     this.barChartData = [
       {
-        name: 'January',
+        name: 'January-2023',
         value: 7187,
       },
       {
