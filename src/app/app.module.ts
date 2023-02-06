@@ -22,6 +22,7 @@ import {FinanceComponent} from './finance/finance.component';
 import {HomeComponent} from './home/home.component';
 import {NetworkRequestInterceptor} from './interceptor/network-request-interceptor';
 import {NetworkResponseInterceptor} from './interceptor/network-response-interceptor';
+import {MainComponent} from './main/main.component';
 import {NgZorroAntdModule} from './ng-zorro-antd.module';
 
 registerLocaleData(en);
@@ -32,6 +33,7 @@ registerLocaleData(en);
     HomeComponent,
     SignInComponent,
     EventCreateComponent,
+    MainComponent,
     EventUpdateComponent,
     EventComponent,
     FinanceComponent,
