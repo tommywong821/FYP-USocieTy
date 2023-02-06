@@ -5,7 +5,9 @@ import io.jsonwebtoken.MalformedJwtException
 import io.mockk.every
 import io.mockk.mockkStatic
 import ngok3.fyp.backend.controller.authentication.model.MockAuthRepository
+import ngok3.fyp.backend.operation.finance.model.CreateFinanceDto
 import ngok3.fyp.backend.operation.finance.model.FinanceChartDto
+import ngok3.fyp.backend.operation.finance.model.FinanceRecordDto
 import ngok3.fyp.backend.operation.finance.model.FinanceTableDto
 import ngok3.fyp.backend.operation.society.SocietyEntity
 import ngok3.fyp.backend.operation.student.StudentEntity
@@ -425,7 +427,20 @@ class FinanceControllerTest @Autowired constructor(
             financeEntity.studentEntity = studentEntity
         }
 
-        every { financeService.createFinancialRecords() } returns financeEntityList
+        val createFinanceDto: CreateFinanceDto = CreateFinanceDto(
+            mockAuthRepository.testSocietyName,
+            listOf(
+                FinanceRecordDto(123.0, "test category 1", "test description 1", "2/7/2023"),
+                FinanceRecordDto(345.0, "test category 2", "test description 2", "2/8/2023"),
+            )
+        )
+
+        every {
+            financeService.createFinancialRecords(
+                mockAuthRepository.validUserCookieToken,
+                createFinanceDto
+            )
+        } returns financeEntityList
 
         mockMvc.post("/finance") {
             headers {
@@ -433,7 +448,7 @@ class FinanceControllerTest @Autowired constructor(
                 cookie(Cookie("token", mockAuthRepository.validUserCookieToken))
             }
             content =
-                "{\"societyName\":\"test society\",\"financeRecords\":[{\"amount\":123,\"description\":\"aaa\",\"date\":\"2\\/7\\/2023\"},{\"amount\":345,\"description\":\"bbb\",\"date\":\"2\\/8\\/2023\"}]}"
+                "{\"societyName\":\"test society\",\"financeRecords\":[{\"amount\":123.0,\"category\":\"test category 1\",\"description\":\"test description 1\",\"date\":\"2\\/7\\/2023\"},{\"amount\":345.0,\"category\":\"test category 2\",\"description\":\"test description 2\",\"date\":\"2\\/8\\/2023\"}]}"
         }.andDo { print() }.andExpect {
             status { isOk() }
             content { contentType(MediaType.APPLICATION_JSON) }
@@ -462,8 +477,16 @@ class FinanceControllerTest @Autowired constructor(
     fun `should return 401 error when user no belong to that society and try to create finance record`() {
         val societyName: String = mockAuthRepository.testSocietyName
         val itsc: String = mockAuthRepository.invalidUserItsc
+        val createFinanceDto: CreateFinanceDto = CreateFinanceDto(
+            societyName,
+            listOf(
+                FinanceRecordDto(123.0, "test category 1", "test description 1", "2/7/2023"),
+                FinanceRecordDto(345.0, "test category 2", "test description 2", "2/8/2023"),
+            )
+        )
+
         every {
-            financeService.createFinancialRecords()
+            financeService.createFinancialRecords(mockAuthRepository.invalidUserCookieToken, createFinanceDto)
         } throws AccessDeniedException("student with itsc: ${itsc} do not belong to this society: ${societyName}")
 
         mockMvc.post("/finance") {
@@ -472,7 +495,7 @@ class FinanceControllerTest @Autowired constructor(
                 cookie(Cookie("token", mockAuthRepository.invalidUserCookieToken))
             }
             content =
-                "{\"societyName\":\"test society\",\"financeRecords\":[{\"amount\":123,\"description\":\"aaa\",\"date\":\"2\\/7\\/2023\"},{\"amount\":345,\"description\":\"bbb\",\"date\":\"2\\/8\\/2023\"}]}"
+                "{\"societyName\":\"test society\",\"financeRecords\":[{\"amount\":123.0,\"category\":\"test category 1\",\"description\":\"test description 1\",\"date\":\"2\\/7\\/2023\"},{\"amount\":345.0,\"category\":\"test category 2\",\"description\":\"test description 2\",\"date\":\"2\\/8\\/2023\"}]}"
         }.andDo { print() }.andExpect {
             status { isUnauthorized() }
             jsonPath("$.status") {
@@ -487,8 +510,15 @@ class FinanceControllerTest @Autowired constructor(
     @Test
     fun `should return 401 error when invalid cookie token try to create finance record`() {
         val societyName: String = mockAuthRepository.testSocietyName
+        val createFinanceDto: CreateFinanceDto = CreateFinanceDto(
+            mockAuthRepository.testSocietyName,
+            listOf(
+                FinanceRecordDto(123.0, "test category 1", "test description 1", "2/7/2023"),
+                FinanceRecordDto(345.0, "test category 2", "test description 2", "2/8/2023"),
+            )
+        )
         every {
-            financeService.createFinancialRecords()
+            financeService.createFinancialRecords("dummy", createFinanceDto)
         } throws MalformedJwtException("Invalid JWT token")
 
         mockMvc.post("/finance") {
@@ -497,7 +527,7 @@ class FinanceControllerTest @Autowired constructor(
                 cookie(Cookie("token", "dummy"))
             }
             content =
-                "{\"societyName\":\"test society\",\"financeRecords\":[{\"amount\":123,\"description\":\"aaa\",\"date\":\"2\\/7\\/2023\"},{\"amount\":345,\"description\":\"bbb\",\"date\":\"2\\/8\\/2023\"}]}"
+                "{\"societyName\":\"test society\",\"financeRecords\":[{\"amount\":123.0,\"category\":\"test category 1\",\"description\":\"test description 1\",\"date\":\"2\\/7\\/2023\"},{\"amount\":345.0,\"category\":\"test category 2\",\"description\":\"test description 2\",\"date\":\"2\\/8\\/2023\"}]}"
         }.andDo { print() }.andExpect {
             status { isUnauthorized() }
             jsonPath("$.status") {
