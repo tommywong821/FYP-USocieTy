@@ -1,9 +1,9 @@
 import {Component, OnInit} from '@angular/core';
-import {Form, FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {IconProp} from '@fortawesome/fontawesome-svg-core';
 import {faMinus} from '@fortawesome/free-solid-svg-icons';
 import {filter} from 'rxjs';
-import {User} from 'src/app/model/user';
+import {ApiService} from 'src/app/services/api.service';
 import {AuthService} from 'src/app/services/auth.service';
 
 @Component({
@@ -17,7 +17,7 @@ export class FinanceCreateComponent implements OnInit {
 
   enrolledSocieties: string[] = [];
 
-  constructor(private fb: FormBuilder, private authService: AuthService) {
+  constructor(private fb: FormBuilder, private authService: AuthService, private apiService: ApiService) {
     this.validateForm = this.fb.group({
       societyName: '',
       financeRecords: this.fb.array([]),
@@ -57,14 +57,27 @@ export class FinanceCreateComponent implements OnInit {
     }
   }
 
+  removeAllFinanceRecrod(): void {
+    const formArray = <FormArray>this.validateForm.get('financeRecords');
+    while (formArray.length !== 0) {
+      formArray.removeAt(0);
+    }
+  }
+
   submitForm(): void {
     if (this.validateForm.valid) {
-      console.log('submit', this.validateForm.value);
       //change date format to mm/dd/2023
       this.validateForm.value.financeRecords.forEach((financeRecord: any) => {
-        financeRecord.date = financeRecord.date.toLocaleDateString();
+        if (financeRecord.date instanceof Date) {
+          financeRecord.date = financeRecord.date.toLocaleDateString();
+        }
       });
-      console.log('modify', this.validateForm.value);
+      this.apiService.createFinanceRecords(this.validateForm.value).subscribe({
+        next: () => {
+          alert('Financial Records are created');
+          this.removeAllFinanceRecrod();
+        },
+      });
     } else {
       alert('You must fill all the fields');
       Object.values(this.financeRecords.controls).forEach(control => {
