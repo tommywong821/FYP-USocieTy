@@ -5,12 +5,23 @@
     [formGroup]="validateForm"
     (ngSubmit)="submitForm()"
   >
-    <input
-      nz-input
-      placeholder="Society Name"
-      type="text"
-      formControlName="societyName"
-    />
+    <div>
+      <nz-form-label
+        class="mb-2 text-sm font-medium text-gray-700"
+        for="societyName"
+        >Society</nz-form-label
+      >
+      <nz-select
+        class="w-32"
+        formControlName="societyName"
+      >
+        <nz-option
+          *ngFor="let society of enrolledSocieties"
+          [nzLabel]="society"
+          [nzValue]="society"
+        ></nz-option>
+      </nz-select>
+    </div>
     <div class="grid grid-cols-12 gap-4">
       <label class="col-start-2 flex justify-center"> Amount </label>
       <label class="flex justify-center"> Category </label>

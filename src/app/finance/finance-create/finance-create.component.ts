@@ -2,6 +2,9 @@ import {Component, OnInit} from '@angular/core';
 import {Form, FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {IconProp} from '@fortawesome/fontawesome-svg-core';
 import {faMinus} from '@fortawesome/free-solid-svg-icons';
+import {filter} from 'rxjs';
+import {User} from 'src/app/model/user';
+import {AuthService} from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-finance-create',
@@ -12,7 +15,9 @@ export class FinanceCreateComponent implements OnInit {
   validateForm!: FormGroup;
   faMinus: IconProp = faMinus;
 
-  constructor(private fb: FormBuilder) {
+  enrolledSocieties: string[] = [];
+
+  constructor(private fb: FormBuilder, private authService: AuthService) {
     this.validateForm = this.fb.group({
       societyName: '',
       financeRecords: this.fb.array([]),
@@ -24,6 +29,10 @@ export class FinanceCreateComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.authService.user$
+      .pipe(filter(user => !!user))
+      .subscribe(user => (this.enrolledSocieties = [...user!.enrolledSocieties]));
+
     this.addField();
   }
 
@@ -35,6 +44,7 @@ export class FinanceCreateComponent implements OnInit {
       // //Validate user input
       this.fb.group({
         amount: new FormControl(null, [Validators.required, Validators.pattern('^[0-9]*$')]),
+        category: new FormControl(null, Validators.required),
         description: new FormControl(null, Validators.required),
         date: new FormControl(null, Validators.required),
       })
