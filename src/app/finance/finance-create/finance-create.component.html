@@ -5,52 +5,63 @@
     [formGroup]="validateForm"
     (ngSubmit)="submitForm()"
   >
+    <input
+      nz-input
+      placeholder="Society Name"
+      type="text"
+      formControlName="societyName"
+    />
     <div class="grid grid-cols-12 gap-4">
       <label class="col-start-2 flex justify-center"> Amount </label>
       <label class="flex justify-center"> Description </label>
       <label class="flex justify-center"> Date </label>
 
       <div class="col-span-12">
-        <div *ngFor="let financeRecord of listOfFinanceRecord; let i = index">
-          <div class="grid grid-cols-12 py-4">
-            <label class="flex justify-center">{{ i + 1 }}</label>
-            <nz-form-control
-              nzHasFeedback
-              nzErrorTip="Please input amount of this record."
-            >
-              <input
-                nz-input
-                required
-                placeholder="Amount(HKD)"
-                [attr.id]="financeRecord.id"
-                [formControlName]="financeRecord.amount"
-              />
-            </nz-form-control>
-            <nz-form-control
-              nzHasFeedback
-              nzErrorTip="Please input description of this record."
-            >
-              <input
-                nz-input
-                required
-                placeholder="Description"
-                [attr.id]="financeRecord.id"
-                [formControlName]="financeRecord.description"
-              />
-            </nz-form-control>
-            <nz-form-control
-              nzHasFeedback
-              nzErrorTip="Please input date of this record."
-            >
-              <nz-date-picker
-                required
-                [nzShowTime]="true"
-                [formControlName]="financeRecord.date"
-              ></nz-date-picker>
-            </nz-form-control>
-            <button (click)="removeField(financeRecord, $event)">
-              <fa-icon [icon]="faMinus"></fa-icon>
-            </button>
+        <div
+          formArrayName="financeRecords"
+          *ngFor="let financeRecord of financeRecords.controls; let idx = index"
+        >
+          <div [formGroupName]="idx">
+            <div class="grid grid-cols-12 py-4">
+              <label class="flex justify-center">{{ idx + 1 }}</label>
+              <nz-form-control
+                nzHasFeedback
+                nzErrorTip="Please input amount of this record."
+              >
+                <input
+                  nz-input
+                  required
+                  placeholder="Amount(HKD)"
+                  formControlName="amount"
+                  type="number"
+                />
+              </nz-form-control>
+              <nz-form-control
+                nzHasFeedback
+                nzErrorTip="Please input description of this record."
+              >
+                <input
+                  nz-input
+                  required
+                  placeholder="Description"
+                  formControlName="description"
+                  type="text"
+                />
+              </nz-form-control>
+              <nz-form-control
+                nzHasFeedback
+                nzErrorTip="Please input date of this record."
+              >
+                <nz-date-picker
+                  required
+                  [nzShowTime]="false"
+                  formControlName="date"
+                ></nz-date-picker>
+              </nz-form-control>
+              <button (click)="removeFinanceRecrod(idx)">
+                <fa-icon [icon]="faMinus"></fa-icon>
+              </button>
+            </div>
           </div>
         </div>
       </div>
