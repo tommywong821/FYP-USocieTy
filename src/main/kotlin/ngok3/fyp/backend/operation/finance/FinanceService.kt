@@ -68,4 +68,8 @@ class FinanceService(
         )
     }
 
+    fun createFinancialRecords(): List<FinanceEntity> {
+        TODO("Not yet implemented")
+    }
+
 }

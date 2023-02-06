@@ -35,16 +35,16 @@ class FinanceServiceTest(
         every {
             enrolledSocietyRecordRepository.findByItscAndSocietyNameAndEnrolledStatus(
                 mockAuthRepository.validUserItsc,
-                mockAuthRepository.testSociety,
+                mockAuthRepository.testSocietyName,
                 EnrolledStatus.SUCCESS
             )
         } returns Optional.of(EnrolledSocietyRecordEntity())
 
         every {
             financeEntityRepository.findFinanceTableDataWithSocietyName(
-                mockAuthRepository.testSociety,
-                dateUtil.convertStringToLocalDateTime("03-02-2023"),
-                dateUtil.convertStringToLocalDateTime("04-02-2023")
+                mockAuthRepository.testSocietyName,
+                dateUtil.convertStringToLocalDateTime("3/2/2023"),
+                dateUtil.convertStringToLocalDateTime("4/2/2023")
             )
         } returns listOf<FinanceEntity>(
             FinanceEntity(1.0, "description 1", dateUtil.currentLocalDateTime),
@@ -53,9 +53,9 @@ class FinanceServiceTest(
 
         val financeTableData = financeService.getTableData(
             mockAuthRepository.validUserCookieToken,
-            mockAuthRepository.testSociety,
-            "03-02-2023",
-            "04-02-2023"
+            mockAuthRepository.testSocietyName,
+            "3/2/2023",
+            "4/2/2023"
         )
 
         assertEquals(financeTableData[0].amount, 1.0)
@@ -73,7 +73,7 @@ class FinanceServiceTest(
     @Test
     fun `should not get all finance table record from database with itsc not joining the society`() {
         val itsc: String = mockAuthRepository.invalidUserItsc
-        val societyName: String = mockAuthRepository.testSociety
+        val societyName: String = mockAuthRepository.testSocietyName
 
         every {
             enrolledSocietyRecordRepository.findByItscAndSocietyNameAndEnrolledStatus(
@@ -98,7 +98,7 @@ class FinanceServiceTest(
     @Test
     fun `should not get all finance table record from database with invalid jwt token`() {
         val exception: Exception = assertThrows {
-            financeService.getTableData("dummy", mockAuthRepository.testSociety, "03-02-2023", "04-02-2023")
+            financeService.getTableData("dummy", mockAuthRepository.testSocietyName, "03-02-2023", "04-02-2023")
         }
 
         assertEquals(MalformedJwtException::class, exception::class)
@@ -109,16 +109,16 @@ class FinanceServiceTest(
         every {
             enrolledSocietyRecordRepository.findByItscAndSocietyNameAndEnrolledStatus(
                 mockAuthRepository.validUserItsc,
-                mockAuthRepository.testSociety,
+                mockAuthRepository.testSocietyName,
                 EnrolledStatus.SUCCESS
             )
         } returns Optional.of(EnrolledSocietyRecordEntity())
 
         every {
             financeEntityRepository.findFinancePieChartData(
-                mockAuthRepository.testSociety,
-                dateUtil.convertStringToLocalDateTime("05-02-2023"),
-                dateUtil.convertStringToLocalDateTime("06-02-2023")
+                mockAuthRepository.testSocietyName,
+                dateUtil.convertStringToLocalDateTime("5/2/2023"),
+                dateUtil.convertStringToLocalDateTime("6/2/2023")
             )
         } returns listOf(
             FinanceChartDto("Souvenir", 5740.0),
@@ -128,8 +128,8 @@ class FinanceServiceTest(
         val financePieChartData = financeService.getPieChartData(
             mockAuthRepository.validUserCookieToken,
             "test society",
-            "05-02-2023",
-            "06-02-2023"
+            "5/2/2023",
+            "6/2/2023"
         )
 
         assertEquals(financePieChartData[0].name, "Souvenir")
@@ -143,7 +143,7 @@ class FinanceServiceTest(
     @Test
     fun `should not get all finance pie chart record from database with itsc not joining the society`() {
         val itsc: String = mockAuthRepository.invalidUserItsc
-        val societyName: String = mockAuthRepository.testSociety
+        val societyName: String = mockAuthRepository.testSocietyName
 
         every {
             enrolledSocietyRecordRepository.findByItscAndSocietyNameAndEnrolledStatus(
@@ -168,7 +168,7 @@ class FinanceServiceTest(
     @Test
     fun `should not get all finance pie chart record from database with invalid jwt token`() {
         val exception: Exception = assertThrows {
-            financeService.getPieChartData("dummy", mockAuthRepository.testSociety, "03-02-2023", "04-02-2023")
+            financeService.getPieChartData("dummy", mockAuthRepository.testSocietyName, "03-02-2023", "04-02-2023")
         }
 
         assertEquals(MalformedJwtException::class, exception::class)
@@ -179,16 +179,16 @@ class FinanceServiceTest(
         every {
             enrolledSocietyRecordRepository.findByItscAndSocietyNameAndEnrolledStatus(
                 mockAuthRepository.validUserItsc,
-                mockAuthRepository.testSociety,
+                mockAuthRepository.testSocietyName,
                 EnrolledStatus.SUCCESS
             )
         } returns Optional.of(EnrolledSocietyRecordEntity())
 
         every {
             financeEntityRepository.findFinanceBarChartData(
-                mockAuthRepository.testSociety,
-                dateUtil.convertStringToLocalDateTime("05-02-2023"),
-                dateUtil.convertStringToLocalDateTime("06-02-2023")
+                mockAuthRepository.testSocietyName,
+                dateUtil.convertStringToLocalDateTime("5/2/2023"),
+                dateUtil.convertStringToLocalDateTime("6/2/2023")
             )
         } returns listOf(
             FinanceChartDto("Jan-2023", 7187.0),
@@ -198,8 +198,8 @@ class FinanceServiceTest(
         val financePieChartData = financeService.getBarChartData(
             mockAuthRepository.validUserCookieToken,
             "test society",
-            "05-02-2023",
-            "06-02-2023"
+            "5/2/2023",
+            "6/2/2023"
         )
 
         assertEquals(financePieChartData[0].name, "Jan-2023")
@@ -213,7 +213,7 @@ class FinanceServiceTest(
     @Test
     fun `should not get all finance bar chart record from database with itsc not joining the society`() {
         val itsc: String = mockAuthRepository.invalidUserItsc
-        val societyName: String = mockAuthRepository.testSociety
+        val societyName: String = mockAuthRepository.testSocietyName
 
         every {
             enrolledSocietyRecordRepository.findByItscAndSocietyNameAndEnrolledStatus(
@@ -227,8 +227,8 @@ class FinanceServiceTest(
             financeService.getBarChartData(
                 mockAuthRepository.invalidUserCookieToken,
                 societyName,
-                "03-02-2023",
-                "04-02-2023"
+                "3/2/2023",
+                "4/2/2023"
             )
         }
 
@@ -238,7 +238,7 @@ class FinanceServiceTest(
     @Test
     fun `should not get all finance bar chart record from database with invalid jwt token`() {
         val exception: Exception = assertThrows {
-            financeService.getBarChartData("dummy", mockAuthRepository.testSociety, "03-02-2023", "04-02-2023")
+            financeService.getBarChartData("dummy", mockAuthRepository.testSocietyName, "3/2/2023", "4/2/2023")
         }
 
         assertEquals(MalformedJwtException::class, exception::class)
