@@ -457,4 +457,55 @@ class FinanceControllerTest @Autowired constructor(
             }
         }
     }
+
+    @Test
+    fun `should return 401 error when user no belong to that society and try to create finance record`() {
+        val societyName: String = mockAuthRepository.testSocietyName
+        val itsc: String = mockAuthRepository.invalidUserItsc
+        every {
+            financeService.createFinancialRecords()
+        } throws AccessDeniedException("student with itsc: ${itsc} do not belong to this society: ${societyName}")
+
+        mockMvc.post("/finance") {
+            headers {
+                contentType = MediaType.APPLICATION_JSON
+                cookie(Cookie("token", mockAuthRepository.invalidUserCookieToken))
+            }
+            content =
+                "{\"societyName\":\"test society\",\"financeRecords\":[{\"amount\":123,\"description\":\"aaa\",\"date\":\"2\\/7\\/2023\"},{\"amount\":345,\"description\":\"bbb\",\"date\":\"2\\/8\\/2023\"}]}"
+        }.andDo { print() }.andExpect {
+            status { isUnauthorized() }
+            jsonPath("$.status") {
+                value(401)
+            }
+            jsonPath("$.message") {
+                value("Unauthorized Access: student with itsc: ${itsc} do not belong to this society: ${societyName}")
+            }
+        }
+    }
+
+    @Test
+    fun `should return 401 error when invalid cookie token try to create finance record`() {
+        val societyName: String = mockAuthRepository.testSocietyName
+        every {
+            financeService.createFinancialRecords()
+        } throws MalformedJwtException("Invalid JWT token")
+
+        mockMvc.post("/finance") {
+            headers {
+                contentType = MediaType.APPLICATION_JSON
+                cookie(Cookie("token", "dummy"))
+            }
+            content =
+                "{\"societyName\":\"test society\",\"financeRecords\":[{\"amount\":123,\"description\":\"aaa\",\"date\":\"2\\/7\\/2023\"},{\"amount\":345,\"description\":\"bbb\",\"date\":\"2\\/8\\/2023\"}]}"
+        }.andDo { print() }.andExpect {
+            status { isUnauthorized() }
+            jsonPath("$.status") {
+                value(401)
+            }
+            jsonPath("$.message") {
+                value("Invalid JWT token")
+            }
+        }
+    }
 }
