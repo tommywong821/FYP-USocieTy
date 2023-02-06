@@ -73,7 +73,7 @@ class FinanceController(
     fun createFinancialRecords(
         @CookieValue("token") jwtToken: String,
         @RequestBody createFinanceDto: CreateFinanceDto
-    ): List<FinanceEntity> {
+    ): List<FinanceTableDto> {
         return financeService.createFinancialRecords(jwtToken, createFinanceDto)
     }
 }

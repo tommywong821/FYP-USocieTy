@@ -5,5 +5,6 @@ data class FinanceTableDto(
     val date: String? = "",
     val amount: Number? = 0.0,
     val description: String? = "",
+    val category: String? = "",
     val editBy: String? = ""
 )

@@ -42,6 +42,7 @@ class FinanceService(
                 financeEntity.date?.let { dateUtil.convertLocalDateTimeToString(it) },
                 financeEntity.amount,
                 financeEntity.description,
+                financeEntity.category,
                 financeEntity.studentEntity?.nickname
             )
         }
@@ -77,7 +78,7 @@ class FinanceService(
         )
     }
 
-    fun createFinancialRecords(jwtToken: String, createFinanceDto: CreateFinanceDto): List<FinanceEntity> {
+    fun createFinancialRecords(jwtToken: String, createFinanceDto: CreateFinanceDto): List<FinanceTableDto> {
         val societyName: String = createFinanceDto.societyName
 
         if (StringUtils.isBlank(createFinanceDto.societyName)) {
@@ -115,7 +116,15 @@ class FinanceService(
             financeEntityList.add(financeEntity)
         }
 
-        return financeEntityRepository.saveAll(financeEntityList)
+        return financeEntityRepository.saveAll(financeEntityList).map { financeEntity ->
+            FinanceTableDto(
+                financeEntity.uuid.toString(),
+                financeEntity.date?.let { dateUtil.convertLocalDateTimeToString(it) },
+                financeEntity.amount,
+                financeEntity.description,
+                financeEntity.studentEntity?.nickname
+            )
+        }
     }
 
 }

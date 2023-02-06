@@ -113,6 +113,9 @@ class FinanceControllerTest @Autowired constructor(
             jsonPath("$[*].description") {
                 value(tableData.map { financeTableDto -> financeTableDto.description })
             }
+            jsonPath("$[*].category") {
+                value(tableData.map { financeTableDto -> financeTableDto.category })
+            }
             jsonPath("$[*].editBy") {
                 value(tableData.map { financeTableDto -> financeTableDto.editBy })
             }
@@ -440,7 +443,16 @@ class FinanceControllerTest @Autowired constructor(
                 mockAuthRepository.validUserCookieToken,
                 createFinanceDto
             )
-        } returns financeEntityList
+        } returns financeEntityList.map { financeEntity ->
+            FinanceTableDto(
+                financeEntity.uuid.toString(),
+                financeEntity.date?.let { dateUtil.convertLocalDateTimeToString(it) },
+                financeEntity.amount,
+                financeEntity.description,
+                financeEntity.category,
+                financeEntity.studentEntity?.nickname
+            )
+        }
 
         mockMvc.post("/finance") {
             headers {
@@ -465,7 +477,13 @@ class FinanceControllerTest @Autowired constructor(
                 value(financeEntityList.map { financeEntity -> financeEntity.description })
             }
             jsonPath("$[*].date") {
-                value(financeEntityList.map { financeEntity -> financeEntity.date.toString() })
+                value(financeEntityList.map { financeEntity ->
+                    financeEntity.date?.let {
+                        dateUtil.convertLocalDateTimeToString(
+                            it
+                        )
+                    }
+                })
             }
             jsonPath("$[*].category") {
                 value(financeEntityList.map { financeEntity -> financeEntity.category })
