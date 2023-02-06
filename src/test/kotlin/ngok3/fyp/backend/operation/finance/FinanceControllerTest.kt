@@ -7,6 +7,8 @@ import io.mockk.mockkStatic
 import ngok3.fyp.backend.controller.authentication.model.MockAuthRepository
 import ngok3.fyp.backend.operation.finance.model.FinanceChartDto
 import ngok3.fyp.backend.operation.finance.model.FinanceTableDto
+import ngok3.fyp.backend.operation.society.SocietyEntity
+import ngok3.fyp.backend.operation.student.StudentEntity
 import ngok3.fyp.backend.util.DateUtil
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
@@ -17,6 +19,7 @@ import org.springframework.http.MediaType
 import org.springframework.security.access.AccessDeniedException
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.get
+import org.springframework.test.web.servlet.post
 import org.springframework.util.LinkedMultiValueMap
 import java.time.Clock
 import java.time.Instant
@@ -71,7 +74,7 @@ class FinanceControllerTest @Autowired constructor(
         every {
             financeService.getTableData(
                 mockAuthRepository.validUserCookieToken,
-                mockAuthRepository.testSociety,
+                mockAuthRepository.testSocietyName,
                 "03-02-2023",
                 "04-02-2023"
             )
@@ -83,7 +86,7 @@ class FinanceControllerTest @Autowired constructor(
                 cookie(Cookie("token", mockAuthRepository.validUserCookieToken))
             }
             params = LinkedMultiValueMap<String, String>().apply {
-                add("societyName", mockAuthRepository.testSociety)
+                add("societyName", mockAuthRepository.testSocietyName)
                 add("fromDate", "03-02-2023")
                 add("toDate", "04-02-2023")
             }
@@ -116,7 +119,7 @@ class FinanceControllerTest @Autowired constructor(
 
     @Test
     fun `should return 401 error when user no belong to that society and try to get finance record to table format`() {
-        val societyName: String = mockAuthRepository.testSociety
+        val societyName: String = mockAuthRepository.testSocietyName
         val itsc: String = mockAuthRepository.invalidUserItsc
         every {
             financeService.getTableData(
@@ -133,7 +136,7 @@ class FinanceControllerTest @Autowired constructor(
                 cookie(Cookie("token", mockAuthRepository.invalidUserCookieToken))
             }
             params = LinkedMultiValueMap<String, String>().apply {
-                add("societyName", mockAuthRepository.testSociety)
+                add("societyName", mockAuthRepository.testSocietyName)
                 add("fromDate", "03-02-2023")
                 add("toDate", "04-02-2023")
             }
@@ -150,7 +153,7 @@ class FinanceControllerTest @Autowired constructor(
 
     @Test
     fun `should return 401 error when invalid cookie token to get finance table data`() {
-        val societyName: String = mockAuthRepository.testSociety
+        val societyName: String = mockAuthRepository.testSocietyName
         every {
             financeService.getTableData(
                 "dummy",
@@ -166,7 +169,7 @@ class FinanceControllerTest @Autowired constructor(
                 cookie(Cookie("token", "dummy"))
             }
             params = LinkedMultiValueMap<String, String>().apply {
-                add("societyName", mockAuthRepository.testSociety)
+                add("societyName", mockAuthRepository.testSocietyName)
                 add("fromDate", "03-02-2023")
                 add("toDate", "04-02-2023")
             }
@@ -191,7 +194,7 @@ class FinanceControllerTest @Autowired constructor(
         every {
             financeService.getPieChartData(
                 mockAuthRepository.validUserCookieToken,
-                mockAuthRepository.testSociety,
+                mockAuthRepository.testSocietyName,
                 "03-02-2023",
                 "04-02-2023"
             )
@@ -203,7 +206,7 @@ class FinanceControllerTest @Autowired constructor(
                 cookie(Cookie("token", mockAuthRepository.validUserCookieToken))
             }
             params = LinkedMultiValueMap<String, String>().apply {
-                add("societyName", mockAuthRepository.testSociety)
+                add("societyName", mockAuthRepository.testSocietyName)
                 add("fromDate", "03-02-2023")
                 add("toDate", "04-02-2023")
             }
@@ -227,7 +230,7 @@ class FinanceControllerTest @Autowired constructor(
 
     @Test
     fun `should return 401 error when user no belong to that society and try to get finance record to pie chart format`() {
-        val societyName: String = mockAuthRepository.testSociety
+        val societyName: String = mockAuthRepository.testSocietyName
         val itsc: String = mockAuthRepository.invalidUserItsc
         every {
             financeService.getPieChartData(
@@ -244,7 +247,7 @@ class FinanceControllerTest @Autowired constructor(
                 cookie(Cookie("token", mockAuthRepository.invalidUserCookieToken))
             }
             params = LinkedMultiValueMap<String, String>().apply {
-                add("societyName", mockAuthRepository.testSociety)
+                add("societyName", mockAuthRepository.testSocietyName)
                 add("fromDate", "03-02-2023")
                 add("toDate", "04-02-2023")
             }
@@ -261,7 +264,7 @@ class FinanceControllerTest @Autowired constructor(
 
     @Test
     fun `should return 401 error when invalid cookie token to get finance pie chart data`() {
-        val societyName: String = mockAuthRepository.testSociety
+        val societyName: String = mockAuthRepository.testSocietyName
         every {
             financeService.getPieChartData(
                 "dummy",
@@ -277,7 +280,7 @@ class FinanceControllerTest @Autowired constructor(
                 cookie(Cookie("token", "dummy"))
             }
             params = LinkedMultiValueMap<String, String>().apply {
-                add("societyName", mockAuthRepository.testSociety)
+                add("societyName", mockAuthRepository.testSocietyName)
                 add("fromDate", "03-02-2023")
                 add("toDate", "04-02-2023")
             }
@@ -302,7 +305,7 @@ class FinanceControllerTest @Autowired constructor(
         every {
             financeService.getBarChartData(
                 mockAuthRepository.validUserCookieToken,
-                mockAuthRepository.testSociety,
+                mockAuthRepository.testSocietyName,
                 "03-02-2023",
                 "04-02-2023"
             )
@@ -314,7 +317,7 @@ class FinanceControllerTest @Autowired constructor(
                 cookie(Cookie("token", mockAuthRepository.validUserCookieToken))
             }
             params = LinkedMultiValueMap<String, String>().apply {
-                add("societyName", mockAuthRepository.testSociety)
+                add("societyName", mockAuthRepository.testSocietyName)
                 add("fromDate", "03-02-2023")
                 add("toDate", "04-02-2023")
             }
@@ -338,7 +341,7 @@ class FinanceControllerTest @Autowired constructor(
 
     @Test
     fun `should return 401 error when user no belong to that society and try to get finance record to bar chart format`() {
-        val societyName: String = mockAuthRepository.testSociety
+        val societyName: String = mockAuthRepository.testSocietyName
         val itsc: String = mockAuthRepository.invalidUserItsc
         every {
             financeService.getBarChartData(
@@ -355,7 +358,7 @@ class FinanceControllerTest @Autowired constructor(
                 cookie(Cookie("token", mockAuthRepository.invalidUserCookieToken))
             }
             params = LinkedMultiValueMap<String, String>().apply {
-                add("societyName", mockAuthRepository.testSociety)
+                add("societyName", mockAuthRepository.testSocietyName)
                 add("fromDate", "03-02-2023")
                 add("toDate", "04-02-2023")
             }
@@ -372,7 +375,7 @@ class FinanceControllerTest @Autowired constructor(
 
     @Test
     fun `should return 401 error when invalid cookie token to get finance bar chart data`() {
-        val societyName: String = mockAuthRepository.testSociety
+        val societyName: String = mockAuthRepository.testSocietyName
         every {
             financeService.getBarChartData(
                 "dummy",
@@ -388,7 +391,7 @@ class FinanceControllerTest @Autowired constructor(
                 cookie(Cookie("token", "dummy"))
             }
             params = LinkedMultiValueMap<String, String>().apply {
-                add("societyName", mockAuthRepository.testSociety)
+                add("societyName", mockAuthRepository.testSocietyName)
                 add("fromDate", "03-02-2023")
                 add("toDate", "04-02-2023")
             }
@@ -399,6 +402,58 @@ class FinanceControllerTest @Autowired constructor(
             }
             jsonPath("$.message") {
                 value("Invalid JWT token")
+            }
+        }
+    }
+
+    @Test
+    fun `should create financial records`() {
+        val societyEntity: SocietyEntity = SocietyEntity(mockAuthRepository.testSocietyName)
+        val studentEntity: StudentEntity = StudentEntity(
+            mockAuthRepository.validUserItsc,
+            mockAuthRepository.validUserNickname,
+            mockAuthRepository.validUserMail
+        )
+
+        val financeEntityList: List<FinanceEntity> = listOf<FinanceEntity>(
+            FinanceEntity(1.0, "test description 1", LocalDateTime.now(), "test category 1"),
+            FinanceEntity(2.2, "test description 2", LocalDateTime.now().plusDays(1), "test category 2")
+        )
+
+        for (financeEntity in financeEntityList) {
+            financeEntity.societyEntity = societyEntity
+            financeEntity.studentEntity = studentEntity
+        }
+
+        every { financeService.createFinancialRecords() } returns financeEntityList
+
+        mockMvc.post("/finance") {
+            headers {
+                contentType = MediaType.APPLICATION_JSON
+                cookie(Cookie("token", mockAuthRepository.validUserCookieToken))
+            }
+            content =
+                "{\"societyName\":\"test society\",\"financeRecords\":[{\"amount\":123,\"description\":\"aaa\",\"date\":\"2\\/7\\/2023\"},{\"amount\":345,\"description\":\"bbb\",\"date\":\"2\\/8\\/2023\"}]}"
+        }.andDo { print() }.andExpect {
+            status { isOk() }
+            content { contentType(MediaType.APPLICATION_JSON) }
+            jsonPath("$") {
+                isArray()
+            }
+            jsonPath("$.size()") {
+                value(financeEntityList.size)
+            }
+            jsonPath("$[*].amount") {
+                value(financeEntityList.map { financeEntity -> financeEntity.amount })
+            }
+            jsonPath("$[*].description") {
+                value(financeEntityList.map { financeEntity -> financeEntity.description })
+            }
+            jsonPath("$[*].date") {
+                value(financeEntityList.map { financeEntity -> financeEntity.date.toString() })
+            }
+            jsonPath("$[*].category") {
+                value(financeEntityList.map { financeEntity -> financeEntity.category })
             }
         }
     }

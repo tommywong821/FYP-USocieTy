@@ -7,7 +7,7 @@ import java.time.format.DateTimeFormatter
 
 @Component
 class DateUtil {
-    val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
+    val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("M/d/yyyy")
     val currentLocalDateTime: LocalDateTime = LocalDateTime.now()
     fun convertLocalDateTimeToString(localDateTime: LocalDateTime): String {
         return localDateTime.format(formatter)
