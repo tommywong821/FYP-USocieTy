@@ -7,7 +7,13 @@ import ngok3.fyp.backend.controller.authentication.model.MockAuthRepository
 import ngok3.fyp.backend.operation.enrolled_event_record.EnrolledStatus
 import ngok3.fyp.backend.operation.enrolled_society_record.EnrolledSocietyRecordEntity
 import ngok3.fyp.backend.operation.enrolled_society_record.EnrolledSocietyRecordRepository
+import ngok3.fyp.backend.operation.finance.model.CreateFinanceDto
 import ngok3.fyp.backend.operation.finance.model.FinanceChartDto
+import ngok3.fyp.backend.operation.finance.model.FinanceRecordDto
+import ngok3.fyp.backend.operation.society.SocietyEntity
+import ngok3.fyp.backend.operation.society.SocietyRepository
+import ngok3.fyp.backend.operation.student.StudentEntity
+import ngok3.fyp.backend.operation.student.StudentRepository
 import ngok3.fyp.backend.util.DateUtil
 import ngok3.fyp.backend.util.JWTUtil
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -23,10 +29,12 @@ class FinanceServiceTest(
     @Autowired private val dateUtil: DateUtil,
 ) {
     private val financeEntityRepository: FinanceEntityRepository = mockk(relaxed = true)
+    private val studentRepository: StudentRepository = mockk(relaxed = true)
+    private val societyRepository: SocietyRepository = mockk(relaxed = true)
     private val enrolledSocietyRecordRepository: EnrolledSocietyRecordRepository = mockk(relaxed = true)
     private val jwtUtil: JWTUtil = JWTUtil(enrolledSocietyRecordRepository = enrolledSocietyRecordRepository)
     private val financeService: FinanceService =
-        FinanceService(financeEntityRepository, dateUtil, jwtUtil)
+        FinanceService(financeEntityRepository, studentRepository, societyRepository, dateUtil, jwtUtil)
 
     private val mockAuthRepository: MockAuthRepository = MockAuthRepository()
 
@@ -242,5 +250,43 @@ class FinanceServiceTest(
         }
 
         assertEquals(MalformedJwtException::class, exception::class)
+    }
+
+    @Test
+    fun `should create finance record with society name`() {
+        val studentEntity: StudentEntity = StudentEntity(
+            mockAuthRepository.validUserItsc,
+            mockAuthRepository.validUserNickname,
+            mockAuthRepository.validUserMail
+        )
+        every { studentRepository.findByItsc(mockAuthRepository.validUserItsc) } returns Optional.of(studentEntity)
+
+        val societyEntity: SocietyEntity = SocietyEntity(mockAuthRepository.testSocietyName)
+        every { societyRepository.findByName(mockAuthRepository.testSocietyName) } returns Optional.of(societyEntity)
+
+        val financeEntityList: List<FinanceEntity> = listOf<FinanceEntity>(
+            FinanceEntity(12.3, "aaa", dateUtil.convertStringToLocalDateTime("2/7/2023"), "test category 1"),
+            FinanceEntity(34.5, "bbb", dateUtil.convertStringToLocalDateTime("2/5/2023"), "test category 2")
+        )
+
+        val financeChartDto: CreateFinanceDto = CreateFinanceDto(
+            "test society",
+            listOf(
+                FinanceRecordDto(12.3, "test category 1", "aaa", "2/7/2023"),
+                FinanceRecordDto(34.5, "test category 2", "bbb", "2/5/2023"),
+            )
+        )
+
+        for (financeEntity in financeEntityList) {
+            financeEntity.societyEntity = societyEntity
+            financeEntity.studentEntity = studentEntity
+        }
+
+        every { financeEntityRepository.saveAll(any<List<FinanceEntity>>()) } returns financeEntityList
+
+        val financeCreateRecord =
+            financeService.createFinancialRecords(mockAuthRepository.validUserCookieToken, financeChartDto)
+
+        assertEquals(financeEntityList.size, financeCreateRecord.size)
     }
 }

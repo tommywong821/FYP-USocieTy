@@ -74,6 +74,6 @@ class FinanceController(
         @CookieValue("token") jwtToken: String,
         @RequestBody createFinanceDto: CreateFinanceDto
     ): List<FinanceEntity> {
-        return financeService.createFinancialRecords()
+        return financeService.createFinancialRecords(jwtToken, createFinanceDto)
     }
 }

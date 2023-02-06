@@ -58,4 +58,9 @@ class JWTUtil(
             throw AccessDeniedException("student with itsc: ${itsc} do not belong to this society: ${societyName}")
         }
     }
+
+    fun getClaimFromJWTToken(jwtToken: String, key: String): String {
+        val claims: Claims = verifyToken(jwtToken)
+        return claims[key].toString()
+    }
 }
