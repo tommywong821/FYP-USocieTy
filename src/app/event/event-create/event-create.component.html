@@ -43,30 +43,59 @@
               />
             </nz-form-control>
           </div>
-          <div class="col-span-6 sm:col-span-4">
-            <label
-              for="category"
-              class="mb-2 block text-sm font-medium text-gray-700"
-              >Category</label
-            >
-            <nz-form-control
-              nzHasFeedback
-              [nzSpan]="4"
-              nzErrorTip="Input is required"
-            >
-              <nz-select>
-                <nz-option
-                  *ngFor="let category of EventCategory | keyvalue"
-                  [nzLabel]="category.value"
-                  [nzValue]="category.value"
-                ></nz-option>
-              </nz-select>
-            </nz-form-control>
+          <div class="col-span-6 flex flex-row gap-4 sm:col-span-4">
+            <div class="flex-1">
+              <label
+                for="category"
+                class="mb-2 block text-sm font-medium text-gray-700"
+                >Category</label
+              >
+              <nz-form-control
+                nzHasFeedback
+                [nzSpan]="24"
+                nzErrorTip="Input is required"
+              >
+                <nz-select
+                  required
+                  [formControlName]="CreateEventFormFields.Category"
+                >
+                  <nz-option
+                    *ngFor="let category of EventCategory | keyvalue"
+                    [nzLabel]="category.value"
+                    [nzValue]="category.value"
+                  ></nz-option>
+                </nz-select>
+              </nz-form-control>
+            </div>
+            <div class="flex-1">
+              <label
+                for="society"
+                class="mb-2 block text-sm font-medium text-gray-700"
+                >Society</label
+              >
+              <nz-form-control
+                nzHasFeedback
+                [nzSpan]="24"
+                nzErrorTip="Input is required"
+              >
+                <nz-select
+                  required
+                  [formControlName]="CreateEventFormFields.Society"
+                >
+                  <nz-option
+                    *ngFor="let society of enrolledSocieties"
+                    [nzLabel]="society"
+                    [nzValue]="society"
+                  ></nz-option>
+                </nz-select>
+              </nz-form-control>
+            </div>
+            <div class="basis-9/12"></div>
           </div>
           <div class="col-span-6 flex flex-row gap-x-4 sm:col-span-4">
             <div>
               <label
-                for="max-participations"
+                for="max-participation"
                 class="mb-2 block text-sm font-medium text-gray-700"
                 >Max Participants</label
               >
@@ -78,7 +107,7 @@
                   nz-input
                   required
                   type="number"
-                  [formControlName]="CreateEventFormFields.MaxParticipations"
+                  [formControlName]="CreateEventFormFields.MaxParticipation"
                   class="w-28"
                 />
               </nz-form-control>
@@ -157,10 +186,10 @@
             <label class="mb-2 block text-sm font-medium text-gray-700">Cover Picture</label>
             <div>
               <nz-upload
+                [nzAction]="''"
                 nzType="drag"
                 [nzLimit]="1"
-                nzAction="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-                (nzChange)="uploadPicture($event)"
+                (nzChange)="saveFileBuffer($event)"
               >
                 <p class="ant-upload-drag-icon">
                   <span

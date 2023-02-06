@@ -1,7 +1,7 @@
 export interface Event {
   name: string;
   poster: string;
-  maxParticipations: number;
+  maxParticipation: number;
   applyDeadline: Date;
   location: string;
   startDate: Date;
@@ -14,7 +14,7 @@ export interface Event {
 export interface EventFormData {
   name: string;
   poster: string;
-  maxParticipations: number;
+  maxParticipation: number;
   applyDeadline: Date;
   location: string;
   date: Date[];

@@ -12,6 +12,8 @@ import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
 import {SignInComponent} from './auth/sign-in/sign-in.component';
 import {EventCreateComponent} from './event/event-create/event-create.component';
+import {EventUpdateComponent} from './event/event-update/event-update.component';
+import {EventComponent} from './event/event.component';
 import {FinanceBarChartComponent} from './finance/finance-bar-chart/finance-bar-chart.component';
 import {FinanceCreateComponent} from './finance/finance-create/finance-create.component';
 import {FinancePieChartComponent} from './finance/finance-pie-chart/finance-pie-chart.component';
@@ -30,6 +32,8 @@ registerLocaleData(en);
     HomeComponent,
     SignInComponent,
     EventCreateComponent,
+    EventUpdateComponent,
+    EventComponent,
     FinanceComponent,
     FinanceBarChartComponent,
     FinancePieChartComponent,
