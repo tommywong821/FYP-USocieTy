@@ -14,13 +14,8 @@ class StudentService(
         val studentEntity = studentEntityOpt.orElseGet {
             studentRepository.save(StudentEntity(itsc, "", "${itsc}@connect.ust.hk"))
         }
-        val enrolledSocietyList: StringBuilder = StringBuilder()
-        var prefix = ""
-        for (enrolledSociety in studentEntity.enrolledSocietyRecordEntity) {
-            enrolledSocietyList.append(prefix)
-            prefix = ","
-            enrolledSocietyList.append(enrolledSociety.societyEntity?.name)
-        }
-        return StudentDto(studentEntity, enrolledSocietyList.toString())
+        val enrolledSocietyList: List<String?> =
+            studentEntity.enrolledSocietyRecordEntity.map { it.societyEntity?.name }
+        return StudentDto(studentEntity, enrolledSocietyList)
     }
 }

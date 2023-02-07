@@ -2,6 +2,7 @@ package ngok3.fyp.backend.authentication.jwt
 
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.ExpiredJwtException
+import ngok3.fyp.backend.util.JWTUtil
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpMethod
 import org.springframework.http.HttpStatus

@@ -10,16 +10,16 @@ import javax.persistence.Table
 @Entity
 @Table(name = "event")
 open class EventEntity(
-    open var name: String? = null,
-    open var poster: String? = null,
-    open var maxParticipation: Int? = null,
-    open var applyDeadline: LocalDateTime? = null,
-    open var location: String? = null,
-    open var startDate: LocalDateTime? = null,
-    open var endDate: LocalDateTime? = null,
-    open var category: String? = null,
-    open var description: String? = null,
-    open var fee: Float? = null,
+    open var name: String? = "",
+    open var poster: String? = "",
+    open var maxParticipation: Int? = -1,
+    open var applyDeadline: LocalDateTime? = LocalDateTime.MIN,
+    open var location: String? = "",
+    open var startDate: LocalDateTime? = LocalDateTime.MIN,
+    open var endDate: LocalDateTime? = LocalDateTime.MIN,
+    open var category: String? = "",
+    open var description: String? = "",
+    open var fee: Double? = -1.0,
 
     ) : BaseEntity() {
     @OneToMany(mappedBy = "eventEntity")
