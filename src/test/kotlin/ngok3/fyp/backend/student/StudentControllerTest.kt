@@ -38,7 +38,7 @@ class StudentControllerTest @Autowired constructor(
         )
 
         mockMvc.get("/student?itsc=${mockStudentRepository.testItsc}") {
-            cookie(Cookie("token", mockAuthRepository.cookieToken))
+            cookie(Cookie("token", mockAuthRepository.validUserCookieToken))
         }
             .andDo { print() }
             .andExpect {

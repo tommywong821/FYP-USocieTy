@@ -42,7 +42,7 @@ class EventControllerTest @Autowired constructor(
         val allEventList = mockEventRepository.allTestEventList
 
         mockMvc.get("/event?pageNum=${mockEventRepository.testPageNumWithoutSid}&pageSize=${mockEventRepository.testPageSizeWithoutSid}") {
-            cookie(Cookie("token", mockAuthRepository.cookieToken))
+            cookie(Cookie("token", mockAuthRepository.validUserCookieToken))
         }
             .andDo { print() }
             .andExpect {
@@ -92,7 +92,7 @@ class EventControllerTest @Autowired constructor(
         )
 
         mockMvc.get("/event?itsc=${mockStudentRepository.testItsc}&pageNum=${mockEventRepository.testPageNumWithSid}&pageSize=${mockEventRepository.testPageSizeWithSid}") {
-            cookie(Cookie("token", mockAuthRepository.cookieToken))
+            cookie(Cookie("token", mockAuthRepository.validUserCookieToken))
         }
             .andDo { print() }
             .andExpect {

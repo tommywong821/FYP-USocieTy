@@ -2,13 +2,13 @@ package ngok3.fyp.backend.authentication
 
 import com.fasterxml.jackson.dataformat.xml.XmlMapper
 import com.fasterxml.jackson.module.kotlin.readValue
-import ngok3.fyp.backend.authentication.jwt.JWTUtil
 import ngok3.fyp.backend.authentication.model.*
 import ngok3.fyp.backend.authentication.role.Role
 import ngok3.fyp.backend.authentication.role.RoleEntityRepository
 import ngok3.fyp.backend.operation.student.StudentDto
 import ngok3.fyp.backend.operation.student.StudentEntity
 import ngok3.fyp.backend.operation.student.StudentRepository
+import ngok3.fyp.backend.util.JWTUtil
 import ngok3.fyp.backend.util.exception.model.CASException
 import ngok3.fyp.backend.util.webclient.OkHttpClientFactory
 import okhttp3.*
@@ -74,23 +74,11 @@ class AuthService(
         frontendResponse.setHeader(HttpHeaders.SET_COOKIE, cookie.toString())
 
         //create society list string
-        val enrolledSocietyList: StringBuilder = StringBuilder()
-        var prefix = ""
-        for (enrolledSociety in studentEntity.enrolledSocietyRecordEntity) {
-            enrolledSocietyList.append(prefix)
-            prefix = ","
-            enrolledSocietyList.append(enrolledSociety.societyEntity?.name)
-        }
-
+        val enrolledSocietyList: List<String?> =
+            studentEntity.enrolledSocietyRecordEntity.map { it.societyEntity?.name }
         // create role list string
-        prefix = ""
-        val roleList: StringBuilder = StringBuilder()
-        for (role in studentEntity.roles) {
-            roleList.append(prefix)
-            prefix = ","
-            roleList.append(role.role)
-        }
-        return StudentDto(studentEntity, enrolledSocietyList.toString(), roleList.toString())
+        val roleList: List<String?> = studentEntity.roles.map { it.role.toString() }
+        return StudentDto(studentEntity, enrolledSocietyList, roleList)
     }
 
     fun createNewStudentEntityInDB(authenticationSuccess: AuthenticationSuccess): StudentEntity {
@@ -124,29 +112,18 @@ class AuthService(
                 ).sameSite("None").build()
         frontendResponse.setHeader(HttpHeaders.SET_COOKIE, cookie.toString())
 
-//        create society list string
-        val enrolledSocietyList: StringBuilder = StringBuilder()
-        var prefix = ""
-        for (enrolledSociety in studentEntity.enrolledSocietyRecordEntity) {
-            enrolledSocietyList.append(prefix)
-            prefix = ","
-            enrolledSocietyList.append(enrolledSociety.societyEntity?.name)
-        }
 
-        //        create role list string
-        prefix = ""
-        val roleList: StringBuilder = StringBuilder()
-        for (role in studentEntity.roles) {
-            roleList.append(prefix)
-            prefix = ","
-            roleList.append(role.role)
-        }
+        //create society list string
+        val enrolledSocietyList: List<String?> =
+            studentEntity.enrolledSocietyRecordEntity.map { it.societyEntity?.name }
+        // create role list string
+        val roleList: List<String?> = studentEntity.roles.map { it.role.toString() }
 
         val mockResponse = CasServiceResponse()
         mockResponse.authenticationFailure = AuthenticationFailure(null, null)
         mockResponse.authenticationSuccess =
             AuthenticationSuccess("tkwongax", CasAttributes("tkwongax@connect.ust.hk", "WONG, Tsz Kit"))
-        return StudentDto(studentEntity, enrolledSocietyList.toString(), roleList.toString())
+        return StudentDto(studentEntity, enrolledSocietyList, roleList)
     }
 
     fun validateMobileLogin(aadProfile: AADProfile): UserToken {

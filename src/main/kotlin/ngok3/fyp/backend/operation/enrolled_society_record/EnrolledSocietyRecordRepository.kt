@@ -10,9 +10,9 @@ interface EnrolledSocietyRecordRepository : CrudRepository<EnrolledSocietyRecord
         """select e from EnrolledSocietyRecordEntity e
 where e.studentEntity.itsc = ?1 and e.societyEntity.name = ?2 and e.status = ?3"""
     )
-    fun findByStudentEntity_ItscAndSocietyEntity_NameAndStatus(
+    fun findByItscAndSocietyNameAndEnrolledStatus(
         itsc: String,
-        name: String,
+        societyName: String,
         status: EnrolledStatus
     ): Optional<EnrolledSocietyRecordEntity>
 
