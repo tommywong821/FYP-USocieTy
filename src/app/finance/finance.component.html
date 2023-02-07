@@ -2,45 +2,49 @@
   <div class="m-5">
     <div class="sm:overflow-hidden sm:rounded-md">
       <div class="space-y-6 bg-white px-4 py-5 sm:p-6">
-        <h1 class="text-xl font-bold">Financial Record</h1>
-        <div class="col-span-6 flex gap-x-4 sm:col-span-4">
-          <form
-            nz-form
-            [formGroup]="form"
-            (ngSubmit)="submitForm()"
-          >
-            <div class="flex flex-row">
-              <nz-form-label
-                class="mb-2 pt-1 text-sm font-medium text-gray-700"
-                for="societyName"
-                >Society</nz-form-label
+        <div class="flex justify-center">
+          <div class="flex-col">
+            <h1 class="text-center text-xl font-bold">Financial Record</h1>
+            <div class="col-span-6 flex gap-x-4 sm:col-span-4">
+              <form
+                nz-form
+                [formGroup]="form"
+                (ngSubmit)="submitForm()"
               >
-              <nz-form-control
-                nzHasFeedback
-                class="w-32 pt-1"
-              >
-                <nz-select formControlName="societyName">
-                  <nz-option
-                    *ngFor="let society of enrolledSocieties"
-                    [nzLabel]="society"
-                    [nzValue]="society"
-                  ></nz-option>
-                </nz-select>
-              </nz-form-control>
-              <nz-range-picker
-                formControlName="dateRange"
-                [nzShowTime]="false"
-                [(ngModel)]="defaultDate"
-                (ngModelChange)="onDateChange($event)"
-              ></nz-range-picker>
-              <button
-                nz-button
-                nzType="primary"
-              >
-                Check
-              </button>
+                <div class="flex flex-row">
+                  <nz-form-label
+                    class="mb-2 pt-1 text-sm font-medium text-gray-700"
+                    for="societyName"
+                    >Society</nz-form-label
+                  >
+                  <nz-form-control
+                    nzHasFeedback
+                    class="w-32 pt-1"
+                  >
+                    <nz-select formControlName="societyName">
+                      <nz-option
+                        *ngFor="let society of enrolledSocieties"
+                        [nzLabel]="society"
+                        [nzValue]="society"
+                      ></nz-option>
+                    </nz-select>
+                  </nz-form-control>
+                  <nz-range-picker
+                    formControlName="dateRange"
+                    [nzShowTime]="false"
+                    [(ngModel)]="defaultDate"
+                    (ngModelChange)="onDateChange($event)"
+                  ></nz-range-picker>
+                  <button
+                    nz-button
+                    nzType="primary"
+                  >
+                    Check
+                  </button>
+                </div>
+              </form>
             </div>
-          </form>
+          </div>
         </div>
 
         <div class="col-span-6 flex flex-row flex-wrap">
