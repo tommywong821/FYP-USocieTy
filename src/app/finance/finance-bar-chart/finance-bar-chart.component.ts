@@ -9,11 +9,21 @@ import {FinanceChartRecord} from '../IFinanceChartRecord';
 export class FinanceBarChartComponent implements OnInit {
   @Input() barChartData: FinanceChartRecord[] = [];
 
-  constructor() {}
+  view: [number, number];
+
+  constructor() {
+    this.view = [innerWidth / 2.5, 400];
+  }
 
   ngOnInit(): void {}
 
   onSelect(data: EventEmitter<any>): void {
     console.log('Item clicked', JSON.parse(JSON.stringify(data)));
+  }
+
+  // view is the variable used to change the chart size (Ex: view = [width, height])
+
+  onResize(event: any) {
+    this.view = [event.target.innerWidth / 2.5, 400];
   }
 }

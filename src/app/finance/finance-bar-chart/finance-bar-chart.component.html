@@ -11,6 +11,8 @@
   [xAxisLabel]="'Month'"
   [yAxisLabel]="'HKD'"
   (select)="onSelect($event)"
+  (window:resize)="onResize($event)"
+  [view]="view"
 >
   <!-- pop up animation dialog text -->
   <ng-template

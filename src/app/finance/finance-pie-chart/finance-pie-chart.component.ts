@@ -1,4 +1,4 @@
-import {Component, ElementRef, EventEmitter, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit} from '@angular/core';
 import {FinanceChartRecord} from '../IFinanceChartRecord';
 
 @Component({
@@ -8,7 +8,11 @@ import {FinanceChartRecord} from '../IFinanceChartRecord';
 })
 export class FinancePieChartComponent implements OnInit {
   @Input() pieChartData: FinanceChartRecord[] = [];
-  constructor(public elementRef: ElementRef) {}
+  view: [number, number];
+
+  constructor() {
+    this.view = [innerWidth / 2.5, 400];
+  }
 
   ngOnInit(): void {}
 
@@ -26,5 +30,9 @@ export class FinancePieChartComponent implements OnInit {
 
   valueFormatting(value: number) {
     return `$${value.toLocaleString('en-US')}`;
+  }
+
+  onResize(event: any) {
+    this.view = [event.target.innerWidth / 2.5, 400];
   }
 }

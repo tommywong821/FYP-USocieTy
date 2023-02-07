@@ -8,6 +8,8 @@
   (select)="onSelect($event)"
   (activate)="onActivate($event)"
   (deactivate)="onDeactivate($event)"
+  (window:resize)="onResize($event)"
+  [view]="view"
 >
   <ng-template
     #tooltipTemplate

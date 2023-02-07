@@ -1,4 +1,7 @@
 import {Component, OnInit} from '@angular/core';
+import {filter} from 'rxjs';
+import {ApiService} from '../services/api.service';
+import {AuthService} from '../services/auth.service';
 import {FinanceChartRecord} from './IFinanceChartRecord';
 import {FinanceTableRecord} from './IFinanceTableRecord';
 
@@ -9,19 +12,25 @@ import {FinanceTableRecord} from './IFinanceTableRecord';
 })
 export class FinanceComponent implements OnInit {
   currentDate: Date;
+  // defaultDate[0]: fromDate, defaultDate[1]: toDate
   defaultDate: Date[] = [];
   barChartData: FinanceChartRecord[] = [];
   pieChartData: FinanceChartRecord[] = [];
   tableData: FinanceTableRecord[] = [];
 
-  constructor() {
+  enrolledSocieties: string[] = [];
+
+  constructor(private authService: AuthService, private apiService: ApiService) {
     this.currentDate = new Date();
   }
 
   ngOnInit(): void {
     // dummy
     this.defaultDate = [this.getFirstDayOfYear(this.currentDate), this.getLastDayOfYear(this.currentDate)];
-    //TODO change to call api with default date
+
+    this.authService.user$
+      .pipe(filter(user => !!user))
+      .subscribe(user => (this.enrolledSocieties = [...user!.enrolledSocieties]));
   }
 
   onDateChange(result: Date[]): void {
@@ -114,4 +123,6 @@ export class FinanceComponent implements OnInit {
   getLastDayOfYear(date: Date): Date {
     return new Date(date.getFullYear(), 11, 31);
   }
+
+  fetchFinanceRecord() {}
 }
