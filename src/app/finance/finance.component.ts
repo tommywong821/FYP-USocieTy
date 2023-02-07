@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {filter} from 'rxjs';
+import {filter, zip} from 'rxjs';
 import {ApiService} from '../services/api.service';
 import {AuthService} from '../services/auth.service';
 import {FinanceChartRecord} from './model/IFinanceChartRecord';
@@ -22,9 +22,6 @@ export class FinanceComponent implements OnInit {
   enrolledSocieties: string[] = [];
 
   form!: FormGroup;
-  fromDate: String = '';
-  toDate: String = '';
-  societyName: String = '';
 
   constructor(private authService: AuthService, private apiService: ApiService, private fb: FormBuilder) {
     this.currentDate = new Date();
@@ -35,95 +32,12 @@ export class FinanceComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // dummy
+    // initial data picker value
     this.defaultDate = [this.getFirstDayOfYear(this.currentDate), this.getLastDayOfYear(this.currentDate)];
 
     this.authService.user$
       .pipe(filter(user => !!user))
       .subscribe(user => (this.enrolledSocieties = [...user!.enrolledSocieties]));
-  }
-
-  onDateChange(result: Date[]): void {
-    console.log(result[0].toLocaleDateString());
-    //TODO change to call api with change date
-    this.barChartData = [
-      {
-        name: 'January-2023',
-        value: 7187,
-      },
-      {
-        name: 'February',
-        value: 8738,
-      },
-      {
-        name: 'March',
-        value: 408,
-      },
-      {
-        name: 'April',
-        value: 5490,
-      },
-      {
-        name: 'May',
-        value: 9057,
-      },
-      {
-        name: 'June',
-        value: 4117,
-      },
-      {
-        name: 'July',
-        value: 7331,
-      },
-      {
-        name: 'August',
-        value: 8421,
-      },
-      {
-        name: 'September',
-        value: 4450,
-      },
-      {
-        name: 'October',
-        value: 1852,
-      },
-      {
-        name: 'November',
-        value: 6738,
-      },
-      {
-        name: 'December',
-        value: 2062,
-      },
-    ];
-
-    this.pieChartData = [
-      {
-        name: 'Souvenir',
-        value: 5740,
-      },
-      {
-        name: 'Supplies',
-        value: 4736,
-      },
-      {
-        name: 'Daily Expenses',
-        value: 5301,
-      },
-      {
-        name: 'Maintenance ',
-        value: 7913,
-      },
-    ];
-
-    this.tableData = new Array(100).fill(0).map((_, index) => ({
-      id: index,
-      date: `Edward King ${index}`,
-      amount: 32,
-      description: `London, Park Lane no. ${index}`,
-      editBy: `edit by ${index}`,
-      disabled: index % 2 === 0,
-    }));
   }
 
   getFirstDayOfYear(date: Date): Date {
@@ -137,10 +51,11 @@ export class FinanceComponent implements OnInit {
   submitForm(): void {
     if (this.form.valid) {
       //change date format to mm/dd/2023
-      this.fromDate = this.form.value.dateRange[0].toLocaleDateString();
-      this.toDate = this.form.value.dateRange[1].toLocaleDateString();
-      this.societyName = this.form.value.societyName;
-      console.log(`fromDate: ${this.fromDate}, toDate: ${this.toDate}, societyName: ${this.societyName}`);
+      let societyName: string = this.form.value.societyName;
+      let fromDate: string = this.form.value.dateRange[0].toLocaleDateString();
+      let toDate: string = this.form.value.dateRange[1].toLocaleDateString();
+      console.log(`fromDate: ${fromDate}, toDate: ${toDate}, societyName: ${societyName}`);
+      this.fetchFinanceRecord(societyName, fromDate, toDate);
     } else {
       alert('You must fill all the fields');
       Object.values(this.form.controls).forEach(control => {
@@ -152,5 +67,15 @@ export class FinanceComponent implements OnInit {
     }
   }
 
-  fetchFinanceRecord() {}
+  fetchFinanceRecord(societyName: string, fromDate: string, toDate: string) {
+    zip(
+      this.apiService.getFinanceTableData(societyName, fromDate, toDate),
+      this.apiService.getFinancePieChartData(societyName, fromDate, toDate),
+      this.apiService.getFinanceBarChartData(societyName, fromDate, toDate)
+    ).subscribe(([tableData, pieChartData, barChartData]) => {
+      this.tableData = tableData;
+      this.pieChartData = pieChartData;
+      this.barChartData = barChartData;
+    });
+  }
 }

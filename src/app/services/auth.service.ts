@@ -31,7 +31,8 @@ export class AuthService {
 
   validateUser(queryParams: Params): Observable<User> {
     const request = {
-      endpoint: validateUserEndpoint,
+      // endpoint: validateUserEndpoint,
+      endpoint: '/auth/mockServiceValidate',
       queryParam: null,
       body: {
         ticket: queryParams['ticket'],

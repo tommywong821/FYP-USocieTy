@@ -1,8 +1,10 @@
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import {Injectable} from '@angular/core';
-import {Observable, map} from 'rxjs';
+import {map, Observable} from 'rxjs';
 import {environment} from 'src/environments/environment';
 import {Request} from '../api/common';
+import {FinanceChartRecord} from '../finance/model/IFinanceChartRecord';
+import {FinanceTableRecord} from '../finance/model/IFinanceTableRecord';
 
 @Injectable({
   providedIn: 'root',
@@ -25,6 +27,33 @@ export class ApiService {
   }
 
   createFinanceRecords(body: any): Observable<any> {
-    return this.restful.post(`${environment.backend_url}/finance/create`, body);
+    return this.restful.post(`${environment.backend_url}/finance`, body);
+  }
+
+  getFinanceTableData(societyName: string, fromDate: string, toDate: string): Observable<FinanceTableRecord[]> {
+    let queryParams = new HttpParams()
+      .append('societyName', societyName)
+      .append('fromDate', fromDate)
+      .append('toDate', toDate);
+
+    return this.restful.get<FinanceTableRecord[]>(`${environment.backend_url}/finance/table`, {params: queryParams});
+  }
+
+  getFinancePieChartData(societyName: string, fromDate: string, toDate: string): Observable<FinanceChartRecord[]> {
+    let queryParams = new HttpParams()
+      .append('societyName', societyName)
+      .append('fromDate', fromDate)
+      .append('toDate', toDate);
+
+    return this.restful.get<FinanceChartRecord[]>(`${environment.backend_url}/finance/pieChart`, {params: queryParams});
+  }
+
+  getFinanceBarChartData(societyName: string, fromDate: string, toDate: string): Observable<FinanceChartRecord[]> {
+    let queryParams = new HttpParams()
+      .append('societyName', societyName)
+      .append('fromDate', fromDate)
+      .append('toDate', toDate);
+
+    return this.restful.get<FinanceChartRecord[]>(`${environment.backend_url}/finance/barChart`, {params: queryParams});
   }
 }
