@@ -27,7 +27,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   String fullname = '';
   String nickname = '';
   String email = '';
-  String enrolledSocieties = '';
+  List<String> enrolledSocieties = [];
 
   @override
   Widget build(BuildContext context) {
@@ -108,6 +108,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     try {
       await loginProcess();
     } catch (e) {
+      print(e);
       showError("Login fail. Please try again.");
       setState(() {
         isLoggedIn = false;
