@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.Parameters
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import ngok3.fyp.backend.operation.finance.model.CreateFinanceDto
 import ngok3.fyp.backend.operation.finance.model.FinanceChartDto
+import ngok3.fyp.backend.operation.finance.model.FinanceDeleteDto
 import ngok3.fyp.backend.operation.finance.model.FinanceTableDto
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
@@ -75,5 +76,14 @@ class FinanceController(
         @RequestBody createFinanceDto: CreateFinanceDto
     ): List<FinanceTableDto> {
         return financeService.createFinancialRecords(jwtToken, createFinanceDto)
+    }
+
+    @Operation(summary = "delete finance record(s) with user input form")
+    @DeleteMapping
+    fun deleteFinancialRecords(
+        @CookieValue("token") jwtToken: String,
+        @RequestParam("id") deleteIdList: List<FinanceDeleteDto>
+    ): List<FinanceDeleteDto> {
+        return financeService.deleteFinanceRecords(jwtToken, deleteIdList)
     }
 }
