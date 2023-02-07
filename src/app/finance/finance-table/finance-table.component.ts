@@ -1,7 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {Path} from 'src/app/app-routing.module';
-import {FinanceTableRecord} from '../IFinanceTableRecord';
+import {FinanceTableRecord} from '../model/IFinanceTableRecord';
 
 @Component({
   selector: 'app-finance-table',

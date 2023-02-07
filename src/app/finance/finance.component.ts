@@ -1,9 +1,10 @@
 import {Component, OnInit} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {filter} from 'rxjs';
 import {ApiService} from '../services/api.service';
 import {AuthService} from '../services/auth.service';
-import {FinanceChartRecord} from './IFinanceChartRecord';
-import {FinanceTableRecord} from './IFinanceTableRecord';
+import {FinanceChartRecord} from './model/IFinanceChartRecord';
+import {FinanceTableRecord} from './model/IFinanceTableRecord';
 
 @Component({
   selector: 'app-finance',
@@ -20,8 +21,17 @@ export class FinanceComponent implements OnInit {
 
   enrolledSocieties: string[] = [];
 
-  constructor(private authService: AuthService, private apiService: ApiService) {
+  form!: FormGroup;
+  fromDate: String = '';
+  toDate: String = '';
+  societyName: String = '';
+
+  constructor(private authService: AuthService, private apiService: ApiService, private fb: FormBuilder) {
     this.currentDate = new Date();
+    this.form = this.fb.group({
+      societyName: ['', [Validators.required]],
+      dateRange: [[], [Validators.required]],
+    });
   }
 
   ngOnInit(): void {
@@ -122,6 +132,24 @@ export class FinanceComponent implements OnInit {
 
   getLastDayOfYear(date: Date): Date {
     return new Date(date.getFullYear(), 11, 31);
+  }
+
+  submitForm(): void {
+    if (this.form.valid) {
+      //change date format to mm/dd/2023
+      this.fromDate = this.form.value.dateRange[0].toLocaleDateString();
+      this.toDate = this.form.value.dateRange[1].toLocaleDateString();
+      this.societyName = this.form.value.societyName;
+      console.log(`fromDate: ${this.fromDate}, toDate: ${this.toDate}, societyName: ${this.societyName}`);
+    } else {
+      alert('You must fill all the fields');
+      Object.values(this.form.controls).forEach(control => {
+        if (control.invalid) {
+          control.markAsDirty();
+          control.updateValueAndValidity({onlySelf: true});
+        }
+      });
+    }
   }
 
   fetchFinanceRecord() {}

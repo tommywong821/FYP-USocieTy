@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, OnInit} from '@angular/core';
-import {FinanceChartRecord} from '../IFinanceChartRecord';
+import {FinanceChartRecord} from '../model/IFinanceChartRecord';
 
 @Component({
   selector: 'app-finance-bar-chart',
