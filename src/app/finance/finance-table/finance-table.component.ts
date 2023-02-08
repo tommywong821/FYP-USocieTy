@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Router} from '@angular/router';
 import {Path} from 'src/app/app-routing.module';
 import {ApiService} from 'src/app/services/api.service';
@@ -12,6 +12,8 @@ import {FinanceTableRecord} from '../model/IFinanceTableRecord';
 export class FinanceTableComponent implements OnInit {
   @Input() tableData: FinanceTableRecord[] = [];
   @Input() societyName: string = '';
+
+  @Output() updateFinanceDataEvent = new EventEmitter<void>();
 
   checked = false;
   loading = false;
@@ -62,6 +64,7 @@ export class FinanceTableComponent implements OnInit {
           this.setOfCheckedId.clear();
           this.refreshCheckedStatus();
           this.loading = false;
+          this.updateFinanceDataEvent.emit();
         },
       });
   }

@@ -23,6 +23,8 @@ export class FinanceComponent implements OnInit {
 
   form!: FormGroup;
   societyName: string = '';
+  fromDate: string = '';
+  toDate: string = '';
 
   constructor(private authService: AuthService, private apiService: ApiService, private fb: FormBuilder) {
     this.currentDate = new Date();
@@ -53,10 +55,10 @@ export class FinanceComponent implements OnInit {
     if (this.form.valid) {
       //change date format to mm/dd/2023
       this.societyName = this.form.value.societyName;
-      let fromDate: string = this.form.value.dateRange[0].toLocaleDateString();
-      let toDate: string = this.form.value.dateRange[1].toLocaleDateString();
-      console.log(`fromDate: ${fromDate}, toDate: ${toDate}, societyName: ${this.societyName}`);
-      this.fetchFinanceRecord(this.societyName, fromDate, toDate);
+      this.fromDate = this.form.value.dateRange[0].toLocaleDateString();
+      this.toDate = this.form.value.dateRange[1].toLocaleDateString();
+      console.log(`fromDate: ${this.fromDate}, toDate: ${this.toDate}, societyName: ${this.societyName}`);
+      this.fetchFinanceRecord();
     } else {
       alert('You must fill all the fields');
       Object.values(this.form.controls).forEach(control => {
@@ -68,12 +70,13 @@ export class FinanceComponent implements OnInit {
     }
   }
 
-  fetchFinanceRecord(societyName: string, fromDate: string, toDate: string) {
+  fetchFinanceRecord() {
     zip(
-      this.apiService.getFinanceTableData(societyName, fromDate, toDate),
-      this.apiService.getFinancePieChartData(societyName, fromDate, toDate),
-      this.apiService.getFinanceBarChartData(societyName, fromDate, toDate)
+      this.apiService.getFinanceTableData(this.societyName, this.fromDate, this.toDate),
+      this.apiService.getFinancePieChartData(this.societyName, this.fromDate, this.toDate),
+      this.apiService.getFinanceBarChartData(this.societyName, this.fromDate, this.toDate)
     ).subscribe(([tableData, pieChartData, barChartData]) => {
+      tableData.forEach((data: FinanceTableRecord) => (data.date = new Date(data.date).toDateString()));
       this.tableData = tableData;
       this.pieChartData = pieChartData;
       this.barChartData = barChartData;

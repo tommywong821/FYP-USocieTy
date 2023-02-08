@@ -67,6 +67,7 @@
           <app-finance-table
             [tableData]="tableData"
             [societyName]="societyName"
+            (updateFinanceDataEvent)="fetchFinanceRecord()"
           ></app-finance-table>
         </div>
       </div>
