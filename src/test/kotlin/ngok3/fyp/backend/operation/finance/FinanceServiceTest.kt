@@ -7,10 +7,7 @@ import ngok3.fyp.backend.controller.authentication.model.MockAuthRepository
 import ngok3.fyp.backend.operation.enrolled_event_record.EnrolledStatus
 import ngok3.fyp.backend.operation.enrolled_society_record.EnrolledSocietyRecordEntity
 import ngok3.fyp.backend.operation.enrolled_society_record.EnrolledSocietyRecordRepository
-import ngok3.fyp.backend.operation.finance.model.CreateFinanceDto
-import ngok3.fyp.backend.operation.finance.model.FinanceChartDto
-import ngok3.fyp.backend.operation.finance.model.FinanceDeleteDto
-import ngok3.fyp.backend.operation.finance.model.FinanceRecordDto
+import ngok3.fyp.backend.operation.finance.model.*
 import ngok3.fyp.backend.operation.society.SocietyEntity
 import ngok3.fyp.backend.operation.society.SocietyRepository
 import ngok3.fyp.backend.operation.student.StudentEntity
@@ -382,7 +379,7 @@ class FinanceServiceTest(
         val exception: AccessDeniedException = assertThrows {
             financeService.deleteFinanceRecords(
                 mockAuthRepository.invalidUserCookieToken,
-                mockAuthRepository.testSocietyName,
+                societyName,
                 deleteIdList
             )
         }
@@ -402,6 +399,67 @@ class FinanceServiceTest(
                 "dummy",
                 mockAuthRepository.testSocietyName,
                 deleteIdList
+            )
+        }
+
+        assertEquals(MalformedJwtException::class, exception::class)
+    }
+
+    @Test
+    fun `should get total number of finance record from database within date range`() {
+        val financeRecordTotalNumberDto: FinanceRecordTotalNumberDto = FinanceRecordTotalNumberDto(200)
+
+        every {
+            financeEntityRepository.countTotalNumberOfFinanceRecordWithinDateRange(
+                dateUtil.convertStringToLocalDateTime("5/2/2023"),
+                dateUtil.convertStringToLocalDateTime("6/2/2023"),
+                mockAuthRepository.testSocietyName
+            )
+        } returns financeRecordTotalNumberDto
+
+        val totalNumber = financeService.getFinanceRecordTotalNumber(
+            mockAuthRepository.validUserCookieToken,
+            mockAuthRepository.testSocietyName,
+            "5/2/2023",
+            "6/2/2023"
+        )
+
+        assertEquals(200, totalNumber.total)
+    }
+
+    @Test
+    fun `should not get total number of finance record from database within date range when itsc not joining the society`() {
+        val itsc: String = mockAuthRepository.invalidUserItsc
+        val societyName: String = mockAuthRepository.testSocietyName
+
+        every {
+            enrolledSocietyRecordRepository.findByItscAndSocietyNameAndEnrolledStatus(
+                itsc,
+                societyName,
+                EnrolledStatus.SUCCESS
+            )
+        } returns Optional.empty()
+
+        val exception: AccessDeniedException = assertThrows {
+            financeService.getFinanceRecordTotalNumber(
+                mockAuthRepository.invalidUserCookieToken,
+                societyName,
+                "5/2/2023",
+                "6/2/2023"
+            )
+        }
+
+        assertEquals("student with itsc: ${itsc} do not belong to this society: ${societyName}", exception.message)
+    }
+
+    @Test
+    fun `should not get total number of finance record from database within date range when invalid jwt token`() {
+        val exception: Exception = assertThrows {
+            financeService.getFinanceRecordTotalNumber(
+                "dummy",
+                mockAuthRepository.testSocietyName,
+                "5/2/2023",
+                "6/2/2023"
             )
         }
 

@@ -93,12 +93,12 @@ class FinanceController(
         ), Parameter(name = "toDate", description = "Date Format: M/d/yyyy \n\n eg: 3/3/2023 === 3rd February 2023")
     )
     @GetMapping("/totalNumber")
-    fun getTotalFinanceRecord(
+    fun getFinanceRecordTotalNumber(
         @CookieValue("token") jwtToken: String,
         @RequestParam("societyName") societyName: String,
         @RequestParam("fromDate") fromDateString: String,
         @RequestParam("toDate") toDateString: String,
-    ): TotalNumberFinanceRecordDto {
-        return financeService.getTotalNumberFinanceRecord(jwtToken, societyName, fromDateString, toDateString)
+    ): FinanceRecordTotalNumberDto {
+        return financeService.getFinanceRecordTotalNumber(jwtToken, societyName, fromDateString, toDateString)
     }
 }
