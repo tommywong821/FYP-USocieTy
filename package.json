@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "serve": "ng serve --ssl",
-    "start": "node ./src/scripts/server.js",
+    "start": "node server.js",
     "purgescss": "node ./src/scripts/purgecss.js",
     "obfuscate": "node ./src/scripts/obfuscate.js",
     "postbuild": "npm run purgescss && npm run obfuscate",
