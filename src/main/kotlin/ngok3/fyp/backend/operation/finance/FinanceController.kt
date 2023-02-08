@@ -4,10 +4,7 @@ import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.Parameters
 import io.swagger.v3.oas.annotations.responses.ApiResponse
-import ngok3.fyp.backend.operation.finance.model.CreateFinanceDto
-import ngok3.fyp.backend.operation.finance.model.FinanceChartDto
-import ngok3.fyp.backend.operation.finance.model.FinanceDeleteDto
-import ngok3.fyp.backend.operation.finance.model.FinanceTableDto
+import ngok3.fyp.backend.operation.finance.model.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
 
@@ -86,5 +83,22 @@ class FinanceController(
         @RequestParam("id") deleteIdList: List<FinanceDeleteDto>
     ): List<FinanceDeleteDto> {
         return financeService.deleteFinanceRecords(jwtToken, societyName, deleteIdList)
+    }
+
+    @Operation(summary = "get total number finance record within date range")
+    @Parameters(
+        Parameter(
+            name = "fromDate",
+            description = "Date Format: M/d/yyyy \n\n eg: 2/3/2023 === 2nd February 2023"
+        ), Parameter(name = "toDate", description = "Date Format: M/d/yyyy \n\n eg: 3/3/2023 === 3rd February 2023")
+    )
+    @GetMapping("/totalNumber")
+    fun getFinanceRecordTotalNumber(
+        @CookieValue("token") jwtToken: String,
+        @RequestParam("societyName") societyName: String,
+        @RequestParam("fromDate") fromDateString: String,
+        @RequestParam("toDate") toDateString: String,
+    ): FinanceRecordTotalNumberDto {
+        return financeService.getFinanceRecordTotalNumber(jwtToken, societyName, fromDateString, toDateString)
     }
 }
