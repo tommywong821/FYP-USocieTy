@@ -594,4 +594,168 @@ class FinanceControllerTest @Autowired constructor(
             }
         }
     }
+
+    @Test
+    fun `should return 401 error when user no belong to that society and try to delete finance record`() {
+        val deleteIdList: List<FinanceDeleteDto> = listOf(
+            FinanceDeleteDto("4a487d9f-8f8d-4aec-b65b-22c4d28730c1"),
+            FinanceDeleteDto("336d5d07-74a3-49b3-a6d3-30fa743fd490"),
+        )
+
+        every {
+            financeService.deleteFinanceRecords(
+                mockAuthRepository.invalidUserCookieToken, mockAuthRepository.testSocietyName,
+                deleteIdList
+            )
+        } throws AccessDeniedException("student with itsc: ${mockAuthRepository.invalidUserItsc} do not belong to this society: ${mockAuthRepository.testSocietyName}")
+
+        mockMvc.delete("/finance") {
+            headers {
+                contentType = MediaType.APPLICATION_JSON
+                cookie(Cookie("token", mockAuthRepository.invalidUserCookieToken))
+            }
+            params = LinkedMultiValueMap<String, String>().apply {
+                add("societyName", mockAuthRepository.testSocietyName)
+                add("id", "4a487d9f-8f8d-4aec-b65b-22c4d28730c1")
+                add("id", "336d5d07-74a3-49b3-a6d3-30fa743fd490")
+            }
+        }.andDo { print() }.andExpect {
+            status { isUnauthorized() }
+            jsonPath("$.status") {
+                value(401)
+            }
+            jsonPath("$.message") {
+                value("Unauthorized Access: student with itsc: ${mockAuthRepository.invalidUserItsc} do not belong to this society: ${mockAuthRepository.testSocietyName}")
+            }
+        }
+    }
+
+    @Test
+    fun `should return 401 error when invalid cookie token try to delete finance record`() {
+        val deleteIdList: List<FinanceDeleteDto> = listOf(
+            FinanceDeleteDto("4a487d9f-8f8d-4aec-b65b-22c4d28730c1"),
+            FinanceDeleteDto("336d5d07-74a3-49b3-a6d3-30fa743fd490"),
+        )
+
+        every {
+            financeService.deleteFinanceRecords(
+                "dummy", mockAuthRepository.testSocietyName,
+                deleteIdList
+            )
+        } throws MalformedJwtException("Invalid JWT token")
+
+        mockMvc.delete("/finance") {
+            headers {
+                contentType = MediaType.APPLICATION_JSON
+                cookie(Cookie("token", "dummy"))
+            }
+            params = LinkedMultiValueMap<String, String>().apply {
+                add("societyName", mockAuthRepository.testSocietyName)
+                add("id", "4a487d9f-8f8d-4aec-b65b-22c4d28730c1")
+                add("id", "336d5d07-74a3-49b3-a6d3-30fa743fd490")
+            }
+        }.andDo { print() }.andExpect {
+            status { isUnauthorized() }
+            jsonPath("$.status") {
+                value(401)
+            }
+            jsonPath("$.message") {
+                value("Invalid JWT token")
+            }
+        }
+    }
+
+    @Test
+    fun `should get total number of financial records within date range`() {
+        every {
+            financeService.getTotalNumberFinanceRecord(
+                mockAuthRepository.validUserCookieToken,
+                mockAuthRepository.testSocietyName,
+                "03-02-2023",
+                "04-02-2023"
+            )
+        } returns TotalNumberFinanceRecordDto(200)
+
+        mockMvc.get("/finance/totalNumber") {
+            headers {
+                contentType = MediaType.APPLICATION_JSON
+                cookie(Cookie("token", mockAuthRepository.validUserCookieToken))
+            }
+            params = LinkedMultiValueMap<String, String>().apply {
+                add("societyName", mockAuthRepository.testSocietyName)
+                add("fromDate", "03-02-2023")
+                add("toDate", "04-02-2023")
+            }
+        }.andDo { print() }.andExpect {
+            status { isOk() }
+            content { contentType(MediaType.APPLICATION_JSON) }
+            jsonPath("$.total") {
+                value(200)
+            }
+        }
+    }
+
+    @Test
+    fun `should return 401 error when user no belong to that society and get total number of financial records within date range`() {
+        every {
+            financeService.getTotalNumberFinanceRecord(
+                mockAuthRepository.invalidUserCookieToken,
+                mockAuthRepository.testSocietyName,
+                "03-02-2023",
+                "04-02-2023"
+            )
+        } throws AccessDeniedException("student with itsc: ${mockAuthRepository.invalidUserItsc} do not belong to this society: ${mockAuthRepository.testSocietyName}")
+
+        mockMvc.get("/finance/totalNumber") {
+            headers {
+                contentType = MediaType.APPLICATION_JSON
+                cookie(Cookie("token", mockAuthRepository.invalidUserCookieToken))
+            }
+            params = LinkedMultiValueMap<String, String>().apply {
+                add("societyName", mockAuthRepository.testSocietyName)
+                add("fromDate", "03-02-2023")
+                add("toDate", "04-02-2023")
+            }
+        }.andDo { print() }.andExpect {
+            status { isUnauthorized() }
+            jsonPath("$.status") {
+                value(401)
+            }
+            jsonPath("$.message") {
+                value("Unauthorized Access: student with itsc: ${mockAuthRepository.invalidUserItsc} do not belong to this society: ${mockAuthRepository.testSocietyName}")
+            }
+        }
+    }
+
+    @Test
+    fun `should return 401 error when invalid cookie token try to get total number of financial records within date range`() {
+        every {
+            financeService.getTotalNumberFinanceRecord(
+                "dummy",
+                mockAuthRepository.testSocietyName,
+                "03-02-2023",
+                "04-02-2023"
+            )
+        } throws MalformedJwtException("Invalid JWT token")
+
+        mockMvc.get("/finance/totalNumber") {
+            headers {
+                contentType = MediaType.APPLICATION_JSON
+                cookie(Cookie("token", "dummy"))
+            }
+            params = LinkedMultiValueMap<String, String>().apply {
+                add("societyName", mockAuthRepository.testSocietyName)
+                add("fromDate", "03-02-2023")
+                add("toDate", "04-02-2023")
+            }
+        }.andDo { print() }.andExpect {
+            status { isUnauthorized() }
+            jsonPath("$.status") {
+                value(401)
+            }
+            jsonPath("$.message") {
+                value("Invalid JWT token")
+            }
+        }
+    }
 }

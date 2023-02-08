@@ -1,9 +1,6 @@
 package ngok3.fyp.backend.operation.finance
 
-import ngok3.fyp.backend.operation.finance.model.CreateFinanceDto
-import ngok3.fyp.backend.operation.finance.model.FinanceChartDto
-import ngok3.fyp.backend.operation.finance.model.FinanceDeleteDto
-import ngok3.fyp.backend.operation.finance.model.FinanceTableDto
+import ngok3.fyp.backend.operation.finance.model.*
 import ngok3.fyp.backend.operation.society.SocietyEntity
 import ngok3.fyp.backend.operation.society.SocietyRepository
 import ngok3.fyp.backend.operation.student.StudentEntity
@@ -138,6 +135,15 @@ class FinanceService(
         financeEntityRepository.deleteAllById(deleteIdList.map { deleteId -> UUID.fromString(deleteId.id) })
 
         return deleteIdList
+    }
+
+    fun getTotalNumberFinanceRecord(
+        jwtToken: String,
+        societyName: String,
+        fromDateString: String,
+        toDateString: String
+    ): TotalNumberFinanceRecordDto {
+        return TotalNumberFinanceRecordDto(0)
     }
 
 }
