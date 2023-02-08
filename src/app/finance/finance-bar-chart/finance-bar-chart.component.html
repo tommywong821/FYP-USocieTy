@@ -1,0 +1,24 @@
+<ngx-charts-bar-vertical
+  [scheme]="'cool'"
+  [results]="barChartData"
+  [gradient]="false"
+  [xAxis]="true"
+  [yAxis]="true"
+  [legend]="false"
+  [legendTitle]="'Month'"
+  [showXAxisLabel]="true"
+  [showYAxisLabel]="true"
+  [xAxisLabel]="'Month'"
+  [yAxisLabel]="'HKD'"
+  (select)="onSelect($event)"
+  (window:resize)="onResize($event)"
+  [view]="view"
+>
+  <!-- pop up animation dialog text -->
+  <ng-template
+    #tooltipTemplate
+    let-model="model"
+  >
+    <div>${{ model.value.toLocaleString('en-US') }}</div>
+  </ng-template>
+</ngx-charts-bar-vertical>

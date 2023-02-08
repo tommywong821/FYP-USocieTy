@@ -1,8 +1,8 @@
+import {Path} from './../../app-routing.module';
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {filter, Subject, switchMap, takeUntil} from 'rxjs';
 import {User} from 'src/app/model/user';
-import {ApiService} from 'src/app/services/api.service';
 import {AuthService} from 'src/app/services/auth.service';
 import {environment} from 'src/environments/environment';
 
@@ -12,12 +12,7 @@ import {environment} from 'src/environments/environment';
   styleUrls: ['./sign-in.component.scss'],
 })
 export class SignInComponent implements OnInit {
-  constructor(
-    private authService: AuthService,
-    private route: ActivatedRoute,
-    private router: Router,
-    private apiService: ApiService
-  ) {}
+  constructor(private authService: AuthService, private route: ActivatedRoute, private router: Router) {}
 
   destroy$ = new Subject<void>();
 
@@ -29,8 +24,8 @@ export class SignInComponent implements OnInit {
         switchMap(queryParams => this.authService.validateUser(queryParams))
       )
       .subscribe((user: User) => {
-        this.authService.signIn(user);
-        this.router.navigate(['/home']);
+        this.authService.saveUserToLocalStorage(user);
+        this.router.navigate([Path.Main]);
       });
   }
 

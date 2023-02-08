@@ -1,0 +1,75 @@
+<div class="h-full w-full">
+  <div class="m-5">
+    <div class="sm:overflow-hidden sm:rounded-md">
+      <div class="space-y-6 bg-white px-4 py-5 sm:p-6">
+        <div class="flex justify-center">
+          <div class="flex-col">
+            <h1 class="text-center text-xl font-bold">Financial Record</h1>
+            <div class="col-span-6 flex gap-x-4 sm:col-span-4">
+              <form
+                nz-form
+                [formGroup]="form"
+                (ngSubmit)="submitForm()"
+              >
+                <div class="flex flex-row">
+                  <nz-form-label
+                    class="mb-2 pt-1 text-sm font-medium text-gray-700"
+                    for="societyName"
+                    >Society</nz-form-label
+                  >
+                  <nz-form-control
+                    nzHasFeedback
+                    class="w-32 pt-1"
+                  >
+                    <nz-select formControlName="societyName">
+                      <nz-option
+                        *ngFor="let society of enrolledSocieties"
+                        [nzLabel]="society"
+                        [nzValue]="society"
+                      ></nz-option>
+                    </nz-select>
+                  </nz-form-control>
+                  <nz-range-picker
+                    formControlName="dateRange"
+                    [nzShowTime]="false"
+                    [(ngModel)]="defaultDate"
+                  ></nz-range-picker>
+                  <button
+                    nz-button
+                    nzType="primary"
+                  >
+                    Check
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-span-6 flex flex-row flex-wrap">
+          <div class="flex-col">
+            <div class="grow text-center font-bold">Monthly Expense Report</div>
+            <app-finance-bar-chart [barChartData]="barChartData"></app-finance-bar-chart>
+          </div>
+          <div class="flex-col">
+            <div class="text-center font-bold">Expense By Category</div>
+            <!-- fix css hard code -->
+            <div
+              id="pie-chart-parent"
+              class="h-5/6"
+            >
+              <app-finance-pie-chart [pieChartData]="pieChartData"></app-finance-pie-chart>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-span-12">
+          <app-finance-table
+            [tableData]="tableData"
+            [societyName]="societyName"
+          ></app-finance-table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

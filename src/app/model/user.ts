@@ -1,4 +1,7 @@
 export interface User {
-  name: string;
+  itsc: string;
+  nickname: string;
   email: string;
+  enrolledSocieties: string[];
+  roles: string;
 }
