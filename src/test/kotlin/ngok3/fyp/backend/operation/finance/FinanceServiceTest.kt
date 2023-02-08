@@ -9,6 +9,7 @@ import ngok3.fyp.backend.operation.enrolled_society_record.EnrolledSocietyRecord
 import ngok3.fyp.backend.operation.enrolled_society_record.EnrolledSocietyRecordRepository
 import ngok3.fyp.backend.operation.finance.model.CreateFinanceDto
 import ngok3.fyp.backend.operation.finance.model.FinanceChartDto
+import ngok3.fyp.backend.operation.finance.model.FinanceDeleteDto
 import ngok3.fyp.backend.operation.finance.model.FinanceRecordDto
 import ngok3.fyp.backend.operation.society.SocietyEntity
 import ngok3.fyp.backend.operation.society.SocietyRepository
@@ -269,7 +270,7 @@ class FinanceServiceTest(
             FinanceEntity(34.5, "bbb", dateUtil.convertStringToLocalDateTime("2/5/2023"), "test category 2")
         )
 
-        val financeChartDto: CreateFinanceDto = CreateFinanceDto(
+        val financeDto: CreateFinanceDto = CreateFinanceDto(
             "test society",
             listOf(
                 FinanceRecordDto(12.3, "test category 1", "aaa", "2/7/2023"),
@@ -285,8 +286,125 @@ class FinanceServiceTest(
         every { financeEntityRepository.saveAll(any<List<FinanceEntity>>()) } returns financeEntityList
 
         val financeCreateRecord =
-            financeService.createFinancialRecords(mockAuthRepository.validUserCookieToken, financeChartDto)
+            financeService.createFinancialRecords(mockAuthRepository.validUserCookieToken, financeDto)
 
         assertEquals(financeEntityList.size, financeCreateRecord.size)
+    }
+
+    @Test
+    fun `should not create finance record with itsc not joining the society`() {
+        val itsc: String = mockAuthRepository.invalidUserItsc
+        val societyName: String = mockAuthRepository.testSocietyName
+
+        every {
+            enrolledSocietyRecordRepository.findByItscAndSocietyNameAndEnrolledStatus(
+                itsc,
+                societyName,
+                EnrolledStatus.SUCCESS
+            )
+        } returns Optional.empty()
+
+        val financeDto: CreateFinanceDto = CreateFinanceDto(
+            "test society",
+            listOf(
+                FinanceRecordDto(12.3, "test category 1", "aaa", "2/7/2023"),
+                FinanceRecordDto(34.5, "test category 2", "bbb", "2/5/2023"),
+            )
+        )
+
+        val exception: AccessDeniedException = assertThrows {
+            financeService.createFinancialRecords(mockAuthRepository.invalidUserCookieToken, financeDto)
+        }
+
+        assertEquals("student with itsc: ${itsc} do not belong to this society: ${societyName}", exception.message)
+    }
+
+    @Test
+    fun `should not create finance record with invalid jwt token`() {
+        val financeDto: CreateFinanceDto = CreateFinanceDto(
+            "test society",
+            listOf(
+                FinanceRecordDto(12.3, "test category 1", "aaa", "2/7/2023"),
+                FinanceRecordDto(34.5, "test category 2", "bbb", "2/5/2023"),
+            )
+        )
+
+        val exception: Exception = assertThrows {
+            financeService.createFinancialRecords("dummy", financeDto)
+        }
+
+        assertEquals(MalformedJwtException::class, exception::class)
+    }
+
+    @Test
+    fun `should delete finance record from database`() {
+        val deleteIdList: List<FinanceDeleteDto> = listOf(
+            FinanceDeleteDto("4a487d9f-8f8d-4aec-b65b-22c4d28730c1"),
+            FinanceDeleteDto("336d5d07-74a3-49b3-a6d3-30fa743fd490"),
+        )
+
+        every {
+            financeEntityRepository.deleteAllById(deleteIdList.map { financeDeleteDto ->
+                UUID.fromString(
+                    financeDeleteDto.id
+                )
+            })
+        } returns Unit
+
+        val financeTableData = financeService.deleteFinanceRecords(
+            mockAuthRepository.validUserCookieToken,
+            mockAuthRepository.testSocietyName,
+            deleteIdList
+        )
+
+        assertEquals(deleteIdList[0].id, financeTableData[0].id)
+        assertEquals(deleteIdList[1].id, financeTableData[1].id)
+    }
+
+    @Test
+    fun `should not delete finance record with itsc not joining the society`() {
+        val itsc: String = mockAuthRepository.invalidUserItsc
+        val societyName: String = mockAuthRepository.testSocietyName
+
+        every {
+            enrolledSocietyRecordRepository.findByItscAndSocietyNameAndEnrolledStatus(
+                itsc,
+                societyName,
+                EnrolledStatus.SUCCESS
+            )
+        } returns Optional.empty()
+
+        val deleteIdList: List<FinanceDeleteDto> = listOf(
+            FinanceDeleteDto("4a487d9f-8f8d-4aec-b65b-22c4d28730c1"),
+            FinanceDeleteDto("336d5d07-74a3-49b3-a6d3-30fa743fd490"),
+        )
+
+        val exception: AccessDeniedException = assertThrows {
+            financeService.deleteFinanceRecords(
+                mockAuthRepository.invalidUserCookieToken,
+                mockAuthRepository.testSocietyName,
+                deleteIdList
+            )
+        }
+
+        assertEquals("student with itsc: ${itsc} do not belong to this society: ${societyName}", exception.message)
+    }
+
+    @Test
+    fun `should not delete finance record with invalid jwt token`() {
+        val deleteIdList: List<FinanceDeleteDto> = listOf(
+            FinanceDeleteDto("4a487d9f-8f8d-4aec-b65b-22c4d28730c1"),
+            FinanceDeleteDto("336d5d07-74a3-49b3-a6d3-30fa743fd490"),
+        )
+
+        val exception: Exception = assertThrows {
+            financeService.deleteFinanceRecords(
+                "dummy",
+                mockAuthRepository.testSocietyName,
+                deleteIdList
+            )
+        }
+
+        assertEquals(MalformedJwtException::class, exception::class)
     }
 }
