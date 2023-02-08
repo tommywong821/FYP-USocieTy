@@ -1,7 +1,9 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Router} from '@angular/router';
+import {BehaviorSubject} from 'rxjs';
 import {Path} from 'src/app/app-routing.module';
 import {ApiService} from 'src/app/services/api.service';
+import {FinanceTableRequestParam} from '../model/IFinanceTableParam';
 import {FinanceTableRecord} from '../model/IFinanceTableRecord';
 
 @Component({
@@ -10,10 +12,15 @@ import {FinanceTableRecord} from '../model/IFinanceTableRecord';
   styleUrls: ['./finance-table.component.scss'],
 })
 export class FinanceTableComponent implements OnInit {
-  @Input() tableData: FinanceTableRecord[] = [];
-  @Input() societyName: string = '';
+  @Input() financeTableRequestParam$: BehaviorSubject<FinanceTableRequestParam | null>;
 
   @Output() updateFinanceDataEvent = new EventEmitter<void>();
+
+  societyName: string = '';
+  fromDate: string = '';
+  toDate: string = '';
+
+  tableData: FinanceTableRecord[] = [];
 
   checked = false;
   loading = false;
@@ -21,9 +28,24 @@ export class FinanceTableComponent implements OnInit {
   listOfCurrentPageData: readonly FinanceTableRecord[] = [];
   setOfCheckedId = new Set<string>();
 
-  constructor(private router: Router, private apiService: ApiService) {}
+  constructor(private router: Router, private apiService: ApiService) {
+    this.financeTableRequestParam$ = new BehaviorSubject<FinanceTableRequestParam | null>(null);
+  }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.financeTableRequestParam$.subscribe({
+      next: (financeTableRequestParam: FinanceTableRequestParam | null) => {
+        if (financeTableRequestParam !== null) {
+          console.log(financeTableRequestParam);
+          this.societyName = financeTableRequestParam.societyName;
+          this.fromDate = financeTableRequestParam.fromDate;
+          this.toDate = financeTableRequestParam.toDate;
+          console.log(`fromDate: ${this.fromDate}, toDate: ${this.toDate}, societyName: ${this.societyName}`);
+          this.fetchTableData();
+        }
+      },
+    });
+  }
 
   updateCheckedSet(id: string, checked: boolean): void {
     if (checked) {
@@ -64,7 +86,9 @@ export class FinanceTableComponent implements OnInit {
           this.setOfCheckedId.clear();
           this.refreshCheckedStatus();
           this.loading = false;
+          // update parent data
           this.updateFinanceDataEvent.emit();
+          this.fetchTableData();
         },
       });
   }
@@ -76,5 +100,14 @@ export class FinanceTableComponent implements OnInit {
 
   routeToCreateRecordPage() {
     this.router.navigate([Path.Main, Path.Finance, Path.CreateFinance]);
+  }
+
+  fetchTableData() {
+    this.apiService.getFinanceTableData(this.societyName, this.fromDate, this.toDate).subscribe({
+      next: (tableData: FinanceTableRecord[]) => {
+        tableData.forEach((data: FinanceTableRecord) => (data.date = new Date(data.date).toDateString()));
+        this.tableData = tableData;
+      },
+    });
   }
 }

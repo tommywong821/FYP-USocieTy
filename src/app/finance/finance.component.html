@@ -65,8 +65,7 @@
 
         <div class="col-span-12">
           <app-finance-table
-            [tableData]="tableData"
-            [societyName]="societyName"
+            [financeTableRequestParam$]="financeTableRequestParam$"
             (updateFinanceDataEvent)="fetchFinanceRecord()"
           ></app-finance-table>
         </div>
