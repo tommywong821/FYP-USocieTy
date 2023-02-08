@@ -1,0 +1,58 @@
+<div class="flex justify-between">
+  <!-- header -->
+  <button
+    nz-button
+    nzType="primary"
+    (click)="routeToCreateRecordPage()"
+  >
+    Add New Record(s)
+  </button>
+  <div>
+    <button
+      nz-button
+      nzDanger
+      nzType="primary"
+      [disabled]="setOfCheckedId.size === 0"
+      [nzLoading]="loading"
+      (click)="sendRequest()"
+    >
+      Remove
+    </button>
+    <span>Selected {{ setOfCheckedId.size }} records</span>
+  </div>
+</div>
+<!-- content -->
+<nz-table
+  #rowSelectionTable
+  nzShowPagination
+  nzShowSizeChanger
+  [nzData]="tableData"
+  (nzCurrentPageDataChange)="onCurrentPageDataChange($event)"
+>
+  <thead>
+    <tr>
+      <th
+        [nzChecked]="checked"
+        [nzIndeterminate]="indeterminate"
+        (nzCheckedChange)="onAllChecked($event)"
+      ></th>
+      <th>Date</th>
+      <th>Amount(HKD)</th>
+      <th>Description</th>
+      <th>Edit By</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let data of rowSelectionTable.data">
+      <td
+        [nzChecked]="setOfCheckedId.has(data.id)"
+        [nzDisabled]="data.disabled"
+        (nzCheckedChange)="onItemChecked(data.id, $event)"
+      ></td>
+      <td>{{ data.date }}</td>
+      <td>${{ data.amount }}</td>
+      <td>{{ data.description }}</td>
+      <td>{{ data.editBy }}</td>
+    </tr>
+  </tbody>
+</nz-table>

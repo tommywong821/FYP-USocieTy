@@ -1,15 +1,16 @@
 import {Component, OnInit} from '@angular/core';
 import {faHome, faPiggyBank, faUsers} from '@fortawesome/free-solid-svg-icons';
-import {Path} from './app-routing.module';
-import {SidebarOption} from './home/home';
-import {User} from './model/user';
-import {AuthService} from './services/auth.service';
+import {Path} from '../app-routing.module';
+import {SidebarOption} from '../home/home';
+import {User} from '../model/user';
+import {AuthService} from '../services/auth.service';
+
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss'],
+  selector: 'app-main',
+  templateUrl: './main.component.html',
+  styleUrls: ['./main.component.scss'],
 })
-export class AppComponent implements OnInit {
+export class MainComponent implements OnInit {
   sidebarOptions: SidebarOption[] = [
     {
       name: 'Home',
@@ -18,7 +19,7 @@ export class AppComponent implements OnInit {
     },
     {
       name: 'Event',
-      link: Path.CreateEvent,
+      link: Path.Event,
       icon: faUsers,
     },
     {
