@@ -5,10 +5,7 @@ import io.jsonwebtoken.MalformedJwtException
 import io.mockk.every
 import io.mockk.mockkStatic
 import ngok3.fyp.backend.controller.authentication.model.MockAuthRepository
-import ngok3.fyp.backend.operation.finance.model.CreateFinanceDto
-import ngok3.fyp.backend.operation.finance.model.FinanceChartDto
-import ngok3.fyp.backend.operation.finance.model.FinanceRecordDto
-import ngok3.fyp.backend.operation.finance.model.FinanceTableDto
+import ngok3.fyp.backend.operation.finance.model.*
 import ngok3.fyp.backend.operation.society.SocietyEntity
 import ngok3.fyp.backend.operation.student.StudentEntity
 import ngok3.fyp.backend.util.DateUtil
@@ -20,6 +17,7 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType
 import org.springframework.security.access.AccessDeniedException
 import org.springframework.test.web.servlet.MockMvc
+import org.springframework.test.web.servlet.delete
 import org.springframework.test.web.servlet.get
 import org.springframework.test.web.servlet.post
 import org.springframework.util.LinkedMultiValueMap
@@ -527,7 +525,7 @@ class FinanceControllerTest @Autowired constructor(
 
     @Test
     fun `should return 401 error when invalid cookie token try to create finance record`() {
-        val societyName: String = mockAuthRepository.testSocietyName
+        mockAuthRepository.testSocietyName
         val createFinanceDto: CreateFinanceDto = CreateFinanceDto(
             mockAuthRepository.testSocietyName,
             listOf(
@@ -553,6 +551,46 @@ class FinanceControllerTest @Autowired constructor(
             }
             jsonPath("$.message") {
                 value("Invalid JWT token")
+            }
+        }
+    }
+
+    @Test
+    fun `should delete financial records`() {
+        val deleteIdList: List<FinanceDeleteDto> = listOf(
+            FinanceDeleteDto("4a487d9f-8f8d-4aec-b65b-22c4d28730c1"),
+            FinanceDeleteDto("336d5d07-74a3-49b3-a6d3-30fa743fd490"),
+        )
+
+        every {
+            financeService.deleteFinanceRecords(
+                mockAuthRepository.validUserCookieToken,
+                mockAuthRepository.testSocietyName,
+                deleteIdList
+            )
+        } returns deleteIdList
+
+        mockMvc.delete("/finance") {
+            headers {
+                contentType = MediaType.APPLICATION_JSON
+                cookie(Cookie("token", mockAuthRepository.validUserCookieToken))
+            }
+            params = LinkedMultiValueMap<String, String>().apply {
+                add("societyName", mockAuthRepository.testSocietyName)
+                add("id", "4a487d9f-8f8d-4aec-b65b-22c4d28730c1")
+                add("id", "336d5d07-74a3-49b3-a6d3-30fa743fd490")
+            }
+        }.andDo { print() }.andExpect {
+            status { isOk() }
+            content { contentType(MediaType.APPLICATION_JSON) }
+            jsonPath("$") {
+                isArray()
+            }
+            jsonPath("$.size()") {
+                value(deleteIdList.size)
+            }
+            jsonPath("$[*].id") {
+                value(deleteIdList.map { deleteData -> deleteData.id })
             }
         }
     }
