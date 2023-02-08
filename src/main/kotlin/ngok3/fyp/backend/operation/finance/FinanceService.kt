@@ -137,13 +137,19 @@ class FinanceService(
         return deleteIdList
     }
 
-    fun getTotalNumberFinanceRecord(
+    fun getFinanceRecordTotalNumber(
         jwtToken: String,
         societyName: String,
         fromDateString: String,
         toDateString: String
-    ): TotalNumberFinanceRecordDto {
-        return TotalNumberFinanceRecordDto(0)
+    ): FinanceRecordTotalNumberDto {
+        jwtUtil.verifyUserEnrolledSociety(jwtToken, societyName)
+
+        return financeEntityRepository.countTotalNumberOfFinanceRecordWithinDateRange(
+            dateUtil.convertStringToLocalDateTime(
+                fromDateString
+            ), dateUtil.convertStringToLocalDateTime(toDateString), societyName
+        )
     }
 
 }

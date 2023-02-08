@@ -668,13 +668,13 @@ class FinanceControllerTest @Autowired constructor(
     @Test
     fun `should get total number of financial records within date range`() {
         every {
-            financeService.getTotalNumberFinanceRecord(
+            financeService.getFinanceRecordTotalNumber(
                 mockAuthRepository.validUserCookieToken,
                 mockAuthRepository.testSocietyName,
                 "03-02-2023",
                 "04-02-2023"
             )
-        } returns TotalNumberFinanceRecordDto(200)
+        } returns FinanceRecordTotalNumberDto(200)
 
         mockMvc.get("/finance/totalNumber") {
             headers {
@@ -698,7 +698,7 @@ class FinanceControllerTest @Autowired constructor(
     @Test
     fun `should return 401 error when user no belong to that society and get total number of financial records within date range`() {
         every {
-            financeService.getTotalNumberFinanceRecord(
+            financeService.getFinanceRecordTotalNumber(
                 mockAuthRepository.invalidUserCookieToken,
                 mockAuthRepository.testSocietyName,
                 "03-02-2023",
@@ -730,7 +730,7 @@ class FinanceControllerTest @Autowired constructor(
     @Test
     fun `should return 401 error when invalid cookie token try to get total number of financial records within date range`() {
         every {
-            financeService.getTotalNumberFinanceRecord(
+            financeService.getFinanceRecordTotalNumber(
                 "dummy",
                 mockAuthRepository.testSocietyName,
                 "03-02-2023",
