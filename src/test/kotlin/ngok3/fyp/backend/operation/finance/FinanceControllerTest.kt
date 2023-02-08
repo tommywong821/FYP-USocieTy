@@ -558,12 +558,16 @@ class FinanceControllerTest @Autowired constructor(
     @Test
     fun `should delete financial records`() {
         val deleteIdList: List<FinanceDeleteDto> = listOf(
-            FinanceDeleteDto("123"),
-            FinanceDeleteDto("456"),
+            FinanceDeleteDto("4a487d9f-8f8d-4aec-b65b-22c4d28730c1"),
+            FinanceDeleteDto("336d5d07-74a3-49b3-a6d3-30fa743fd490"),
         )
 
         every {
-            financeService.deleteFinanceRecords(mockAuthRepository.validUserCookieToken, deleteIdList)
+            financeService.deleteFinanceRecords(
+                mockAuthRepository.validUserCookieToken,
+                mockAuthRepository.testSocietyName,
+                deleteIdList
+            )
         } returns deleteIdList
 
         mockMvc.delete("/finance") {
@@ -572,8 +576,9 @@ class FinanceControllerTest @Autowired constructor(
                 cookie(Cookie("token", mockAuthRepository.validUserCookieToken))
             }
             params = LinkedMultiValueMap<String, String>().apply {
-                add("id", "123")
-                add("id", "456")
+                add("societyName", mockAuthRepository.testSocietyName)
+                add("id", "4a487d9f-8f8d-4aec-b65b-22c4d28730c1")
+                add("id", "336d5d07-74a3-49b3-a6d3-30fa743fd490")
             }
         }.andDo { print() }.andExpect {
             status { isOk() }

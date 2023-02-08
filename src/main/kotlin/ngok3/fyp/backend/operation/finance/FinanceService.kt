@@ -128,8 +128,16 @@ class FinanceService(
         }
     }
 
-    fun deleteFinanceRecords(jwtToken: String, deleteIdList: List<FinanceDeleteDto>): List<FinanceDeleteDto> {
-        TODO("Not yet implemented")
+    fun deleteFinanceRecords(
+        jwtToken: String,
+        societyName: String,
+        deleteIdList: List<FinanceDeleteDto>
+    ): List<FinanceDeleteDto> {
+        jwtUtil.verifyUserEnrolledSociety(jwtToken, societyName)
+
+        financeEntityRepository.deleteAllById(deleteIdList.map { deleteId -> UUID.fromString(deleteId.id) })
+
+        return deleteIdList
     }
 
 }

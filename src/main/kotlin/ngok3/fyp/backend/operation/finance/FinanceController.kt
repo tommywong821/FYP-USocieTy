@@ -82,8 +82,9 @@ class FinanceController(
     @DeleteMapping
     fun deleteFinancialRecords(
         @CookieValue("token") jwtToken: String,
+        @RequestParam("societyName") societyName: String,
         @RequestParam("id") deleteIdList: List<FinanceDeleteDto>
     ): List<FinanceDeleteDto> {
-        return financeService.deleteFinanceRecords(jwtToken, deleteIdList)
+        return financeService.deleteFinanceRecords(jwtToken, societyName, deleteIdList)
     }
 }
