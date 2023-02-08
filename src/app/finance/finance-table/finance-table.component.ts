@@ -1,6 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {Path} from 'src/app/app-routing.module';
+import {ApiService} from 'src/app/services/api.service';
 import {FinanceTableRecord} from '../model/IFinanceTableRecord';
 
 @Component({
@@ -10,18 +11,19 @@ import {FinanceTableRecord} from '../model/IFinanceTableRecord';
 })
 export class FinanceTableComponent implements OnInit {
   @Input() tableData: FinanceTableRecord[] = [];
+  @Input() societyName: string = '';
 
   checked = false;
   loading = false;
   indeterminate = false;
   listOfCurrentPageData: readonly FinanceTableRecord[] = [];
-  setOfCheckedId = new Set<number>();
+  setOfCheckedId = new Set<string>();
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private apiService: ApiService) {}
 
   ngOnInit(): void {}
 
-  updateCheckedSet(id: number, checked: boolean): void {
+  updateCheckedSet(id: string, checked: boolean): void {
     if (checked) {
       this.setOfCheckedId.add(id);
     } else {
@@ -49,14 +51,22 @@ export class FinanceTableComponent implements OnInit {
     this.loading = true;
     const requestData = this.tableData.filter(data => this.setOfCheckedId.has(data.id));
     console.log(requestData);
-    setTimeout(() => {
-      this.setOfCheckedId.clear();
-      this.refreshCheckedStatus();
-      this.loading = false;
-    }, 1000);
+    this.apiService
+      .deleteFinanceData(
+        this.societyName,
+        requestData.map(data => data.id)
+      )
+      .subscribe({
+        next: () => {
+          // TODO update ui
+          this.setOfCheckedId.clear();
+          this.refreshCheckedStatus();
+          this.loading = false;
+        },
+      });
   }
 
-  onItemChecked(id: number, checked: boolean): void {
+  onItemChecked(id: string, checked: boolean): void {
     this.updateCheckedSet(id, checked);
     this.refreshCheckedStatus();
   }

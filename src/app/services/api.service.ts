@@ -56,4 +56,14 @@ export class ApiService {
 
     return this.restful.get<FinanceChartRecord[]>(`${environment.backend_url}/finance/barChart`, {params: queryParams});
   }
+
+  deleteFinanceData(societyName: string, financeRecordIdList: string[]): Observable<FinanceTableRecord[]> {
+    let queryParams = new HttpParams().append('societyName', societyName);
+
+    financeRecordIdList.forEach(financeRecordId => {
+      queryParams = queryParams.append('id', financeRecordId);
+    });
+
+    return this.restful.delete<FinanceTableRecord[]>(`${environment.backend_url}/finance`, {params: queryParams});
+  }
 }

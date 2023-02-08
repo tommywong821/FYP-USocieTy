@@ -1,5 +1,5 @@
 export interface FinanceTableRecord {
-  id: number;
+  id: string;
   date: string;
   amount: number;
   description: string;

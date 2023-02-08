@@ -22,6 +22,7 @@ export class FinanceComponent implements OnInit {
   enrolledSocieties: string[] = [];
 
   form!: FormGroup;
+  societyName: string = '';
 
   constructor(private authService: AuthService, private apiService: ApiService, private fb: FormBuilder) {
     this.currentDate = new Date();
@@ -51,11 +52,11 @@ export class FinanceComponent implements OnInit {
   submitForm(): void {
     if (this.form.valid) {
       //change date format to mm/dd/2023
-      let societyName: string = this.form.value.societyName;
+      this.societyName = this.form.value.societyName;
       let fromDate: string = this.form.value.dateRange[0].toLocaleDateString();
       let toDate: string = this.form.value.dateRange[1].toLocaleDateString();
-      console.log(`fromDate: ${fromDate}, toDate: ${toDate}, societyName: ${societyName}`);
-      this.fetchFinanceRecord(societyName, fromDate, toDate);
+      console.log(`fromDate: ${fromDate}, toDate: ${toDate}, societyName: ${this.societyName}`);
+      this.fetchFinanceRecord(this.societyName, fromDate, toDate);
     } else {
       alert('You must fill all the fields');
       Object.values(this.form.controls).forEach(control => {
