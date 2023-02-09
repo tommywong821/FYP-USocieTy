@@ -35,7 +35,7 @@ interface FinanceEntityRepository : JpaRepository<FinanceEntity, UUID> {
     ): List<FinanceChartDto>
 
 
-    @Query("select new ngok3.fyp.backend.operation.finance.model.FinanceRecordTotalNumberDto(count(f)) from FinanceEntity f where f.date >= ?1 and f.date <= ?2 and f.societyEntity.name = ?3")
+    @Query("select new ngok3.fyp.backend.operation.finance.model.FinanceRecordTotalNumberDto(count(f)) from FinanceEntity f where f.societyEntity.name = ?1 and f.date >= ?2 and f.date <= ?3 ")
     fun countTotalNumberOfFinanceRecordWithinDateRange(
         societyName: String,
         fromDate: LocalDateTime,
