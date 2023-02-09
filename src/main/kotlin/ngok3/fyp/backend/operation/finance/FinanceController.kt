@@ -101,4 +101,21 @@ class FinanceController(
     ): FinanceRecordTotalNumberDto {
         return financeService.getFinanceRecordTotalNumber(jwtToken, societyName, fromDateString, toDateString)
     }
+
+    @Operation(summary = "get all category of finance record within date range")
+    @Parameters(
+        Parameter(
+            name = "fromDate",
+            description = "Date Format: M/d/yyyy \n\n eg: 2/3/2023 === 2nd February 2023"
+        ), Parameter(name = "toDate", description = "Date Format: M/d/yyyy \n\n eg: 3/3/2023 === 3rd February 2023")
+    )
+    @GetMapping("/category")
+    fun getFinanceRecordCategory(
+        @CookieValue("token") jwtToken: String,
+        @RequestParam("societyName") societyName: String,
+        @RequestParam("fromDate") fromDateString: String,
+        @RequestParam("toDate") toDateString: String,
+    ): List<FinanceRecordCategoryDto> {
+        return financeService.getFinanceRecordCategory(jwtToken, societyName, fromDateString, toDateString)
+    }
 }

@@ -33,6 +33,7 @@ jobs:
         echo "spring.datasource.password=Test1234" >> application.properties
         echo "heroku.frontend.url=heroku.frontend.url" >> application.properties
         echo "cors.originPatterns=cors.originPatterns" >> application.properties
+        echo "cookie.lifetime=7" >> application.properties
         cd ../../..
     
     # Assembles and tests this project.

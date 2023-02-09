@@ -152,4 +152,14 @@ class FinanceService(
         )
     }
 
+    fun getFinanceRecordCategory(
+        jwtToken: String,
+        societyName: String,
+        fromDateString: String,
+        toDateString: String
+    ): List<FinanceRecordCategoryDto> {
+        return emptyList()
+    }
+
+
 }
