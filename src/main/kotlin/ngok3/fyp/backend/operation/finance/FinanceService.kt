@@ -20,6 +20,7 @@ class FinanceService(
     @Autowired val dateUtil: DateUtil,
     @Autowired val jwtUtil: JWTUtil,
 ) {
+
     fun getTableData(
         jwtToken: String,
         societyName: String,
@@ -146,9 +147,10 @@ class FinanceService(
         jwtUtil.verifyUserEnrolledSociety(jwtToken, societyName)
 
         return financeEntityRepository.countTotalNumberOfFinanceRecordWithinDateRange(
+            societyName,
             dateUtil.convertStringToLocalDateTime(
                 fromDateString
-            ), dateUtil.convertStringToLocalDateTime(toDateString), societyName
+            ), dateUtil.convertStringToLocalDateTime(toDateString)
         )
     }
 
@@ -158,8 +160,13 @@ class FinanceService(
         fromDateString: String,
         toDateString: String
     ): List<FinanceRecordCategoryDto> {
-        return emptyList()
+        jwtUtil.verifyUserEnrolledSociety(jwtToken, societyName)
+
+        return financeEntityRepository.getAllCategoryOfFinanceRecordWithinDateRange(
+            societyName,
+            dateUtil.convertStringToLocalDateTime(
+                fromDateString
+            ), dateUtil.convertStringToLocalDateTime(toDateString)
+        )
     }
-
-
 }
