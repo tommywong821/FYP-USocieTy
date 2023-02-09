@@ -1,6 +1,6 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Router} from '@angular/router';
-import {NzTableQueryParams} from 'ng-zorro-antd/table';
+import {NzTableFilterList, NzTableQueryParams} from 'ng-zorro-antd/table';
 import {BehaviorSubject, zip} from 'rxjs';
 import {Path} from 'src/app/app-routing.module';
 import {ApiService} from 'src/app/services/api.service';
@@ -22,15 +22,17 @@ export class FinanceTableComponent implements OnInit {
   toDate: string = '';
 
   tableData: FinanceTableRecord[] = [];
-  // TODO add api to get total number of finance record within date range
   total: number = 0;
   pageSize: number = 10;
   pageIndex: number = 1;
+  filterCategory: NzTableFilterList = [];
 
   checked = false;
   loading = false;
   indeterminate = false;
   setOfCheckedId = new Set<string>();
+  // block api call when component init
+  queryParamsChangeEventCnt = 0;
 
   constructor(private router: Router, private apiService: ApiService) {
     this.financeTableRequestParam$ = new BehaviorSubject<FinanceTableRequestParam | null>(null);
@@ -41,11 +43,9 @@ export class FinanceTableComponent implements OnInit {
     this.financeTableRequestParam$.subscribe({
       next: (financeTableRequestParam: FinanceTableRequestParam | null) => {
         if (financeTableRequestParam !== null) {
-          console.log(financeTableRequestParam);
           this.societyName = financeTableRequestParam.societyName;
           this.fromDate = financeTableRequestParam.fromDate;
           this.toDate = financeTableRequestParam.toDate;
-          console.log(`fromDate: ${this.fromDate}, toDate: ${this.toDate}, societyName: ${this.societyName}`);
           this.fetchTableData();
         }
       },
@@ -61,16 +61,36 @@ export class FinanceTableComponent implements OnInit {
   }
 
   onQueryParamsChange(params: NzTableQueryParams): void {
-    console.log(params);
+    // block api call when component init
+    if (++this.queryParamsChangeEventCnt == 1) {
+      return;
+    }
+
     const {pageSize, pageIndex, sort, filter} = params;
     const currentSort = sort.find(item => item.value !== null);
-    const sortField = (currentSort && currentSort.key) || null;
-    const sortOrder = (currentSort && currentSort.value) || null;
-    console.log(sortField);
-    console.log(sortOrder);
-    console.log(pageSize);
-    console.log(pageIndex);
-    this.refreshCheckedStatus();
+    const sortField = (currentSort && currentSort.key) || undefined;
+    const sortOrder = (currentSort && currentSort.value) || undefined;
+    const currentFilter = filter.find(item => item.value !== null);
+    const filterKey = (currentFilter && currentFilter.key) || undefined;
+    const filterValue = (currentFilter && currentFilter.value) || undefined;
+    this.apiService
+      .getFinanceTableData(
+        this.societyName,
+        this.fromDate,
+        this.toDate,
+        pageIndex,
+        pageSize,
+        sortField,
+        sortOrder,
+        filterKey,
+        filterValue
+      )
+      .subscribe({
+        next: () => {
+          console.log('getted');
+          this.refreshCheckedStatus();
+        },
+      });
   }
 
   refreshCheckedStatus(): void {
@@ -87,7 +107,6 @@ export class FinanceTableComponent implements OnInit {
   sendRequest(): void {
     this.loading = true;
     const requestData = this.tableData.filter(data => this.setOfCheckedId.has(data.id));
-    console.log(requestData);
     this.apiService
       .deleteFinanceData(
         this.societyName,
@@ -117,12 +136,16 @@ export class FinanceTableComponent implements OnInit {
   fetchTableData() {
     zip(
       this.apiService.getTotalNumberOfFinanceTableData(this.societyName, this.fromDate, this.toDate),
-      this.apiService.getFinanceTableData(this.societyName, this.fromDate, this.toDate)
-    ).subscribe(([totalNumber, tableData]) => {
+      this.apiService.getFinanceTableData(this.societyName, this.fromDate, this.toDate),
+      this.apiService.getAllCategoryOfFinanceRecord(this.societyName, this.fromDate, this.toDate)
+    ).subscribe(([totalNumber, tableData, categoryList]) => {
       this.total = totalNumber.total;
 
       tableData.forEach((data: FinanceTableRecord) => (data.date = new Date(data.date).toDateString()));
       this.tableData = tableData;
+
+      this.filterCategory = categoryList;
+      console.log(this.filterCategory);
     });
   }
 }

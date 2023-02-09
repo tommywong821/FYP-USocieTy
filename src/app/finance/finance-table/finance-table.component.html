@@ -52,6 +52,13 @@
       >
         Amount(HKD)
       </th>
+      <th
+        nzColumnKey="category"
+        [nzFilters]="filterCategory"
+        [nzFilterFn]="true"
+      >
+        Category
+      </th>
       <th>Description</th>
       <th>Edit By</th>
     </tr>
@@ -65,6 +72,7 @@
       ></td>
       <td>{{ data.date }}</td>
       <td>${{ data.amount }}</td>
+      <td>{{ data.category }}</td>
       <td>{{ data.description }}</td>
       <td>{{ data.editBy }}</td>
     </tr>
