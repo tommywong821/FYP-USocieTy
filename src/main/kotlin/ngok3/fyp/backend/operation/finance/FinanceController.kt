@@ -85,7 +85,7 @@ class FinanceController(
         return financeService.deleteFinanceRecords(jwtToken, societyName, deleteIdList)
     }
 
-    @Operation(summary = "get total number finance record within date range")
+    @Operation(summary = "get total number of finance record within date range")
     @Parameters(
         Parameter(
             name = "fromDate",
