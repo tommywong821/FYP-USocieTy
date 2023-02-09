@@ -14,3 +14,6 @@ heroku:
 
 cors:
   originPatterns: ${CORS_ORIGINS}
+
+cookie:
+  lifetime: ${COOKIE_LENGTH}

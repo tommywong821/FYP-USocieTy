@@ -32,11 +32,7 @@ jobs:
         echo "spring.datasource.username=test" >> application.properties
         echo "spring.datasource.password=Test1234" >> application.properties
         echo "heroku.frontend.url=heroku.frontend.url" >> application.properties
-        echo "heroku.backend.url=heroku.backend.url" >> application.properties
         echo "cors.originPatterns=cors.originPatterns" >> application.properties
-        echo "itsc.tenantId=ITSC_TENANT_ID" >> application.properties
-        echo "itsc.clientId=ITSC_CLIENT_ID" >> application.properties
-        echo "itsc.clientSecret=ITSC_CLIENT_SECRET" >> application.properties
         cd ../../..
     
     # Assembles and tests this project.
