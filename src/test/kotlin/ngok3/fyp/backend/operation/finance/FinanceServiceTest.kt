@@ -411,9 +411,9 @@ class FinanceServiceTest(
 
         every {
             financeEntityRepository.countTotalNumberOfFinanceRecordWithinDateRange(
+                mockAuthRepository.testSocietyName,
                 dateUtil.convertStringToLocalDateTime("5/2/2023"),
-                dateUtil.convertStringToLocalDateTime("6/2/2023"),
-                mockAuthRepository.testSocietyName
+                dateUtil.convertStringToLocalDateTime("6/2/2023")
             )
         } returns financeRecordTotalNumberDto
 
@@ -456,6 +456,73 @@ class FinanceServiceTest(
     fun `should not get total number of finance record from database within date range when invalid jwt token`() {
         val exception: Exception = assertThrows {
             financeService.getFinanceRecordTotalNumber(
+                "dummy",
+                mockAuthRepository.testSocietyName,
+                "5/2/2023",
+                "6/2/2023"
+            )
+        }
+
+        assertEquals(MalformedJwtException::class, exception::class)
+    }
+
+    @Test
+    fun `should get all category of finance record from database within date range`() {
+        val categoryList: List<FinanceRecordCategoryDto> = listOf<FinanceRecordCategoryDto>(
+            FinanceRecordCategoryDto("category a", "category a"),
+            FinanceRecordCategoryDto("category b", "category b"),
+        )
+
+        every {
+            financeEntityRepository.getAllCategoryOfFinanceRecordWithinDateRange(
+                mockAuthRepository.testSocietyName,
+                dateUtil.convertStringToLocalDateTime("5/2/2023"),
+                dateUtil.convertStringToLocalDateTime("6/2/2023")
+            )
+        } returns categoryList
+
+        val totalNumber = financeService.getFinanceRecordCategory(
+            mockAuthRepository.validUserCookieToken,
+            mockAuthRepository.testSocietyName,
+            "5/2/2023",
+            "6/2/2023"
+        )
+
+        assertEquals(categoryList[0].text, totalNumber[0].text)
+        assertEquals(categoryList[0].value, totalNumber[0].value)
+        assertEquals(categoryList[1].text, totalNumber[1].text)
+        assertEquals(categoryList[1].value, totalNumber[1].value)
+    }
+
+    @Test
+    fun `should not get all category of finance record from database within date range when itsc not joining the society`() {
+        val itsc: String = mockAuthRepository.invalidUserItsc
+        val societyName: String = mockAuthRepository.testSocietyName
+
+        every {
+            enrolledSocietyRecordRepository.findByItscAndSocietyNameAndEnrolledStatus(
+                itsc,
+                societyName,
+                EnrolledStatus.SUCCESS
+            )
+        } returns Optional.empty()
+
+        val exception: AccessDeniedException = assertThrows {
+            financeService.getFinanceRecordTotalNumber(
+                mockAuthRepository.invalidUserCookieToken,
+                societyName,
+                "5/2/2023",
+                "6/2/2023"
+            )
+        }
+
+        assertEquals("student with itsc: ${itsc} do not belong to this society: ${societyName}", exception.message)
+    }
+
+    @Test
+    fun `should not get all category of finance record from database within date range when invalid jwt token`() {
+        val exception: Exception = assertThrows {
+            financeService.getFinanceRecordCategory(
                 "dummy",
                 mockAuthRepository.testSocietyName,
                 "5/2/2023",

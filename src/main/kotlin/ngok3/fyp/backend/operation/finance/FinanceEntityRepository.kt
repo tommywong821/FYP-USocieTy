@@ -1,6 +1,7 @@
 package ngok3.fyp.backend.operation.finance;
 
 import ngok3.fyp.backend.operation.finance.model.FinanceChartDto
+import ngok3.fyp.backend.operation.finance.model.FinanceRecordCategoryDto
 import ngok3.fyp.backend.operation.finance.model.FinanceRecordTotalNumberDto
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
@@ -36,9 +37,17 @@ interface FinanceEntityRepository : JpaRepository<FinanceEntity, UUID> {
 
     @Query("select new ngok3.fyp.backend.operation.finance.model.FinanceRecordTotalNumberDto(count(f)) from FinanceEntity f where f.date >= ?1 and f.date <= ?2 and f.societyEntity.name = ?3")
     fun countTotalNumberOfFinanceRecordWithinDateRange(
+        societyName: String,
         fromDate: LocalDateTime,
-        toDate: LocalDateTime,
-        societyName: String
+        toDate: LocalDateTime
     ): FinanceRecordTotalNumberDto
+
+
+    @Query("select new ngok3.fyp.backend.operation.finance.model.FinanceRecordCategoryDto(f.category, f.category) from FinanceEntity f where f.societyEntity.name = ?1 and f.date >= ?2 and f.date <= ?3 group by f.category")
+    fun getAllCategoryOfFinanceRecordWithinDateRange(
+        societyName: String,
+        fromDate: LocalDateTime,
+        toDate: LocalDateTime
+    ): List<FinanceRecordCategoryDto>
 
 }
