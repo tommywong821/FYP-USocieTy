@@ -21,6 +21,6 @@ data class EnrolledEventDto(
             DateTimeFormatter.ofPattern("yyyy-MM-dd")
         ),
         enrolledEventRecordEntity.eventEntity?.category,
-        enrolledEventRecordEntity.status?.status
+        enrolledEventRecordEntity.status.status
     )
 }
