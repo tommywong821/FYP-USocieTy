@@ -24,10 +24,14 @@
 <!-- content -->
 <nz-table
   #rowSelectionTable
-  nzShowPagination
   nzShowSizeChanger
   [nzData]="tableData"
-  (nzCurrentPageDataChange)="onCurrentPageDataChange($event)"
+  [nzFrontPagination]="false"
+  [nzLoading]="loading"
+  [nzTotal]="total"
+  [nzPageSize]="pageSize"
+  [nzPageIndex]="pageIndex"
+  (nzQueryParams)="onQueryParamsChange($event)"
 >
   <thead>
     <tr>
@@ -36,8 +40,18 @@
         [nzIndeterminate]="indeterminate"
         (nzCheckedChange)="onAllChecked($event)"
       ></th>
-      <th>Date</th>
-      <th>Amount(HKD)</th>
+      <th
+        nzColumnKey="date"
+        [nzSortFn]="true"
+      >
+        Date
+      </th>
+      <th
+        nzColumnKey="amount"
+        [nzSortFn]="true"
+      >
+        Amount(HKD)
+      </th>
       <th>Description</th>
       <th>Edit By</th>
     </tr>

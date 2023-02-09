@@ -1,6 +1,7 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Router} from '@angular/router';
-import {BehaviorSubject} from 'rxjs';
+import {NzTableQueryParams} from 'ng-zorro-antd/table';
+import {BehaviorSubject, zip} from 'rxjs';
 import {Path} from 'src/app/app-routing.module';
 import {ApiService} from 'src/app/services/api.service';
 import {FinanceTableRequestParam} from '../model/IFinanceTableParam';
@@ -21,11 +22,14 @@ export class FinanceTableComponent implements OnInit {
   toDate: string = '';
 
   tableData: FinanceTableRecord[] = [];
+  // TODO add api to get total number of finance record within date range
+  total: number = 0;
+  pageSize: number = 10;
+  pageIndex: number = 1;
 
   checked = false;
   loading = false;
   indeterminate = false;
-  listOfCurrentPageData: readonly FinanceTableRecord[] = [];
   setOfCheckedId = new Set<string>();
 
   constructor(private router: Router, private apiService: ApiService) {
@@ -33,6 +37,7 @@ export class FinanceTableComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    // async monitoring parent when to submit form to check finance data
     this.financeTableRequestParam$.subscribe({
       next: (financeTableRequestParam: FinanceTableRequestParam | null) => {
         if (financeTableRequestParam !== null) {
@@ -55,19 +60,27 @@ export class FinanceTableComponent implements OnInit {
     }
   }
 
-  onCurrentPageDataChange(listOfCurrentPageData: readonly FinanceTableRecord[]): void {
-    this.listOfCurrentPageData = listOfCurrentPageData;
+  onQueryParamsChange(params: NzTableQueryParams): void {
+    console.log(params);
+    const {pageSize, pageIndex, sort, filter} = params;
+    const currentSort = sort.find(item => item.value !== null);
+    const sortField = (currentSort && currentSort.key) || null;
+    const sortOrder = (currentSort && currentSort.value) || null;
+    console.log(sortField);
+    console.log(sortOrder);
+    console.log(pageSize);
+    console.log(pageIndex);
     this.refreshCheckedStatus();
   }
 
   refreshCheckedStatus(): void {
-    const listOfEnabledData = this.listOfCurrentPageData.filter(({disabled}) => !disabled);
+    const listOfEnabledData = this.tableData.filter(({disabled}) => !disabled);
     this.checked = listOfEnabledData.every(({id}) => this.setOfCheckedId.has(id));
     this.indeterminate = listOfEnabledData.some(({id}) => this.setOfCheckedId.has(id)) && !this.checked;
   }
 
   onAllChecked(checked: boolean): void {
-    this.listOfCurrentPageData.filter(({disabled}) => !disabled).forEach(({id}) => this.updateCheckedSet(id, checked));
+    this.tableData.filter(({disabled}) => !disabled).forEach(({id}) => this.updateCheckedSet(id, checked));
     this.refreshCheckedStatus();
   }
 
@@ -82,7 +95,6 @@ export class FinanceTableComponent implements OnInit {
       )
       .subscribe({
         next: () => {
-          // TODO update ui
           this.setOfCheckedId.clear();
           this.refreshCheckedStatus();
           this.loading = false;
@@ -103,11 +115,14 @@ export class FinanceTableComponent implements OnInit {
   }
 
   fetchTableData() {
-    this.apiService.getFinanceTableData(this.societyName, this.fromDate, this.toDate).subscribe({
-      next: (tableData: FinanceTableRecord[]) => {
-        tableData.forEach((data: FinanceTableRecord) => (data.date = new Date(data.date).toDateString()));
-        this.tableData = tableData;
-      },
+    zip(
+      this.apiService.getTotalNumberOfFinanceTableData(this.societyName, this.fromDate, this.toDate),
+      this.apiService.getFinanceTableData(this.societyName, this.fromDate, this.toDate)
+    ).subscribe(([totalNumber, tableData]) => {
+      this.total = totalNumber.total;
+
+      tableData.forEach((data: FinanceTableRecord) => (data.date = new Date(data.date).toDateString()));
+      this.tableData = tableData;
     });
   }
 }

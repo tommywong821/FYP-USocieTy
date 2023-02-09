@@ -4,6 +4,7 @@ import {map, Observable} from 'rxjs';
 import {environment} from 'src/environments/environment';
 import {Request} from '../api/common';
 import {FinanceChartRecord} from '../finance/model/IFinanceChartRecord';
+import {FinanceRecordTotalNumber} from '../finance/model/IFinanceRecordTotalNumber';
 import {FinanceTableRecord} from '../finance/model/IFinanceTableRecord';
 
 @Injectable({
@@ -65,5 +66,20 @@ export class ApiService {
     });
 
     return this.restful.delete<FinanceTableRecord[]>(`${environment.backend_url}/finance`, {params: queryParams});
+  }
+
+  getTotalNumberOfFinanceTableData(
+    societyName: string,
+    fromDate: string,
+    toDate: string
+  ): Observable<FinanceRecordTotalNumber> {
+    let queryParams = new HttpParams()
+      .append('societyName', societyName)
+      .append('fromDate', fromDate)
+      .append('toDate', toDate);
+
+    return this.restful.get<FinanceRecordTotalNumber>(`${environment.backend_url}/finance/totalNumber`, {
+      params: queryParams,
+    });
   }
 }
