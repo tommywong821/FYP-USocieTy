@@ -35,6 +35,9 @@ class AuthService(
     @Value("\${heroku.frontend.url}")
     val frontendUrl: String? = null
 
+    @Value("\${cookie.lifetime}")
+    val lifetime: String = "1"
+
     fun itscSSOServiceValidate(ticket: Map<String, String>, frontendResponse: HttpServletResponse): StudentDto {
         val url: HttpUrl = HttpUrl.Builder()
             .scheme("https")
@@ -69,7 +72,7 @@ class AuthService(
         val cookie: ResponseCookie =
             ResponseCookie.from("token", jwtUtil.generateToken(studentEntity)).httpOnly(true).secure(true).path("/")
                 .maxAge(
-                    Duration.ofDays(1)
+                    Duration.ofDays(lifetime.toLong())
                 ).sameSite("None").build()
         frontendResponse.setHeader(HttpHeaders.SET_COOKIE, cookie.toString())
 
@@ -108,7 +111,7 @@ class AuthService(
         val cookie: ResponseCookie =
             ResponseCookie.from("token", jwtUtil.generateToken(studentEntity)).httpOnly(true).secure(true).path("/")
                 .maxAge(
-                    Duration.ofDays(1)
+                    Duration.ofDays(lifetime.toLong())
                 ).sameSite("None").build()
         frontendResponse.setHeader(HttpHeaders.SET_COOKIE, cookie.toString())
 

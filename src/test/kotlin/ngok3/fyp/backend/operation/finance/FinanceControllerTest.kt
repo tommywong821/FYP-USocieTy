@@ -758,4 +758,112 @@ class FinanceControllerTest @Autowired constructor(
             }
         }
     }
+
+    @Test
+    fun `should get category of financial records within date range`() {
+        val categoryList: List<FinanceRecordCategoryDto> = listOf<FinanceRecordCategoryDto>(
+            FinanceRecordCategoryDto("category a", "category a"),
+            FinanceRecordCategoryDto("category b", "category b"),
+        )
+
+        every {
+            financeService.getFinanceRecordCategory(
+                mockAuthRepository.validUserCookieToken,
+                mockAuthRepository.testSocietyName,
+                "03-02-2023",
+                "04-02-2023"
+            )
+        } returns categoryList
+
+        mockMvc.get("/finance/category") {
+            headers {
+                contentType = MediaType.APPLICATION_JSON
+                cookie(Cookie("token", mockAuthRepository.validUserCookieToken))
+            }
+            params = LinkedMultiValueMap<String, String>().apply {
+                add("societyName", mockAuthRepository.testSocietyName)
+                add("fromDate", "03-02-2023")
+                add("toDate", "04-02-2023")
+            }
+        }.andDo { print() }.andExpect {
+            status { isOk() }
+            content { contentType(MediaType.APPLICATION_JSON) }
+            jsonPath("$") {
+                isArray()
+            }
+            jsonPath("$.size()") {
+                value(categoryList.size)
+            }
+            jsonPath("$[*].text") {
+                value(categoryList.map { category -> category.text })
+            }
+            jsonPath("$[*].value") {
+                value(categoryList.map { category -> category.value })
+            }
+        }
+    }
+
+    @Test
+    fun `should return 401 error when user no belong to that society and get category of financial records within date range`() {
+        every {
+            financeService.getFinanceRecordCategory(
+                mockAuthRepository.invalidUserCookieToken,
+                mockAuthRepository.testSocietyName,
+                "03-02-2023",
+                "04-02-2023"
+            )
+        } throws AccessDeniedException("student with itsc: ${mockAuthRepository.invalidUserItsc} do not belong to this society: ${mockAuthRepository.testSocietyName}")
+
+        mockMvc.get("/finance/category") {
+            headers {
+                contentType = MediaType.APPLICATION_JSON
+                cookie(Cookie("token", mockAuthRepository.invalidUserCookieToken))
+            }
+            params = LinkedMultiValueMap<String, String>().apply {
+                add("societyName", mockAuthRepository.testSocietyName)
+                add("fromDate", "03-02-2023")
+                add("toDate", "04-02-2023")
+            }
+        }.andDo { print() }.andExpect {
+            status { isUnauthorized() }
+            jsonPath("$.status") {
+                value(401)
+            }
+            jsonPath("$.message") {
+                value("Unauthorized Access: student with itsc: ${mockAuthRepository.invalidUserItsc} do not belong to this society: ${mockAuthRepository.testSocietyName}")
+            }
+        }
+    }
+
+    @Test
+    fun `should return 401 error when invalid cookie token try to get category of financial records within date range`() {
+        every {
+            financeService.getFinanceRecordCategory(
+                "dummy",
+                mockAuthRepository.testSocietyName,
+                "03-02-2023",
+                "04-02-2023"
+            )
+        } throws MalformedJwtException("Invalid JWT token")
+
+        mockMvc.get("/finance/category") {
+            headers {
+                contentType = MediaType.APPLICATION_JSON
+                cookie(Cookie("token", "dummy"))
+            }
+            params = LinkedMultiValueMap<String, String>().apply {
+                add("societyName", mockAuthRepository.testSocietyName)
+                add("fromDate", "03-02-2023")
+                add("toDate", "04-02-2023")
+            }
+        }.andDo { print() }.andExpect {
+            status { isUnauthorized() }
+            jsonPath("$.status") {
+                value(401)
+            }
+            jsonPath("$.message") {
+                value("Invalid JWT token")
+            }
+        }
+    }
 }
