@@ -26,8 +26,21 @@ class FinanceController(
         @RequestParam("societyName") societyName: String,
         @RequestParam("fromDate") fromDateString: String,
         @RequestParam("toDate") toDateString: String,
+        @RequestParam("pageIndex", required = false) pageIndex: Int,
+        @RequestParam("pageSize", required = false) pageSize: Int,
+        @RequestParam("sortField", required = false) sortField: String,
+        @RequestParam("isAscend", required = false) isAscend: Boolean
     ): List<FinanceTableDto> {
-        return financeService.getTableData(jwtToken, societyName, fromDateString, toDateString)
+        return financeService.getTableData(
+            jwtToken,
+            societyName,
+            fromDateString,
+            toDateString,
+            pageIndex,
+            pageSize,
+            sortField,
+            isAscend
+        )
     }
 
     @Operation(summary = "get all finance record with society name group by category")

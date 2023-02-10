@@ -25,7 +25,11 @@ class FinanceService(
         jwtToken: String,
         societyName: String,
         fromDateString: String,
-        toDateString: String
+        toDateString: String,
+        pageIndex: Int,
+        pageSize: Int,
+        sortField: String,
+        isAscend: Boolean
     ): List<FinanceTableDto> {
         jwtUtil.verifyUserEnrolledSociety(jwtToken, societyName)
 
@@ -45,6 +49,15 @@ class FinanceService(
                 financeEntity.studentEntity?.nickname
             )
         }
+    }
+
+    fun getTableData(
+        jwtToken: String,
+        societyName: String,
+        fromDateString: String,
+        toDateString: String,
+    ): List<FinanceTableDto> {
+        return getTableData(jwtToken, societyName, fromDateString, toDateString, 1, 10, "", false)
     }
 
     fun getPieChartData(

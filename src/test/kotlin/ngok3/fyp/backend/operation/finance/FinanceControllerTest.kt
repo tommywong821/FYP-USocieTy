@@ -121,6 +121,82 @@ class FinanceControllerTest @Autowired constructor(
     }
 
     @Test
+    fun `should return finance record to table format with pageable and filter`() {
+        val tableData: List<FinanceTableDto> = listOf(
+            FinanceTableDto(
+                UUID.randomUUID().toString(),
+                dateUtil.currentLocalDateTime.plusDays(1).toString(),
+                2.2,
+                "description 2",
+                "user 2"
+            ),
+            FinanceTableDto(
+                UUID.randomUUID().toString(),
+                dateUtil.currentLocalDateTime.toString(),
+                1,
+                "description 1",
+                "user 1"
+            )
+        )
+
+        every {
+            financeService.getTableData(
+                mockAuthRepository.validUserCookieToken,
+                mockAuthRepository.testSocietyName,
+                "03-02-2023",
+                "04-02-2023",
+                1,
+                10,
+                "amount",
+                true
+            )
+        } returns tableData
+
+        mockMvc.get("/finance/table") {
+            headers {
+                contentType = MediaType.APPLICATION_JSON
+                cookie(Cookie("token", mockAuthRepository.validUserCookieToken))
+            }
+            params = LinkedMultiValueMap<String, String>().apply {
+                add("societyName", mockAuthRepository.testSocietyName)
+                add("fromDate", "03-02-2023")
+                add("toDate", "04-02-2023")
+                add("pageIndex", "1")
+                add("pageSize", "10")
+                add("sortField", "amount")
+                add("isAscend", "true")
+            }
+        }.andDo { print() }.andExpect {
+            status { isOk() }
+            content { contentType(MediaType.APPLICATION_JSON) }
+            jsonPath("$") {
+                isArray()
+            }
+            jsonPath("$.size()") {
+                value(tableData.size)
+            }
+            jsonPath("$[*].id") {
+                value(tableData.map { financeTableDto -> financeTableDto.id })
+            }
+            jsonPath("$[*].date") {
+                value(tableData.map { financeTableDto -> financeTableDto.date })
+            }
+            jsonPath("$[*].amount") {
+                value(tableData.map { financeTableDto -> financeTableDto.amount })
+            }
+            jsonPath("$[*].description") {
+                value(tableData.map { financeTableDto -> financeTableDto.description })
+            }
+            jsonPath("$[*].category") {
+                value(tableData.map { financeTableDto -> financeTableDto.category })
+            }
+            jsonPath("$[*].editBy") {
+                value(tableData.map { financeTableDto -> financeTableDto.editBy })
+            }
+        }
+    }
+
+    @Test
     fun `should return 401 error when user no belong to that society and try to get finance record to table format`() {
         val societyName: String = mockAuthRepository.testSocietyName
         val itsc: String = mockAuthRepository.invalidUserItsc
@@ -866,4 +942,5 @@ class FinanceControllerTest @Autowired constructor(
             }
         }
     }
+
 }
