@@ -76,7 +76,11 @@ class FinanceControllerTest @Autowired constructor(
                 mockAuthRepository.validUserCookieToken,
                 mockAuthRepository.testSocietyName,
                 "03-02-2023",
-                "04-02-2023"
+                "04-02-2023",
+                1,
+                10,
+                "",
+                false
             )
         } returns tableData
 
@@ -89,6 +93,10 @@ class FinanceControllerTest @Autowired constructor(
                 add("societyName", mockAuthRepository.testSocietyName)
                 add("fromDate", "03-02-2023")
                 add("toDate", "04-02-2023")
+                add("pageIndex", "")
+                add("pageSize", "")
+                add("sortField", "")
+                add("isAscend", "")
             }
         }.andDo { print() }.andExpect {
             status { isOk() }
@@ -205,7 +213,11 @@ class FinanceControllerTest @Autowired constructor(
                 mockAuthRepository.invalidUserCookieToken,
                 societyName,
                 "03-02-2023",
-                "04-02-2023"
+                "04-02-2023",
+                1,
+                10,
+                "",
+                false
             )
         } throws AccessDeniedException("student with itsc: ${itsc} do not belong to this society: ${societyName}")
 
@@ -218,6 +230,10 @@ class FinanceControllerTest @Autowired constructor(
                 add("societyName", mockAuthRepository.testSocietyName)
                 add("fromDate", "03-02-2023")
                 add("toDate", "04-02-2023")
+                add("pageIndex", "")
+                add("pageSize", "")
+                add("sortField", "")
+                add("isAscend", "")
             }
         }.andDo { print() }.andExpect {
             status { isUnauthorized() }
@@ -238,7 +254,11 @@ class FinanceControllerTest @Autowired constructor(
                 "dummy",
                 societyName,
                 "03-02-2023",
-                "04-02-2023"
+                "04-02-2023",
+                1,
+                10,
+                "",
+                false
             )
         } throws MalformedJwtException("Invalid JWT token")
 
@@ -251,6 +271,10 @@ class FinanceControllerTest @Autowired constructor(
                 add("societyName", mockAuthRepository.testSocietyName)
                 add("fromDate", "03-02-2023")
                 add("toDate", "04-02-2023")
+                add("pageIndex", "")
+                add("pageSize", "")
+                add("sortField", "")
+                add("isAscend", "")
             }
         }.andDo { print() }.andExpect {
             status { isUnauthorized() }
