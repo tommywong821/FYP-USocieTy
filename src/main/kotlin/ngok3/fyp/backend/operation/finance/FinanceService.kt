@@ -15,6 +15,7 @@ import java.util.*
 @Service
 class FinanceService(
     @Autowired val financeEntityRepository: FinanceEntityRepository,
+    @Autowired val financeEntityDao: FinanceEntityDao,
     @Autowired val studentRepository: StudentRepository,
     @Autowired val societyRepository: SocietyRepository,
     @Autowired val dateUtil: DateUtil,
@@ -25,17 +26,26 @@ class FinanceService(
         jwtToken: String,
         societyName: String,
         fromDateString: String,
-        toDateString: String
+        toDateString: String,
+        pageIndex: Int,
+        pageSize: Int,
+        sortField: String,
+        isAscend: Boolean
     ): List<FinanceTableDto> {
         jwtUtil.verifyUserEnrolledSociety(jwtToken, societyName)
 
-        val financeEntityTableList: List<FinanceEntity> = financeEntityRepository.findFinanceTableDataWithSocietyName(
-            societyName,
-            dateUtil.convertStringToLocalDateTime(fromDateString),
-            dateUtil.convertStringToLocalDateTime(toDateString)
-        )
+        val financeEntityTableList: List<FinanceEntity>? =
+            financeEntityDao.findFinanceTableDataWithSocietyNameWithPageAngFilter(
+                societyName,
+                dateUtil.convertStringToLocalDateTime(fromDateString),
+                dateUtil.convertStringToLocalDateTime(toDateString),
+                pageIndex,
+                pageSize,
+                sortField,
+                isAscend
+            )
 
-        return financeEntityTableList.map { financeEntity ->
+        return financeEntityTableList?.map { financeEntity ->
             FinanceTableDto(
                 financeEntity.uuid.toString(),
                 financeEntity.date?.let { dateUtil.convertLocalDateTimeToString(it) },
@@ -45,6 +55,16 @@ class FinanceService(
                 financeEntity.studentEntity?.nickname
             )
         }
+            ?: emptyList<FinanceTableDto>()
+    }
+
+    fun getTableData(
+        jwtToken: String,
+        societyName: String,
+        fromDateString: String,
+        toDateString: String,
+    ): List<FinanceTableDto> {
+        return getTableData(jwtToken, societyName, fromDateString, toDateString, 1, 10, "", false)
     }
 
     fun getPieChartData(

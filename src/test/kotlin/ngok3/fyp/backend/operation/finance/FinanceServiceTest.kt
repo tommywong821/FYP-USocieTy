@@ -27,12 +27,20 @@ class FinanceServiceTest(
     @Autowired private val dateUtil: DateUtil,
 ) {
     private val financeEntityRepository: FinanceEntityRepository = mockk(relaxed = true)
+    private val financeEntityDao: FinanceEntityDao = mockk(relaxed = true)
     private val studentRepository: StudentRepository = mockk(relaxed = true)
     private val societyRepository: SocietyRepository = mockk(relaxed = true)
     private val enrolledSocietyRecordRepository: EnrolledSocietyRecordRepository = mockk(relaxed = true)
     private val jwtUtil: JWTUtil = JWTUtil(enrolledSocietyRecordRepository = enrolledSocietyRecordRepository)
     private val financeService: FinanceService =
-        FinanceService(financeEntityRepository, studentRepository, societyRepository, dateUtil, jwtUtil)
+        FinanceService(
+            financeEntityRepository,
+            financeEntityDao,
+            studentRepository,
+            societyRepository,
+            dateUtil,
+            jwtUtil
+        )
 
     private val mockAuthRepository: MockAuthRepository = MockAuthRepository()
 
@@ -47,10 +55,14 @@ class FinanceServiceTest(
         } returns Optional.of(EnrolledSocietyRecordEntity())
 
         every {
-            financeEntityRepository.findFinanceTableDataWithSocietyName(
+            financeEntityDao.findFinanceTableDataWithSocietyNameWithPageAngFilter(
                 mockAuthRepository.testSocietyName,
                 dateUtil.convertStringToLocalDateTime("3/2/2023"),
-                dateUtil.convertStringToLocalDateTime("4/2/2023")
+                dateUtil.convertStringToLocalDateTime("4/2/2023"),
+                1,
+                10,
+                "",
+                false
             )
         } returns listOf<FinanceEntity>(
             FinanceEntity(1.0, "description 1", dateUtil.currentLocalDateTime),
@@ -62,6 +74,54 @@ class FinanceServiceTest(
             mockAuthRepository.testSocietyName,
             "3/2/2023",
             "4/2/2023"
+        )
+
+        assertEquals(financeTableData[0].amount, 1.0)
+        assertEquals(financeTableData[0].description, "description 1")
+        assertEquals(financeTableData[0].date, dateUtil.convertLocalDateTimeToString(dateUtil.currentLocalDateTime))
+
+        assertEquals(financeTableData[1].amount, 2.2)
+        assertEquals(financeTableData[1].description, "description 2")
+        assertEquals(
+            financeTableData[1].date,
+            dateUtil.convertLocalDateTimeToString(dateUtil.currentLocalDateTime.plusDays(1))
+        )
+    }
+
+    @Test
+    fun `should get pageable and filtered finance table record from database with society name`() {
+        every {
+            enrolledSocietyRecordRepository.findByItscAndSocietyNameAndEnrolledStatus(
+                mockAuthRepository.validUserItsc,
+                mockAuthRepository.testSocietyName,
+                EnrolledStatus.SUCCESS
+            )
+        } returns Optional.of(EnrolledSocietyRecordEntity())
+
+        every {
+            financeEntityDao.findFinanceTableDataWithSocietyNameWithPageAngFilter(
+                mockAuthRepository.testSocietyName,
+                dateUtil.convertStringToLocalDateTime("3/2/2023"),
+                dateUtil.convertStringToLocalDateTime("4/2/2023"),
+                1,
+                10,
+                "amount",
+                true
+            )
+        } returns listOf<FinanceEntity>(
+            FinanceEntity(1.0, "description 1", dateUtil.currentLocalDateTime),
+            FinanceEntity(2.2, "description 2", dateUtil.currentLocalDateTime.plusDays(1)),
+        )
+
+        val financeTableData = financeService.getTableData(
+            mockAuthRepository.validUserCookieToken,
+            mockAuthRepository.testSocietyName,
+            "3/2/2023",
+            "4/2/2023",
+            1,
+            10,
+            "amount",
+            true
         )
 
         assertEquals(financeTableData[0].amount, 1.0)
