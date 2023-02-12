@@ -26,10 +26,10 @@ class FinanceController(
         @RequestParam("societyName") societyName: String,
         @RequestParam("fromDate") fromDateString: String,
         @RequestParam("toDate") toDateString: String,
-        @RequestParam("pageIndex", required = false) pageIndex: Int,
-        @RequestParam("pageSize", required = false) pageSize: Int,
-        @RequestParam("sortField", required = false) sortField: String,
-        @RequestParam("isAscend", required = false) isAscend: Boolean
+        @RequestParam("pageIndex", required = false, defaultValue = "1") pageIndex: Int,
+        @RequestParam("pageSize", required = false, defaultValue = "10") pageSize: Int,
+        @RequestParam("sortField", required = false, defaultValue = "") sortField: String,
+        @RequestParam("isAscend", required = false, defaultValue = "false") isAscend: Boolean
     ): List<FinanceTableDto> {
         return financeService.getTableData(
             jwtToken,
