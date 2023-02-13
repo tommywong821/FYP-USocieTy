@@ -73,6 +73,17 @@ export class FinanceTableComponent implements OnInit {
     const currentFilter = filter.find(item => item.value !== null);
     const filterKey = (currentFilter && currentFilter.key) || undefined;
     const filterValue = (currentFilter && currentFilter.value) || undefined;
+
+    if (filterValue.length) {
+      this.apiService
+        .getTotalNumberOfFinanceTableData(this.societyName, this.fromDate, this.toDate, filterKey, filterValue)
+        .subscribe({
+          next: totalNumber => {
+            this.total = totalNumber.total;
+          },
+        });
+    }
+
     this.apiService
       .getFinanceTableData(
         this.societyName,
@@ -86,8 +97,9 @@ export class FinanceTableComponent implements OnInit {
         filterValue
       )
       .subscribe({
-        next: () => {
-          console.log('getted');
+        next: tableData => {
+          tableData.forEach((data: FinanceTableRecord) => (data.date = new Date(data.date).toDateString()));
+          this.tableData = tableData;
           this.refreshCheckedStatus();
         },
       });

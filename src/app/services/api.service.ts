@@ -96,12 +96,20 @@ export class ApiService {
   getTotalNumberOfFinanceTableData(
     societyName: string,
     fromDate: string,
-    toDate: string
+    toDate: string,
+    filterKey?: string,
+    filterValue?: string[]
   ): Observable<FinanceRecordTotalNumber> {
     let queryParams = new HttpParams()
       .append('societyName', societyName)
       .append('fromDate', fromDate)
       .append('toDate', toDate);
+
+    if (filterKey && filterValue) {
+      filterValue.forEach(value => {
+        queryParams = queryParams.append(filterKey, value);
+      });
+    }
 
     return this.restful.get<FinanceRecordTotalNumber>(`${environment.backend_url}/finance/totalNumber`, {
       params: queryParams,
