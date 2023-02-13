@@ -912,7 +912,8 @@ class FinanceControllerTest @Autowired constructor(
                 mockAuthRepository.validUserCookieToken,
                 mockAuthRepository.testSocietyName,
                 "03-02-2023",
-                "04-02-2023"
+                "04-02-2023",
+                emptyList()
             )
         } returns FinanceRecordTotalNumberDto(200)
 
@@ -936,13 +937,47 @@ class FinanceControllerTest @Autowired constructor(
     }
 
     @Test
+    fun `should get total number of financial records within date range and filter`() {
+        every {
+            financeService.getFinanceRecordTotalNumber(
+                mockAuthRepository.validUserCookieToken,
+                mockAuthRepository.testSocietyName,
+                "03-02-2023",
+                "04-02-2023",
+                listOf("category 2", "category 1")
+            )
+        } returns FinanceRecordTotalNumberDto(200)
+
+        mockMvc.get("/finance/totalNumber") {
+            headers {
+                contentType = MediaType.APPLICATION_JSON
+                cookie(Cookie("token", mockAuthRepository.validUserCookieToken))
+            }
+            params = LinkedMultiValueMap<String, String>().apply {
+                add("societyName", mockAuthRepository.testSocietyName)
+                add("fromDate", "03-02-2023")
+                add("toDate", "04-02-2023")
+                add("category", "category 2")
+                add("category", "category 1")
+            }
+        }.andDo { print() }.andExpect {
+            status { isOk() }
+            content { contentType(MediaType.APPLICATION_JSON) }
+            jsonPath("$.total") {
+                value(200)
+            }
+        }
+    }
+
+    @Test
     fun `should return 401 error when user no belong to that society and get total number of financial records within date range`() {
         every {
             financeService.getFinanceRecordTotalNumber(
                 mockAuthRepository.invalidUserCookieToken,
                 mockAuthRepository.testSocietyName,
                 "03-02-2023",
-                "04-02-2023"
+                "04-02-2023",
+                emptyList()
             )
         } throws AccessDeniedException("student with itsc: ${mockAuthRepository.invalidUserItsc} do not belong to this society: ${mockAuthRepository.testSocietyName}")
 
@@ -974,7 +1009,8 @@ class FinanceControllerTest @Autowired constructor(
                 "dummy",
                 mockAuthRepository.testSocietyName,
                 "03-02-2023",
-                "04-02-2023"
+                "04-02-2023",
+                emptyList()
             )
         } throws MalformedJwtException("Invalid JWT token")
 

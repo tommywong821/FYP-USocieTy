@@ -570,14 +570,15 @@ class FinanceServiceTest(
     }
 
     @Test
-    fun `should get total number of finance record from database within date range`() {
+    fun `should get total number of finance record from database within date range and filter`() {
         val financeRecordTotalNumberDto: FinanceRecordTotalNumberDto = FinanceRecordTotalNumberDto(200)
 
         every {
-            financeEntityRepository.countTotalNumberOfFinanceRecordWithinDateRange(
+            financeEntityDao.countTotalNumberOfFinanceRecordWithinDateRange(
                 mockAuthRepository.testSocietyName,
                 dateUtil.convertStringToLocalDateTime("5/2/2023"),
-                dateUtil.convertStringToLocalDateTime("6/2/2023")
+                dateUtil.convertStringToLocalDateTime("6/2/2023"),
+                listOf("category 1", "category 2")
             )
         } returns financeRecordTotalNumberDto
 
@@ -585,7 +586,8 @@ class FinanceServiceTest(
             mockAuthRepository.validUserCookieToken,
             mockAuthRepository.testSocietyName,
             "5/2/2023",
-            "6/2/2023"
+            "6/2/2023",
+            listOf("category 1", "category 2")
         )
 
         assertEquals(200, totalNumber.total)
