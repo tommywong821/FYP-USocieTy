@@ -5,9 +5,8 @@
     "ng": "ng",
     "serve": "ng serve --ssl",
     "start": "node server.js",
-    "purgescss": "node ./src/scripts/purgecss.js",
     "obfuscate": "node ./src/scripts/obfuscate.js",
-    "postbuild": "npm run purgescss && npm run obfuscate",
+    "postbuild": "npm run obfuscate",
     "build": "ng build --aot=true --build-optimizer=true",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
