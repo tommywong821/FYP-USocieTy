@@ -30,7 +30,8 @@ class FinanceService(
         pageIndex: Int,
         pageSize: Int,
         sortField: String,
-        isAscend: Boolean
+        isAscend: Boolean,
+        category: List<String>
     ): List<FinanceTableDto> {
         jwtUtil.verifyUserEnrolledSociety(jwtToken, societyName)
 
@@ -42,7 +43,8 @@ class FinanceService(
                 pageIndex,
                 pageSize,
                 sortField,
-                isAscend
+                isAscend,
+                category
             )
 
         return financeEntityTableList?.map { financeEntity ->
@@ -64,7 +66,7 @@ class FinanceService(
         fromDateString: String,
         toDateString: String,
     ): List<FinanceTableDto> {
-        return getTableData(jwtToken, societyName, fromDateString, toDateString, 1, 10, "", false)
+        return getTableData(jwtToken, societyName, fromDateString, toDateString, 1, 10, "", false, emptyList())
     }
 
     fun getPieChartData(
