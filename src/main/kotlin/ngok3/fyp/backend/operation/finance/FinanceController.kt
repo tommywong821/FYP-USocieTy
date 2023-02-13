@@ -113,8 +113,9 @@ class FinanceController(
         @RequestParam("societyName") societyName: String,
         @RequestParam("fromDate") fromDateString: String,
         @RequestParam("toDate") toDateString: String,
+        @RequestParam("category", required = false, defaultValue = "") category: List<String>
     ): FinanceRecordTotalNumberDto {
-        return financeService.getFinanceRecordTotalNumber(jwtToken, societyName, fromDateString, toDateString)
+        return financeService.getFinanceRecordTotalNumber(jwtToken, societyName, fromDateString, toDateString, category)
     }
 
     @Operation(summary = "get all category of finance record within date range")
