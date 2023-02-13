@@ -62,7 +62,8 @@ class FinanceServiceTest(
                 1,
                 10,
                 "",
-                false
+                false,
+                emptyList()
             )
         } returns listOf<FinanceEntity>(
             FinanceEntity(1.0, "description 1", dateUtil.currentLocalDateTime),
@@ -89,7 +90,57 @@ class FinanceServiceTest(
     }
 
     @Test
-    fun `should get pageable and filtered finance table record from database with society name`() {
+    fun `should get pageable finance table record from database with society name`() {
+        every {
+            enrolledSocietyRecordRepository.findByItscAndSocietyNameAndEnrolledStatus(
+                mockAuthRepository.validUserItsc,
+                mockAuthRepository.testSocietyName,
+                EnrolledStatus.SUCCESS
+            )
+        } returns Optional.of(EnrolledSocietyRecordEntity())
+
+        every {
+            financeEntityDao.findFinanceTableDataWithSocietyNameWithPageAngFilter(
+                mockAuthRepository.testSocietyName,
+                dateUtil.convertStringToLocalDateTime("3/2/2023"),
+                dateUtil.convertStringToLocalDateTime("4/2/2023"),
+                2,
+                5,
+                "",
+                false,
+                emptyList()
+            )
+        } returns listOf<FinanceEntity>(
+            FinanceEntity(1.0, "description 1", dateUtil.currentLocalDateTime),
+            FinanceEntity(2.2, "description 2", dateUtil.currentLocalDateTime.plusDays(1)),
+        )
+
+        val financeTableData = financeService.getTableData(
+            mockAuthRepository.validUserCookieToken,
+            mockAuthRepository.testSocietyName,
+            "3/2/2023",
+            "4/2/2023",
+            2,
+            5,
+            "",
+            false,
+            emptyList()
+        )
+
+        assertEquals(financeTableData[0].amount, 1.0)
+        assertEquals(financeTableData[0].description, "description 1")
+        assertEquals(financeTableData[0].date, dateUtil.convertLocalDateTimeToString(dateUtil.currentLocalDateTime))
+
+        assertEquals(financeTableData[1].amount, 2.2)
+        assertEquals(financeTableData[1].description, "description 2")
+        assertEquals(
+            financeTableData[1].date,
+            dateUtil.convertLocalDateTimeToString(dateUtil.currentLocalDateTime.plusDays(1))
+        )
+    }
+
+    @Test
+    fun `should get sort finance table record from database with society name`() {
         every {
             enrolledSocietyRecordRepository.findByItscAndSocietyNameAndEnrolledStatus(
                 mockAuthRepository.validUserItsc,
@@ -106,7 +157,8 @@ class FinanceServiceTest(
                 1,
                 10,
                 "amount",
-                true
+                true,
+                emptyList()
             )
         } returns listOf<FinanceEntity>(
             FinanceEntity(1.0, "description 1", dateUtil.currentLocalDateTime),
@@ -121,7 +173,8 @@ class FinanceServiceTest(
             1,
             10,
             "amount",
-            true
+            true,
+            emptyList()
         )
 
         assertEquals(financeTableData[0].amount, 1.0)
@@ -135,6 +188,57 @@ class FinanceServiceTest(
             dateUtil.convertLocalDateTimeToString(dateUtil.currentLocalDateTime.plusDays(1))
         )
     }
+
+    @Test
+    fun `should get filtered finance table record from database with society name`() {
+        every {
+            enrolledSocietyRecordRepository.findByItscAndSocietyNameAndEnrolledStatus(
+                mockAuthRepository.validUserItsc,
+                mockAuthRepository.testSocietyName,
+                EnrolledStatus.SUCCESS
+            )
+        } returns Optional.of(EnrolledSocietyRecordEntity())
+
+        every {
+            financeEntityDao.findFinanceTableDataWithSocietyNameWithPageAngFilter(
+                mockAuthRepository.testSocietyName,
+                dateUtil.convertStringToLocalDateTime("3/2/2023"),
+                dateUtil.convertStringToLocalDateTime("4/2/2023"),
+                1,
+                10,
+                "",
+                false,
+                listOf("category 2")
+            )
+        } returns listOf<FinanceEntity>(
+            FinanceEntity(1.0, "description 1", dateUtil.currentLocalDateTime, "category 2"),
+            FinanceEntity(2.2, "description 2", dateUtil.currentLocalDateTime.plusDays(1), "category 2"),
+        )
+
+        val financeTableData = financeService.getTableData(
+            mockAuthRepository.validUserCookieToken,
+            mockAuthRepository.testSocietyName,
+            "3/2/2023",
+            "4/2/2023",
+            1,
+            10,
+            "",
+            false,
+            listOf("category 2")
+        )
+
+        assertEquals(financeTableData[0].amount, 1.0)
+        assertEquals(financeTableData[0].description, "description 1")
+        assertEquals(financeTableData[0].date, dateUtil.convertLocalDateTimeToString(dateUtil.currentLocalDateTime))
+
+        assertEquals(financeTableData[1].amount, 2.2)
+        assertEquals(financeTableData[1].description, "description 2")
+        assertEquals(
+            financeTableData[1].date,
+            dateUtil.convertLocalDateTimeToString(dateUtil.currentLocalDateTime.plusDays(1))
+        )
+    }
+
 
     @Test
     fun `should not get all finance table record from database with itsc not joining the society`() {
@@ -466,14 +570,15 @@ class FinanceServiceTest(
     }
 
     @Test
-    fun `should get total number of finance record from database within date range`() {
+    fun `should get total number of finance record from database within date range and filter`() {
         val financeRecordTotalNumberDto: FinanceRecordTotalNumberDto = FinanceRecordTotalNumberDto(200)
 
         every {
-            financeEntityRepository.countTotalNumberOfFinanceRecordWithinDateRange(
+            financeEntityDao.countTotalNumberOfFinanceRecordWithinDateRange(
                 mockAuthRepository.testSocietyName,
                 dateUtil.convertStringToLocalDateTime("5/2/2023"),
-                dateUtil.convertStringToLocalDateTime("6/2/2023")
+                dateUtil.convertStringToLocalDateTime("6/2/2023"),
+                listOf("category 1", "category 2")
             )
         } returns financeRecordTotalNumberDto
 
@@ -481,7 +586,8 @@ class FinanceServiceTest(
             mockAuthRepository.validUserCookieToken,
             mockAuthRepository.testSocietyName,
             "5/2/2023",
-            "6/2/2023"
+            "6/2/2023",
+            listOf("category 1", "category 2")
         )
 
         assertEquals(200, totalNumber.total)

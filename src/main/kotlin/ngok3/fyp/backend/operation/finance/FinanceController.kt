@@ -29,7 +29,8 @@ class FinanceController(
         @RequestParam("pageIndex", required = false, defaultValue = "1") pageIndex: Int,
         @RequestParam("pageSize", required = false, defaultValue = "10") pageSize: Int,
         @RequestParam("sortField", required = false, defaultValue = "") sortField: String,
-        @RequestParam("isAscend", required = false, defaultValue = "false") isAscend: Boolean
+        @RequestParam("isAscend", required = false, defaultValue = "false") isAscend: Boolean,
+        @RequestParam("category", required = false, defaultValue = "") category: List<String>
     ): List<FinanceTableDto> {
         return financeService.getTableData(
             jwtToken,
@@ -39,7 +40,8 @@ class FinanceController(
             pageIndex,
             pageSize,
             sortField,
-            isAscend
+            isAscend,
+            category
         )
     }
 
@@ -111,8 +113,9 @@ class FinanceController(
         @RequestParam("societyName") societyName: String,
         @RequestParam("fromDate") fromDateString: String,
         @RequestParam("toDate") toDateString: String,
+        @RequestParam("category", required = false, defaultValue = "") category: List<String>
     ): FinanceRecordTotalNumberDto {
-        return financeService.getFinanceRecordTotalNumber(jwtToken, societyName, fromDateString, toDateString)
+        return financeService.getFinanceRecordTotalNumber(jwtToken, societyName, fromDateString, toDateString, category)
     }
 
     @Operation(summary = "get all category of finance record within date range")
