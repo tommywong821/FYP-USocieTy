@@ -30,7 +30,8 @@ class FinanceService(
         pageIndex: Int,
         pageSize: Int,
         sortField: String,
-        isAscend: Boolean
+        isAscend: Boolean,
+        category: List<String>
     ): List<FinanceTableDto> {
         jwtUtil.verifyUserEnrolledSociety(jwtToken, societyName)
 
@@ -42,7 +43,8 @@ class FinanceService(
                 pageIndex,
                 pageSize,
                 sortField,
-                isAscend
+                isAscend,
+                category
             )
 
         return financeEntityTableList?.map { financeEntity ->
@@ -64,7 +66,7 @@ class FinanceService(
         fromDateString: String,
         toDateString: String,
     ): List<FinanceTableDto> {
-        return getTableData(jwtToken, societyName, fromDateString, toDateString, 1, 10, "", false)
+        return getTableData(jwtToken, societyName, fromDateString, toDateString, 1, 10, "", false, emptyList())
     }
 
     fun getPieChartData(
@@ -164,13 +166,24 @@ class FinanceService(
         fromDateString: String,
         toDateString: String
     ): FinanceRecordTotalNumberDto {
+        return getFinanceRecordTotalNumber(jwtToken, societyName, fromDateString, toDateString, emptyList())
+    }
+
+    fun getFinanceRecordTotalNumber(
+        jwtToken: String,
+        societyName: String,
+        fromDateString: String,
+        toDateString: String,
+        category: List<String>
+    ): FinanceRecordTotalNumberDto {
         jwtUtil.verifyUserEnrolledSociety(jwtToken, societyName)
 
-        return financeEntityRepository.countTotalNumberOfFinanceRecordWithinDateRange(
+        return financeEntityDao.countTotalNumberOfFinanceRecordWithinDateRange(
             societyName,
             dateUtil.convertStringToLocalDateTime(
                 fromDateString
-            ), dateUtil.convertStringToLocalDateTime(toDateString)
+            ), dateUtil.convertStringToLocalDateTime(toDateString),
+            category
         )
     }
 
