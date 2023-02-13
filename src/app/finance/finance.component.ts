@@ -1,9 +1,10 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {filter, zip} from 'rxjs';
+import {BehaviorSubject, filter, zip} from 'rxjs';
 import {ApiService} from '../services/api.service';
 import {AuthService} from '../services/auth.service';
 import {FinanceChartRecord} from './model/IFinanceChartRecord';
+import {FinanceTableRequestParam} from './model/IFinanceTableParam';
 import {FinanceTableRecord} from './model/IFinanceTableRecord';
 
 @Component({
@@ -23,6 +24,9 @@ export class FinanceComponent implements OnInit {
 
   form!: FormGroup;
   societyName: string = '';
+  fromDate: string = '';
+  toDate: string = '';
+  financeTableRequestParam$: BehaviorSubject<FinanceTableRequestParam | null>;
 
   constructor(private authService: AuthService, private apiService: ApiService, private fb: FormBuilder) {
     this.currentDate = new Date();
@@ -30,6 +34,7 @@ export class FinanceComponent implements OnInit {
       societyName: ['', [Validators.required]],
       dateRange: [[], [Validators.required]],
     });
+    this.financeTableRequestParam$ = new BehaviorSubject<FinanceTableRequestParam | null>(null);
   }
 
   ngOnInit(): void {
@@ -53,10 +58,15 @@ export class FinanceComponent implements OnInit {
     if (this.form.valid) {
       //change date format to mm/dd/2023
       this.societyName = this.form.value.societyName;
-      let fromDate: string = this.form.value.dateRange[0].toLocaleDateString();
-      let toDate: string = this.form.value.dateRange[1].toLocaleDateString();
-      console.log(`fromDate: ${fromDate}, toDate: ${toDate}, societyName: ${this.societyName}`);
-      this.fetchFinanceRecord(this.societyName, fromDate, toDate);
+      this.fromDate = this.form.value.dateRange[0].toLocaleDateString();
+      this.toDate = this.form.value.dateRange[1].toLocaleDateString();
+      console.log(`fromDate: ${this.fromDate}, toDate: ${this.toDate}, societyName: ${this.societyName}`);
+      this.fetchFinanceRecord();
+      this.financeTableRequestParam$.next({
+        societyName: this.societyName,
+        fromDate: this.fromDate,
+        toDate: this.toDate,
+      });
     } else {
       alert('You must fill all the fields');
       Object.values(this.form.controls).forEach(control => {
@@ -68,13 +78,11 @@ export class FinanceComponent implements OnInit {
     }
   }
 
-  fetchFinanceRecord(societyName: string, fromDate: string, toDate: string) {
+  fetchFinanceRecord() {
     zip(
-      this.apiService.getFinanceTableData(societyName, fromDate, toDate),
-      this.apiService.getFinancePieChartData(societyName, fromDate, toDate),
-      this.apiService.getFinanceBarChartData(societyName, fromDate, toDate)
-    ).subscribe(([tableData, pieChartData, barChartData]) => {
-      this.tableData = tableData;
+      this.apiService.getFinancePieChartData(this.societyName, this.fromDate, this.toDate),
+      this.apiService.getFinanceBarChartData(this.societyName, this.fromDate, this.toDate)
+    ).subscribe(([pieChartData, barChartData]) => {
       this.pieChartData = pieChartData;
       this.barChartData = barChartData;
     });
