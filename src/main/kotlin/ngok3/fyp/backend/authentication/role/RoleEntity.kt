@@ -9,7 +9,7 @@ import javax.persistence.*
 open class RoleEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    open var id: Int? = null,
+    open var id: Int = -1,
     @Enumerated(EnumType.STRING)
-    open var role: Role? = null
+    open var role: Role = Role.ROLE_STUDENT
 )

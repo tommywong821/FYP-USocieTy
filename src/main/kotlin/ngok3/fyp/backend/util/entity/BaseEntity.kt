@@ -14,9 +14,9 @@ abstract class BaseEntity(
         strategy = "org.hibernate.id.UUIDGenerator",
     )
     @Column(name = "uuid", nullable = false)
-    open val uuid: UUID? = null,
-    open var updatedAt: LocalDateTime? = null,
-    open var createdAt: LocalDateTime? = null
+    open val uuid: UUID = UUID.randomUUID(),
+    open var updatedAt: LocalDateTime = LocalDateTime.now(),
+    open var createdAt: LocalDateTime = LocalDateTime.now()
 ) {
 
     @PreUpdate

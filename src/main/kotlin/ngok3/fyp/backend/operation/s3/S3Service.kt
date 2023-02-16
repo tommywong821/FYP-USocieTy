@@ -11,7 +11,7 @@ import java.util.*
 
 @Service
 class S3Service(
-    var s3Client: S3Client,
+    val s3Client: S3Client,
 ) {
     @Value("\${aws.bucketName}")
     lateinit var bucketName: String
