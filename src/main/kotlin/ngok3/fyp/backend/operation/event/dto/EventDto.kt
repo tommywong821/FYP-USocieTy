@@ -53,6 +53,7 @@ data class EventDto(
         endDate = dateUtil.convertStringWithTimeStampToLocalDateTime(this.endDate),
         category = this.category,
         description = this.description,
-        fee = this.fee
+        fee = this.fee,
+        poster = this.poster
     )
 }

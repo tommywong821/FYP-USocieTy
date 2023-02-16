@@ -4,6 +4,8 @@ import ngok3.fyp.backend.operation.enrolled_event_record.*
 import ngok3.fyp.backend.operation.event.dto.EventDto
 import ngok3.fyp.backend.operation.s3.S3BulkResponseEntity
 import ngok3.fyp.backend.operation.s3.S3Service
+import ngok3.fyp.backend.operation.society.SocietyEntity
+import ngok3.fyp.backend.operation.society.SocietyRepository
 import ngok3.fyp.backend.operation.student.StudentEntity
 import ngok3.fyp.backend.operation.student.StudentRepository
 import ngok3.fyp.backend.util.JWTUtil
@@ -19,6 +21,7 @@ import java.util.*
 class EventService(
     private val eventRepository: EventRepository,
     private val studentRepository: StudentRepository,
+    private val societyRepository: SocietyRepository,
     private val enrolledEventRecordRepository: EnrolledEventRecordRepository,
     private val jwtUtil: JWTUtil,
     private val s3Service: S3Service,
@@ -74,9 +77,15 @@ class EventService(
         ).map { enrolledEventEntity -> EnrolledEventDto(enrolledEventEntity) }
     }
 
-    fun createEvent(jwtToken: String, uploadFile: MultipartFile, eventDto: EventDto, societyName: String): EventEntity {
+    fun createEvent(jwtToken: String, uploadFile: MultipartFile, eventDto: EventDto, societyName: String): EventDto {
         //check if user belongs that society
         jwtUtil.verifyUserEnrolledSociety(jwtToken, societyName)
+//        check if society exist
+        val societyEntityOpt: Optional<SocietyEntity> = societyRepository.findByName(societyName)
+        if (societyEntityOpt.isEmpty) {
+            throw Exception("Society $societyName is not exist")
+        }
+
         //upload poster to s3
         val s3BulkResponseEntity: List<S3BulkResponseEntity> =
             s3Service.uploadFiles("${societyName}/event/", arrayOf(uploadFile))
@@ -85,7 +94,11 @@ class EventService(
         }
         //map aws s3 file name to database
         eventDto.poster = s3BulkResponseEntity[0].fileKey
-        return eventRepository.save(eventDto.toEntity())
+        val saveEventEntity: EventEntity = eventDto.toEntity()
+        saveEventEntity.societyEntity = societyEntityOpt.get()
+        eventRepository.save(saveEventEntity)
+
+        return eventDto
     }
 
     fun countEnrolledEvent(itsc: String): Long {
