@@ -7,6 +7,7 @@ import {Request} from '../api/common';
 import {FinanceChartRecord} from '../finance/model/IFinanceChartRecord';
 import {FinanceRecordTotalNumber} from '../finance/model/IFinanceRecordTotalNumber';
 import {FinanceTableRecord} from '../finance/model/IFinanceTableRecord';
+import {Event} from '../model/event';
 
 @Injectable({
   providedIn: 'root',
@@ -124,6 +125,20 @@ export class ApiService {
 
     return this.restful.get<NzTableFilterList>(`${environment.backend_url}/finance/category`, {
       params: queryParams,
+    });
+  }
+
+  createEvent(eventDto: Event, poster: File, societyName: string) {
+    const formData: FormData = new FormData();
+
+    const eventJson: Blob = new Blob([JSON.stringify(eventDto)], {type: 'application/json'});
+    formData.append('event', eventJson);
+    formData.append('poster', poster);
+    formData.append('society', societyName);
+
+    return this.restful.post(`${environment.backend_url}/event`, formData, {
+      reportProgress: true,
+      responseType: 'text',
     });
   }
 }

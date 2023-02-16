@@ -1,16 +1,16 @@
-import {AuthService} from 'src/app/services/auth.service';
-import {ApiService} from './../../services/api.service';
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {NzMessageService} from 'ng-zorro-antd/message';
 import {NzUploadChangeParam} from 'ng-zorro-antd/upload';
+import {filter, map, Subject, takeUntil, tap, zip} from 'rxjs';
 import {EventCategory} from 'src/app/model/event';
-import {convertFiletoBase64, convertFormDataToEvent, getCreateEventRequest} from 'src/util/event.util';
-import {filter, map, Subject, switchMap, tap, zip, takeUntil} from 'rxjs';
+import {AuthService} from 'src/app/services/auth.service';
+import {convertFormDataToEvent} from 'src/util/event.util';
 import {Event} from '../../model/event';
+import {ApiService} from './../../services/api.service';
 
 export enum CreateEventFormFields {
-  EventTitle = 'eventTitle',
+  Name = 'name',
   Location = 'location',
   Society = 'society',
   MaxParticipation = 'maxParticipation',
@@ -52,7 +52,7 @@ export class EventCreateComponent implements OnInit {
 
   ngOnInit(): void {
     this.createEventForm = this.formBuilder.group({
-      eventTitle: ['', [Validators.required]],
+      name: ['', [Validators.required]],
       location: ['', [Validators.required]],
       society: ['', [Validators.required]],
       maxParticipation: ['', [Validators.required]],
@@ -71,15 +71,16 @@ export class EventCreateComponent implements OnInit {
       .pipe(
         takeUntil(this.destroy$),
         tap(() => (this.isProcessing = true)),
-        filter(([event, user]) => !!user),
-        map(([event, user]) => getCreateEventRequest(event, this.createEventForm.value.society, user!)),
-        switchMap(request => this.ApiService.call(request))
+        filter(([event, user]) => !!user)
+        // TODO FIX RXJS
+        // map(([event, user]) => getCreateEventRequest(event, this.createEventForm.value.society, user!)),
+        // switchMap(request => this.ApiService.call(request))
       )
       .subscribe(res => {
-        console.log(res);
-
-        this.isProcessing = false;
-        this.message.remove(this.loadingMessage);
+        // console.log('send request');
+        // console.log(res);
+        // this.isProcessing = false;
+        // this.message.remove(this.loadingMessage);
       });
   }
 
@@ -100,9 +101,19 @@ export class EventCreateComponent implements OnInit {
     }
 
     this.loadingMessage = this.message.loading('Request in progress...', {nzDuration: 0}).messageId;
-    convertFiletoBase64(this.pictureFile)
-      .pipe(map(fileBuffer => convertFormDataToEvent({...this.createEventForm.value, poster: fileBuffer})))
-      .subscribe(event => this.event$.next(event));
+    this.ApiService.createEvent(
+      convertFormDataToEvent({...this.createEventForm.value}),
+      this.pictureFile,
+      this.createEventForm.value.society
+    ).subscribe({
+      next: res => {
+        console.log('send request');
+        console.log(res);
+
+        this.isProcessing = false;
+        this.message.remove(this.loadingMessage);
+      },
+    });
   }
 
   saveFileBuffer({file}: NzUploadChangeParam): void {
