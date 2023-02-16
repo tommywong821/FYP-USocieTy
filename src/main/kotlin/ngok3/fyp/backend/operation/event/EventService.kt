@@ -1,29 +1,27 @@
 package ngok3.fyp.backend.operation.event
 
-import ngok3.fyp.backend.authentication.role.Role
 import ngok3.fyp.backend.operation.enrolled_event_record.*
-import ngok3.fyp.backend.operation.enrolled_society_record.EnrolledSocietyRecordRepository
-import ngok3.fyp.backend.operation.event.dto.CreateEventDto
 import ngok3.fyp.backend.operation.event.dto.EventDto
+import ngok3.fyp.backend.operation.s3.S3BulkResponseEntity
+import ngok3.fyp.backend.operation.s3.S3Service
 import ngok3.fyp.backend.operation.student.StudentEntity
 import ngok3.fyp.backend.operation.student.StudentRepository
-import org.modelmapper.ModelMapper
-import org.springframework.beans.factory.annotation.Autowired
+import ngok3.fyp.backend.util.JWTUtil
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
-import org.springframework.security.access.AccessDeniedException
 import org.springframework.stereotype.Service
+import org.springframework.web.multipart.MultipartFile
 import java.time.LocalDateTime
 import java.util.*
 
 
 @Service
 class EventService(
-    @Autowired val eventRepository: EventRepository,
-    @Autowired val studentRepository: StudentRepository,
-    @Autowired val enrolledEventRecordRepository: EnrolledEventRecordRepository,
-    @Autowired val enrolledSocietyRecordRepository: EnrolledSocietyRecordRepository,
-    private val model: ModelMapper = ModelMapper()
+    private val eventRepository: EventRepository,
+    private val studentRepository: StudentRepository,
+    private val enrolledEventRecordRepository: EnrolledEventRecordRepository,
+    private val jwtUtil: JWTUtil,
+    private val s3Service: S3Service,
 ) {
     fun getAllEvent(pageNum: Int, pageSize: Int): List<EventDto> {
         val firstPageNumWithPageSizeElement: Pageable = PageRequest.of(pageNum, pageSize)
@@ -76,22 +74,18 @@ class EventService(
         ).map { enrolledEventEntity -> EnrolledEventDto(enrolledEventEntity) }
     }
 
-    fun createEvent(createEventDto: CreateEventDto): EventEntity {
-//        check if user itsc has society member role
-        if (studentRepository.findByItscAndRoles_Role(createEventDto.itsc, Role.ROLE_SOCIETY_MEMBER).isEmpty) {
-            throw AccessDeniedException("User ${createEventDto.itsc} do not have right to create event")
+    fun createEvent(jwtToken: String, uploadFile: MultipartFile, eventDto: EventDto, societyName: String): EventEntity {
+        //check if user belongs that society
+        jwtUtil.verifyUserEnrolledSociety(jwtToken, societyName)
+        //upload poster to s3
+        val s3BulkResponseEntity: List<S3BulkResponseEntity> =
+            s3Service.uploadFiles("${societyName}/event/", arrayOf(uploadFile))
+        if (s3BulkResponseEntity.isEmpty() || !s3BulkResponseEntity[0].successful) {
+            throw Exception("Upload File to AWS S3 failed")
         }
-//        check if user is in that society
-        if (enrolledSocietyRecordRepository.findByItscAndSocietyNameAndEnrolledStatus(
-                createEventDto.itsc,
-                createEventDto.society,
-                EnrolledStatus.SUCCESS
-            ).isEmpty
-        ) {
-            throw AccessDeniedException("User ${createEventDto.itsc} do not belong to ${createEventDto.society}")
-        }
-        val savedEventEntity: EventEntity = model.map(createEventDto.eventDto, EventEntity::class.java)
-        return eventRepository.save(savedEventEntity)
+        //map aws s3 file name to database
+        eventDto.poster = s3BulkResponseEntity[0].fileKey
+        return eventRepository.save(eventDto.toEntity())
     }
 
     fun countEnrolledEvent(itsc: String): Long {

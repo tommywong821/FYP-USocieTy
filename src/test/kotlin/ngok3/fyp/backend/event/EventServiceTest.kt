@@ -8,8 +8,10 @@ import ngok3.fyp.backend.operation.enrolled_society_record.EnrolledSocietyRecord
 import ngok3.fyp.backend.operation.event.EventRepository
 import ngok3.fyp.backend.operation.event.EventService
 import ngok3.fyp.backend.operation.event.dto.EventDto
+import ngok3.fyp.backend.operation.s3.S3Service
 import ngok3.fyp.backend.operation.student.StudentRepository
 import ngok3.fyp.backend.student.MockStudentRepository
+import ngok3.fyp.backend.util.JWTUtil
 import org.junit.jupiter.api.Assertions.assertIterableEquals
 import org.junit.jupiter.api.Test
 import java.time.LocalDateTime
@@ -23,8 +25,10 @@ class EventServiceTest {
     private val studentRepository: StudentRepository = mockk()
     private val enrolledEventRecordRepository: EnrolledEventRecordRepository = mockk()
     private val enrolledSocietyRecordRepository: EnrolledSocietyRecordRepository = mockk()
+    private val jwtUtil: JWTUtil = JWTUtil(enrolledSocietyRecordRepository = enrolledSocietyRecordRepository)
+    private val s3Service: S3Service = mockk()
     private val eventService: EventService =
-        EventService(eventRepository, studentRepository, enrolledEventRecordRepository, enrolledSocietyRecordRepository)
+        EventService(eventRepository, studentRepository, enrolledEventRecordRepository, jwtUtil, s3Service)
 
     @Test
     fun `should get all event without sid`() {
