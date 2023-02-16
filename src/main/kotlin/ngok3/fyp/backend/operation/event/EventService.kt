@@ -52,7 +52,7 @@ class EventService(
 //        check maxParticipation and apply deadline
         val numberOfParticipation: Long = enrolledEventRecordRepository.countById_EventUuid(UUID.fromString(eventId));
         if (LocalDateTime.now()
-                .isAfter(eventEntity.applyDeadline) || numberOfParticipation >= eventEntity.maxParticipation!!
+                .isAfter(eventEntity.applyDeadline) || numberOfParticipation >= eventEntity.maxParticipation
         ) {
             throw Exception("Event is not able to register")
         }

@@ -684,11 +684,11 @@ class FinanceControllerTest @Autowired constructor(
         } returns financeEntityList.map { financeEntity ->
             FinanceTableDto(
                 financeEntity.uuid.toString(),
-                financeEntity.date?.let { dateUtil.convertLocalDateTimeToString(it) },
+                dateUtil.convertLocalDateTimeToString(financeEntity.date),
                 financeEntity.amount,
                 financeEntity.description,
                 financeEntity.category,
-                financeEntity.studentEntity?.nickname
+                financeEntity.studentEntity.nickname
             )
         }
 
@@ -716,11 +716,10 @@ class FinanceControllerTest @Autowired constructor(
             }
             jsonPath("$[*].date") {
                 value(financeEntityList.map { financeEntity ->
-                    financeEntity.date?.let {
+
                         dateUtil.convertLocalDateTimeToString(
-                            it
+                            financeEntity.date
                         )
-                    }
                 })
             }
             jsonPath("$[*].category") {
