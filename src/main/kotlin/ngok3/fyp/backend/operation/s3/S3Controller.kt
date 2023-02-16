@@ -13,7 +13,7 @@ import java.util.*
 @RestController
 @RequestMapping("/s3")
 class S3Controller(
-    var s3Service: S3Service
+    val s3Service: S3Service
 ) {
     @GetMapping("{bucket}")
     fun getFileList(

@@ -4,7 +4,6 @@ import io.swagger.v3.oas.annotations.Operation
 import ngok3.fyp.backend.operation.enrolled_event_record.EnrolledEventDto
 import ngok3.fyp.backend.operation.event.dto.EventDto
 import ngok3.fyp.backend.operation.event.dto.JoinEventDto
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.multipart.MultipartFile
@@ -13,7 +12,7 @@ import java.util.*
 @RestController
 @RequestMapping("/event")
 class EventController(
-    @Autowired val eventService: EventService
+    private val eventService: EventService
 ) {
     @Operation(summary = "get all event from all society with pagination")
     @GetMapping

@@ -8,18 +8,17 @@ import ngok3.fyp.backend.operation.student.StudentRepository
 import ngok3.fyp.backend.util.DateUtil
 import ngok3.fyp.backend.util.JWTUtil
 import org.apache.commons.lang3.StringUtils
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import java.util.*
 
 @Service
 class FinanceService(
-    @Autowired val financeEntityRepository: FinanceEntityRepository,
-    @Autowired val financeEntityDao: FinanceEntityDao,
-    @Autowired val studentRepository: StudentRepository,
-    @Autowired val societyRepository: SocietyRepository,
-    @Autowired val dateUtil: DateUtil,
-    @Autowired val jwtUtil: JWTUtil,
+    private val financeEntityRepository: FinanceEntityRepository,
+    private val financeEntityDao: FinanceEntityDao,
+    private val studentRepository: StudentRepository,
+    private val societyRepository: SocietyRepository,
+    private val dateUtil: DateUtil,
+    private val jwtUtil: JWTUtil,
 ) {
 
     fun getTableData(
@@ -50,11 +49,11 @@ class FinanceService(
         return financeEntityTableList?.map { financeEntity ->
             FinanceTableDto(
                 financeEntity.uuid.toString(),
-                financeEntity.date?.let { dateUtil.convertLocalDateTimeToString(it) },
+                dateUtil.convertLocalDateTimeToString(financeEntity.date),
                 financeEntity.amount,
                 financeEntity.description,
                 financeEntity.category,
-                financeEntity.studentEntity?.nickname
+                financeEntity.studentEntity.nickname
             )
         }
             ?: emptyList<FinanceTableDto>()

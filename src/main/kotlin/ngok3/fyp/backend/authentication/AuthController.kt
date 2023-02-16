@@ -4,7 +4,6 @@ import io.swagger.v3.oas.annotations.Operation
 import ngok3.fyp.backend.authentication.model.AADProfile
 import ngok3.fyp.backend.authentication.model.UserToken
 import ngok3.fyp.backend.operation.student.StudentDto
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import javax.servlet.http.HttpServletResponse
@@ -12,7 +11,7 @@ import javax.servlet.http.HttpServletResponse
 @RestController
 @RequestMapping("/auth")
 class AuthController(
-    @Autowired val authService: AuthService
+    private val authService: AuthService
 ) {
     @Operation(summary = "Verify cas ticket pass from admin page and sign cookie to admin page")
     @PostMapping("/serviceValidate")
