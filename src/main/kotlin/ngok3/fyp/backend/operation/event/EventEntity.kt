@@ -1,11 +1,10 @@
 package ngok3.fyp.backend.operation.event
 
 import ngok3.fyp.backend.operation.enrolled_event_record.EnrolledEventRecordEntity
+import ngok3.fyp.backend.operation.society.SocietyEntity
 import ngok3.fyp.backend.util.entity.BaseEntity
 import java.time.LocalDateTime
-import javax.persistence.Entity
-import javax.persistence.OneToMany
-import javax.persistence.Table
+import javax.persistence.*
 
 @Entity
 @Table(name = "event")
@@ -24,4 +23,8 @@ open class EventEntity(
     ) : BaseEntity() {
     @OneToMany(mappedBy = "eventEntity")
     open var enrolledEventRecordEntity: MutableSet<EnrolledEventRecordEntity> = mutableSetOf()
+
+    @ManyToOne
+    @JoinColumn(name = "society_uuid", nullable = false)
+    open var societyEntity: SocietyEntity = SocietyEntity()
 }

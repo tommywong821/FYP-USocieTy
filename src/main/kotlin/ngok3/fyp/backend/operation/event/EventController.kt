@@ -57,7 +57,7 @@ class EventController(
         @RequestPart("poster") uploadFile: MultipartFile,
         @RequestPart("event") eventDto: EventDto,
         @RequestPart("society") societyName: String,
-    ): EventEntity {
+    ): EventDto {
         return eventService.createEvent(jwtToken, uploadFile, eventDto, societyName)
     }
 }
