@@ -139,10 +139,10 @@ class FinanceService(
         return financeEntityRepository.saveAll(financeEntityList).map { financeEntity ->
             FinanceTableDto(
                 financeEntity.uuid.toString(),
-                financeEntity.date?.let { dateUtil.convertLocalDateTimeToString(it) },
+                dateUtil.convertLocalDateTimeToString(financeEntity.date),
                 financeEntity.amount,
                 financeEntity.description,
-                financeEntity.studentEntity?.nickname
+                financeEntity.studentEntity.nickname
             )
         }
     }
