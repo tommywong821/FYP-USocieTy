@@ -10,24 +10,24 @@ import javax.persistence.*
 @Table(name = "enrolled_event_record")
 open class EnrolledEventRecordEntity(
     @EmbeddedId
-    open var id: EnrolledEventRecordKey? = null,
+    open var id: EnrolledEventRecordKey = EnrolledEventRecordKey(),
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
     open var status: EnrolledStatus = EnrolledStatus.PENDING,
-    open var updatedAt: LocalDateTime? = null,
-    open var createdAt: LocalDateTime? = null
+    open var updatedAt: LocalDateTime = LocalDateTime.now(),
+    open var createdAt: LocalDateTime = LocalDateTime.now()
 ) {
 
     @ManyToOne
     @MapsId("studentUuid")
     @JoinColumn(name = "student_entity_uuid")
-    open var studentEntity: StudentEntity? = null
+    open var studentEntity: StudentEntity = StudentEntity()
 
     @ManyToOne
     @MapsId("eventUuid")
     @JoinColumn(name = "event_entity_uuid")
-    open var eventEntity: EventEntity? = null
+    open var eventEntity: EventEntity = EventEntity()
 
     @PreUpdate
     fun updateUpdatedAt() {

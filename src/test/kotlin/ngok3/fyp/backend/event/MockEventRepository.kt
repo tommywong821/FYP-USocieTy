@@ -3,15 +3,48 @@ package ngok3.fyp.backend.event
 import ngok3.fyp.backend.operation.event.EventEntity
 import org.springframework.data.domain.PageImpl
 import org.springframework.data.domain.PageRequest
+import java.time.LocalDateTime
 
 class MockEventRepository {
 
 
     val allTestEventList: List<EventEntity> = listOf(
-        EventEntity("test event 1", "test poster 1", 10, null, "test location 1", null, null),
-        EventEntity("test event 2", "test poster 2", 20, null, "test location 2", null, null),
-        EventEntity("test event 3", "test poster 3", 30, null, "test location 3", null, null),
-        EventEntity("test event 4", "test poster 4", 40, null, "test location 4", null, null),
+        EventEntity(
+            "test event 1",
+            "test poster 1",
+            10,
+            LocalDateTime.now(),
+            "test location 1",
+            LocalDateTime.now(),
+            LocalDateTime.now()
+        ),
+        EventEntity(
+            "test event 2",
+            "test poster 2",
+            20,
+            LocalDateTime.now(),
+            "test location 2",
+            LocalDateTime.now(),
+            LocalDateTime.now()
+        ),
+        EventEntity(
+            "test event 3",
+            "test poster 3",
+            30,
+            LocalDateTime.now(),
+            "test location 3",
+            LocalDateTime.now(),
+            LocalDateTime.now()
+        ),
+        EventEntity(
+            "test event 4",
+            "test poster 4",
+            40,
+            LocalDateTime.now(),
+            "test location 4",
+            LocalDateTime.now(),
+            LocalDateTime.now()
+        ),
     )
 
     val testPageNumWithoutSid = 0

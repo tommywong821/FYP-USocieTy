@@ -17,3 +17,10 @@ cors:
 
 cookie:
   lifetime: ${COOKIE_LENGTH}
+
+aws:
+  region: ${AWS_REGION}
+  credentials:
+    accessKey: ${AWS_ACCESS_KEY}
+    secretKey: ${AWS_SECRET_KEY}
+  bucketName: ${AWS_BUCKET_NAME}

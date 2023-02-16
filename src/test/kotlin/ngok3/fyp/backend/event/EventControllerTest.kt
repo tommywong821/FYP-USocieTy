@@ -13,6 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.get
+import java.time.format.DateTimeFormatter
 import javax.servlet.http.Cookie
 
 @SpringBootTest
@@ -64,7 +65,11 @@ class EventControllerTest @Autowired constructor(
                     value(allEventList.map { eventEntity -> eventEntity.maxParticipation })
                 }
                 jsonPath("$[*].applyDeadline") {
-                    value(allEventList.map { eventEntity -> eventEntity.applyDeadline })
+                    value(allEventList.map { eventEntity ->
+                        eventEntity.applyDeadline.format(
+                            DateTimeFormatter.ofPattern("yyyy-MM-dd")
+                        )
+                    })
                 }
                 jsonPath("$[*].location") {
                     value(allEventList.map { eventEntity -> eventEntity.location })
@@ -114,7 +119,11 @@ class EventControllerTest @Autowired constructor(
                     value(allEventList.map { eventEntity -> eventEntity.maxParticipation })
                 }
                 jsonPath("$[*].applyDeadline") {
-                    value(allEventList.map { eventEntity -> eventEntity.applyDeadline })
+                    value(allEventList.map { eventEntity ->
+                        eventEntity.applyDeadline.format(
+                            DateTimeFormatter.ofPattern("yyyy-MM-dd")
+                        )
+                    })
                 }
                 jsonPath("$[*].location") {
                     value(allEventList.map { eventEntity -> eventEntity.location })

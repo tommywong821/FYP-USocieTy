@@ -6,7 +6,6 @@ import ngok3.fyp.backend.operation.enrolled_society_record.EnrolledSocietyRecord
 import ngok3.fyp.backend.operation.enrolled_society_record.EnrolledSocietyRecordRepository
 import ngok3.fyp.backend.operation.student.StudentEntity
 import ngok3.fyp.backend.operation.student.StudentRepository
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
@@ -14,9 +13,9 @@ import java.util.*
 
 @Service
 class SocietyService(
-    @Autowired val societyRepository: SocietyRepository,
-    @Autowired val studentRepository: StudentRepository,
-    @Autowired val enrolledSocietyRecordRepository: EnrolledSocietyRecordRepository
+    private val societyRepository: SocietyRepository,
+    private val studentRepository: StudentRepository,
+    private val enrolledSocietyRecordRepository: EnrolledSocietyRecordRepository
 ) {
     fun getAllSocieties(pageNum: Int, pageSize: Int): List<SocietyDto> {
         val firstPageNumWithPageSizeElement: Pageable = PageRequest.of(pageNum, pageSize)
