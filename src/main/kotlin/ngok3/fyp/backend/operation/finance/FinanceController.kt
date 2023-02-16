@@ -5,13 +5,12 @@ import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.Parameters
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import ngok3.fyp.backend.operation.finance.model.*
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/finance")
 class FinanceController(
-    @Autowired val financeService: FinanceService
+    private val financeService: FinanceService
 ) {
     @Operation(summary = "get all finance record with society name returning in table dto")
     @Parameters(

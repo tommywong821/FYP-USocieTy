@@ -9,10 +9,10 @@ import javax.persistence.Embeddable
 @Embeddable
 class EnrolledSocietyRecordKey(
     @Column(name = "student_entity_uuid")
-    var studentUuid: UUID? = null,
+    var studentUuid: UUID = UUID.randomUUID(),
 
     @Column(name = "society_entity_uuid")
-    var societyUuid: UUID? = null
+    var societyUuid: UUID = UUID.randomUUID()
 ) : Serializable {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

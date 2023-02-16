@@ -13,7 +13,6 @@ import ngok3.fyp.backend.util.exception.model.CASException
 import ngok3.fyp.backend.util.webclient.OkHttpClientFactory
 import okhttp3.*
 import okio.IOException
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
@@ -28,9 +27,9 @@ import javax.servlet.http.HttpServletResponse
 @Service
 class AuthService(
     private val webClient: OkHttpClient = OkHttpClientFactory().webClient,
-    @Autowired val studentRepository: StudentRepository,
-    @Autowired val roleEntityRepository: RoleEntityRepository,
-    @Autowired val jwtUtil: JWTUtil
+    private val studentRepository: StudentRepository,
+    private val roleEntityRepository: RoleEntityRepository,
+    private val jwtUtil: JWTUtil
 ) {
     @Value("\${heroku.frontend.url}")
     val frontendUrl: String? = null
@@ -77,10 +76,10 @@ class AuthService(
         frontendResponse.setHeader(HttpHeaders.SET_COOKIE, cookie.toString())
 
         //create society list string
-        val enrolledSocietyList: List<String?> =
-            studentEntity.enrolledSocietyRecordEntity.map { it.societyEntity?.name }
+        val enrolledSocietyList: List<String> =
+            studentEntity.enrolledSocietyRecordEntity.map { it.societyEntity.name }
         // create role list string
-        val roleList: List<String?> = studentEntity.roles.map { it.role.toString() }
+        val roleList: List<String> = studentEntity.roles.map { it.role.toString() }
         return StudentDto(studentEntity, enrolledSocietyList, roleList)
     }
 
@@ -117,10 +116,10 @@ class AuthService(
 
 
         //create society list string
-        val enrolledSocietyList: List<String?> =
-            studentEntity.enrolledSocietyRecordEntity.map { it.societyEntity?.name }
+        val enrolledSocietyList: List<String> =
+            studentEntity.enrolledSocietyRecordEntity.map { it.societyEntity.name }
         // create role list string
-        val roleList: List<String?> = studentEntity.roles.map { it.role.toString() }
+        val roleList: List<String> = studentEntity.roles.map { it.role.toString() }
 
         val mockResponse = CasServiceResponse()
         mockResponse.authenticationFailure = AuthenticationFailure(null, null)

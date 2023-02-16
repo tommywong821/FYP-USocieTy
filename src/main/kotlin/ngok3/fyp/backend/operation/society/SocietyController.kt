@@ -1,13 +1,12 @@
 package ngok3.fyp.backend.operation.society
 
 import io.swagger.v3.oas.annotations.Operation
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("society")
 class SocietyController(
-    @Autowired val societyService: SocietyService
+    private val societyService: SocietyService
 ) {
     @Operation(summary = "get all societies with pagination")
     @GetMapping

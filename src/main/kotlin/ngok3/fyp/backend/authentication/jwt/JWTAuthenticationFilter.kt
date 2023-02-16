@@ -29,7 +29,6 @@ class JWTAuthenticationFilter(
         filterChain: FilterChain
     ) {
         try {
-            logger.info("executing request internal filter")
             //allow angular preflight
             if (HttpMethod.OPTIONS.toString() != request.method) {
                 //handle normal restful
