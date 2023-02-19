@@ -1,12 +1,10 @@
-package ngok3.fyp.backend.event
+package ngok3.fyp.backend.operation.event
 
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import ngok3.fyp.backend.operation.enrolled_event_record.EnrolledEventRecordRepository
 import ngok3.fyp.backend.operation.enrolled_society_record.EnrolledSocietyRecordRepository
-import ngok3.fyp.backend.operation.event.EventRepository
-import ngok3.fyp.backend.operation.event.EventService
 import ngok3.fyp.backend.operation.event.dto.EventDto
 import ngok3.fyp.backend.operation.s3.S3Service
 import ngok3.fyp.backend.operation.society.SocietyRepository
