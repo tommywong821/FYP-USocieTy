@@ -11,8 +11,10 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
+import org.springframework.test.web.servlet.delete
 import org.springframework.test.web.servlet.get
 import java.time.format.DateTimeFormatter
+import java.util.*
 import javax.servlet.http.Cookie
 
 @SpringBootTest
@@ -128,5 +130,19 @@ class EventControllerTest @Autowired constructor(
                     value(allEventList.map { eventEntity -> eventEntity.location })
                 }
             }
+    }
+
+    @Test
+    fun `should delete event with event id`() {
+        val uuid: String = UUID.randomUUID().toString()
+        mockMvc.delete("/event/{eventId}", uuid) {
+            headers {
+                contentType = MediaType.APPLICATION_JSON
+                cookie(Cookie("token", mockAuthRepository.validUserCookieToken))
+            }
+            pathInfo
+        }.andDo { print() }.andExpect {
+            status { isNoContent() }
+        }
     }
 }
