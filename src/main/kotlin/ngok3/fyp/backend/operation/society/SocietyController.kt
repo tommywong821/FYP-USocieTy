@@ -22,6 +22,6 @@ class SocietyController(
     fun joinSociety(
         @RequestBody joinSocietyDto: JoinSocietyDto
     ): Boolean {
-        return societyService.joinSociety(joinSocietyDto.itsc, joinSocietyDto.eventId)
+        return societyService.joinSociety(joinSocietyDto.itsc, joinSocietyDto.societyName)
     }
 }
