@@ -107,4 +107,17 @@ class EventService(
             LocalDateTime.now()
         )
     }
+
+    fun deleteEvent(jwtToken: String, eventId: String) {
+        try {
+            jwtUtil.verifyUserEnrolledSociety(
+                jwtToken,
+                eventRepository.findById(UUID.fromString(eventId)).get().societyEntity.name
+            )
+        } catch (e: NoSuchElementException) {
+            throw Exception("Event with id: $eventId is not exist")
+        }
+
+        eventRepository.deleteById(UUID.fromString(eventId))
+    }
 }

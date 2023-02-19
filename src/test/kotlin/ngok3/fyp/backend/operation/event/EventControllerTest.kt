@@ -135,6 +135,9 @@ class EventControllerTest @Autowired constructor(
     @Test
     fun `should delete event with event id`() {
         val uuid: String = UUID.randomUUID().toString()
+
+        every { eventService.deleteEvent(mockAuthRepository.validUserCookieToken, uuid) } returns Unit
+
         mockMvc.delete("/event/{eventId}", uuid) {
             headers {
                 contentType = MediaType.APPLICATION_JSON

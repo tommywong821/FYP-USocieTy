@@ -69,5 +69,6 @@ class EventController(
         @CookieValue("token") jwtToken: String,
         @PathVariable eventId: String,
     ) {
+        eventService.deleteEvent(jwtToken, eventId)
     }
 }
