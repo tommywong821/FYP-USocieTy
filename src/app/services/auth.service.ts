@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {Params} from '@angular/router';
 import {BehaviorSubject, Observable, of} from 'rxjs';
 import {environment} from 'src/environments/environment';
+import {validateUserEndpoint} from '../api/auth';
 import {User} from '../model/user';
 import {ApiService} from './api.service';
 
@@ -30,8 +31,8 @@ export class AuthService {
 
   validateUser(queryParams: Params): Observable<User> {
     const request = {
-      // endpoint: validateUserEndpoint,
-      endpoint: '/auth/mockServiceValidate',
+      endpoint: validateUserEndpoint,
+      // endpoint: '/auth/mockServiceValidate',
       queryParam: null,
       body: {
         ticket: queryParams['ticket'],
