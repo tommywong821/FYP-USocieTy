@@ -8,6 +8,7 @@ import ngok3.fyp.backend.operation.society.SocietyEntity
 import ngok3.fyp.backend.operation.society.SocietyRepository
 import ngok3.fyp.backend.operation.student.StudentEntity
 import ngok3.fyp.backend.operation.student.StudentRepository
+import ngok3.fyp.backend.util.DateUtil
 import ngok3.fyp.backend.util.JWTUtil
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
@@ -24,6 +25,7 @@ class EventService(
     private val societyRepository: SocietyRepository,
     private val enrolledEventRecordRepository: EnrolledEventRecordRepository,
     private val jwtUtil: JWTUtil,
+    private val dateUtil: DateUtil,
     private val s3Service: S3Service,
 ) {
     fun getAllEvent(pageNum: Int, pageSize: Int): List<EventDto> {
@@ -36,7 +38,7 @@ class EventService(
         ).content
 
         return allEvent.map { event ->
-            EventDto(event)
+            EventDto().createFromEntity(event)
         }
     }
 
@@ -119,5 +121,34 @@ class EventService(
         }
 
         eventRepository.deleteById(UUID.fromString(eventId))
+    }
+
+    fun updateEvent(jwtToken: String, eventId: String, updateEvent: EventDto) {
+
+        val eventEntityOpt: Optional<EventEntity> = eventRepository.findById(UUID.fromString(eventId))
+
+        if (eventEntityOpt.isEmpty) {
+            throw Exception("Event with id: $eventId is not exist")
+        }
+
+        //check user identify
+        val eventEntity: EventEntity = eventEntityOpt.get()
+        jwtUtil.verifyUserEnrolledSociety(
+            jwtToken,
+            eventEntity.societyEntity.name
+        )
+
+        //update event entity
+        eventEntity.name = updateEvent.name
+        eventEntity.maxParticipation = updateEvent.maxParticipation
+        eventEntity.applyDeadline = dateUtil.convertStringWithTimeStampToLocalDateTime(updateEvent.applyDeadline)
+        eventEntity.location = updateEvent.location
+        eventEntity.startDate = dateUtil.convertStringWithTimeStampToLocalDateTime(updateEvent.startDate)
+        eventEntity.endDate = dateUtil.convertStringWithTimeStampToLocalDateTime(updateEvent.endDate)
+        eventEntity.category = updateEvent.category
+        eventEntity.description = updateEvent.description
+        eventEntity.fee = updateEvent.fee
+
+        eventRepository.save(eventEntity)
     }
 }

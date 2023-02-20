@@ -71,4 +71,16 @@ class EventController(
     ) {
         eventService.deleteEvent(jwtToken, eventId)
     }
+
+    @Operation(summary = "update event with event id")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PutMapping("/{eventId}")
+    fun updateEvent(
+        @CookieValue("token") jwtToken: String,
+        @RequestPart("poster") uploadFile: MultipartFile,
+        @RequestPart("event") eventDto: EventDto,
+        @PathVariable eventId: String,
+    ) {
+        eventService.updateEvent(jwtToken, eventId, eventDto)
+    }
 }
