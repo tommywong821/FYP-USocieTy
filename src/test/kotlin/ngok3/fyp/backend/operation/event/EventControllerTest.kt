@@ -5,15 +5,19 @@ import io.mockk.every
 import ngok3.fyp.backend.controller.authentication.model.MockAuthRepository
 import ngok3.fyp.backend.operation.event.dto.EventDto
 import ngok3.fyp.backend.student.MockStudentRepository
+import ngok3.fyp.backend.util.DateUtil
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.http.HttpMethod
 import org.springframework.http.MediaType
+import org.springframework.mock.web.MockMultipartFile
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.delete
 import org.springframework.test.web.servlet.get
-import java.time.format.DateTimeFormatter
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import java.util.*
 import javax.servlet.http.Cookie
 
@@ -26,6 +30,7 @@ class EventControllerTest @Autowired constructor(
     private val mockStudentRepository: MockStudentRepository = MockStudentRepository()
     private val mockAuthRepository: MockAuthRepository = MockAuthRepository()
 
+    private val dateUtil: DateUtil = DateUtil()
 
     @MockkBean
     lateinit var eventService: EventService
@@ -38,7 +43,7 @@ class EventControllerTest @Autowired constructor(
                 mockEventRepository.testPageSizeWithoutSid
             )
         } returns mockEventRepository.allTestEventList.map { eventEntity ->
-            EventDto(eventEntity)
+            EventDto().createFromEntity(eventEntity)
         }
 
         val allEventList = mockEventRepository.allTestEventList
@@ -67,9 +72,7 @@ class EventControllerTest @Autowired constructor(
                 }
                 jsonPath("$[*].applyDeadline") {
                     value(allEventList.map { eventEntity ->
-                        eventEntity.applyDeadline.format(
-                            DateTimeFormatter.ofPattern("yyyy-MM-dd")
-                        )
+                        dateUtil.convertLocalDateTimeToString(eventEntity.applyDeadline)
                     })
                 }
                 jsonPath("$[*].location") {
@@ -89,7 +92,7 @@ class EventControllerTest @Autowired constructor(
             mockEventRepository.testFromIndex,
             mockEventRepository.testToIndex
         ).map { eventEntity ->
-            EventDto(eventEntity)
+            EventDto().createFromEntity(eventEntity)
         }
 
         val allEventList = mockEventRepository.allTestEventList.subList(
@@ -121,9 +124,7 @@ class EventControllerTest @Autowired constructor(
                 }
                 jsonPath("$[*].applyDeadline") {
                     value(allEventList.map { eventEntity ->
-                        eventEntity.applyDeadline.format(
-                            DateTimeFormatter.ofPattern("yyyy-MM-dd")
-                        )
+                        dateUtil.convertLocalDateTimeToString(eventEntity.applyDeadline)
                     })
                 }
                 jsonPath("$[*].location") {
@@ -147,5 +148,41 @@ class EventControllerTest @Autowired constructor(
         }.andDo { print() }.andExpect {
             status { isNoContent() }
         }
+    }
+
+    @Test
+    fun `should update event with event id`() {
+        val uuid: String = UUID.randomUUID().toString()
+        val updateEventDto = EventDto(
+            name = "update name",
+            maxParticipation = 10,
+            applyDeadline = "2022-01-12T12:10:10.222Z",
+            location = "update location",
+            startDate = "2022-01-10T12:10:10.222Z",
+            endDate = "2022-01-15T12:10:10.222Z",
+            category = "update category",
+            description = "update description",
+            fee = 12.3
+        )
+
+        every { eventService.updateEvent(mockAuthRepository.validUserCookieToken, uuid, updateEventDto) } returns Unit
+
+        mockMvc.perform(
+            MockMvcRequestBuilders.multipart(
+                HttpMethod.PUT,
+                "/event/$uuid"
+            )
+                .file(MockMultipartFile("poster", "poster".encodeToByteArray()))
+                .file(
+                    MockMultipartFile(
+                        "event",
+                        "test.json",
+                        MediaType.APPLICATION_JSON.toString(),
+                        "{\"name\":\"update name\",\"maxParticipation\":10,\"applyDeadline\":\"2022-01-12T12:10:10.222Z\",\"location\":\"update location\",\"startDate\":\"2022-01-10T12:10:10.222Z\",\"endDate\":\"2022-01-15T12:10:10.222Z\",\"category\":\"update category\",\"description\":\"update description\",\"fee\":12.3}".encodeToByteArray()
+                    )
+                )
+                .cookie(Cookie("token", mockAuthRepository.validUserCookieToken))
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+        ).andExpect(status().isNoContent)
     }
 }
