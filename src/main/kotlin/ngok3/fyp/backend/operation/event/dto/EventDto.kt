@@ -3,7 +3,6 @@ package ngok3.fyp.backend.operation.event.dto
 import ngok3.fyp.backend.operation.event.EventEntity
 import ngok3.fyp.backend.util.DateUtil
 import java.io.Serializable
-import java.time.format.DateTimeFormatter
 
 /**
  * A DTO for the {@link ngok3.fyp.backend.event.EventEntity} entity
@@ -24,24 +23,18 @@ data class EventDto(
 
     private var dateUtil: DateUtil = DateUtil()
 
-    constructor(eventEntity: EventEntity) : this(
-        eventEntity.uuid.toString(),
-        eventEntity.name,
-        eventEntity.poster,
-        eventEntity.maxParticipation,
-        eventEntity.applyDeadline.format(
-            DateTimeFormatter.ofPattern("yyyy-MM-dd")
-        ),
-        eventEntity.location,
-        eventEntity.startDate.format(
-            DateTimeFormatter.ofPattern("yyyy-MM-dd")
-        ),
-        eventEntity.endDate.format(
-            DateTimeFormatter.ofPattern("yyyy-MM-dd")
-        ),
-        eventEntity.category,
-        eventEntity.description,
-        eventEntity.fee
+    fun createFromEntity(eventEntity: EventEntity) = EventDto(
+        id = eventEntity.uuid.toString(),
+        name = eventEntity.name,
+        maxParticipation = eventEntity.maxParticipation,
+        applyDeadline = dateUtil.convertLocalDateTimeToString(eventEntity.applyDeadline),
+        location = eventEntity.location,
+        startDate = dateUtil.convertLocalDateTimeToString(eventEntity.startDate),
+        endDate = dateUtil.convertLocalDateTimeToString(eventEntity.endDate),
+        category = eventEntity.category,
+        description = eventEntity.description,
+        fee = eventEntity.fee,
+        poster = eventEntity.poster
     )
 
     fun toEntity() = EventEntity(
