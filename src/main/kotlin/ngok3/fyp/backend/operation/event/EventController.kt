@@ -1,7 +1,6 @@
 package ngok3.fyp.backend.operation.event
 
 import io.swagger.v3.oas.annotations.Operation
-import ngok3.fyp.backend.operation.enrolled_event_record.EnrolledEventDto
 import ngok3.fyp.backend.operation.event.dto.EventDto
 import ngok3.fyp.backend.operation.event.dto.JoinEventDto
 import org.springframework.http.HttpStatus
@@ -29,25 +28,6 @@ class EventController(
     @PostMapping("/join")
     fun joinEvent(@RequestBody joinEventDto: JoinEventDto): Boolean {
         return eventService.joinEvent(joinEventDto.itsc, joinEventDto.eventId)
-    }
-
-    @Operation(summary = "get all enrolled event of student with itsc")
-    @GetMapping("/enrolled")
-    fun getAllEnrolledEvent(
-        @RequestParam("itsc", required = false, defaultValue = "") itsc: String,
-        @RequestParam("pageNum", required = false, defaultValue = "0") pageNum: Int,
-        @RequestParam("pageSize", required = false, defaultValue = "10") pageSize: Int
-    ): List<EnrolledEventDto> {
-        print("itsc: $itsc pageSize: $pageSize pageNum: $pageNum ")
-        return eventService.getAllEnrolledEvent(itsc, pageNum, pageSize)
-    }
-
-    @Operation(summary = "count all enrolled event of student with itsc")
-    @GetMapping("/enrolled/count")
-    fun countAllEnrolledEvent(
-        @RequestParam("itsc", required = false, defaultValue = "") itsc: String
-    ): Long {
-        return eventService.countEnrolledEvent(itsc)
     }
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_SOCIETY_MEMBER')")

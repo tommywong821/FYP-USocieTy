@@ -2,6 +2,7 @@ package ngok3.fyp.backend.operation.enrolled_event_record
 
 import ngok3.fyp.backend.util.JWTUtil
 import org.springframework.stereotype.Service
+import java.time.LocalDateTime
 import java.util.*
 
 @Service
@@ -29,4 +30,17 @@ class EnrolledEventService(
         enrolledEventRecordRepository.save(enrolledEventRecordEntity)
     }
 
+    fun getAllEnrolledEvent(itsc: String, pageNum: Int, pageSize: Int): List<EnrolledEventDto> {
+        return enrolledEventRecordRepository.findByStudentEntity_ItscAndEventEntity_StartDateGreaterThanEqualOrderByEventEntity_StartDateAsc(
+            itsc,
+            LocalDateTime.now()
+        ).map { enrolledEventEntity -> EnrolledEventDto(enrolledEventEntity) }
+    }
+
+    fun countEnrolledEvent(itsc: String): Long {
+        return enrolledEventRecordRepository.countByStudentEntity_ItscAndEventEntity_StartDateGreaterThanEqual(
+            itsc,
+            LocalDateTime.now()
+        )
+    }
 }
