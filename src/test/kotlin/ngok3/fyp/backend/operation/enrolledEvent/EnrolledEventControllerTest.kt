@@ -3,9 +3,9 @@ package ngok3.fyp.backend.operation.enrolledEvent
 import com.ninjasquad.springmockk.MockkBean
 import io.mockk.every
 import ngok3.fyp.backend.controller.authentication.model.MockAuthRepository
-import ngok3.fyp.backend.operation.enrolled_event_record.EnrolledEventService
-import ngok3.fyp.backend.operation.enrolled_event_record.EnrolledStatus
-import ngok3.fyp.backend.operation.enrolled_event_record.UpdateEnrolledEventRecordDto
+import ngok3.fyp.backend.operation.enrolled.EnrolledStatus
+import ngok3.fyp.backend.operation.enrolled.event_record.EnrolledEventService
+import ngok3.fyp.backend.operation.enrolled.event_record.model.UpdateEnrolledEventRecordDto
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc

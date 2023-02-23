@@ -1,4 +1,4 @@
-package ngok3.fyp.backend.operation.enrolled_event_record
+package ngok3.fyp.backend.operation.enrolled.event_record
 
 import org.hibernate.Hibernate
 import java.io.Serializable
