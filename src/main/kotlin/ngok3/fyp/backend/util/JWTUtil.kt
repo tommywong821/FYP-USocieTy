@@ -6,8 +6,8 @@ import io.jsonwebtoken.JwtException
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.security.Keys
 import ngok3.fyp.backend.authentication.role.RoleEntity
-import ngok3.fyp.backend.operation.enrolled_event_record.EnrolledStatus
-import ngok3.fyp.backend.operation.enrolled_society_record.EnrolledSocietyRecordRepository
+import ngok3.fyp.backend.operation.enrolled.EnrolledStatus
+import ngok3.fyp.backend.operation.enrolled.society_record.EnrolledSocietyRecordRepository
 import ngok3.fyp.backend.operation.student.StudentEntity
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.access.AccessDeniedException

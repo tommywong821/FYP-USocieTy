@@ -1,6 +1,8 @@
-package ngok3.fyp.backend.operation.enrolled_event_record
+package ngok3.fyp.backend.operation.enrolled.event_record
 
 import io.swagger.v3.oas.annotations.Operation
+import ngok3.fyp.backend.operation.enrolled.event_record.model.EnrolledEventDto
+import ngok3.fyp.backend.operation.enrolled.event_record.model.UpdateEnrolledEventRecordDto
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 

@@ -1,9 +1,9 @@
 package ngok3.fyp.backend.operation.event
 
-import ngok3.fyp.backend.operation.enrolled_event_record.EnrolledEventRecordEntity
-import ngok3.fyp.backend.operation.enrolled_event_record.EnrolledEventRecordKey
-import ngok3.fyp.backend.operation.enrolled_event_record.EnrolledEventRecordRepository
-import ngok3.fyp.backend.operation.enrolled_event_record.EnrolledStatus
+import ngok3.fyp.backend.operation.enrolled.EnrolledStatus
+import ngok3.fyp.backend.operation.enrolled.event_record.EnrolledEventRecordEntity
+import ngok3.fyp.backend.operation.enrolled.event_record.EnrolledEventRecordKey
+import ngok3.fyp.backend.operation.enrolled.event_record.EnrolledEventRecordRepository
 import ngok3.fyp.backend.operation.event.dto.EventDto
 import ngok3.fyp.backend.operation.s3.S3BulkResponseEntity
 import ngok3.fyp.backend.operation.s3.S3Service

@@ -4,9 +4,14 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import ngok3.fyp.backend.controller.authentication.model.MockAuthRepository
-import ngok3.fyp.backend.operation.enrolled_event_record.*
-import ngok3.fyp.backend.operation.enrolled_society_record.EnrolledSocietyRecordEntity
-import ngok3.fyp.backend.operation.enrolled_society_record.EnrolledSocietyRecordRepository
+import ngok3.fyp.backend.operation.enrolled.EnrolledStatus
+import ngok3.fyp.backend.operation.enrolled.event_record.EnrolledEventRecordEntity
+import ngok3.fyp.backend.operation.enrolled.event_record.EnrolledEventRecordKey
+import ngok3.fyp.backend.operation.enrolled.event_record.EnrolledEventRecordRepository
+import ngok3.fyp.backend.operation.enrolled.event_record.EnrolledEventService
+import ngok3.fyp.backend.operation.enrolled.event_record.model.UpdateEnrolledEventRecordDto
+import ngok3.fyp.backend.operation.enrolled.society_record.EnrolledSocietyRecordEntity
+import ngok3.fyp.backend.operation.enrolled.society_record.EnrolledSocietyRecordRepository
 import ngok3.fyp.backend.util.JWTUtil
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest

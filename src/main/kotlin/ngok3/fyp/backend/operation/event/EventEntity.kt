@@ -1,6 +1,6 @@
 package ngok3.fyp.backend.operation.event
 
-import ngok3.fyp.backend.operation.enrolled_event_record.EnrolledEventRecordEntity
+import ngok3.fyp.backend.operation.enrolled.event_record.EnrolledEventRecordEntity
 import ngok3.fyp.backend.operation.society.SocietyEntity
 import ngok3.fyp.backend.util.entity.BaseEntity
 import java.time.LocalDateTime
