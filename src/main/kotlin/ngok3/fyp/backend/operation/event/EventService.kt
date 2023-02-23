@@ -1,6 +1,9 @@
 package ngok3.fyp.backend.operation.event
 
-import ngok3.fyp.backend.operation.enrolled_event_record.*
+import ngok3.fyp.backend.operation.enrolled_event_record.EnrolledEventRecordEntity
+import ngok3.fyp.backend.operation.enrolled_event_record.EnrolledEventRecordKey
+import ngok3.fyp.backend.operation.enrolled_event_record.EnrolledEventRecordRepository
+import ngok3.fyp.backend.operation.enrolled_event_record.EnrolledStatus
 import ngok3.fyp.backend.operation.event.dto.EventDto
 import ngok3.fyp.backend.operation.s3.S3BulkResponseEntity
 import ngok3.fyp.backend.operation.s3.S3Service
@@ -72,13 +75,6 @@ class EventService(
         return true;
     }
 
-    fun getAllEnrolledEvent(itsc: String, pageNum: Int, pageSize: Int): List<EnrolledEventDto> {
-        return enrolledEventRecordRepository.findByStudentEntity_ItscAndEventEntity_StartDateGreaterThanEqualOrderByEventEntity_StartDateAsc(
-            itsc,
-            LocalDateTime.now()
-        ).map { enrolledEventEntity -> EnrolledEventDto(enrolledEventEntity) }
-    }
-
     fun createEvent(jwtToken: String, uploadFile: MultipartFile, eventDto: EventDto, societyName: String): EventDto {
         //check if user belongs that society
         jwtUtil.verifyUserEnrolledSociety(jwtToken, societyName)
@@ -101,13 +97,6 @@ class EventService(
         eventRepository.save(saveEventEntity)
 
         return eventDto
-    }
-
-    fun countEnrolledEvent(itsc: String): Long {
-        return enrolledEventRecordRepository.countByStudentEntity_ItscAndEventEntity_StartDateGreaterThanEqual(
-            itsc,
-            LocalDateTime.now()
-        )
     }
 
     fun deleteEvent(jwtToken: String, eventId: String) {
