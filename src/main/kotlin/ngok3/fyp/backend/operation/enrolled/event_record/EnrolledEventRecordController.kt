@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*
 @RestController
 @RequestMapping("/enrolledEventRecord")
 class EnrolledEventRecordController(
-    private val enrolledEventService: EnrolledEventService
+    private val enrolledEventService: EnrolledEventRecordService
 ) {
     @Operation(summary = "update enrolled event record")
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -18,7 +18,7 @@ class EnrolledEventRecordController(
         @CookieValue("token") jwtToken: String,
         @RequestBody updateEnrolledEventRecordDto: UpdateEnrolledEventRecordDto
     ) {
-        return enrolledEventService.updateEnrolledEventService(jwtToken, updateEnrolledEventRecordDto)
+        return enrolledEventService.updateEnrolledEventRecord(jwtToken, updateEnrolledEventRecordDto)
     }
 
     @Operation(summary = "get all enrolled event of student with itsc")

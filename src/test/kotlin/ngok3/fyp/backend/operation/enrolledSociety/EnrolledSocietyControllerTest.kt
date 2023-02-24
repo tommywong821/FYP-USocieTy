@@ -1,11 +1,11 @@
-package ngok3.fyp.backend.operation.enrolledEvent
+package ngok3.fyp.backend.operation.enrolledSociety
 
 import com.ninjasquad.springmockk.MockkBean
 import io.mockk.every
 import ngok3.fyp.backend.controller.authentication.model.MockAuthRepository
 import ngok3.fyp.backend.operation.enrolled.EnrolledStatus
-import ngok3.fyp.backend.operation.enrolled.event_record.EnrolledEventRecordService
-import ngok3.fyp.backend.operation.enrolled.event_record.model.UpdateEnrolledEventRecordDto
+import ngok3.fyp.backend.operation.enrolled.society_record.EnrolledSocietyRecordService
+import ngok3.fyp.backend.operation.enrolled.society_record.UpdateEnrolledSocietyRecordDto
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
@@ -18,37 +18,37 @@ import javax.servlet.http.Cookie
 
 @SpringBootTest
 @AutoConfigureMockMvc(addFilters = false)
-class EnrolledEventControllerTest @Autowired constructor(
+class EnrolledSocietyControllerTest @Autowired constructor(
     val mockMvc: MockMvc
 ) {
     @MockkBean
-    lateinit var enrolledEventService: EnrolledEventRecordService
+    lateinit var enrolledSocietyService: EnrolledSocietyRecordService
 
     private val mockAuthRepository: MockAuthRepository = MockAuthRepository()
 
     @Test
-    fun `should update enroll event record status`() {
-        val eventUUID: UUID = UUID.randomUUID()
+    fun `should update enroll society record status`() {
+        val societyUUID: UUID = UUID.randomUUID()
         val studentUUID: UUID = UUID.randomUUID()
 
         every {
-            enrolledEventService.updateEnrolledEventRecord(
+            enrolledSocietyService.updateEnrolledSocietyRecord(
                 mockAuthRepository.validUserCookieToken,
-                UpdateEnrolledEventRecordDto(
-                    eventId = eventUUID.toString(),
+                UpdateEnrolledSocietyRecordDto(
+                    societyId = societyUUID.toString(),
                     studentId = studentUUID.toString(),
                     status = EnrolledStatus.SUCCESS
                 )
             )
         } returns Unit
 
-        mockMvc.put("/enrolledEventRecord") {
+        mockMvc.put("/enrolledSocietyRecord") {
             headers {
                 contentType = MediaType.APPLICATION_JSON
                 cookie(Cookie("token", mockAuthRepository.validUserCookieToken))
             }
 
-            content = "{\"eventId\":\"$eventUUID\",\"studentId\":\"$studentUUID\",\"status\":\"SUCCESS\"}"
+            content = "{\"societyId\":\"$societyUUID\",\"studentId\":\"$studentUUID\",\"status\":\"SUCCESS\"}"
         }.andDo { print() }.andExpect { status { isNoContent() } }
     }
 }

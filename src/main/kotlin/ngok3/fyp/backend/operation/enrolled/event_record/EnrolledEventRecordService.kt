@@ -8,11 +8,11 @@ import java.time.LocalDateTime
 import java.util.*
 
 @Service
-class EnrolledEventService(
+class EnrolledEventRecordService(
     private val enrolledEventRecordRepository: EnrolledEventRecordRepository,
     private val jwtUtil: JWTUtil
 ) {
-    fun updateEnrolledEventService(jwtToken: String, updateEnrolledEventRecordDto: UpdateEnrolledEventRecordDto) {
+    fun updateEnrolledEventRecord(jwtToken: String, updateEnrolledEventRecordDto: UpdateEnrolledEventRecordDto) {
         val enrolledEventRecordEntity: EnrolledEventRecordEntity = enrolledEventRecordRepository.findById(
             EnrolledEventRecordKey(
                 UUID.fromString(updateEnrolledEventRecordDto.studentId),
