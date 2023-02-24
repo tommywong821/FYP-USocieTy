@@ -1,6 +1,7 @@
 package ngok3.fyp.backend.operation.student
 
 import ngok3.fyp.backend.authentication.role.RoleEntity
+import ngok3.fyp.backend.operation.attendance.AttendanceEntity
 import ngok3.fyp.backend.operation.enrolled.event_record.EnrolledEventRecordEntity
 import ngok3.fyp.backend.operation.enrolled.society_record.EnrolledSocietyRecordEntity
 import ngok3.fyp.backend.operation.finance.FinanceEntity
@@ -30,4 +31,7 @@ open class StudentEntity(
 
     @OneToMany(mappedBy = "studentEntity")
     open var financeRecords: MutableSet<FinanceEntity> = mutableSetOf()
+
+    @OneToMany(mappedBy = "studentEntity", orphanRemoval = true)
+    open var attendanceEntities: MutableSet<AttendanceEntity> = mutableSetOf()
 }
