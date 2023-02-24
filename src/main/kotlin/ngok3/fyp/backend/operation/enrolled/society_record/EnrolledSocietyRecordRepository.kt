@@ -1,6 +1,6 @@
-package ngok3.fyp.backend.operation.enrolled_society_record
+package ngok3.fyp.backend.operation.enrolled.society_record
 
-import ngok3.fyp.backend.operation.enrolled_event_record.EnrolledStatus
+import ngok3.fyp.backend.operation.enrolled.EnrolledStatus
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.CrudRepository
 import java.util.*
