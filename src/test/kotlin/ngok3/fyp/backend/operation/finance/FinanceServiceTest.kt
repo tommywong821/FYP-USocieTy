@@ -4,9 +4,9 @@ import io.jsonwebtoken.MalformedJwtException
 import io.mockk.every
 import io.mockk.mockk
 import ngok3.fyp.backend.controller.authentication.model.MockAuthRepository
-import ngok3.fyp.backend.operation.enrolled_event_record.EnrolledStatus
-import ngok3.fyp.backend.operation.enrolled_society_record.EnrolledSocietyRecordEntity
-import ngok3.fyp.backend.operation.enrolled_society_record.EnrolledSocietyRecordRepository
+import ngok3.fyp.backend.operation.enrolled.EnrolledStatus
+import ngok3.fyp.backend.operation.enrolled.society_record.EnrolledSocietyRecordEntity
+import ngok3.fyp.backend.operation.enrolled.society_record.EnrolledSocietyRecordRepository
 import ngok3.fyp.backend.operation.finance.model.*
 import ngok3.fyp.backend.operation.society.SocietyEntity
 import ngok3.fyp.backend.operation.society.SocietyRepository

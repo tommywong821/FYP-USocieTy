@@ -1,8 +1,8 @@
 package ngok3.fyp.backend.operation.student
 
 import ngok3.fyp.backend.authentication.role.RoleEntity
-import ngok3.fyp.backend.operation.enrolled_event_record.EnrolledEventRecordEntity
-import ngok3.fyp.backend.operation.enrolled_society_record.EnrolledSocietyRecordEntity
+import ngok3.fyp.backend.operation.enrolled.event_record.EnrolledEventRecordEntity
+import ngok3.fyp.backend.operation.enrolled.society_record.EnrolledSocietyRecordEntity
 import ngok3.fyp.backend.operation.finance.FinanceEntity
 import ngok3.fyp.backend.util.entity.BaseEntity
 import javax.persistence.*

@@ -1,4 +1,4 @@
-package ngok3.fyp.backend.operation.enrolled_event_record
+package ngok3.fyp.backend.operation.enrolled.event_record
 
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.CrudRepository
@@ -27,5 +27,4 @@ order by e.eventEntity.startDate"""
 where e.studentEntity.itsc = ?1 and e.eventEntity.startDate >= ?2"""
     )
     fun countByStudentEntity_ItscAndEventEntity_StartDateGreaterThanEqual(itsc: String, startDate: LocalDateTime): Long
-
 }

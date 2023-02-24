@@ -1,6 +1,6 @@
 package ngok3.fyp.backend.operation.society
 
-import ngok3.fyp.backend.operation.enrolled_society_record.EnrolledSocietyRecordEntity
+import ngok3.fyp.backend.operation.enrolled.society_record.EnrolledSocietyRecordEntity
 import ngok3.fyp.backend.operation.event.EventEntity
 import ngok3.fyp.backend.operation.finance.FinanceEntity
 import ngok3.fyp.backend.util.entity.BaseEntity
