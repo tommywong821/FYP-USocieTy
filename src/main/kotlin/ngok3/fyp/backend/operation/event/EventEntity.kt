@@ -1,5 +1,6 @@
 package ngok3.fyp.backend.operation.event
 
+import ngok3.fyp.backend.operation.attendance.AttendanceEntity
 import ngok3.fyp.backend.operation.enrolled.event_record.EnrolledEventRecordEntity
 import ngok3.fyp.backend.operation.society.SocietyEntity
 import ngok3.fyp.backend.util.entity.BaseEntity
@@ -27,4 +28,7 @@ open class EventEntity(
     @ManyToOne
     @JoinColumn(name = "society_uuid", nullable = false)
     open var societyEntity: SocietyEntity = SocietyEntity()
+
+    @OneToMany(mappedBy = "eventEntity", orphanRemoval = true)
+    open var attendanceEntities: MutableSet<AttendanceEntity> = mutableSetOf()
 }
