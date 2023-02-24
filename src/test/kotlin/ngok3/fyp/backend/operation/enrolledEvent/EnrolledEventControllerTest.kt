@@ -51,4 +51,6 @@ class EnrolledEventControllerTest @Autowired constructor(
             content = "{\"eventId\":\"$eventUUID\",\"studentId\":\"$studentUUID\",\"status\":\"SUCCESS\"}"
         }.andDo { print() }.andExpect { status { isNoContent() } }
     }
+
+
 }
