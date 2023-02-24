@@ -25,3 +25,18 @@ export interface CreateEventRequestBody {
 export interface CreateEventRequest extends Request {
   body: CreateEventRequestBody;
 }
+
+export interface GetEventRequest extends Request {
+  urlParams: Record<string, string>;
+}
+
+export interface UpdateEventRequestBody {
+  eventDto: EventDto;
+  itsc: string;
+  society: string;
+}
+
+export interface UpdateEventRequest extends Request {
+  body: UpdateEventRequestBody;
+  urlParams: Record<string, string>;
+}

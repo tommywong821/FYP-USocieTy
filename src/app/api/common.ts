@@ -3,6 +3,7 @@ import {HttpParams} from '@angular/common/http';
 export type RequestBody = Record<string, any>;
 export interface Request {
   endpoint: string;
-  queryParam: HttpParams | null | undefined;
-  body: RequestBody | null | undefined;
+  urlParams?: Record<string, string>;
+  queryParam?: HttpParams;
+  body?: RequestBody;
 }

@@ -21,6 +21,6 @@ export class EventComponent implements OnInit {
   }
 
   toggleUpdateEvent(eventId: string): void {
-    this.router.navigate([Path.Main, Path.Event, Path.UpdateEvent], {queryParams: {id: eventId}});
+    this.router.navigate([Path.Main, Path.Event, Path.UpdateEvent], {queryParams: {eventId: eventId}});
   }
 }

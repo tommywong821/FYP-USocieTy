@@ -1,5 +1,12 @@
 import {Observable, ReplaySubject} from 'rxjs';
-import {createEventEndpoint, CreateEventRequest, CreateEventRequestBody, EventDto} from 'src/app/api/event';
+import {
+  createEventEndpoint,
+  CreateEventRequest,
+  CreateEventRequestBody,
+  EventDto,
+  UpdateEventRequest,
+  UpdateEventRequestBody,
+} from 'src/app/api/event';
 import {Event, EventFormData} from 'src/app/model/event';
 import {User} from 'src/app/model/user';
 
@@ -52,7 +59,21 @@ export function getCreateEventRequest(event: Event, society: string, user: User)
 
   const request: CreateEventRequest = {
     endpoint: createEventEndpoint,
-    queryParam: null,
+    body,
+  };
+
+  return request;
+}
+
+export function getUpdateEventRequest(event: Event, society: string, user: User): UpdateEventRequest {
+  const body: UpdateEventRequestBody = {
+    eventDto: convertEventToEventDto(event),
+    itsc: user.itsc,
+    society,
+  };
+
+  const request: UpdateEventRequest = {
+    endpoint: createEventEndpoint,
     body,
   };
 
