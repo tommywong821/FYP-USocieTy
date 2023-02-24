@@ -8,7 +8,7 @@ import ngok3.fyp.backend.operation.enrolled.EnrolledStatus
 import ngok3.fyp.backend.operation.enrolled.event_record.EnrolledEventRecordEntity
 import ngok3.fyp.backend.operation.enrolled.event_record.EnrolledEventRecordKey
 import ngok3.fyp.backend.operation.enrolled.event_record.EnrolledEventRecordRepository
-import ngok3.fyp.backend.operation.enrolled.event_record.EnrolledEventService
+import ngok3.fyp.backend.operation.enrolled.event_record.EnrolledEventRecordService
 import ngok3.fyp.backend.operation.enrolled.event_record.model.UpdateEnrolledEventRecordDto
 import ngok3.fyp.backend.operation.enrolled.society_record.EnrolledSocietyRecordEntity
 import ngok3.fyp.backend.operation.enrolled.society_record.EnrolledSocietyRecordRepository
@@ -18,14 +18,14 @@ import org.springframework.boot.test.context.SpringBootTest
 import java.util.*
 
 @SpringBootTest
-class EnrolledEventServiceTest {
+class EnrolledEventRecordServiceTest {
     private val mockAuthRepository: MockAuthRepository = MockAuthRepository()
     private val enrolledSocietyRecordRepository: EnrolledSocietyRecordRepository = mockk()
     private val enrolledEventRecordRepository: EnrolledEventRecordRepository = mockk()
 
     private val jwtUtil: JWTUtil = JWTUtil(enrolledSocietyRecordRepository = enrolledSocietyRecordRepository)
 
-    private val enrolledEventService: EnrolledEventService = EnrolledEventService(
+    private val enrolledEventService: EnrolledEventRecordService = EnrolledEventRecordService(
         enrolledEventRecordRepository = enrolledEventRecordRepository,
         jwtUtil = jwtUtil
     )
@@ -60,7 +60,7 @@ class EnrolledEventServiceTest {
             enrolledEventRecordRepository.save(mockEnrolledEventRecordEntity)
         } returns mockEnrolledEventRecordEntity
 
-        enrolledEventService.updateEnrolledEventService(
+        enrolledEventService.updateEnrolledEventRecord(
             mockAuthRepository.validUserCookieToken,
             UpdateEnrolledEventRecordDto(
                 eventId = eventUUID.toString(),
