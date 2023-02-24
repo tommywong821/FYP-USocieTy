@@ -1,6 +1,4 @@
-package ngok3.fyp.backend.student
-
-import ngok3.fyp.backend.operation.student.StudentEntity
+package ngok3.fyp.backend.operation.student
 
 class MockStudentRepository {
     val testItsc: String = "test_itsc"
