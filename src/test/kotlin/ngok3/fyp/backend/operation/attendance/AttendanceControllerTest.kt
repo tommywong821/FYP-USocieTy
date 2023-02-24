@@ -24,11 +24,11 @@ class AttendanceControllerTest @Autowired constructor(
 
     @Test
     fun `should create attendance of student in event`() {
-        val studentId: UUID = UUID.fromString("6c8180b4-0681-4d88-950f-c8f16859f9d6")
-        val eventId: UUID = UUID.fromString("cead8c1e-7cbe-44c6-8fc1-dabe57c80168")
+        val studentId: UUID = UUID.fromString("cead8c1e-7cbe-44c6-8fc1-dabe57c80168")
+        val eventId: UUID = UUID.fromString("6c8180b4-0681-4d88-950f-c8f16859f9d6")
 
         every {
-            attendanceService.createAttendance(studentId.toString(), eventId.toString())
+            attendanceService.createAttendance(studentId = studentId.toString(), eventId = eventId.toString())
         } returns Unit
 
         mockMvc.post("/attendance") {
