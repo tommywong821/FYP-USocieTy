@@ -49,6 +49,8 @@ class WebSecurityConfig(
                 //mobile login endpoint
                 authorize("/auth/mobileLogin", permitAll)
                 authorize("/health", permitAll)
+                //attendance card reader
+                authorize("/attendance", permitAll)
                 authorize(anyRequest, authenticated)
             }
             //filter for each request
