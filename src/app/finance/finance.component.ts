@@ -58,8 +58,8 @@ export class FinanceComponent implements OnInit {
     if (this.form.valid) {
       //change date format to mm/dd/2023
       this.societyName = this.form.value.societyName;
-      this.fromDate = this.form.value.dateRange[0].toLocaleDateString();
-      this.toDate = this.form.value.dateRange[1].toLocaleDateString();
+      this.fromDate = this.form.value.dateRange[0].toLocaleDateString('en-US');
+      this.toDate = this.form.value.dateRange[1].toLocaleDateString('en-US');
       console.log(`fromDate: ${this.fromDate}, toDate: ${this.toDate}, societyName: ${this.societyName}`);
       this.fetchFinanceRecord();
       this.financeTableRequestParam$.next({

@@ -69,7 +69,7 @@ export class FinanceCreateComponent implements OnInit {
       //change date format to mm/dd/2023
       this.validateForm.value.financeRecords.forEach((financeRecord: any) => {
         if (financeRecord.date instanceof Date) {
-          financeRecord.date = financeRecord.date.toLocaleDateString();
+          financeRecord.date = financeRecord.date.toLocaleDateString('en-US');
         }
       });
       this.apiService.createFinanceRecords(this.validateForm.value).subscribe({
