@@ -10,6 +10,7 @@ import {HomeComponent} from './home/home.component';
 import {AuthGuard} from './services/auth.guard';
 import {MainComponent} from './main/main.component';
 import {EventComponent} from './event/event.component';
+import {EventViewComponent} from './event/event-view/event-view.component';
 
 export enum Path {
   Main = 'main',
@@ -18,6 +19,7 @@ export enum Path {
   Event = 'event',
   CreateEvent = 'create',
   UpdateEvent = 'update',
+  ViewEvent = 'view',
   Finance = 'finance',
   CreateFinance = 'create',
 }
@@ -50,6 +52,10 @@ const routes: Routes = [
           {
             path: Path.UpdateEvent,
             component: EventUpdateComponent,
+          },
+          {
+            path: Path.ViewEvent,
+            component: EventViewComponent,
           },
         ],
       },

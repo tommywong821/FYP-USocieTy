@@ -7,3 +7,31 @@
     Create Event
   </button>
 </div>
+<div>
+  <nz-table
+    #eventTable
+    [nzData]="events"
+  >
+    <thead>
+      <tr>
+        <th *ngfor="let columnName of EventTableColumn">
+          {{ columnName }}
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr
+        *ngFor="let event of eventTable.data"
+        (click)="toggleViewEvent(event.id)"
+      >
+        <td *ngfor="let propertyName of Object.keys(EventTableColumn)">
+          {{ event[propertyName] }}
+        </td>
+      </tr>
+    </tbody>
+  </nz-table>
+  <nz-pagination
+    [nzPageIndex]="pageIndex"
+    [nzTotal]="pageSize"
+  ></nz-pagination>
+</div>

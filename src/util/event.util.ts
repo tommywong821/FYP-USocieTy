@@ -74,6 +74,7 @@ export function getUpdateEventRequest(event: Event, society: string, user: User)
 
   const request: UpdateEventRequest = {
     endpoint: createEventEndpoint,
+    urlParams: '', // TODO
     body,
   };
 

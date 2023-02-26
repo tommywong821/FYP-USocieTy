@@ -1,4 +1,4 @@
-import {GetEventRequest, UpdateEventRequest} from './../api/event';
+import {UpdateEventRequest, DeleteEventRequest} from './../api/event';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {NzTableFilterList} from 'ng-zorro-antd/table';
@@ -129,11 +129,21 @@ export class ApiService {
     });
   }
 
-  getEvent(getEventRequest: GetEventRequest): Observable<Event> {
-    return this.restful.get<Event>(`${environment.backend_url}/event/${getEventRequest.urlParams['id']}`);
+  getEvent(eventId: string): Observable<Event> {
+    return this.restful.get<Event>(`${environment.backend_url}/event/${eventId}`);
+  }
+
+  getEvents(pageIndex: number, pageSize: number): Observable<Event[]> {
+    const queryParams = new HttpParams().append('pageIndex', pageIndex).append('pageSize', pageSize);
+
+    return this.restful.get<Event[]>(`${environment.backend_url}/event`, {params: queryParams});
   }
 
   updateEvent(updateEventRequest: UpdateEventRequest): void {
     this.restful.put(`${environment.backend_url}/event/${updateEventRequest.urlParams['id']}`, updateEventRequest.body);
+  }
+
+  deleteEvent(eventId: string): void {
+    this.restful.delete(`${environment.backend_url}/event/${eventId}`);
   }
 }

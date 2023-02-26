@@ -1,3 +1,4 @@
+import {HttpParams} from '@angular/common/http';
 import {Request} from './common';
 
 export const createEventEndpoint = 'event';
@@ -30,6 +31,10 @@ export interface GetEventRequest extends Request {
   urlParams: Record<string, string>;
 }
 
+export interface GetEventsRequest extends Request {
+  queryParam: HttpParams;
+}
+
 export interface UpdateEventRequestBody {
   eventDto: EventDto;
   itsc: string;
@@ -38,5 +43,9 @@ export interface UpdateEventRequestBody {
 
 export interface UpdateEventRequest extends Request {
   body: UpdateEventRequestBody;
+  urlParams: Record<string, string>;
+}
+
+export interface DeleteEventRequest extends Request {
   urlParams: Record<string, string>;
 }
