@@ -1,8 +1,7 @@
 package ngok3.fyp.backend.util
 
+import org.springframework.core.io.ClassPathResource
 import org.springframework.stereotype.Component
-import org.springframework.util.ResourceUtils
-import java.io.FileInputStream
 import java.io.InputStreamReader
 import java.security.KeyFactory
 import java.security.PrivateKey
@@ -25,11 +24,12 @@ class RSAUtil {
 
     private fun loadPrivateKey(): PrivateKey {
         val keyText = InputStreamReader(
-            FileInputStream(ResourceUtils.getFile("classpath:rsa_private_key.pem"))
+            ClassPathResource("rsa_private_key.pem").inputStream
         ).use {
             it.readText()
-                .replace("-----BEGIN PRIVATE KEY-----\n", "")
+                .replace("-----BEGIN PRIVATE KEY-----\r\n", "")
                 .replace("\n", "")
+                .replace("\r", "")
                 .replace("-----END PRIVATE KEY-----", "")
         }
         val encoded = Base64.getDecoder().decode(keyText)
