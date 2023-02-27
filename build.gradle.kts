@@ -41,16 +41,18 @@ dependencies {
     implementation("org.springdoc:springdoc-openapi-ui:1.6.14")
     //testing
     testImplementation("org.springframework.boot:spring-boot-starter-test")
-    //springboot 2.X max version:3.x
-    testImplementation("com.ninja-squad:springmockk:3.1.2")
-    testImplementation("com.h2database:h2")
-    //spring security role based login
-    implementation("org.springframework.boot:spring-boot-starter-security")
-    //AWS SDK V2, S3
-    implementation(platform("software.amazon.awssdk:bom:2.20.2"))
-    implementation("software.amazon.awssdk:s3:2.20.2")
-    //File utils
-    implementation("commons-io:commons-io:2.11.0")
+	//springboot 2.X max version:3.x
+	testImplementation("com.ninja-squad:springmockk:3.1.2")
+	testImplementation("com.h2database:h2")
+	//spring security role based login
+	implementation("org.springframework.boot:spring-boot-starter-security")
+	//AWS SDK V2, S3
+	implementation(platform("software.amazon.awssdk:bom:2.20.2"))
+	implementation("software.amazon.awssdk:s3:2.20.2")
+	//File utils
+	implementation("commons-io:commons-io:2.11.0")
+	//convert json string to object
+	implementation("com.google.code.gson:gson:2.10.1")
 }
 
 tasks.withType<KotlinCompile> {
