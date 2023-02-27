@@ -7,6 +7,10 @@ import ngok3.fyp.backend.operation.enrolled.EnrolledStatus
 import ngok3.fyp.backend.operation.enrolled.event_record.EnrolledEventRecordEntity
 import ngok3.fyp.backend.operation.enrolled.event_record.EnrolledEventRecordKey
 import ngok3.fyp.backend.operation.enrolled.event_record.EnrolledEventRecordRepository
+import ngok3.fyp.backend.operation.event.EventEntity
+import ngok3.fyp.backend.operation.event.EventRepository
+import ngok3.fyp.backend.operation.student.StudentEntity
+import ngok3.fyp.backend.operation.student.StudentRepository
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
 import java.util.*
@@ -15,10 +19,14 @@ import java.util.*
 class AttendanceServiceTest {
 
     private val enrolledEventRecordRepository: EnrolledEventRecordRepository = mockk(relaxed = true)
+    private val studentRepository: StudentRepository = mockk(relaxed = true)
+    private val eventRepository: EventRepository = mockk(relaxed = true)
     private val attendanceRepository: AttendanceRepository = mockk(relaxed = true)
 
     private val attendanceService: AttendanceService = AttendanceService(
         enrolledEventRecordRepository = enrolledEventRecordRepository,
+        studentRepository = studentRepository,
+        eventRepository = eventRepository,
         attendanceRepository = attendanceRepository
     )
 
@@ -29,6 +37,9 @@ class AttendanceServiceTest {
         val eventId: UUID = UUID.fromString("6c8180b4-0681-4d88-950f-c8f16859f9d6")
 
         val attendanceEntity: AttendanceEntity = AttendanceEntity()
+        val studentEntity: StudentEntity = StudentEntity()
+        val eventEntity: EventEntity = EventEntity()
+
 
         every {
             enrolledEventRecordRepository.findByIdAndStatus(
@@ -36,6 +47,14 @@ class AttendanceServiceTest {
                 EnrolledStatus.SUCCESS
             )
         } returns Optional.of(EnrolledEventRecordEntity())
+
+        every {
+            studentRepository.findById(studentId)
+        } returns Optional.of(studentEntity)
+
+        every {
+            eventRepository.findById(eventId)
+        } returns Optional.of(eventEntity)
 
         every {
             attendanceRepository.save(any())
@@ -50,5 +69,7 @@ class AttendanceServiceTest {
             )
         }
         verify(exactly = 1) { attendanceRepository.save(any()) }
+        verify(exactly = 1) { studentRepository.findById(studentId) }
+        verify(exactly = 1) { eventRepository.findById(eventId) }
     }
 }
