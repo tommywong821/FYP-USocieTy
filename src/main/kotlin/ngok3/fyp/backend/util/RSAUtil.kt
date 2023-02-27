@@ -1,6 +1,7 @@
 package ngok3.fyp.backend.util
 
 import org.springframework.stereotype.Component
+import org.springframework.util.ResourceUtils
 import java.io.FileInputStream
 import java.io.InputStreamReader
 import java.security.KeyFactory
@@ -24,7 +25,7 @@ class RSAUtil {
 
     private fun loadPrivateKey(): PrivateKey {
         val keyText = InputStreamReader(
-            FileInputStream("src/main/resources/rsa_private_key.pem")
+            FileInputStream(ResourceUtils.getFile("classpath:rsa_private_key.pem"))
         ).use {
             it.readText()
                 .replace("-----BEGIN PRIVATE KEY-----\n", "")
