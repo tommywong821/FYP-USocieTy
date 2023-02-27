@@ -27,7 +27,7 @@ class RSAUtil {
             ClassPathResource("rsa_private_key.pem").inputStream
         ).use {
             it.readText()
-                .replace("-----BEGIN PRIVATE KEY-----\r\n", "")
+                .replace("-----BEGIN PRIVATE KEY-----", "")
                 .replace("\n", "")
                 .replace("\r", "")
                 .replace("-----END PRIVATE KEY-----", "")
