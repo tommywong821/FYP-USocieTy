@@ -14,4 +14,11 @@ interface StudentRepository : CrudRepository<StudentEntity, UUID> {
     @Query("select s from StudentEntity s inner join s.roles roles where s.itsc = ?1 and roles.role = ?2")
     fun findByItscAndRoles_Role(itsc: String, role: Role): Optional<StudentEntity>
 
+
+    @Query(
+        """select s from StudentEntity s inner join s.enrolledSocietyRecordEntity enrolledSocietyRecordEntity
+where enrolledSocietyRecordEntity.societyEntity.name = ?1"""
+    )
+    fun findByEnrolledSocietyName(name: String): List<StudentEntity>
+
 }

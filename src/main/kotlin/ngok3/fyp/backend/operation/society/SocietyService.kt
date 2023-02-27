@@ -4,6 +4,7 @@ import ngok3.fyp.backend.operation.enrolled.EnrolledStatus
 import ngok3.fyp.backend.operation.enrolled.society_record.EnrolledSocietyRecordEntity
 import ngok3.fyp.backend.operation.enrolled.society_record.EnrolledSocietyRecordKey
 import ngok3.fyp.backend.operation.enrolled.society_record.EnrolledSocietyRecordRepository
+import ngok3.fyp.backend.operation.student.StudentDto
 import ngok3.fyp.backend.operation.student.StudentEntity
 import ngok3.fyp.backend.operation.student.StudentRepository
 import org.springframework.data.domain.PageRequest
@@ -48,5 +49,17 @@ class SocietyService(
         enrolledSocietyRecordEntity.societyEntity = societyEntity
         enrolledSocietyRecordRepository.save(enrolledSocietyRecordEntity)
         return true;
+    }
+
+    fun getAllSocietyMember(societyName: String): List<StudentDto> {
+        return studentRepository.findByEnrolledSocietyName(societyName).map { studentEntity: StudentEntity ->
+            StudentDto(
+                studentEntity.itsc,
+                studentEntity.nickname,
+                studentEntity.mail,
+                emptyList(),
+                emptyList()
+            )
+        }
     }
 }
