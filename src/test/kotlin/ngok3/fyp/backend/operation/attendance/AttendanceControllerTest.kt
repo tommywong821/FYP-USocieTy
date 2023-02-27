@@ -36,7 +36,7 @@ class AttendanceControllerTest @Autowired constructor(
                 contentType = MediaType.APPLICATION_JSON
             }
             content =
-                "{\"data\":\"JAtvHsv2DYgtfqmpA6OrIGh19TfvdU2U\\/tpylZS2E+KLZoxpbLIJvcFbWhP\\/87nKXDr46PKBaTVEfmYs4eQL77pr+83UFJEaf\\/mo6eb6M\\/kZkf9EIAeHmLWaqU14CzoO0nNWRBbDyRmbPHujA3kgkLIcIcbFIbxYSz9pbpIa460=\"}"
+                "{\"data\":\"dc3XrBxZHE0urCUzKlehtgXvLwl93WIgb+udouUxs2uxT56+ptMptD9I3VNxL3fTXGvyIXDlU6zVZcRuaMfV/6OBuCIylFigdChzngIg7WuEQ0kgtvP4aG/6eqyEz8eOdW/4czE+kxwYKq1yhC3y9PPwwY6fyhr0PZmV5jftXN4=\"}"
         }.andDo { print() }.andExpect { status { isCreated() } }
     }
 }
