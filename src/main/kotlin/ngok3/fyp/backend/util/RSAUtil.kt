@@ -32,6 +32,7 @@ class RSAUtil {
                 .replace("\r", "")
                 .replace("-----END PRIVATE KEY-----", "")
         }
+        print(keyText)
         val encoded = Base64.getDecoder().decode(keyText)
         return KeyFactory.getInstance("RSA")
             .generatePrivate(PKCS8EncodedKeySpec(encoded))
