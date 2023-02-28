@@ -48,4 +48,17 @@ class SocietyController(
             assignSocietyMemberRoleDto.studentIdList
         )
     }
+
+    @Operation(summary = "remove society member role from student")
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    @DeleteMapping("/member")
+    fun removeSocietyMemberRole(
+        @RequestParam("societyName") societyName: String,
+        @RequestParam("id") deleteStudentIdList: List<String>
+    ) {
+        return societyService.removeSocietyMemberRole(
+            societyName,
+            deleteStudentIdList
+        )
+    }
 }
