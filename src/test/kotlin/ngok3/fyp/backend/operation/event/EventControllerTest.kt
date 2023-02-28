@@ -4,7 +4,7 @@ import com.ninjasquad.springmockk.MockkBean
 import io.mockk.every
 import ngok3.fyp.backend.controller.authentication.model.MockAuthRepository
 import ngok3.fyp.backend.operation.event.dto.EventDto
-import ngok3.fyp.backend.student.MockStudentRepository
+import ngok3.fyp.backend.operation.student.MockStudentRepository
 import ngok3.fyp.backend.util.DateUtil
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired

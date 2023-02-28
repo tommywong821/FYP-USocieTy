@@ -1,9 +1,13 @@
 package ngok3.fyp.backend.operation.society
 
+import ngok3.fyp.backend.authentication.role.Role
+import ngok3.fyp.backend.authentication.role.RoleEntity
+import ngok3.fyp.backend.authentication.role.RoleEntityRepository
 import ngok3.fyp.backend.operation.enrolled.EnrolledStatus
 import ngok3.fyp.backend.operation.enrolled.society_record.EnrolledSocietyRecordEntity
 import ngok3.fyp.backend.operation.enrolled.society_record.EnrolledSocietyRecordKey
 import ngok3.fyp.backend.operation.enrolled.society_record.EnrolledSocietyRecordRepository
+import ngok3.fyp.backend.operation.student.StudentDto
 import ngok3.fyp.backend.operation.student.StudentEntity
 import ngok3.fyp.backend.operation.student.StudentRepository
 import org.springframework.data.domain.PageRequest
@@ -15,7 +19,8 @@ import java.util.*
 class SocietyService(
     private val societyRepository: SocietyRepository,
     private val studentRepository: StudentRepository,
-    private val enrolledSocietyRecordRepository: EnrolledSocietyRecordRepository
+    private val enrolledSocietyRecordRepository: EnrolledSocietyRecordRepository,
+    private val roleEntityRepository: RoleEntityRepository
 ) {
     fun getAllSocieties(pageNum: Int, pageSize: Int): List<SocietyDto> {
         val firstPageNumWithPageSizeElement: Pageable = PageRequest.of(pageNum, pageSize)
@@ -48,5 +53,43 @@ class SocietyService(
         enrolledSocietyRecordEntity.societyEntity = societyEntity
         enrolledSocietyRecordRepository.save(enrolledSocietyRecordEntity)
         return true;
+    }
+
+    fun getAllSocietyMember(societyName: String): List<StudentDto> {
+        return studentRepository.findByEnrolledSocietyName(societyName).map { studentEntity: StudentEntity ->
+            StudentDto(
+                studentEntity.itsc,
+                studentEntity.nickname,
+                studentEntity.mail,
+                emptyList(),
+                emptyList()
+            )
+        }
+    }
+
+    fun assignSocietyMemberRole(societyName: String, studentIdList: List<String>) {
+        val roleEntity: RoleEntity = roleEntityRepository.findByRole(Role.ROLE_SOCIETY_MEMBER).orElseThrow {
+            Exception("Role: ${Role.ROLE_SOCIETY_MEMBER} does not exist")
+        }
+
+        val studentEntityList: Iterable<StudentEntity> =
+            studentRepository.findByIdInAndEnrolledSocietyNameAndEnrollStatus(studentIdList.map { studentIdString ->
+                UUID.fromString(studentIdString)
+            }.toMutableList(), societyName, EnrolledStatus.SUCCESS)
+
+        studentEntityList.forEach { studentEntity -> studentEntity.roles.add(roleEntity) }
+
+        studentRepository.saveAll(studentEntityList)
+    }
+
+    fun removeSocietyMemberRole(societyName: String, studentIdList: List<String>) {
+        val studentEntityList: Iterable<StudentEntity> =
+            studentRepository.findByIdInAndEnrolledSocietyNameAndEnrollStatus(studentIdList.map { studentIdString ->
+                UUID.fromString(studentIdString)
+            }.toMutableList(), societyName, EnrolledStatus.SUCCESS)
+
+        studentEntityList.forEach { studentEntity -> studentEntity.roles.removeIf { roleEntity -> Role.ROLE_SOCIETY_MEMBER == roleEntity.role } }
+
+        studentRepository.saveAll(studentEntityList)
     }
 }
