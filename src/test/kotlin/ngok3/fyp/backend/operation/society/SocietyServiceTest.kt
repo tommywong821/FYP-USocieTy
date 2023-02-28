@@ -82,4 +82,31 @@ class SocietyServiceTest {
 
         verify(exactly = 1) { studentRepository.saveAll(mockStudentEntityList) }
     }
+
+    @Test
+    fun removeSocietyMemberRole() {
+        val studentIdList: List<String> = listOf<String>(
+            "2ac23d21-4cb0-4173-a2fe-de551ec5aa9d",
+            "38153605-ed2c-42e7-947a-9d1731f4bd44"
+        )
+
+        val mockStudentEntityList: List<StudentEntity> = listOf(
+            StudentEntity("qwert", "nickname 1"),
+            StudentEntity("asdfg", "nickname 2"),
+        )
+
+        every {
+            studentRepository.findByIdInAndEnrolledSocietyNameAndEnrollStatus(studentIdList.map { studentIdString ->
+                UUID.fromString(
+                    studentIdString
+                )
+            }.toMutableList(), mockAuthRepository.testSocietyName, EnrolledStatus.SUCCESS)
+        } returns mockStudentEntityList
+
+        every { studentRepository.saveAll(mockStudentEntityList) } returns mockStudentEntityList
+
+        societyService.removeSocietyMemberRole(mockAuthRepository.testSocietyName, studentIdList)
+
+        verify(exactly = 1) { studentRepository.saveAll(mockStudentEntityList) }
+    }
 }
