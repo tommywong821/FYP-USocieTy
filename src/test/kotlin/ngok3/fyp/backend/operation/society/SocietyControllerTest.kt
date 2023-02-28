@@ -11,6 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.get
+import org.springframework.test.web.servlet.post
 import org.springframework.util.LinkedMultiValueMap
 import javax.servlet.http.Cookie
 
@@ -59,6 +60,30 @@ class SocietyControllerTest @Autowired constructor(
             jsonPath("$[*].nickname") {
                 value(memberOfSociety.map { studentDto -> studentDto.nickname })
             }
+        }
+    }
+
+    @Test
+    fun `should assign society member role to student`() {
+
+        val studentIdList: List<String> = listOf<String>(
+            "2ac23d21-4cb0-4173-a2fe-de551ec5aa9d",
+            "38153605-ed2c-42e7-947a-9d1731f4bd44"
+        )
+
+        every {
+            societyService.assignSocietyMemberRole(mockAuthRepository.testSocietyName, studentIdList)
+        } returns Unit
+
+        mockMvc.post("/society/member") {
+            headers {
+                contentType = MediaType.APPLICATION_JSON
+                cookie(Cookie("token", mockAuthRepository.validUserCookieToken))
+            }
+            content =
+                "{\"societyName\":\"test society\",\"studentIdList\":[\"2ac23d21-4cb0-4173-a2fe-de551ec5aa9d\",\"38153605-ed2c-42e7-947a-9d1731f4bd44\"]}"
+        }.andDo { print() }.andExpect {
+            status { isCreated() }
         }
     }
 }

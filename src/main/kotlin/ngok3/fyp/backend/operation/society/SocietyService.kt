@@ -62,4 +62,8 @@ class SocietyService(
             )
         }
     }
+
+    fun assignSocietyMemberRole(societyName: String, studentIdList: List<String>) {
+        TODO("Not yet implemented")
+    }
 }
