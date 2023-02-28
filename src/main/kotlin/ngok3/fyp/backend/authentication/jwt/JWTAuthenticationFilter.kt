@@ -4,8 +4,10 @@ import io.jsonwebtoken.Claims
 import io.jsonwebtoken.ExpiredJwtException
 import ngok3.fyp.backend.util.JWTUtil
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpMethod
 import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseCookie
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
@@ -70,6 +72,10 @@ class JWTAuthenticationFilter(
     //return http code, body to frontend when error
     fun handleException(ex: Exception, response: HttpServletResponse) {
         logger.error("handleException in ${this.javaClass.name}: ${ex.message}")
+        val cookie: ResponseCookie =
+            ResponseCookie.from("token", "").httpOnly(true).secure(true).path("/")
+                .maxAge(0).sameSite("None").build()
+        response.setHeader(HttpHeaders.SET_COOKIE, cookie.toString())
 //        handle expired cookie
         if (ex is ExpiredJwtException) {
             response.status = HttpStatus.FORBIDDEN.value()
