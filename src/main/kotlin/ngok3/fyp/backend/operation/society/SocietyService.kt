@@ -1,5 +1,8 @@
 package ngok3.fyp.backend.operation.society
 
+import ngok3.fyp.backend.authentication.role.Role
+import ngok3.fyp.backend.authentication.role.RoleEntity
+import ngok3.fyp.backend.authentication.role.RoleEntityRepository
 import ngok3.fyp.backend.operation.enrolled.EnrolledStatus
 import ngok3.fyp.backend.operation.enrolled.society_record.EnrolledSocietyRecordEntity
 import ngok3.fyp.backend.operation.enrolled.society_record.EnrolledSocietyRecordKey
@@ -16,7 +19,8 @@ import java.util.*
 class SocietyService(
     private val societyRepository: SocietyRepository,
     private val studentRepository: StudentRepository,
-    private val enrolledSocietyRecordRepository: EnrolledSocietyRecordRepository
+    private val enrolledSocietyRecordRepository: EnrolledSocietyRecordRepository,
+    private val roleEntityRepository: RoleEntityRepository
 ) {
     fun getAllSocieties(pageNum: Int, pageSize: Int): List<SocietyDto> {
         val firstPageNumWithPageSizeElement: Pageable = PageRequest.of(pageNum, pageSize)
@@ -64,6 +68,17 @@ class SocietyService(
     }
 
     fun assignSocietyMemberRole(societyName: String, studentIdList: List<String>) {
-        TODO("Not yet implemented")
+        val roleEntity: RoleEntity = roleEntityRepository.findByRole(Role.ROLE_SOCIETY_MEMBER).orElseThrow {
+            Exception("Role: ${Role.ROLE_SOCIETY_MEMBER} does not exist")
+        }
+
+        val studentEntityList: Iterable<StudentEntity> =
+            studentRepository.findByIdInAndEnrolledSocietyNameAndEnrollStatus(studentIdList.map { studentIdString ->
+                UUID.fromString(studentIdString)
+            }.toMutableList(), societyName, EnrolledStatus.SUCCESS)
+
+        studentEntityList.forEach { studentEntity -> studentEntity.roles.add(roleEntity) }
+
+        studentRepository.saveAll(studentEntityList)
     }
 }
