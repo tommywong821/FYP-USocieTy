@@ -81,4 +81,8 @@ class SocietyService(
 
         studentRepository.saveAll(studentEntityList)
     }
+
+    fun removeSocietyMemberRole(societyName: String, studentIdList: List<String>) {
+        TODO("Not yet implemented")
+    }
 }

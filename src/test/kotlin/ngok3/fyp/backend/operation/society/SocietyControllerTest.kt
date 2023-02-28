@@ -10,6 +10,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
+import org.springframework.test.web.servlet.delete
 import org.springframework.test.web.servlet.get
 import org.springframework.test.web.servlet.post
 import org.springframework.util.LinkedMultiValueMap
@@ -84,6 +85,33 @@ class SocietyControllerTest @Autowired constructor(
                 "{\"societyName\":\"test society\",\"studentIdList\":[\"2ac23d21-4cb0-4173-a2fe-de551ec5aa9d\",\"38153605-ed2c-42e7-947a-9d1731f4bd44\"]}"
         }.andDo { print() }.andExpect {
             status { isCreated() }
+        }
+    }
+
+    @Test
+    fun `should remove society member role from student`() {
+
+        val studentIdList: List<String> = listOf<String>(
+            "2ac23d21-4cb0-4173-a2fe-de551ec5aa9d",
+            "38153605-ed2c-42e7-947a-9d1731f4bd44"
+        )
+
+        every {
+            societyService.removeSocietyMemberRole(mockAuthRepository.testSocietyName, studentIdList)
+        } returns Unit
+
+        mockMvc.delete("/society/member") {
+            headers {
+                contentType = MediaType.APPLICATION_JSON
+                cookie(Cookie("token", mockAuthRepository.validUserCookieToken))
+            }
+            params = LinkedMultiValueMap<String, String>().apply {
+                add("societyName", mockAuthRepository.testSocietyName)
+                add("id", "2ac23d21-4cb0-4173-a2fe-de551ec5aa9d")
+                add("id", "38153605-ed2c-42e7-947a-9d1731f4bd44")
+            }
+        }.andDo { print() }.andExpect {
+            status { isAccepted() }
         }
     }
 }
