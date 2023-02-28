@@ -83,6 +83,13 @@ class SocietyService(
     }
 
     fun removeSocietyMemberRole(societyName: String, studentIdList: List<String>) {
-        TODO("Not yet implemented")
+        val studentEntityList: Iterable<StudentEntity> =
+            studentRepository.findByIdInAndEnrolledSocietyNameAndEnrollStatus(studentIdList.map { studentIdString ->
+                UUID.fromString(studentIdString)
+            }.toMutableList(), societyName, EnrolledStatus.SUCCESS)
+
+        studentEntityList.forEach { studentEntity -> studentEntity.roles.removeIf { roleEntity -> Role.ROLE_SOCIETY_MEMBER == roleEntity.role } }
+
+        studentRepository.saveAll(studentEntityList)
     }
 }
