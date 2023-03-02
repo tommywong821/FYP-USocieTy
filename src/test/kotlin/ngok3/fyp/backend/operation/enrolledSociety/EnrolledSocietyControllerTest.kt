@@ -5,6 +5,7 @@ import io.mockk.every
 import ngok3.fyp.backend.controller.authentication.model.MockAuthRepository
 import ngok3.fyp.backend.operation.enrolled.EnrolledStatus
 import ngok3.fyp.backend.operation.enrolled.society_record.EnrolledSocietyRecordService
+import ngok3.fyp.backend.operation.enrolled.society_record.StudentEnrolledEventRecord
 import ngok3.fyp.backend.operation.enrolled.society_record.UpdateEnrolledSocietyRecordDto
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -12,7 +13,9 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
+import org.springframework.test.web.servlet.get
 import org.springframework.test.web.servlet.put
+import org.springframework.util.LinkedMultiValueMap
 import java.util.*
 import javax.servlet.http.Cookie
 
@@ -50,5 +53,48 @@ class EnrolledSocietyControllerTest @Autowired constructor(
 
             content = "{\"societyId\":\"$societyUUID\",\"studentId\":\"$studentUUID\",\"status\":\"SUCCESS\"}"
         }.andDo { print() }.andExpect { status { isNoContent() } }
+    }
+
+    @Test
+    fun `should get student with enrolled society status != SUCCESS`() {
+        val mockStudentListNotInSuccess: List<StudentEnrolledEventRecord> = listOf(
+            StudentEnrolledEventRecord("qwert", "nickname 1", EnrolledStatus.PENDING),
+            StudentEnrolledEventRecord("asdfg", "nickname 2", EnrolledStatus.DECLINE),
+        )
+
+        every {
+            enrolledSocietyService.getEnrolledSocietyRecord(
+                mockAuthRepository.validUserCookieToken,
+                mockAuthRepository.testSocietyName,
+            )
+        } returns mockStudentListNotInSuccess
+
+        mockMvc.get("/enrolledSocietyRecord") {
+            headers {
+                contentType = MediaType.APPLICATION_JSON
+                cookie(Cookie("token", mockAuthRepository.validUserCookieToken))
+            }
+            params = LinkedMultiValueMap<String, String>().apply {
+                add("societyName", mockAuthRepository.testSocietyName)
+            }
+        }.andDo { print() }.andExpect {
+            status { isOk() }
+            content { contentType(MediaType.APPLICATION_JSON) }
+            jsonPath("$") {
+                isArray()
+            }
+            jsonPath("$.size()") {
+                value(mockStudentListNotInSuccess.size)
+            }
+            jsonPath("$[*].itsc") {
+                value(mockStudentListNotInSuccess.map { mockData -> mockData.itsc })
+            }
+            jsonPath("$[*].nickname") {
+                value(mockStudentListNotInSuccess.map { mockData -> mockData.nickname })
+            }
+            jsonPath("$[*].status") {
+                value(mockStudentListNotInSuccess.map { mockData -> mockData.status.toString() })
+            }
+        }
     }
 }
