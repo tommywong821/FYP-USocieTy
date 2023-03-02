@@ -16,4 +16,11 @@ where e.studentEntity.itsc = ?1 and e.societyEntity.name = ?2 and e.status = ?3"
         status: EnrolledStatus
     ): Optional<EnrolledSocietyRecordEntity>
 
+
+    @Query("select e from EnrolledSocietyRecordEntity e where e.societyEntity.name = ?1 and e.status != ?2")
+    fun findBySocietyEntity_NameAndStatusNotEqual(
+        name: String,
+        status: EnrolledStatus
+    ): List<EnrolledSocietyRecordEntity>
+
 }

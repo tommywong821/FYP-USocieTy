@@ -1,5 +1,6 @@
 package ngok3.fyp.backend.operation.enrolled.society_record
 
+import ngok3.fyp.backend.operation.enrolled.EnrolledStatus
 import ngok3.fyp.backend.util.JWTUtil
 import org.springframework.stereotype.Service
 import java.util.*
@@ -30,7 +31,17 @@ class EnrolledSocietyRecordService(
     }
 
     fun getEnrolledSocietyRecord(jwtToken: String, societyName: String): List<StudentEnrolledEventRecord> {
-        TODO("Not yet implemented")
-        return listOf<StudentEnrolledEventRecord>()
+        jwtUtil.verifyUserEnrolledSociety(
+            jwtToken = jwtToken,
+            societyName
+        )
+        return enrolledSocietyRepository.findBySocietyEntity_NameAndStatusNotEqual(societyName, EnrolledStatus.SUCCESS)
+            .map { enrolledSocietyRecordEntity ->
+                StudentEnrolledEventRecord(
+                    enrolledSocietyRecordEntity.studentEntity.itsc,
+                    enrolledSocietyRecordEntity.studentEntity.nickname,
+                    enrolledSocietyRecordEntity.status
+                )
+            }
     }
 }
