@@ -4,7 +4,7 @@ import {Component, OnInit} from '@angular/core';
 import {FormGroup, FormBuilder, Validators} from '@angular/forms';
 import {NzMessageService} from 'ng-zorro-antd/message';
 import {NzUploadChangeParam} from 'ng-zorro-antd/upload';
-import {Subject, filter, zip, takeUntil, tap, map, switchMap, first} from 'rxjs';
+import {Subject, filter, zip, takeUntil, tap, map, switchMap, first, finalize} from 'rxjs';
 import {EventCategory} from 'src/app/model/event';
 import {getUpdateEventRequest, convertFiletoBase64, convertFormDataToEvent} from 'src/util/event.util';
 import {Event} from '../../model/event';
@@ -85,12 +85,10 @@ export class EventUpdateComponent implements OnInit {
           takeUntil(this.destroy$),
           tap(() => (this.isProcessing = true)),
           filter(([event, user]) => !!user),
-          map(([event, user]) => getUpdateEventRequest(event, this.updateEventForm.value.society, user!))
+          map(([event, user]) => getUpdateEventRequest(event, this.updateEventForm.value.society, user!)),
+          finalize(() => this.router.navigate([Path.Main, Path.Event]))
         )
-        .subscribe(request => {
-          this.ApiService.updateEvent(request);
-          this.router.navigate([Path.Main, Path.Event]);
-        });
+        .subscribe(request => this.ApiService.updateEvent(request));
     }
   }
 

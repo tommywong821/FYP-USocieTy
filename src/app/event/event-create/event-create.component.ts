@@ -76,8 +76,6 @@ export class EventCreateComponent implements OnInit {
         switchMap(request => this.ApiService.call(request))
       )
       .subscribe(res => {
-        console.log(res);
-
         this.isProcessing = false;
         this.message.remove(this.loadingMessage);
       });

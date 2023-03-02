@@ -146,4 +146,14 @@ export class ApiService {
   deleteEvent(eventId: string): void {
     this.restful.delete(`${environment.backend_url}/event/${eventId}`);
   }
+
+  updateEnrollmentStatus(eventId: string, studentId: string, status: string): void {
+    const body = {
+      eventId,
+      studentId,
+      status,
+    };
+
+    this.restful.put(`${environment.backend_url}/enrolledEventRecord`, body);
+  }
 }

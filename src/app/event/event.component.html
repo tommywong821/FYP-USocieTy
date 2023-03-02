@@ -33,5 +33,6 @@
   <nz-pagination
     [nzPageIndex]="pageIndex"
     [nzTotal]="pageSize"
+    (nzPageIndexChange)="changePageIndex()"
   ></nz-pagination>
 </div>

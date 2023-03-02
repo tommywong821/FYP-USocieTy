@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {Router, Params} from '@angular/router';
-import {BehaviorSubject, map, switchMap} from 'rxjs';
+import {BehaviorSubject, map, Subject, switchMap} from 'rxjs';
 import {Path} from '../app-routing.module';
 import {ApiService} from '../services/api.service';
 import {Event} from '../model/event';
@@ -26,27 +26,21 @@ export class EventComponent implements OnInit {
   EventTableColumn = EventTableColumn;
 
   events: Event[] = [];
+  refreshEvents$ = new Subject();
 
-  private _pageIndex = 1;
-
-  get pageIndex(): number {
-    return this._pageIndex;
-  }
-
-  set pageIndex(value: number) {
-    this._pageIndex = value;
-    this.pageIndex$.next(value);
-  }
-
-  pageIndex$ = new BehaviorSubject<number>(this.pageIndex);
+  pageIndex = 1;
   pageSize = 15;
 
   constructor(private router: Router, private ApiService: ApiService) {}
 
   ngOnInit(): void {
-    this.pageIndex$
-      .pipe(switchMap(pageIndex => this.ApiService.getEvents(pageIndex, this.pageSize)))
-      .subscribe(events => (this.events = events));
+    this.refreshEvents$
+      .pipe(switchMap(() => this.ApiService.getEvents(this.pageIndex, this.pageSize)))
+      .subscribe(event => (this.events = ([] as Event[]).concat(event)));
+  }
+
+  changePageIndex(): void {
+    this.refreshEvents$.next({});
   }
 
   toggleCreateEvent(): void {
@@ -58,7 +52,7 @@ export class EventComponent implements OnInit {
   }
 
   deleteEvent(eventId: string): void {
-    // TODO refresh after deletion
     this.ApiService.deleteEvent(eventId);
+    this.refreshEvents$.next({});
   }
 }
