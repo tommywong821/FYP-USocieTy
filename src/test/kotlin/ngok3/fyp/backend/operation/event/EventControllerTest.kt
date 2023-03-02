@@ -18,7 +18,6 @@ import org.springframework.test.web.servlet.delete
 import org.springframework.test.web.servlet.get
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
-import java.io.InputStream
 import java.util.*
 import javax.servlet.http.Cookie
 
@@ -171,7 +170,7 @@ class EventControllerTest @Autowired constructor(
                 mockAuthRepository.validUserCookieToken,
                 uuid,
                 updateEventDto,
-                MockMultipartFile("test", InputStream.nullInputStream())
+                any()
             )
         } returns Unit
 
