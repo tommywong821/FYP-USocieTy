@@ -61,6 +61,6 @@ class EventController(
         @RequestPart("event") eventDto: EventDto,
         @PathVariable eventId: String,
     ) {
-        eventService.updateEvent(jwtToken, eventId, eventDto)
+        eventService.updateEvent(jwtToken, eventId, eventDto, uploadFile)
     }
 }

@@ -22,6 +22,10 @@ class S3Service(
     }
 
     fun uploadFiles(bucketFolderName: String, files: Array<MultipartFile>): List<S3BulkResponseEntity> {
+        return this.uploadFiles(bucketFolderName, files, 0)
+    }
+
+    fun uploadFiles(bucketFolderName: String, files: Array<MultipartFile>, version: Long): List<S3BulkResponseEntity> {
         val responses: ArrayList<S3BulkResponseEntity> = ArrayList()
 
 //        check if bucket exist
@@ -39,10 +43,11 @@ class S3Service(
             run {
                 val originFileName: String? = file.originalFilename
                 val uuid: String = UUID.randomUUID().toString()
+                val fileName: String = "${bucketFolderName}${uuid}_${version}"
                 val fileExtension: String = FilenameUtils.getExtension(file.originalFilename)
                 responses.add(
                     s3Client.putObject(
-                        PutObjectRequest.builder().bucket(bucketName).key("${bucketFolderName}${uuid}.${fileExtension}")
+                        PutObjectRequest.builder().bucket(bucketName).key("$fileName.${fileExtension}")
                             .build(),
                         RequestBody.fromBytes(file.bytes)
                     )
@@ -51,7 +56,7 @@ class S3Service(
                         .let { response ->
                             S3BulkResponseEntity(
                                 bucket = bucketFolderName,
-                                fileKey = "$uuid.$fileExtension",
+                                fileKey = "$fileName.$fileExtension",
                                 originFileName = originFileName ?: "no name",
                                 successful = response.isSuccessful,
                                 statusCode = response.statusCode()
@@ -61,4 +66,5 @@ class S3Service(
         }
         return responses
     }
+
 }

@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service
 import org.springframework.web.multipart.MultipartFile
 import java.time.LocalDateTime
 import java.util.*
+import javax.persistence.OptimisticLockException
 
 
 @Service
@@ -72,7 +73,7 @@ class EventService(
         enrolledEventRecordEntity.studentEntity = studentEntity
         enrolledEventRecordEntity.eventEntity = eventEntity
         enrolledEventRecordRepository.save(enrolledEventRecordEntity)
-        return true;
+        return true
     }
 
     fun createEvent(jwtToken: String, uploadFile: MultipartFile, eventDto: EventDto, societyName: String): EventDto {
@@ -112,22 +113,36 @@ class EventService(
         eventRepository.deleteById(UUID.fromString(eventId))
     }
 
-    fun updateEvent(jwtToken: String, eventId: String, updateEvent: EventDto) {
+    fun updateEvent(jwtToken: String, eventId: String, updateEvent: EventDto, uploadFile: MultipartFile) {
 
         val eventEntityOpt: Optional<EventEntity> = eventRepository.findById(UUID.fromString(eventId))
 
         if (eventEntityOpt.isEmpty) {
             throw Exception("Event with id: $eventId is not exist")
         }
+        val eventEntity: EventEntity = eventEntityOpt.get()
+        //prevent concurrent update
+        if (eventEntity.version != updateEvent.version) {
+            throw OptimisticLockException("Expected version: ${eventEntity.version} but request version: ${updateEvent.version}")
+        }
 
         //check user identify
-        val eventEntity: EventEntity = eventEntityOpt.get()
         jwtUtil.verifyUserEnrolledSociety(
             jwtToken,
             eventEntity.societyEntity.name
         )
 
         //update event entity
+        val s3BulkResponseEntity: List<S3BulkResponseEntity> =
+            s3Service.uploadFiles(
+                "${eventEntity.societyEntity.name}/event/",
+                arrayOf(uploadFile),
+                eventEntity.version + 1
+            )
+        if (s3BulkResponseEntity.isEmpty() || !s3BulkResponseEntity[0].successful) {
+            throw Exception("Upload File to AWS S3 failed")
+        }
+        //map aws s3 file name to database
         eventEntity.name = updateEvent.name
         eventEntity.maxParticipation = updateEvent.maxParticipation
         eventEntity.applyDeadline = dateUtil.convertStringWithTimeStampToLocalDateTime(updateEvent.applyDeadline)
@@ -137,6 +152,7 @@ class EventService(
         eventEntity.category = updateEvent.category
         eventEntity.description = updateEvent.description
         eventEntity.fee = updateEvent.fee
+        eventEntity.poster = s3BulkResponseEntity[0].fileKey
 
         eventRepository.save(eventEntity)
     }
