@@ -18,6 +18,7 @@ import org.springframework.test.web.servlet.delete
 import org.springframework.test.web.servlet.get
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
+import java.io.InputStream
 import java.util.*
 import javax.servlet.http.Cookie
 
@@ -165,7 +166,14 @@ class EventControllerTest @Autowired constructor(
             fee = 12.3
         )
 
-        every { eventService.updateEvent(mockAuthRepository.validUserCookieToken, uuid, updateEventDto) } returns Unit
+        every {
+            eventService.updateEvent(
+                mockAuthRepository.validUserCookieToken,
+                uuid,
+                updateEventDto,
+                MockMultipartFile("test", InputStream.nullInputStream())
+            )
+        } returns Unit
 
         mockMvc.perform(
             MockMvcRequestBuilders.multipart(

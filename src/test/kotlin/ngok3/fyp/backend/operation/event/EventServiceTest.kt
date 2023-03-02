@@ -18,6 +18,8 @@ import ngok3.fyp.backend.util.DateUtil
 import ngok3.fyp.backend.util.JWTUtil
 import org.junit.jupiter.api.Assertions.assertIterableEquals
 import org.junit.jupiter.api.Test
+import org.springframework.mock.web.MockMultipartFile
+import java.io.InputStream
 import java.time.LocalDateTime
 import java.util.*
 
@@ -143,7 +145,12 @@ class EventServiceTest {
             eventRepository.save(mockEventEntity)
         } returns mockEventEntity
 
-        eventService.updateEvent(mockAuthRepository.validUserCookieToken, uuid, updateEventDto)
+        eventService.updateEvent(
+            mockAuthRepository.validUserCookieToken,
+            uuid,
+            updateEventDto,
+            MockMultipartFile("test", InputStream.nullInputStream())
+        )
 
         verify(exactly = 1) { eventRepository.findById(UUID.fromString(uuid)) }
         verify(exactly = 1) {

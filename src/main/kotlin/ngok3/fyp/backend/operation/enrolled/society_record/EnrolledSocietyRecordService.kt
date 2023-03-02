@@ -28,4 +28,9 @@ class EnrolledSocietyRecordService(
 
         enrolledSocietyRepository.save(enrolledSocietyRecordEntity)
     }
+
+    fun getEnrolledSocietyRecord(jwtToken: String, societyName: String): List<StudentEnrolledEventRecord> {
+        TODO("Not yet implemented")
+        return listOf<StudentEnrolledEventRecord>()
+    }
 }

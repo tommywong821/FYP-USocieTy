@@ -19,4 +19,14 @@ class EnrolledSocietyController(
     ) {
         return enrolledSocietyService.updateEnrolledSocietyRecord(jwtToken, updateEnrolledSocietyRecordDto)
     }
+
+
+    @Operation(summary = "get all studnet records with enrolled society status not equal SUCCESS")
+    @GetMapping
+    fun getEnrolledSocietyRecord(
+        @CookieValue("token") jwtToken: String,
+        @RequestParam("societyName") societyName: String,
+    ): List<StudentEnrolledEventRecord> {
+        return enrolledSocietyService.getEnrolledSocietyRecord(jwtToken, societyName)
+    }
 }
