@@ -2,7 +2,6 @@ package ngok3.fyp.backend.operation.event
 
 import io.mockk.every
 import io.mockk.mockk
-import io.mockk.mockkStatic
 import io.mockk.verify
 import ngok3.fyp.backend.controller.authentication.model.MockAuthRepository
 import ngok3.fyp.backend.operation.enrolled.EnrolledStatus
@@ -21,7 +20,6 @@ import org.junit.jupiter.api.Assertions.assertIterableEquals
 import org.junit.jupiter.api.Test
 import org.springframework.mock.web.MockMultipartFile
 import java.io.InputStream
-import java.time.LocalDateTime
 import java.util.*
 
 class EventServiceTest {
@@ -50,12 +48,9 @@ class EventServiceTest {
 
     @Test
     fun `should get all event without sid`() {
-        mockkStatic(LocalDateTime::class)
-        every { LocalDateTime.now() } returns LocalDateTime.MAX
-
         every {
             eventRepository.findByApplyDeadlineGreaterThanEqualOrderByApplyDeadlineAsc(
-                LocalDateTime.now(),
+                any(),
                 mockEventRepository.testPageableWithoutSid
             )
         } returns mockEventRepository.withoutSidTestEventPage
@@ -143,6 +138,10 @@ class EventServiceTest {
 
         every {
             s3Service.uploadFiles("${mockAuthRepository.testSocietyName}/event/", any(), 1)
+        } returns listOf(S3BulkResponseEntity("", "", "", true, 200))
+
+        every {
+            s3Service.uploadFiles("${mockAuthRepository.testSocietyName}/event/", any())
         } returns listOf(S3BulkResponseEntity("", "", "", true, 200))
 
         every {

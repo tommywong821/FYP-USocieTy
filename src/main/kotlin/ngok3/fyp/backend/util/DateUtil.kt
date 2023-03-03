@@ -3,13 +3,14 @@ package ngok3.fyp.backend.util
 import org.springframework.stereotype.Component
 import java.time.LocalDate
 import java.time.LocalDateTime
+import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
 @Component
 class DateUtil {
     val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("M/d/yyyy")
     val formatterWithTimeStamp: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSX")
-    val currentLocalDateTime: LocalDateTime = LocalDateTime.now()
+    val currentLocalDateTime: LocalDateTime = LocalDateTime.now(ZoneId.of("Asia/Hong_Kong"))
     fun convertLocalDateTimeToString(localDateTime: LocalDateTime): String {
         return localDateTime.format(formatter)
     }

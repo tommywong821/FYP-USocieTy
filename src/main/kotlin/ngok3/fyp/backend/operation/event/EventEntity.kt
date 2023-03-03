@@ -5,6 +5,7 @@ import ngok3.fyp.backend.operation.enrolled.event_record.EnrolledEventRecordEnti
 import ngok3.fyp.backend.operation.society.SocietyEntity
 import ngok3.fyp.backend.util.entity.BaseEntity
 import java.time.LocalDateTime
+import java.time.ZoneId
 import javax.persistence.*
 
 @Entity
@@ -13,15 +14,15 @@ open class EventEntity(
     open var name: String = "",
     open var poster: String = "",
     open var maxParticipation: Int = -1,
-    open var applyDeadline: LocalDateTime = LocalDateTime.now(),
+    open var applyDeadline: LocalDateTime = LocalDateTime.now(ZoneId.of("Asia/Hong_Kong")),
     open var location: String = "",
-    open var startDate: LocalDateTime = LocalDateTime.now(),
-    open var endDate: LocalDateTime = LocalDateTime.now(),
+    open var startDate: LocalDateTime = LocalDateTime.now(ZoneId.of("Asia/Hong_Kong")),
+    open var endDate: LocalDateTime = LocalDateTime.now(ZoneId.of("Asia/Hong_Kong")),
     open var category: String = "",
     open var description: String = "",
     open var fee: Double = -1.0,
 //    @Version open var version: Long = 0
-    ) : BaseEntity() {
+) : BaseEntity() {
 
 
     @OneToMany(mappedBy = "eventEntity")
