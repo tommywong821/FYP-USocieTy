@@ -20,7 +20,7 @@ class ExceptionHandler {
         logger.error("handleException: ${ex.message}")
         val errorMessage = ErrorMessage(
             HttpStatus.UNAUTHORIZED.value(),
-            "Invalid JWT token"
+            "Invalid JWT token: ${ex.message}"
         )
         return ResponseEntity(errorMessage, HttpStatus.UNAUTHORIZED)
     }
@@ -30,7 +30,7 @@ class ExceptionHandler {
         logger.error("handleException: ${ex.message}")
         val errorMessage = ErrorMessage(
             HttpStatus.SERVICE_UNAVAILABLE.value(),
-            "CAS Server Error"
+            "CAS Server Error: ${ex.message}"
         )
         return ResponseEntity(errorMessage, HttpStatus.SERVICE_UNAVAILABLE)
     }
@@ -50,7 +50,7 @@ class ExceptionHandler {
         logger.error("handleException: ${ex.message}")
         val errorMessage = ErrorMessage(
             HttpStatus.INTERNAL_SERVER_ERROR.value(),
-            "Internal Server Error"
+            "Internal Server Error: ${ex.message}"
         )
         return ResponseEntity(errorMessage, HttpStatus.INTERNAL_SERVER_ERROR)
     }
