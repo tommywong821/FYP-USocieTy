@@ -165,7 +165,14 @@ class EventControllerTest @Autowired constructor(
             fee = 12.3
         )
 
-        every { eventService.updateEvent(mockAuthRepository.validUserCookieToken, uuid, updateEventDto) } returns Unit
+        every {
+            eventService.updateEvent(
+                mockAuthRepository.validUserCookieToken,
+                uuid,
+                updateEventDto,
+                any()
+            )
+        } returns Unit
 
         mockMvc.perform(
             MockMvcRequestBuilders.multipart(
