@@ -10,6 +10,7 @@ import ngok3.fyp.backend.operation.enrolled.event_record.EnrolledEventRecordRepo
 import ngok3.fyp.backend.operation.enrolled.society_record.EnrolledSocietyRecordEntity
 import ngok3.fyp.backend.operation.enrolled.society_record.EnrolledSocietyRecordRepository
 import ngok3.fyp.backend.operation.event.dto.EventDto
+import ngok3.fyp.backend.operation.s3.S3BulkResponseEntity
 import ngok3.fyp.backend.operation.s3.S3Service
 import ngok3.fyp.backend.operation.society.SocietyEntity
 import ngok3.fyp.backend.operation.society.SocietyRepository
@@ -18,6 +19,8 @@ import ngok3.fyp.backend.util.DateUtil
 import ngok3.fyp.backend.util.JWTUtil
 import org.junit.jupiter.api.Assertions.assertIterableEquals
 import org.junit.jupiter.api.Test
+import org.springframework.mock.web.MockMultipartFile
+import java.io.InputStream
 import java.time.LocalDateTime
 import java.util.*
 
@@ -138,12 +141,20 @@ class EventServiceTest {
             )
         } returns Optional.of(EnrolledSocietyRecordEntity())
 
+        every {
+            s3Service.uploadFiles("${mockAuthRepository.testSocietyName}/event/", any(), 1)
+        } returns listOf(S3BulkResponseEntity("", "", "", true, 200))
 
         every {
             eventRepository.save(mockEventEntity)
         } returns mockEventEntity
 
-        eventService.updateEvent(mockAuthRepository.validUserCookieToken, uuid, updateEventDto)
+        eventService.updateEvent(
+            mockAuthRepository.validUserCookieToken,
+            uuid,
+            updateEventDto,
+            MockMultipartFile("test", InputStream.nullInputStream())
+        )
 
         verify(exactly = 1) { eventRepository.findById(UUID.fromString(uuid)) }
         verify(exactly = 1) {
