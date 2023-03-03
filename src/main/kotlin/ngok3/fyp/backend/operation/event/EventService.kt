@@ -121,10 +121,10 @@ class EventService(
             throw Exception("Event with id: $eventId is not exist")
         }
         val eventEntity: EventEntity = eventEntityOpt.get()
-        //prevent concurrent update
-        if (eventEntity.version != updateEvent.version) {
-            throw OptimisticLockException("Expected version: ${eventEntity.version} but request version: ${updateEvent.version}")
-        }
+//        //prevent concurrent update
+//        if (eventEntity.version != updateEvent.version) {
+//            throw OptimisticLockException("Expected version: ${eventEntity.version} but request version: ${updateEvent.version}")
+//        }
 
         //check user identify
         jwtUtil.verifyUserEnrolledSociety(
@@ -137,7 +137,7 @@ class EventService(
             s3Service.uploadFiles(
                 "${eventEntity.societyEntity.name}/event/",
                 arrayOf(uploadFile),
-                eventEntity.version + 1
+//                eventEntity.version + 1
             )
         if (s3BulkResponseEntity.isEmpty() || !s3BulkResponseEntity[0].successful) {
             throw Exception("Upload File to AWS S3 failed")

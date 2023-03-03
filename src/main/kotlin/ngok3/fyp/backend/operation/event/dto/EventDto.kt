@@ -36,7 +36,7 @@ data class EventDto(
         description = eventEntity.description,
         fee = eventEntity.fee,
         poster = eventEntity.poster,
-        version = eventEntity.version
+//        version = eventEntity.version
     )
 
     fun toEntity() = EventEntity(
@@ -50,6 +50,6 @@ data class EventDto(
         description = this.description,
         fee = this.fee,
         poster = this.poster,
-        version = this.version + 1
+//        version = this.version + 1
     )
 }
