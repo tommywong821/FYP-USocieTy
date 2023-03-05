@@ -1,6 +1,7 @@
 package ngok3.fyp.backend.authentication.student_role
 
 import ngok3.fyp.backend.authentication.role.RoleEntity
+import ngok3.fyp.backend.operation.society.SocietyEntity
 import ngok3.fyp.backend.operation.student.StudentEntity
 import javax.persistence.*
 
@@ -12,11 +13,15 @@ open class StudentRoleEntity {
 
     @ManyToOne
     @MapsId("studentUuid")
-    @JoinColumn(name = "student_entity_uuid")
+    @JoinColumn(name = "student_uuid")
     open var studentEntity: StudentEntity = StudentEntity()
 
     @ManyToOne
     @MapsId("roleId")
-    @JoinColumn(name = "role_entity_id")
+    @JoinColumn(name = "role_id")
     open var roleEntity: RoleEntity = RoleEntity()
+
+    @ManyToOne
+    @JoinColumn(name = "society_uuid")
+    open var societyEntity: SocietyEntity? = null
 }
