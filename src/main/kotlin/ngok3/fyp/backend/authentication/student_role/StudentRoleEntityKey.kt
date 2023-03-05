@@ -8,7 +8,7 @@ import javax.persistence.Embeddable
 
 @Embeddable
 open class StudentRoleEntityKey : Serializable {
-    @Column(name = "student_entity_uuid")
+    @Column(name = "student_uuid")
     open var studentUuid: UUID? = null
 
     @Column(name = "role_id")
