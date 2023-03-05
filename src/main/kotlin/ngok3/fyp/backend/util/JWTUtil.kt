@@ -5,7 +5,7 @@ import io.jsonwebtoken.ExpiredJwtException
 import io.jsonwebtoken.JwtException
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.security.Keys
-import ngok3.fyp.backend.authentication.role.RoleEntity
+import ngok3.fyp.backend.authentication.student_role.StudentRoleEntity
 import ngok3.fyp.backend.operation.enrolled.EnrolledStatus
 import ngok3.fyp.backend.operation.enrolled.society_record.EnrolledSocietyRecordRepository
 import ngok3.fyp.backend.operation.student.StudentEntity
@@ -27,7 +27,7 @@ class JWTUtil(
         claims["name"] = studentEntity.nickname
         claims["mail"] = studentEntity.mail
         claims["role"] =
-            studentEntity.roles.joinToString(separator = ",") { roleEntity: RoleEntity -> roleEntity.role.toString() }
+            studentEntity.studentRoleEntities.joinToString(separator = ",") { studentRoleEntity: StudentRoleEntity -> studentRoleEntity.roleEntity.role.toString() }
 
         //set token only valid in 24 hours
         val calendar: Calendar = Calendar.getInstance()

@@ -14,7 +14,7 @@ class StudentService(
             studentRepository.save(StudentEntity(itsc, "", "${itsc}@connect.ust.hk"))
         }
         val enrolledSocietyList: List<String> =
-            studentEntity.enrolledSocietyRecordEntity.map { it.societyEntity.name }
+            studentEntity.enrolledSocietyRecordEntities.map { it.societyEntity.name }
         return StudentDto(studentEntity, enrolledSocietyList)
     }
 }

@@ -3,7 +3,6 @@ package ngok3.fyp.backend.authentication
 import com.fasterxml.jackson.dataformat.xml.XmlMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import ngok3.fyp.backend.authentication.model.*
-import ngok3.fyp.backend.authentication.role.Role
 import ngok3.fyp.backend.authentication.role.RoleEntityRepository
 import ngok3.fyp.backend.operation.student.StudentDto
 import ngok3.fyp.backend.operation.student.StudentEntity
@@ -77,9 +76,9 @@ class AuthService(
 
         //create society list string
         val enrolledSocietyList: List<String> =
-            studentEntity.enrolledSocietyRecordEntity.map { it.societyEntity.name }
+            studentEntity.enrolledSocietyRecordEntities.map { it.societyEntity.name }
         // create role list string
-        val roleList: List<String> = studentEntity.roles.map { it.role.toString() }
+        val roleList: List<String> = studentEntity.studentRoleEntities.map { it.roleEntity.role.toString() }
         return StudentDto(studentEntity, enrolledSocietyList, roleList)
     }
 
@@ -94,9 +93,10 @@ class AuthService(
 
     fun createNewStudentEntityInDB(itsc: String, name: String, mail: String): StudentEntity {
         val newStudentEntity = StudentEntity(itsc, name, mail)
-        newStudentEntity.roles = mutableSetOf(
-            roleEntityRepository.findByRole(Role.ROLE_STUDENT)
-                .orElseThrow { Exception("Role: ${Role.ROLE_STUDENT} does not exist") })
+//        TODO update
+//        newStudentEntity.roles = mutableSetOf(
+//            roleEntityRepository.findByRole(Role.ROLE_STUDENT)
+//                .orElseThrow { Exception("Role: ${Role.ROLE_STUDENT} does not exist") })
         return studentRepository.save(newStudentEntity)
     }
 
@@ -119,9 +119,9 @@ class AuthService(
 
         //create society list string
         val enrolledSocietyList: List<String> =
-            studentEntity.enrolledSocietyRecordEntity.map { it.societyEntity.name }
+            studentEntity.enrolledSocietyRecordEntities.map { it.societyEntity.name }
         // create role list string
-        val roleList: List<String> = studentEntity.roles.map { it.role.toString() }
+        val roleList: List<String> = studentEntity.studentRoleEntities.map { it.roleEntity.role.toString() }
 
         val mockResponse = CasServiceResponse()
         mockResponse.authenticationFailure = AuthenticationFailure(null, null)
