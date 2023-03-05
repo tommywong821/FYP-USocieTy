@@ -1,7 +1,7 @@
 import {EventProperty} from './../model/event';
 import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
-import {Subject, switchMap} from 'rxjs';
+import {ReplaySubject, Subject, switchMap} from 'rxjs';
 import {Path} from '../app-routing.module';
 import {ApiService} from '../services/api.service';
 import {Event, EventCategory} from '../model/event';
@@ -69,12 +69,21 @@ export class EventComponent implements OnInit {
   pageIndex = 1;
   pageSize = 15;
 
+  deleteEvent$ = new Subject();
+  deleteEventId$ = new ReplaySubject<string>();
+
+  showModal = false;
+
   constructor(private router: Router, private ApiService: ApiService) {}
 
   ngOnInit(): void {
     this.refreshEvents$
       .pipe(switchMap(() => this.ApiService.getEvents(this.pageIndex, this.pageSize)))
       .subscribe(event => (this.events = ([] as Event[]).concat(event)));
+
+    this.deleteEvent$
+      .pipe(switchMap(() => this.deleteEventId$.asObservable()))
+      .subscribe(eventId => this.ApiService.deleteEvent(eventId));
   }
 
   changePageIndex(): void {
@@ -93,9 +102,20 @@ export class EventComponent implements OnInit {
     this.router.navigate([Path.Main, Path.Event, Path.ViewEvent], {queryParams: {eventId: eventId}});
   }
 
-  deleteEvent(eventId: string): void {
-    // TODO add warning
-    this.ApiService.deleteEvent(eventId);
+  toggleDeleteEvent(eventId: string): void {
+    this.showModal = true;
+    this.deleteEventId$.next(eventId);
+  }
+
+  confirmEventDeletion(): void {
+    this.showModal = false;
+    this.deleteEvent$.next({});
     this.refreshEvents$.next({});
   }
+
+  cancelEventDeletion(): void {
+    this.showModal = false;
+  }
 }
+
+// (click)="toggleViewEvent(event.id!!)"

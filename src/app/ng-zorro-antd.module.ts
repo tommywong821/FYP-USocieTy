@@ -9,6 +9,7 @@ import {NzSelectModule} from 'ng-zorro-antd/select';
 import {NzTableModule} from 'ng-zorro-antd/table';
 import {NzPaginationModule} from 'ng-zorro-antd/pagination';
 import {NzUploadModule} from 'ng-zorro-antd/upload';
+import {NzModalModule} from 'ng-zorro-antd/modal';
 
 @NgModule({
   imports: [
@@ -22,6 +23,7 @@ import {NzUploadModule} from 'ng-zorro-antd/upload';
     NzSelectModule,
     NzTableModule,
     NzPaginationModule,
+    NzModalModule,
   ],
   exports: [
     NzIconModule,
@@ -34,6 +36,7 @@ import {NzUploadModule} from 'ng-zorro-antd/upload';
     NzSelectModule,
     NzTableModule,
     NzPaginationModule,
+    NzModalModule,
   ],
 })
 export class NgZorroAntdModule {}

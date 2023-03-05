@@ -34,7 +34,6 @@
         <tr
           class="cursor-pointer"
           *ngFor="let event of eventTable.data"
-          (click)="toggleViewEvent(event.id!!)"
         >
           <td>{{ event.name }}</td>
           <td>{{ event.category }}</td>
@@ -44,12 +43,12 @@
           <td>{{ event.applyDeadline | date : 'dd/MM/yyyy hh:mm' }}</td>
           <td>{{ event.startDate | date : 'dd/MM/yyyy hh:mm' }}</td>
           <td>{{ event.endDate | date : 'dd/MM/yyyy hh:mm' }}</td>
-          <td class="text-center">
+          <td class="z-10 text-center">
             <button
               nz-button
               nzDanger
               nzType="primary"
-              (click)="deleteEvent(event.id!!)"
+              (click)="toggleDeleteEvent(event.id!!)"
             >
               Remove
             </button>
@@ -58,4 +57,32 @@
       </tbody>
     </nz-table>
   </div>
+
+  <nz-modal
+    [(nzVisible)]="showModal"
+    nzTitle="Warning"
+    [nzFooter]="modalFooter"
+  >
+    <ng-container *nzModalContent>
+      <span>This action is irreversible, are you sure?</span>
+    </ng-container>
+
+    <ng-template #modalFooter>
+      <button
+        nz-button
+        nzType="default"
+        (click)="cancelEventDeletion()"
+      >
+        Cancel
+      </button>
+      <button
+        nz-button
+        nzDanger
+        nzType="primary"
+        (click)="confirmEventDeletion()"
+      >
+        Confirm
+      </button>
+    </ng-template>
+  </nz-modal>
 </div>
