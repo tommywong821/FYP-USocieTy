@@ -117,5 +117,3 @@ export class EventComponent implements OnInit {
     this.showModal = false;
   }
 }
-
-// (click)="toggleViewEvent(event.id!!)"

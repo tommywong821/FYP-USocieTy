@@ -35,15 +35,15 @@
           class="cursor-pointer"
           *ngFor="let event of eventTable.data"
         >
-          <td>{{ event.name }}</td>
-          <td>{{ event.category }}</td>
-          <td>{{ event.location }}</td>
-          <td>{{ event.maxParticipation }}</td>
-          <td>{{ event.fee }}</td>
-          <td>{{ event.applyDeadline | date : 'dd/MM/yyyy hh:mm' }}</td>
-          <td>{{ event.startDate | date : 'dd/MM/yyyy hh:mm' }}</td>
-          <td>{{ event.endDate | date : 'dd/MM/yyyy hh:mm' }}</td>
-          <td class="z-10 text-center">
+          <td (click)="toggleViewEvent(event.id!!)">{{ event.name }}</td>
+          <td (click)="toggleViewEvent(event.id!!)">{{ event.category }}</td>
+          <td (click)="toggleViewEvent(event.id!!)">{{ event.location }}</td>
+          <td (click)="toggleViewEvent(event.id!!)">{{ event.maxParticipation }}</td>
+          <td (click)="toggleViewEvent(event.id!!)">{{ event.fee }}</td>
+          <td (click)="toggleViewEvent(event.id!!)">{{ event.applyDeadline | date : 'dd/MM/yyyy hh:mm' }}</td>
+          <td (click)="toggleViewEvent(event.id!!)">{{ event.startDate | date : 'dd/MM/yyyy hh:mm' }}</td>
+          <td (click)="toggleViewEvent(event.id!!)">{{ event.endDate | date : 'dd/MM/yyyy hh:mm' }}</td>
+          <td class="cursor-default">
             <button
               nz-button
               nzDanger
