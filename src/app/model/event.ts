@@ -1,4 +1,5 @@
 export interface Event {
+  id?: string;
   name: string;
   poster: string;
   maxParticipation: number;
@@ -9,6 +10,20 @@ export interface Event {
   category: EventCategory;
   description: string;
   fee: number;
+}
+
+export enum EventProperty {
+  id,
+  name,
+  poster,
+  maxParticipation,
+  applyDeadline,
+  location,
+  startDate,
+  endDate,
+  category,
+  description,
+  fee,
 }
 
 export interface EventFormData {

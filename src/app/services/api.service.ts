@@ -1,4 +1,4 @@
-import {UpdateEventRequest, DeleteEventRequest} from './../api/event';
+import {UpdateEventRequest} from './../api/event';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {NzTableFilterList} from 'ng-zorro-antd/table';

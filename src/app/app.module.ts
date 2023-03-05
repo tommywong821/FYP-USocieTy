@@ -24,7 +24,7 @@ import {NetworkRequestInterceptor} from './interceptor/network-request-intercept
 import {NetworkResponseInterceptor} from './interceptor/network-response-interceptor';
 import {MainComponent} from './main/main.component';
 import {NgZorroAntdModule} from './ng-zorro-antd.module';
-import { EventViewComponent } from './event/event-view/event-view.component';
+import {EventViewComponent} from './event/event-view/event-view.component';
 
 registerLocaleData(en);
 

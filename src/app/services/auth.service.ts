@@ -33,7 +33,6 @@ export class AuthService {
     const request = {
       endpoint: validateUserEndpoint,
       // endpoint: '/auth/mockServiceValidate',
-      queryParam: null,
       body: {
         ticket: queryParams['ticket'],
       },

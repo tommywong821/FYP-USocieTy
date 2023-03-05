@@ -2,6 +2,7 @@ import {HttpParams} from '@angular/common/http';
 import {Request} from './common';
 
 export const createEventEndpoint = 'event';
+export const updateEventEndpoint = 'event';
 
 export interface EventDto {
   id: string;

@@ -37,6 +37,7 @@ export class EventUpdateComponent implements OnInit {
 
   enrolledSocieties: string[] = [];
 
+  eventId = '';
   event$ = new Subject<Event>();
 
   destroy$ = new Subject<void>();
@@ -59,6 +60,7 @@ export class EventUpdateComponent implements OnInit {
       this.route.queryParams
         .pipe(
           first(),
+          tap(params => (this.eventId = params['eventId'])),
           switchMap(params => this.ApiService.getEvent(params['eventId']))
         )
         .subscribe(
@@ -85,7 +87,7 @@ export class EventUpdateComponent implements OnInit {
           takeUntil(this.destroy$),
           tap(() => (this.isProcessing = true)),
           filter(([event, user]) => !!user),
-          map(([event, user]) => getUpdateEventRequest(event, this.updateEventForm.value.society, user!)),
+          map(([event, user]) => getUpdateEventRequest(this.eventId, event, this.updateEventForm.value.society, user!)),
           finalize(() => this.router.navigate([Path.Main, Path.Event]))
         )
         .subscribe(request => this.ApiService.updateEvent(request));

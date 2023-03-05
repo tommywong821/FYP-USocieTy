@@ -4,6 +4,7 @@ import {
   CreateEventRequest,
   CreateEventRequestBody,
   EventDto,
+  updateEventEndpoint,
   UpdateEventRequest,
   UpdateEventRequestBody,
 } from 'src/app/api/event';
@@ -65,16 +66,18 @@ export function getCreateEventRequest(event: Event, society: string, user: User)
   return request;
 }
 
-export function getUpdateEventRequest(event: Event, society: string, user: User): UpdateEventRequest {
+export function getUpdateEventRequest(eventId: string, event: Event, society: string, user: User): UpdateEventRequest {
   const body: UpdateEventRequestBody = {
     eventDto: convertEventToEventDto(event),
     itsc: user.itsc,
     society,
   };
 
+  const urlParams = {id: eventId};
+
   const request: UpdateEventRequest = {
-    endpoint: createEventEndpoint,
-    urlParams: '', // TODO
+    endpoint: updateEventEndpoint,
+    urlParams,
     body,
   };
 

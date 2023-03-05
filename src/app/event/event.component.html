@@ -1,38 +1,51 @@
-<div class="m-8">
-  <button
-    nz-button
-    nzType="primary"
-    (click)="toggleCreateEvent()"
-  >
-    Create Event
-  </button>
-</div>
-<div>
-  <nz-table
-    #eventTable
-    [nzData]="events"
-  >
-    <thead>
-      <tr>
-        <th *ngfor="let columnName of EventTableColumn">
-          {{ columnName }}
-        </th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr
-        *ngFor="let event of eventTable.data"
-        (click)="toggleViewEvent(event.id)"
+<div class="m-5 px-8">
+  <div class="my-5 space-y-6 py-4">
+    <div class="flex bg-white">
+      <h1 class="text-xl">Event Management</h1>
+      <button
+        class="ml-auto"
+        nz-button
+        nzType="primary"
+        (click)="toggleCreateEvent()"
       >
-        <td *ngfor="let propertyName of Object.keys(EventTableColumn)">
-          {{ event[propertyName] }}
-        </td>
-      </tr>
-    </tbody>
-  </nz-table>
-  <nz-pagination
-    [nzPageIndex]="pageIndex"
-    [nzTotal]="pageSize"
-    (nzPageIndexChange)="changePageIndex()"
-  ></nz-pagination>
+        Create Event
+      </button>
+    </div>
+  </div>
+  <div>
+    <nz-table
+      #eventTable
+      [nzPageIndex]="pageIndex"
+      [nzTotal]="pageSize"
+      (nzPageIndexChange)="changePageIndex()"
+      [nzData]="events"
+    >
+      <thead>
+        <tr>
+          <th
+            *ngFor="let column of EventTableColumn"
+            [nzColumnKey]="column.title"
+          >
+            {{ column.title }}
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          class="cursor-pointer"
+          *ngFor="let event of eventTable.data"
+          (click)="toggleViewEvent(event.id!!)"
+        >
+          <td>{{ event.name }}</td>
+          <td>{{ event.category }}</td>
+          <td>{{ event.location }}</td>
+          <td>{{ event.maxParticipation }}</td>
+          <td>{{ event.fee }}</td>
+          <td>{{ event.applyDeadline }}</td>
+          <td>{{ event.startDate }}</td>
+          <td>{{ event.endDate }}</td>
+        </tr>
+      </tbody>
+    </nz-table>
+  </div>
 </div>

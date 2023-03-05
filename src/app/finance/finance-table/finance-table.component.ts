@@ -17,14 +17,14 @@ export class FinanceTableComponent implements OnInit {
 
   @Output() updateFinanceDataEvent = new EventEmitter<void>();
 
-  societyName: string = '';
-  fromDate: string = '';
-  toDate: string = '';
+  societyName = '';
+  fromDate = '';
+  toDate = '';
 
   tableData: FinanceTableRecord[] = [];
-  total: number = 0;
-  pageSize: number = 10;
-  pageIndex: number = 1;
+  total = 0;
+  pageSize = 10;
+  pageIndex = 1;
   filterCategory: NzTableFilterList = [];
 
   checked = false;

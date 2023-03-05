@@ -1,21 +1,46 @@
+import {EventProperty} from './../model/event';
 import {Component, OnInit} from '@angular/core';
-import {Router, Params} from '@angular/router';
-import {BehaviorSubject, map, Subject, switchMap} from 'rxjs';
+import {Router} from '@angular/router';
+import {Subject, switchMap} from 'rxjs';
 import {Path} from '../app-routing.module';
 import {ApiService} from '../services/api.service';
-import {Event} from '../model/event';
+import {Event, EventCategory} from '../model/event';
 
-export enum EventTableColumn {
-  name = 'Name',
-  maxParticipation = 'Max Participation',
-  applyDeadline = 'Apply Deadline',
-  location = 'Location',
-  startDate = 'Start Date',
-  endDate = 'End Date',
-  category = 'Category',
-  // description = 'Description',
-  fee = 'Fee',
-}
+export const EventTableColumn = [
+  // {
+  //   title: 'society',
+  // },
+  {
+    title: 'Name',
+  },
+  {
+    title: 'Category',
+  },
+  {
+    title: 'Location',
+  },
+  {
+    title: 'Max Participation',
+  },
+  {
+    title: 'Fee',
+  },
+  {
+    title: 'Apply Deadline',
+  },
+  {
+    title: 'Start Date',
+  },
+  {
+    title: 'End Date',
+  },
+  // {
+  //   title: 'description',
+  // },
+  // {
+  //   title: 'delete',
+  // },
+];
 
 @Component({
   selector: 'app-event',
@@ -23,9 +48,25 @@ export enum EventTableColumn {
   styleUrls: ['./event.component.scss'],
 })
 export class EventComponent implements OnInit {
+  eventProperties = Object.keys(EventProperty);
   EventTableColumn = EventTableColumn;
+  eventTableHeaders = EventTableColumn.map(col => col.title);
 
-  events: Event[] = [];
+  events: Event[] = [
+    {
+      id: '',
+      name: 'Ocamp',
+      poster: '',
+      maxParticipation: 1,
+      applyDeadline: new Date(),
+      location: 'HKUST',
+      startDate: new Date(),
+      endDate: new Date(),
+      category: EventCategory.OrientationCamp,
+      description: '',
+      fee: 1,
+    },
+  ];
   refreshEvents$ = new Subject();
 
   pageIndex = 1;
@@ -41,6 +82,10 @@ export class EventComponent implements OnInit {
 
   changePageIndex(): void {
     this.refreshEvents$.next({});
+  }
+
+  getEventPropByKey(event: Event, key: string): any {
+    return event[key as keyof Event];
   }
 
   toggleCreateEvent(): void {
