@@ -21,7 +21,7 @@ open class EventEntity(
     open var category: String = "",
     open var description: String = "",
     open var fee: Double = -1.0,
-//    @Version open var version: Long = 0
+    @Version open var version: Long = 0
 ) : BaseEntity() {
 
 

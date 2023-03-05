@@ -3,6 +3,7 @@ package ngok3.fyp.backend.operation.society
 import ngok3.fyp.backend.authentication.role.Role
 import ngok3.fyp.backend.authentication.role.RoleEntity
 import ngok3.fyp.backend.authentication.role.RoleEntityRepository
+import ngok3.fyp.backend.authentication.student_role.StudentRoleEntity
 import ngok3.fyp.backend.operation.enrolled.EnrolledStatus
 import ngok3.fyp.backend.operation.enrolled.society_record.EnrolledSocietyRecordEntity
 import ngok3.fyp.backend.operation.enrolled.society_record.EnrolledSocietyRecordKey
@@ -77,7 +78,20 @@ class SocietyService(
                 UUID.fromString(studentIdString)
             }.toMutableList(), societyName, EnrolledStatus.SUCCESS)
 
-        studentEntityList.forEach { studentEntity -> studentEntity.roles.add(roleEntity) }
+        val societyEntity: SocietyEntity = societyRepository.findByName(societyName).orElseThrow {
+            Exception("Society: $societyName does not exist")
+        }
+
+
+
+        for (studentEntity in studentEntityList) {
+            val studentRoleEntity: StudentRoleEntity = StudentRoleEntity()
+            studentRoleEntity.roleEntity = roleEntity
+            studentRoleEntity.studentEntity = studentEntity
+
+            studentEntity.studentRoleEntities.add(studentRoleEntity)
+        }
+
 
         studentRepository.saveAll(studentEntityList)
     }
@@ -88,7 +102,7 @@ class SocietyService(
                 UUID.fromString(studentIdString)
             }.toMutableList(), societyName, EnrolledStatus.SUCCESS)
 
-        studentEntityList.forEach { studentEntity -> studentEntity.roles.removeIf { roleEntity -> Role.ROLE_SOCIETY_MEMBER == roleEntity.role } }
+        studentEntityList.forEach { studentEntity -> studentEntity.studentRoleEntities.removeIf { studentRoleEntity -> Role.ROLE_SOCIETY_MEMBER == studentRoleEntity.roleEntity.role } }
 
         studentRepository.saveAll(studentEntityList)
     }
