@@ -41,9 +41,19 @@
           <td>{{ event.location }}</td>
           <td>{{ event.maxParticipation }}</td>
           <td>{{ event.fee }}</td>
-          <td>{{ event.applyDeadline }}</td>
-          <td>{{ event.startDate }}</td>
-          <td>{{ event.endDate }}</td>
+          <td>{{ event.applyDeadline | date : 'dd/MM/yyyy hh:mm' }}</td>
+          <td>{{ event.startDate | date : 'dd/MM/yyyy hh:mm' }}</td>
+          <td>{{ event.endDate | date : 'dd/MM/yyyy hh:mm' }}</td>
+          <td class="text-center">
+            <button
+              nz-button
+              nzDanger
+              nzType="primary"
+              (click)="deleteEvent(event.id!!)"
+            >
+              Remove
+            </button>
+          </td>
         </tr>
       </tbody>
     </nz-table>

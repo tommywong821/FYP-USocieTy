@@ -34,12 +34,9 @@ export const EventTableColumn = [
   {
     title: 'End Date',
   },
-  // {
-  //   title: 'description',
-  // },
-  // {
-  //   title: 'delete',
-  // },
+  {
+    title: '',
+  },
 ];
 
 @Component({
@@ -57,14 +54,14 @@ export class EventComponent implements OnInit {
       id: '',
       name: 'Ocamp',
       poster: '',
-      maxParticipation: 1,
+      maxParticipation: 120,
       applyDeadline: new Date(),
       location: 'HKUST',
       startDate: new Date(),
       endDate: new Date(),
       category: EventCategory.OrientationCamp,
       description: '',
-      fee: 1,
+      fee: 100,
     },
   ];
   refreshEvents$ = new Subject();
@@ -97,6 +94,7 @@ export class EventComponent implements OnInit {
   }
 
   deleteEvent(eventId: string): void {
+    // TODO add warning
     this.ApiService.deleteEvent(eventId);
     this.refreshEvents$.next({});
   }

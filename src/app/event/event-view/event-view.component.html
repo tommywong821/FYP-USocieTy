@@ -1,1 +1,42 @@
-<p>event-view works!</p>
+<div class="m-5 px-8">
+  <div class="my-5 space-y-6 py-4">
+    <div class="flex bg-white">
+      <h1 class="text-xl">Event Detail</h1>
+      <button
+        class="ml-auto"
+        nz-button
+        nzType="primary"
+        (click)="toggleUpdateEvent()"
+      >
+        Update Event
+      </button>
+    </div>
+  </div>
+  <div>
+    <nz-table
+      #enrollmentTable
+      [nzPageIndex]="pageIndex"
+      [nzTotal]="pageSize"
+      (nzPageIndexChange)="changePageIndex()"
+      [nzData]="enrollmentRecords"
+    >
+      <thead>
+        <tr>
+          <th
+            *ngFor="let column of enrollmentTableColumn"
+            [nzColumnKey]="column.title"
+          >
+            {{ column.title }}
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let enrollment of enrollmentTable.data">
+          <!-- <td>{{ enrollment.itsc }}</td> -->
+          <!-- <td>{{ enrollment. }}</td>
+          <td>{{ enrollment. }}</td> -->
+        </tr>
+      </tbody>
+    </nz-table>
+  </div>
+</div>
