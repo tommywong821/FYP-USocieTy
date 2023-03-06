@@ -19,7 +19,8 @@ data class EventDto(
     val category: String = "",
     val description: String = "",
     val fee: Double = 0.0,
-    val version: Long = 0
+    val version: Long = 0,
+    val society: String? = ""
 ) : Serializable {
 
     private var dateUtil: DateUtil = DateUtil()
@@ -36,7 +37,8 @@ data class EventDto(
         description = eventEntity.description,
         fee = eventEntity.fee,
         poster = eventEntity.poster,
-//        version = eventEntity.version
+        version = eventEntity.version,
+        society = eventEntity.societyEntity.name
     )
 
     fun toEntity() = EventEntity(
@@ -50,6 +52,6 @@ data class EventDto(
         description = this.description,
         fee = this.fee,
         poster = this.poster,
-//        version = this.version + 1
+        version = this.version + 1
     )
 }
