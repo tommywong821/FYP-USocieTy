@@ -1,5 +1,6 @@
 package ngok3.fyp.backend.operation.attendance
 
+import ngok3.fyp.backend.operation.attendance.model.StudentAttendanceDto
 import ngok3.fyp.backend.operation.enrolled.EnrolledStatus
 import ngok3.fyp.backend.operation.enrolled.event_record.EnrolledEventRecordKey
 import ngok3.fyp.backend.operation.enrolled.event_record.EnrolledEventRecordRepository
@@ -42,5 +43,9 @@ class AttendanceService(
         attendanceEntity.studentEntity = studentEntity
 
         attendanceRepository.save(attendanceEntity)
+    }
+
+    fun getAllAttendance(): List<StudentAttendanceDto> {
+        TODO("Not yet implemented")
     }
 }
