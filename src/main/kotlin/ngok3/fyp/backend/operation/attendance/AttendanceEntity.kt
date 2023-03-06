@@ -3,6 +3,7 @@ package ngok3.fyp.backend.operation.attendance
 import ngok3.fyp.backend.operation.event.EventEntity
 import ngok3.fyp.backend.operation.student.StudentEntity
 import java.time.LocalDateTime
+import java.time.ZoneId
 import java.util.*
 import javax.persistence.*
 
@@ -30,11 +31,11 @@ open class AttendanceEntity {
 
     @PreUpdate
     fun updateUpdatedAt() {
-        this.updatedAt = LocalDateTime.now()
+        this.updatedAt = LocalDateTime.now(ZoneId.of("Asia/Hong_Kong"))
     }
 
     @PrePersist
     fun updateCreatedAt() {
-        this.createdAt = LocalDateTime.now()
+        this.createdAt = LocalDateTime.now(ZoneId.of("Asia/Hong_Kong"))
     }
 }

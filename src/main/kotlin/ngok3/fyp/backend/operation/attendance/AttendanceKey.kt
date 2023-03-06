@@ -16,4 +16,24 @@ open class AttendanceKey : Serializable {
     companion object {
         private const val serialVersionUID = -4863302676672335388L
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as AttendanceKey
+
+        if (studentUuid != other.studentUuid) return false
+        if (eventUuid != other.eventUuid) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = studentUuid?.hashCode() ?: 0
+        result = 31 * result + (eventUuid?.hashCode() ?: 0)
+        return result
+    }
+
+
 }

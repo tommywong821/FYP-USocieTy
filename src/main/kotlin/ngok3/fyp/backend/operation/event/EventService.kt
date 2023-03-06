@@ -18,8 +18,8 @@ import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 import org.springframework.web.multipart.MultipartFile
 import java.time.LocalDateTime
+import java.time.ZoneId
 import java.util.*
-import javax.persistence.OptimisticLockException
 
 
 @Service
@@ -34,11 +34,11 @@ class EventService(
 ) {
     fun getAllEvent(pageNum: Int, pageSize: Int): List<EventDto> {
         val firstPageNumWithPageSizeElement: Pageable = PageRequest.of(pageNum, pageSize)
-        println("LocalDateTime.now(): ${LocalDateTime.now()}")
+        println("LocalDateTime.now(ZoneId.of(\"Asia/Hong_Kong\")): ${LocalDateTime.now(ZoneId.of("Asia/Hong_Kong"))}")
 
         //get all event
         val allEvent: List<EventEntity> = eventRepository.findByApplyDeadlineGreaterThanEqualOrderByApplyDeadlineAsc(
-            LocalDateTime.now(), firstPageNumWithPageSizeElement
+            LocalDateTime.now(ZoneId.of("Asia/Hong_Kong")), firstPageNumWithPageSizeElement
         ).content
 
         return allEvent.map { event ->
@@ -60,7 +60,7 @@ class EventService(
         val eventEntity: EventEntity = eventEntityOptional.get()
 //        check maxParticipation and apply deadline
         val numberOfParticipation: Long = enrolledEventRecordRepository.countById_EventUuid(UUID.fromString(eventId));
-        if (LocalDateTime.now()
+        if (LocalDateTime.now(ZoneId.of("Asia/Hong_Kong"))
                 .isAfter(eventEntity.applyDeadline) || numberOfParticipation >= eventEntity.maxParticipation
         ) {
             throw Exception("Event is not able to register")
@@ -78,7 +78,7 @@ class EventService(
 
     fun createEvent(jwtToken: String, uploadFile: MultipartFile, eventDto: EventDto, societyName: String): EventDto {
         //check if user belongs that society
-        jwtUtil.verifyUserEnrolledSociety(jwtToken, societyName)
+        jwtUtil.verifyUserAdminRoleOfSociety(jwtToken, societyName)
 //        check if society exist
         val societyEntityOpt: Optional<SocietyEntity> = societyRepository.findByName(societyName)
         if (societyEntityOpt.isEmpty) {
@@ -102,7 +102,7 @@ class EventService(
 
     fun deleteEvent(jwtToken: String, eventId: String) {
         try {
-            jwtUtil.verifyUserEnrolledSociety(
+            jwtUtil.verifyUserAdminRoleOfSociety(
                 jwtToken,
                 eventRepository.findById(UUID.fromString(eventId)).get().societyEntity.name
             )
@@ -127,7 +127,7 @@ class EventService(
 //        }
 
         //check user identify
-        jwtUtil.verifyUserEnrolledSociety(
+        jwtUtil.verifyUserAdminRoleOfSociety(
             jwtToken,
             eventEntity.societyEntity.name
         )
