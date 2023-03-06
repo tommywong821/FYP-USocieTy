@@ -1,5 +1,7 @@
 package ngok3.fyp.backend.operation.attendance
 
+import ngok3.fyp.backend.authentication.role.Role
+import ngok3.fyp.backend.authentication.student_role.StudentRoleEntityRepository
 import ngok3.fyp.backend.operation.attendance.model.StudentAttendanceDto
 import ngok3.fyp.backend.operation.enrolled.EnrolledStatus
 import ngok3.fyp.backend.operation.enrolled.event_record.EnrolledEventRecordKey
@@ -8,6 +10,7 @@ import ngok3.fyp.backend.operation.event.EventEntity
 import ngok3.fyp.backend.operation.event.EventRepository
 import ngok3.fyp.backend.operation.student.StudentEntity
 import ngok3.fyp.backend.operation.student.StudentRepository
+import org.springframework.security.access.AccessDeniedException
 import org.springframework.stereotype.Service
 import java.util.*
 
@@ -16,9 +19,18 @@ class AttendanceService(
     private val enrolledEventRecordRepository: EnrolledEventRecordRepository,
     private val studentRepository: StudentRepository,
     private val eventRepository: EventRepository,
-    private val attendanceRepository: AttendanceRepository
+    private val attendanceRepository: AttendanceRepository,
+    private val studentRoleEntityRepository: StudentRoleEntityRepository
 ) {
-    fun createAttendance(studentId: String, eventId: String) {
+    fun createAttendance(studentId: String, eventId: String, userItsc: String) {
+        studentRoleEntityRepository.findByUserItscAndUserRoleAndHisSocietyIsHoldingEvent(
+            userItsc,
+            Role.ROLE_SOCIETY_MEMBER,
+            UUID.fromString(eventId)
+        ).orElseThrow {
+            AccessDeniedException("User: $userItsc did not belong to this event's society member")
+        }
+
         enrolledEventRecordRepository.findByIdAndStatus(
             EnrolledEventRecordKey(studentUuid = UUID.fromString(studentId), eventUuid = UUID.fromString(eventId)),
             EnrolledStatus.SUCCESS

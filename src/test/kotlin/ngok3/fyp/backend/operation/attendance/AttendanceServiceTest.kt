@@ -3,6 +3,9 @@ package ngok3.fyp.backend.operation.attendance
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import ngok3.fyp.backend.authentication.role.Role
+import ngok3.fyp.backend.authentication.student_role.StudentRoleEntity
+import ngok3.fyp.backend.authentication.student_role.StudentRoleEntityRepository
 import ngok3.fyp.backend.operation.attendance.model.StudentAttendanceDto
 import ngok3.fyp.backend.operation.enrolled.EnrolledStatus
 import ngok3.fyp.backend.operation.enrolled.event_record.EnrolledEventRecordEntity
@@ -25,12 +28,14 @@ class AttendanceServiceTest {
     private val studentRepository: StudentRepository = mockk(relaxed = true)
     private val eventRepository: EventRepository = mockk(relaxed = true)
     private val attendanceRepository: AttendanceRepository = mockk(relaxed = true)
+    private val studentRoleEntityRepository: StudentRoleEntityRepository = mockk(relaxed = true)
 
     private val attendanceService: AttendanceService = AttendanceService(
         enrolledEventRecordRepository = enrolledEventRecordRepository,
         studentRepository = studentRepository,
         eventRepository = eventRepository,
-        attendanceRepository = attendanceRepository
+        attendanceRepository = attendanceRepository,
+        studentRoleEntityRepository = studentRoleEntityRepository
     )
 
 
@@ -38,11 +43,19 @@ class AttendanceServiceTest {
     fun `should create attendance with event id and student id`() {
         val studentId: UUID = UUID.fromString("cead8c1e-7cbe-44c6-8fc1-dabe57c80168")
         val eventId: UUID = UUID.fromString("6c8180b4-0681-4d88-950f-c8f16859f9d6")
+        val userItsc: String = "itsc"
 
         val attendanceEntity: AttendanceEntity = AttendanceEntity()
         val studentEntity: StudentEntity = StudentEntity()
         val eventEntity: EventEntity = EventEntity()
 
+        every {
+            studentRoleEntityRepository.findByUserItscAndUserRoleAndHisSocietyIsHoldingEvent(
+                userItsc,
+                Role.ROLE_SOCIETY_MEMBER,
+                eventId
+            )
+        } returns Optional.of(StudentRoleEntity())
 
         every {
             enrolledEventRecordRepository.findByIdAndStatus(
@@ -63,7 +76,7 @@ class AttendanceServiceTest {
             attendanceRepository.save(any())
         } returns attendanceEntity
 
-        attendanceService.createAttendance(studentId = studentId.toString(), eventId = eventId.toString())
+        attendanceService.createAttendance(studentId = studentId.toString(), eventId = eventId.toString(), userItsc)
 
         verify(exactly = 1) {
             enrolledEventRecordRepository.findByIdAndStatus(
