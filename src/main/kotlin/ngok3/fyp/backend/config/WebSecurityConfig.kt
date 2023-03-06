@@ -5,6 +5,7 @@ import ngok3.fyp.backend.authentication.jwt.JWTAuthenticationFilter
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.http.HttpMethod
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
@@ -51,6 +52,7 @@ class WebSecurityConfig(
                 authorize("/health", permitAll)
                 //attendance card reader
                 authorize("/attendance", permitAll)
+                authorize(HttpMethod.GET, "/event", permitAll)
                 authorize(anyRequest, authenticated)
             }
             //filter for each request
