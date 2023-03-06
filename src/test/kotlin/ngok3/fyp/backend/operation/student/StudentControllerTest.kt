@@ -11,7 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.get
-import javax.servlet.http.Cookie
+import java.util.*
 
 @SpringBootTest
 @AutoConfigureMockMvc(addFilters = false)
@@ -28,16 +28,41 @@ class StudentControllerTest @Autowired constructor(
 
     @Test
     @DisplayName("GET /student?itsc={itsc}")
-    fun `should return test student profile`() {
-        every { studentService.getStudentProfile(mockStudentRepository.testItsc) } returns StudentDto(
+    fun `should return test student profile with itsc`() {
+        every { studentService.getStudentProfile(mockStudentRepository.testItsc, "") } returns StudentDto(
             mockStudentEntity.itsc,
             mockStudentEntity.nickname,
             mockStudentEntity.mail,
         )
 
-        mockMvc.get("/student?itsc=${mockStudentRepository.testItsc}") {
-            cookie(Cookie("token", mockAuthRepository.validUserCookieToken))
-        }
+        mockMvc.get("/student?itsc=${mockStudentRepository.testItsc}")
+            .andDo { print() }
+            .andExpect {
+                status { isOk() }
+                content { contentType(MediaType.APPLICATION_JSON) }
+                jsonPath("$.itsc") {
+                    value(mockStudentRepository.testStudentEntity.itsc)
+                }
+                jsonPath("$.nickname") {
+                    value(mockStudentRepository.testStudentEntity.nickname)
+                }
+                jsonPath("$.mail") {
+                    value(mockStudentRepository.testStudentEntity.mail)
+                }
+            }
+    }
+
+    @Test
+    @DisplayName("GET /student?itsc={itsc}")
+    fun `should return test student profile with uuid`() {
+        val mockUuid: String = UUID.randomUUID().toString()
+        every { studentService.getStudentProfile("", mockUuid) } returns StudentDto(
+            mockStudentEntity.itsc,
+            mockStudentEntity.nickname,
+            mockStudentEntity.mail,
+        )
+
+        mockMvc.get("/student?uuid=${mockUuid}")
             .andDo { print() }
             .andExpect {
                 status { isOk() }

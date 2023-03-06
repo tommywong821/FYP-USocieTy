@@ -5,6 +5,7 @@ import ngok3.fyp.backend.operation.enrolled.event_record.model.UpdateEnrolledEve
 import ngok3.fyp.backend.util.JWTUtil
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
+import java.time.ZoneId
 import java.util.*
 
 @Service
@@ -22,7 +23,7 @@ class EnrolledEventRecordService(
             Exception("Enrolled Event Record with student id: ${updateEnrolledEventRecordDto.studentId} and event id: ${updateEnrolledEventRecordDto.eventId} is not found")
         }
 
-        jwtUtil.verifyUserEnrolledSociety(
+        jwtUtil.verifyUserAdminRoleOfSociety(
             jwtToken = jwtToken,
             enrolledEventRecordEntity.eventEntity.societyEntity.name
         )
@@ -35,14 +36,14 @@ class EnrolledEventRecordService(
     fun getAllEnrolledEvent(itsc: String, pageNum: Int, pageSize: Int): List<EnrolledEventDto> {
         return enrolledEventRecordRepository.findByStudentEntity_ItscAndEventEntity_StartDateGreaterThanEqualOrderByEventEntity_StartDateAsc(
             itsc,
-            LocalDateTime.now()
+            LocalDateTime.now(ZoneId.of("Asia/Hong_Kong"))
         ).map { enrolledEventEntity -> EnrolledEventDto(enrolledEventEntity) }
     }
 
     fun countEnrolledEvent(itsc: String): Long {
         return enrolledEventRecordRepository.countByStudentEntity_ItscAndEventEntity_StartDateGreaterThanEqual(
             itsc,
-            LocalDateTime.now()
+            LocalDateTime.now(ZoneId.of("Asia/Hong_Kong"))
         )
     }
 }

@@ -1,9 +1,9 @@
 package ngok3.fyp.backend.operation.event
 
-import ngok3.fyp.backend.operation.event.EventEntity
 import org.springframework.data.domain.PageImpl
 import org.springframework.data.domain.PageRequest
 import java.time.LocalDateTime
+import java.time.ZoneId
 
 class MockEventRepository {
 
@@ -13,37 +13,37 @@ class MockEventRepository {
             "test event 1",
             "test poster 1",
             10,
-            LocalDateTime.now(),
+            LocalDateTime.now(ZoneId.of("Asia/Hong_Kong")),
             "test location 1",
-            LocalDateTime.now(),
-            LocalDateTime.now()
+            LocalDateTime.now(ZoneId.of("Asia/Hong_Kong")),
+            LocalDateTime.now(ZoneId.of("Asia/Hong_Kong"))
         ),
         EventEntity(
             "test event 2",
             "test poster 2",
             20,
-            LocalDateTime.now(),
+            LocalDateTime.now(ZoneId.of("Asia/Hong_Kong")),
             "test location 2",
-            LocalDateTime.now(),
-            LocalDateTime.now()
+            LocalDateTime.now(ZoneId.of("Asia/Hong_Kong")),
+            LocalDateTime.now(ZoneId.of("Asia/Hong_Kong"))
         ),
         EventEntity(
             "test event 3",
             "test poster 3",
             30,
-            LocalDateTime.now(),
+            LocalDateTime.now(ZoneId.of("Asia/Hong_Kong")),
             "test location 3",
-            LocalDateTime.now(),
-            LocalDateTime.now()
+            LocalDateTime.now(ZoneId.of("Asia/Hong_Kong")),
+            LocalDateTime.now(ZoneId.of("Asia/Hong_Kong"))
         ),
         EventEntity(
             "test event 4",
             "test poster 4",
             40,
-            LocalDateTime.now(),
+            LocalDateTime.now(ZoneId.of("Asia/Hong_Kong")),
             "test location 4",
-            LocalDateTime.now(),
-            LocalDateTime.now()
+            LocalDateTime.now(ZoneId.of("Asia/Hong_Kong")),
+            LocalDateTime.now(ZoneId.of("Asia/Hong_Kong"))
         ),
     )
 

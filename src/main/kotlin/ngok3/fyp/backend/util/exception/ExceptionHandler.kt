@@ -20,7 +20,7 @@ class ExceptionHandler {
         logger.error("handleException: ${ex.message}")
         val errorMessage = ErrorMessage(
             HttpStatus.UNAUTHORIZED.value(),
-            "Invalid JWT token: ${ex.message}"
+            "Invalid JWT token"
         )
         return ResponseEntity(errorMessage, HttpStatus.UNAUTHORIZED)
     }

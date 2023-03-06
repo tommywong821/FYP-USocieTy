@@ -3,6 +3,9 @@ package ngok3.fyp.backend.operation.enrolledEvent
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import ngok3.fyp.backend.authentication.role.Role
+import ngok3.fyp.backend.authentication.student_role.StudentRoleEntity
+import ngok3.fyp.backend.authentication.student_role.StudentRoleEntityRepository
 import ngok3.fyp.backend.controller.authentication.model.MockAuthRepository
 import ngok3.fyp.backend.operation.enrolled.EnrolledStatus
 import ngok3.fyp.backend.operation.enrolled.event_record.EnrolledEventRecordEntity
@@ -10,8 +13,6 @@ import ngok3.fyp.backend.operation.enrolled.event_record.EnrolledEventRecordKey
 import ngok3.fyp.backend.operation.enrolled.event_record.EnrolledEventRecordRepository
 import ngok3.fyp.backend.operation.enrolled.event_record.EnrolledEventRecordService
 import ngok3.fyp.backend.operation.enrolled.event_record.model.UpdateEnrolledEventRecordDto
-import ngok3.fyp.backend.operation.enrolled.society_record.EnrolledSocietyRecordEntity
-import ngok3.fyp.backend.operation.enrolled.society_record.EnrolledSocietyRecordRepository
 import ngok3.fyp.backend.util.JWTUtil
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
@@ -20,10 +21,10 @@ import java.util.*
 @SpringBootTest
 class EnrolledEventRecordServiceTest {
     private val mockAuthRepository: MockAuthRepository = MockAuthRepository()
-    private val enrolledSocietyRecordRepository: EnrolledSocietyRecordRepository = mockk()
     private val enrolledEventRecordRepository: EnrolledEventRecordRepository = mockk()
+    private val studentRoleEntityRepository: StudentRoleEntityRepository = mockk()
 
-    private val jwtUtil: JWTUtil = JWTUtil(enrolledSocietyRecordRepository = enrolledSocietyRecordRepository)
+    private val jwtUtil: JWTUtil = JWTUtil(studentRoleEntityRepository = studentRoleEntityRepository)
 
     private val enrolledEventService: EnrolledEventRecordService = EnrolledEventRecordService(
         enrolledEventRecordRepository = enrolledEventRecordRepository,
@@ -49,12 +50,12 @@ class EnrolledEventRecordServiceTest {
         } returns Optional.of(mockEnrolledEventRecordEntity)
 
         every {
-            enrolledSocietyRecordRepository.findByItscAndSocietyNameAndEnrolledStatus(
+            studentRoleEntityRepository.findByStudentItscAndSocietyNameAndRole(
                 mockAuthRepository.validUserItsc,
                 mockAuthRepository.testSocietyName,
-                EnrolledStatus.SUCCESS
+                Role.ROLE_SOCIETY_MEMBER
             )
-        } returns Optional.of(EnrolledSocietyRecordEntity())
+        } returns Optional.of(StudentRoleEntity())
 
         every {
             enrolledEventRecordRepository.save(mockEnrolledEventRecordEntity)
@@ -70,10 +71,10 @@ class EnrolledEventRecordServiceTest {
         )
 
         verify(exactly = 1) {
-            enrolledSocietyRecordRepository.findByItscAndSocietyNameAndEnrolledStatus(
+            studentRoleEntityRepository.findByStudentItscAndSocietyNameAndRole(
                 mockAuthRepository.validUserItsc,
                 mockAuthRepository.testSocietyName,
-                EnrolledStatus.SUCCESS
+                Role.ROLE_SOCIETY_MEMBER
             )
         }
         verify(exactly = 1) {

@@ -69,6 +69,10 @@ class SocietyServiceTest {
         } returns Optional.of(RoleEntity(1, Role.ROLE_SOCIETY_MEMBER))
 
         every {
+            societyRepository.findByName(mockAuthRepository.testSocietyName)
+        } returns Optional.of(SocietyEntity())
+
+        every {
             studentRepository.findByIdInAndEnrolledSocietyNameAndEnrollStatus(studentIdList.map { studentIdString ->
                 UUID.fromString(
                     studentIdString
