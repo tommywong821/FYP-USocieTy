@@ -158,6 +158,12 @@ class EventService(
     }
 
     fun getEventWithUuid(jwtToken: String, eventUuid: String): EventDto {
-        TODO("Not yet implemented")
+        val eventEntity: EventEntity = eventRepository.findById(UUID.fromString(eventUuid)).orElseThrow {
+            Exception("event: $eventUuid does not exist")
+        }
+
+        jwtUtil.verifyUserAdminRoleOfSociety(jwtToken, eventEntity.societyEntity.name)
+
+        return EventDto().createFromEntity(eventEntity)
     }
 }
