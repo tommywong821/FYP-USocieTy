@@ -46,6 +46,12 @@ class AttendanceService(
     }
 
     fun getAllAttendance(): List<StudentAttendanceDto> {
-        TODO("Not yet implemented")
+        return attendanceRepository.findAll().map { attendanceEntity: AttendanceEntity ->
+            StudentAttendanceDto(
+                attendanceEntity.studentEntity?.uuid.toString(),
+                attendanceEntity.studentEntity?.nickname,
+                attendanceEntity.createdAt.toString()
+            )
+        }
     }
 }
