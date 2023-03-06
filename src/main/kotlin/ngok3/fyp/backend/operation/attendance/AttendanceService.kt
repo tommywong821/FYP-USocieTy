@@ -54,4 +54,12 @@ class AttendanceService(
             )
         }
     }
+
+    fun deleteAttendance(studentUuid: String, eventUuid: String): Boolean {
+        val attendanceKey: AttendanceKey = AttendanceKey()
+        attendanceKey.studentUuid = UUID.fromString(studentUuid)
+        attendanceKey.eventUuid = UUID.fromString(eventUuid)
+        return (attendanceRepository.deleteByAttendanceKey(attendanceKey) == 1)
+
+    }
 }

@@ -51,7 +51,7 @@ class WebSecurityConfig(
                 authorize("/auth/mobileLogin", permitAll)
                 authorize("/health", permitAll)
                 //attendance card reader
-                authorize("/attendance", permitAll)
+                authorize("/attendance/**", permitAll)
                 authorize(HttpMethod.GET, "/event", permitAll)
                 authorize(HttpMethod.GET, "/student/**", permitAll)
                 authorize(anyRequest, authenticated)

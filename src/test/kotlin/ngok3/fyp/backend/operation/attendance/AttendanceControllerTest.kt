@@ -10,8 +10,10 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
+import org.springframework.test.web.servlet.delete
 import org.springframework.test.web.servlet.get
 import org.springframework.test.web.servlet.post
+import org.springframework.util.LinkedMultiValueMap
 import java.time.LocalDateTime
 import java.util.*
 
@@ -78,5 +80,49 @@ class AttendanceControllerTest @Autowired constructor(
                     value(studentAttendanceDtoList.map { studentAttendance -> studentAttendance.attendanceCreatedAt })
                 }
             }
+    }
+
+    @Test
+    fun `should delete attendance`() {
+        val mockStudentUuid: String = UUID.randomUUID().toString()
+        val mockEventUuid: String = UUID.randomUUID().toString()
+
+        every {
+            attendanceService.deleteAttendance(mockStudentUuid, mockEventUuid)
+        } returns true
+
+        mockMvc.delete("/attendance") {
+            headers {
+                contentType = MediaType.APPLICATION_JSON
+            }
+            params = LinkedMultiValueMap<String, String>().apply {
+                add("studentUuid", mockStudentUuid)
+                add("eventUuid", mockEventUuid)
+            }
+        }.andDo { print() }.andExpect {
+            status { isAccepted() }
+        }
+    }
+
+    @Test
+    fun `should not delete attendance`() {
+        val mockStudentUuid: String = UUID.randomUUID().toString()
+        val mockEventUuid: String = UUID.randomUUID().toString()
+
+        every {
+            attendanceService.deleteAttendance(mockStudentUuid, mockEventUuid)
+        } returns false
+
+        mockMvc.delete("/attendance") {
+            headers {
+                contentType = MediaType.APPLICATION_JSON
+            }
+            params = LinkedMultiValueMap<String, String>().apply {
+                add("studentUuid", mockStudentUuid)
+                add("eventUuid", mockEventUuid)
+            }
+        }.andDo { print() }.andExpect {
+            status { isNotFound() }
+        }
     }
 }
