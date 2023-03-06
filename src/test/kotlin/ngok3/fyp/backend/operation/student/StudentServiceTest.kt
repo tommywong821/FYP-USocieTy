@@ -12,7 +12,7 @@ class StudentServiceTest() {
     private val studentService: StudentService = StudentService(studentRepository)
 
     @Test
-    fun `should get test student profile`() {
+    fun `should get test student profile with itsc`() {
         //create mock student entity
         val mockStudentEntity: StudentEntity = mockStudentRepository.testStudentEntity
         val mockStudentEntityItsc: String = mockStudentRepository.testItsc
@@ -21,7 +21,26 @@ class StudentServiceTest() {
         every { studentRepository.findByItsc(mockStudentEntityItsc) } returns Optional.of(mockStudentEntity)
 
         //mock service operation
-        val mockStudentDto: StudentDto = studentService.getStudentProfile(mockStudentEntityItsc)
+        val mockStudentDto: StudentDto = studentService.getStudentProfile(mockStudentEntityItsc, "")
+
+        //test value
+        assertEquals(mockStudentDto.itsc, mockStudentEntity.itsc)
+        assertEquals(mockStudentDto.nickname, mockStudentEntity.nickname)
+        assertEquals(mockStudentDto.mail, mockStudentEntity.mail)
+    }
+
+    @Test
+    fun `should get test student profile with uuid`() {
+        //create mock student entity
+        val mockStudentEntity: StudentEntity = mockStudentRepository.testStudentEntity
+        val mockStudentEntityItsc: String = mockStudentRepository.testItsc
+        val mockUuid: String = UUID.randomUUID().toString()
+
+        //mock db operation
+        every { studentRepository.findById(UUID.fromString(mockUuid)) } returns Optional.of(mockStudentEntity)
+
+        //mock service operation
+        val mockStudentDto: StudentDto = studentService.getStudentProfile("", mockUuid)
 
         //test value
         assertEquals(mockStudentDto.itsc, mockStudentEntity.itsc)
