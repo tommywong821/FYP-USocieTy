@@ -18,4 +18,15 @@ where s.studentEntity.itsc = ?1 and s.societyEntity.name = ?2 and s.roleEntity.r
         role: Role
     ): Optional<StudentRoleEntity>
 
+
+    @Query(
+        """select s from StudentRoleEntity s inner join s.societyEntity.eventRecords eventRecords
+where s.studentEntity.itsc = ?1 and s.roleEntity.role = ?2 and eventRecords.uuid = ?3"""
+    )
+    fun findByUserItscAndUserRoleAndHisSocietyIsHoldingEvent(
+        itsc: String,
+        role: Role,
+        eventUuid: UUID
+    ): Optional<StudentRoleEntity>
+
 }
