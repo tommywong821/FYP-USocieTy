@@ -3,10 +3,11 @@ package ngok3.fyp.backend.operation.event
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import ngok3.fyp.backend.authentication.role.Role
+import ngok3.fyp.backend.authentication.student_role.StudentRoleEntity
+import ngok3.fyp.backend.authentication.student_role.StudentRoleEntityRepository
 import ngok3.fyp.backend.controller.authentication.model.MockAuthRepository
-import ngok3.fyp.backend.operation.enrolled.EnrolledStatus
 import ngok3.fyp.backend.operation.enrolled.event_record.EnrolledEventRecordRepository
-import ngok3.fyp.backend.operation.enrolled.society_record.EnrolledSocietyRecordEntity
 import ngok3.fyp.backend.operation.enrolled.society_record.EnrolledSocietyRecordRepository
 import ngok3.fyp.backend.operation.event.dto.EventDto
 import ngok3.fyp.backend.operation.s3.S3BulkResponseEntity
@@ -32,7 +33,8 @@ class EventServiceTest {
     private val societyRecordRepository: SocietyRepository = mockk()
     private val enrolledEventRecordRepository: EnrolledEventRecordRepository = mockk()
     private val enrolledSocietyRecordRepository: EnrolledSocietyRecordRepository = mockk()
-    private val jwtUtil: JWTUtil = JWTUtil(enrolledSocietyRecordRepository = enrolledSocietyRecordRepository)
+    private val studentRoleEntityRepository: StudentRoleEntityRepository = mockk()
+    private val jwtUtil: JWTUtil = JWTUtil(studentRoleEntityRepository = studentRoleEntityRepository)
     private val dateUtil: DateUtil = DateUtil()
     private val s3Service: S3Service = mockk()
     private val eventService: EventService =
@@ -81,12 +83,12 @@ class EventServiceTest {
         } returns Optional.of(mockEventEntity)
 
         every {
-            enrolledSocietyRecordRepository.findByItscAndSocietyNameAndEnrolledStatus(
+            studentRoleEntityRepository.findByStudentItscAndSocietyNameAndRole(
                 mockAuthRepository.validUserItsc,
                 mockAuthRepository.testSocietyName,
-                EnrolledStatus.SUCCESS
+                Role.ROLE_SOCIETY_MEMBER
             )
-        } returns Optional.of(EnrolledSocietyRecordEntity())
+        } returns Optional.of(StudentRoleEntity())
 
         every {
             eventRepository.deleteById(UUID.fromString(uuid))
@@ -97,10 +99,10 @@ class EventServiceTest {
         verify(exactly = 1) { eventRepository.deleteById(UUID.fromString(uuid)) }
         verify(exactly = 1) { eventRepository.findById(UUID.fromString(uuid)) }
         verify(exactly = 1) {
-            enrolledSocietyRecordRepository.findByItscAndSocietyNameAndEnrolledStatus(
+            studentRoleEntityRepository.findByStudentItscAndSocietyNameAndRole(
                 mockAuthRepository.validUserItsc,
                 mockAuthRepository.testSocietyName,
-                EnrolledStatus.SUCCESS
+                Role.ROLE_SOCIETY_MEMBER
             )
         }
 
@@ -129,12 +131,12 @@ class EventServiceTest {
         } returns Optional.of(mockEventEntity)
 
         every {
-            enrolledSocietyRecordRepository.findByItscAndSocietyNameAndEnrolledStatus(
+            studentRoleEntityRepository.findByStudentItscAndSocietyNameAndRole(
                 mockAuthRepository.validUserItsc,
                 mockAuthRepository.testSocietyName,
-                EnrolledStatus.SUCCESS
+                Role.ROLE_SOCIETY_MEMBER
             )
-        } returns Optional.of(EnrolledSocietyRecordEntity())
+        } returns Optional.of(StudentRoleEntity())
 
         every {
             s3Service.uploadFiles("${mockAuthRepository.testSocietyName}/event/", any(), 1)
@@ -157,10 +159,10 @@ class EventServiceTest {
 
         verify(exactly = 1) { eventRepository.findById(UUID.fromString(uuid)) }
         verify(exactly = 1) {
-            enrolledSocietyRecordRepository.findByItscAndSocietyNameAndEnrolledStatus(
+            studentRoleEntityRepository.findByStudentItscAndSocietyNameAndRole(
                 mockAuthRepository.validUserItsc,
                 mockAuthRepository.testSocietyName,
-                EnrolledStatus.SUCCESS
+                Role.ROLE_SOCIETY_MEMBER
             )
         }
         verify(exactly = 1) { eventRepository.save(mockEventEntity) }

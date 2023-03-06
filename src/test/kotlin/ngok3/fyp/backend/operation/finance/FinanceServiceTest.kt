@@ -3,10 +3,10 @@ package ngok3.fyp.backend.operation.finance
 import io.jsonwebtoken.MalformedJwtException
 import io.mockk.every
 import io.mockk.mockk
+import ngok3.fyp.backend.authentication.role.Role
+import ngok3.fyp.backend.authentication.student_role.StudentRoleEntity
+import ngok3.fyp.backend.authentication.student_role.StudentRoleEntityRepository
 import ngok3.fyp.backend.controller.authentication.model.MockAuthRepository
-import ngok3.fyp.backend.operation.enrolled.EnrolledStatus
-import ngok3.fyp.backend.operation.enrolled.society_record.EnrolledSocietyRecordEntity
-import ngok3.fyp.backend.operation.enrolled.society_record.EnrolledSocietyRecordRepository
 import ngok3.fyp.backend.operation.finance.model.*
 import ngok3.fyp.backend.operation.society.SocietyEntity
 import ngok3.fyp.backend.operation.society.SocietyRepository
@@ -30,8 +30,8 @@ class FinanceServiceTest(
     private val financeEntityDao: FinanceEntityDao = mockk(relaxed = true)
     private val studentRepository: StudentRepository = mockk(relaxed = true)
     private val societyRepository: SocietyRepository = mockk(relaxed = true)
-    private val enrolledSocietyRecordRepository: EnrolledSocietyRecordRepository = mockk(relaxed = true)
-    private val jwtUtil: JWTUtil = JWTUtil(enrolledSocietyRecordRepository = enrolledSocietyRecordRepository)
+    private val studentRoleEntityRepository: StudentRoleEntityRepository = mockk()
+    private val jwtUtil: JWTUtil = JWTUtil(studentRoleEntityRepository = studentRoleEntityRepository)
     private val financeService: FinanceService =
         FinanceService(
             financeEntityRepository,
@@ -47,12 +47,12 @@ class FinanceServiceTest(
     @Test
     fun `should get all finance table record from database with society name`() {
         every {
-            enrolledSocietyRecordRepository.findByItscAndSocietyNameAndEnrolledStatus(
+            studentRoleEntityRepository.findByStudentItscAndSocietyNameAndRole(
                 mockAuthRepository.validUserItsc,
                 mockAuthRepository.testSocietyName,
-                EnrolledStatus.SUCCESS
+                Role.ROLE_SOCIETY_MEMBER
             )
-        } returns Optional.of(EnrolledSocietyRecordEntity())
+        } returns Optional.of(StudentRoleEntity())
 
         every {
             financeEntityDao.findFinanceTableDataWithSocietyNameWithPageAngFilter(
@@ -92,12 +92,12 @@ class FinanceServiceTest(
     @Test
     fun `should get pageable finance table record from database with society name`() {
         every {
-            enrolledSocietyRecordRepository.findByItscAndSocietyNameAndEnrolledStatus(
+            studentRoleEntityRepository.findByStudentItscAndSocietyNameAndRole(
                 mockAuthRepository.validUserItsc,
                 mockAuthRepository.testSocietyName,
-                EnrolledStatus.SUCCESS
+                Role.ROLE_SOCIETY_MEMBER
             )
-        } returns Optional.of(EnrolledSocietyRecordEntity())
+        } returns Optional.of(StudentRoleEntity())
 
         every {
             financeEntityDao.findFinanceTableDataWithSocietyNameWithPageAngFilter(
@@ -142,12 +142,12 @@ class FinanceServiceTest(
     @Test
     fun `should get sort finance table record from database with society name`() {
         every {
-            enrolledSocietyRecordRepository.findByItscAndSocietyNameAndEnrolledStatus(
+            studentRoleEntityRepository.findByStudentItscAndSocietyNameAndRole(
                 mockAuthRepository.validUserItsc,
                 mockAuthRepository.testSocietyName,
-                EnrolledStatus.SUCCESS
+                Role.ROLE_SOCIETY_MEMBER
             )
-        } returns Optional.of(EnrolledSocietyRecordEntity())
+        } returns Optional.of(StudentRoleEntity())
 
         every {
             financeEntityDao.findFinanceTableDataWithSocietyNameWithPageAngFilter(
@@ -192,12 +192,12 @@ class FinanceServiceTest(
     @Test
     fun `should get filtered finance table record from database with society name`() {
         every {
-            enrolledSocietyRecordRepository.findByItscAndSocietyNameAndEnrolledStatus(
+            studentRoleEntityRepository.findByStudentItscAndSocietyNameAndRole(
                 mockAuthRepository.validUserItsc,
                 mockAuthRepository.testSocietyName,
-                EnrolledStatus.SUCCESS
+                Role.ROLE_SOCIETY_MEMBER
             )
-        } returns Optional.of(EnrolledSocietyRecordEntity())
+        } returns Optional.of(StudentRoleEntity())
 
         every {
             financeEntityDao.findFinanceTableDataWithSocietyNameWithPageAngFilter(
@@ -246,10 +246,10 @@ class FinanceServiceTest(
         val societyName: String = mockAuthRepository.testSocietyName
 
         every {
-            enrolledSocietyRecordRepository.findByItscAndSocietyNameAndEnrolledStatus(
+            studentRoleEntityRepository.findByStudentItscAndSocietyNameAndRole(
                 itsc,
                 societyName,
-                EnrolledStatus.SUCCESS
+                Role.ROLE_SOCIETY_MEMBER
             )
         } returns Optional.empty()
 
@@ -262,7 +262,10 @@ class FinanceServiceTest(
             )
         }
 
-        assertEquals("student with itsc: ${itsc} do not belong to this society: ${societyName}", exception.message)
+        assertEquals(
+            "student with itsc: $itsc do not have ROLE_SOCIETY_MEMBER role of society: $societyName",
+            exception.message
+        )
     }
 
     @Test
@@ -277,12 +280,12 @@ class FinanceServiceTest(
     @Test
     fun `should get all finance pie chart record from database with society name`() {
         every {
-            enrolledSocietyRecordRepository.findByItscAndSocietyNameAndEnrolledStatus(
+            studentRoleEntityRepository.findByStudentItscAndSocietyNameAndRole(
                 mockAuthRepository.validUserItsc,
                 mockAuthRepository.testSocietyName,
-                EnrolledStatus.SUCCESS
+                Role.ROLE_SOCIETY_MEMBER
             )
-        } returns Optional.of(EnrolledSocietyRecordEntity())
+        } returns Optional.of(StudentRoleEntity())
 
         every {
             financeEntityRepository.findFinancePieChartData(
@@ -316,10 +319,10 @@ class FinanceServiceTest(
         val societyName: String = mockAuthRepository.testSocietyName
 
         every {
-            enrolledSocietyRecordRepository.findByItscAndSocietyNameAndEnrolledStatus(
+            studentRoleEntityRepository.findByStudentItscAndSocietyNameAndRole(
                 itsc,
                 societyName,
-                EnrolledStatus.SUCCESS
+                Role.ROLE_SOCIETY_MEMBER
             )
         } returns Optional.empty()
 
@@ -332,7 +335,10 @@ class FinanceServiceTest(
             )
         }
 
-        assertEquals("student with itsc: ${itsc} do not belong to this society: ${societyName}", exception.message)
+        assertEquals(
+            "student with itsc: $itsc do not have ROLE_SOCIETY_MEMBER role of society: $societyName",
+            exception.message
+        )
     }
 
     @Test
@@ -347,12 +353,12 @@ class FinanceServiceTest(
     @Test
     fun `should get all finance bar chart record from database with society name`() {
         every {
-            enrolledSocietyRecordRepository.findByItscAndSocietyNameAndEnrolledStatus(
+            studentRoleEntityRepository.findByStudentItscAndSocietyNameAndRole(
                 mockAuthRepository.validUserItsc,
                 mockAuthRepository.testSocietyName,
-                EnrolledStatus.SUCCESS
+                Role.ROLE_SOCIETY_MEMBER
             )
-        } returns Optional.of(EnrolledSocietyRecordEntity())
+        } returns Optional.of(StudentRoleEntity())
 
         every {
             financeEntityRepository.findFinanceBarChartData(
@@ -386,10 +392,10 @@ class FinanceServiceTest(
         val societyName: String = mockAuthRepository.testSocietyName
 
         every {
-            enrolledSocietyRecordRepository.findByItscAndSocietyNameAndEnrolledStatus(
+            studentRoleEntityRepository.findByStudentItscAndSocietyNameAndRole(
                 itsc,
                 societyName,
-                EnrolledStatus.SUCCESS
+                Role.ROLE_SOCIETY_MEMBER
             )
         } returns Optional.empty()
 
@@ -402,7 +408,10 @@ class FinanceServiceTest(
             )
         }
 
-        assertEquals("student with itsc: ${itsc} do not belong to this society: ${societyName}", exception.message)
+        assertEquals(
+            "student with itsc: $itsc do not have ROLE_SOCIETY_MEMBER role of society: $societyName",
+            exception.message
+        )
     }
 
     @Test
@@ -421,6 +430,14 @@ class FinanceServiceTest(
             mockAuthRepository.validUserNickname,
             mockAuthRepository.validUserMail
         )
+        every {
+            studentRoleEntityRepository.findByStudentItscAndSocietyNameAndRole(
+                mockAuthRepository.validUserItsc,
+                mockAuthRepository.testSocietyName,
+                Role.ROLE_SOCIETY_MEMBER
+            )
+        } returns Optional.of(StudentRoleEntity())
+
         every { studentRepository.findByItsc(mockAuthRepository.validUserItsc) } returns Optional.of(studentEntity)
 
         val societyEntity: SocietyEntity = SocietyEntity(mockAuthRepository.testSocietyName)
@@ -458,10 +475,10 @@ class FinanceServiceTest(
         val societyName: String = mockAuthRepository.testSocietyName
 
         every {
-            enrolledSocietyRecordRepository.findByItscAndSocietyNameAndEnrolledStatus(
+            studentRoleEntityRepository.findByStudentItscAndSocietyNameAndRole(
                 itsc,
                 societyName,
-                EnrolledStatus.SUCCESS
+                Role.ROLE_SOCIETY_MEMBER
             )
         } returns Optional.empty()
 
@@ -477,7 +494,10 @@ class FinanceServiceTest(
             financeService.createFinancialRecords(mockAuthRepository.invalidUserCookieToken, financeDto)
         }
 
-        assertEquals("student with itsc: ${itsc} do not belong to this society: ${societyName}", exception.message)
+        assertEquals(
+            "student with itsc: $itsc do not have ROLE_SOCIETY_MEMBER role of society: $societyName",
+            exception.message
+        )
     }
 
     @Test
@@ -505,6 +525,14 @@ class FinanceServiceTest(
         )
 
         every {
+            studentRoleEntityRepository.findByStudentItscAndSocietyNameAndRole(
+                mockAuthRepository.validUserItsc,
+                mockAuthRepository.testSocietyName,
+                Role.ROLE_SOCIETY_MEMBER
+            )
+        } returns Optional.of(StudentRoleEntity())
+
+        every {
             financeEntityRepository.deleteAllById(deleteIdList.map { financeDeleteDto ->
                 UUID.fromString(
                     financeDeleteDto.id
@@ -528,10 +556,10 @@ class FinanceServiceTest(
         val societyName: String = mockAuthRepository.testSocietyName
 
         every {
-            enrolledSocietyRecordRepository.findByItscAndSocietyNameAndEnrolledStatus(
+            studentRoleEntityRepository.findByStudentItscAndSocietyNameAndRole(
                 itsc,
                 societyName,
-                EnrolledStatus.SUCCESS
+                Role.ROLE_SOCIETY_MEMBER
             )
         } returns Optional.empty()
 
@@ -548,7 +576,10 @@ class FinanceServiceTest(
             )
         }
 
-        assertEquals("student with itsc: ${itsc} do not belong to this society: ${societyName}", exception.message)
+        assertEquals(
+            "student with itsc: $itsc do not have ROLE_SOCIETY_MEMBER role of society: $societyName",
+            exception.message
+        )
     }
 
     @Test
@@ -572,6 +603,14 @@ class FinanceServiceTest(
     @Test
     fun `should get total number of finance record from database within date range and filter`() {
         val financeRecordTotalNumberDto: FinanceRecordTotalNumberDto = FinanceRecordTotalNumberDto(200)
+
+        every {
+            studentRoleEntityRepository.findByStudentItscAndSocietyNameAndRole(
+                mockAuthRepository.validUserItsc,
+                mockAuthRepository.testSocietyName,
+                Role.ROLE_SOCIETY_MEMBER
+            )
+        } returns Optional.of(StudentRoleEntity())
 
         every {
             financeEntityDao.countTotalNumberOfFinanceRecordWithinDateRange(
@@ -599,10 +638,10 @@ class FinanceServiceTest(
         val societyName: String = mockAuthRepository.testSocietyName
 
         every {
-            enrolledSocietyRecordRepository.findByItscAndSocietyNameAndEnrolledStatus(
+            studentRoleEntityRepository.findByStudentItscAndSocietyNameAndRole(
                 itsc,
                 societyName,
-                EnrolledStatus.SUCCESS
+                Role.ROLE_SOCIETY_MEMBER
             )
         } returns Optional.empty()
 
@@ -615,7 +654,10 @@ class FinanceServiceTest(
             )
         }
 
-        assertEquals("student with itsc: ${itsc} do not belong to this society: ${societyName}", exception.message)
+        assertEquals(
+            "student with itsc: $itsc do not have ROLE_SOCIETY_MEMBER role of society: $societyName",
+            exception.message
+        )
     }
 
     @Test
@@ -638,6 +680,14 @@ class FinanceServiceTest(
             FinanceRecordCategoryDto("category a", "category a"),
             FinanceRecordCategoryDto("category b", "category b"),
         )
+
+        every {
+            studentRoleEntityRepository.findByStudentItscAndSocietyNameAndRole(
+                mockAuthRepository.validUserItsc,
+                mockAuthRepository.testSocietyName,
+                Role.ROLE_SOCIETY_MEMBER
+            )
+        } returns Optional.of(StudentRoleEntity())
 
         every {
             financeEntityRepository.getAllCategoryOfFinanceRecordWithinDateRange(
@@ -666,10 +716,10 @@ class FinanceServiceTest(
         val societyName: String = mockAuthRepository.testSocietyName
 
         every {
-            enrolledSocietyRecordRepository.findByItscAndSocietyNameAndEnrolledStatus(
+            studentRoleEntityRepository.findByStudentItscAndSocietyNameAndRole(
                 itsc,
                 societyName,
-                EnrolledStatus.SUCCESS
+                Role.ROLE_SOCIETY_MEMBER
             )
         } returns Optional.empty()
 
@@ -682,7 +732,10 @@ class FinanceServiceTest(
             )
         }
 
-        assertEquals("student with itsc: ${itsc} do not belong to this society: ${societyName}", exception.message)
+        assertEquals(
+            "student with itsc: $itsc do not have ROLE_SOCIETY_MEMBER role of society: $societyName",
+            exception.message
+        )
     }
 
     @Test

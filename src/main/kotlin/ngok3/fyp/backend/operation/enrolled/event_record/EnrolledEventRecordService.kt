@@ -23,7 +23,7 @@ class EnrolledEventRecordService(
             Exception("Enrolled Event Record with student id: ${updateEnrolledEventRecordDto.studentId} and event id: ${updateEnrolledEventRecordDto.eventId} is not found")
         }
 
-        jwtUtil.verifyUserEnrolledSociety(
+        jwtUtil.verifyUserAdminRoleOfSociety(
             jwtToken = jwtToken,
             enrolledEventRecordEntity.eventEntity.societyEntity.name
         )
