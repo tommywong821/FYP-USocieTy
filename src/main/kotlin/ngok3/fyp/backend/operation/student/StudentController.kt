@@ -12,11 +12,12 @@ class StudentController(
     private val studentService: StudentService
 ) {
     @Operation(summary = "Get student profile from database by itsc")
-    @GetMapping()
+    @GetMapping
     fun getStudentProfile(
-        @RequestParam("itsc") itsc: String
+        @RequestParam(name = "itsc", required = false, defaultValue = "") itsc: String,
+        @RequestParam(name = "uuid", required = false, defaultValue = "") uuid: String,
     ): StudentDto {
-        return studentService.getStudentProfile(itsc)
+        return studentService.getStudentProfile(itsc, uuid)
     }
 }
 

@@ -53,6 +53,7 @@ class WebSecurityConfig(
                 //attendance card reader
                 authorize("/attendance", permitAll)
                 authorize(HttpMethod.GET, "/event", permitAll)
+                authorize(HttpMethod.GET, "/student/**", permitAll)
                 authorize(anyRequest, authenticated)
             }
             //filter for each request
