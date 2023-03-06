@@ -5,11 +5,10 @@ import io.jsonwebtoken.ExpiredJwtException
 import io.jsonwebtoken.JwtException
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.security.Keys
+import ngok3.fyp.backend.authentication.role.Role
 import ngok3.fyp.backend.authentication.student_role.StudentRoleEntity
-import ngok3.fyp.backend.operation.enrolled.EnrolledStatus
-import ngok3.fyp.backend.operation.enrolled.society_record.EnrolledSocietyRecordRepository
+import ngok3.fyp.backend.authentication.student_role.StudentRoleEntityRepository
 import ngok3.fyp.backend.operation.student.StudentEntity
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.access.AccessDeniedException
 import org.springframework.stereotype.Component
 import java.security.Key
@@ -19,7 +18,7 @@ import java.util.*
 class JWTUtil(
     private var KEY: String = "dPyvYoiMuI8jUsIbqL-m-Fw-mMhc149ey4fkdBxQK9o",
     val secretKey: Key = Keys.hmacShaKeyFor(KEY.toByteArray()),
-    @Autowired val enrolledSocietyRecordRepository: EnrolledSocietyRecordRepository
+    private val studentRoleEntityRepository: StudentRoleEntityRepository
 ) {
     fun generateToken(studentEntity: StudentEntity): String {
         val claims: Claims = Jwts.claims()
@@ -49,18 +48,14 @@ class JWTUtil(
         }
     }
 
-    fun verifyUserEnrolledSociety(jwtToken: String, societyName: String) {
+    fun verifyUserAdminRoleOfSociety(jwtToken: String, societyName: String) {
         val claims: Claims = verifyToken(jwtToken)
         val itsc: String = claims["itsc"].toString()
 
-        if (enrolledSocietyRecordRepository.findByItscAndSocietyNameAndEnrolledStatus(
-                itsc,
-                societyName,
-                EnrolledStatus.SUCCESS
-            ).isEmpty
-        ) {
-            throw AccessDeniedException("student with itsc: ${itsc} do not belong to this society: ${societyName}")
-        }
+        studentRoleEntityRepository.findByStudentItscAndSocietyNameAndRole(itsc, societyName, Role.ROLE_SOCIETY_MEMBER)
+            .orElseThrow {
+                throw AccessDeniedException("student with itsc: $itsc do not have ${Role.ROLE_SOCIETY_MEMBER} role of society: $societyName")
+            }
     }
 
     fun getClaimFromJWTToken(jwtToken: String, key: String): String {

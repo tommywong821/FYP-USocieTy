@@ -78,7 +78,7 @@ class EventService(
 
     fun createEvent(jwtToken: String, uploadFile: MultipartFile, eventDto: EventDto, societyName: String): EventDto {
         //check if user belongs that society
-        jwtUtil.verifyUserEnrolledSociety(jwtToken, societyName)
+        jwtUtil.verifyUserAdminRoleOfSociety(jwtToken, societyName)
 //        check if society exist
         val societyEntityOpt: Optional<SocietyEntity> = societyRepository.findByName(societyName)
         if (societyEntityOpt.isEmpty) {
@@ -102,7 +102,7 @@ class EventService(
 
     fun deleteEvent(jwtToken: String, eventId: String) {
         try {
-            jwtUtil.verifyUserEnrolledSociety(
+            jwtUtil.verifyUserAdminRoleOfSociety(
                 jwtToken,
                 eventRepository.findById(UUID.fromString(eventId)).get().societyEntity.name
             )
@@ -127,7 +127,7 @@ class EventService(
 //        }
 
         //check user identify
-        jwtUtil.verifyUserEnrolledSociety(
+        jwtUtil.verifyUserAdminRoleOfSociety(
             jwtToken,
             eventEntity.societyEntity.name
         )

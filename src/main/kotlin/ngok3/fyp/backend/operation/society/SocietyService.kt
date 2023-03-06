@@ -83,11 +83,11 @@ class SocietyService(
         }
 
 
-
         for (studentEntity in studentEntityList) {
             val studentRoleEntity: StudentRoleEntity = StudentRoleEntity()
             studentRoleEntity.roleEntity = roleEntity
             studentRoleEntity.studentEntity = studentEntity
+            studentRoleEntity.societyEntity = societyEntity
 
             studentEntity.studentRoleEntities.add(studentRoleEntity)
         }

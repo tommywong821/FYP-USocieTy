@@ -20,7 +20,7 @@ class EnrolledSocietyRecordService(
             Exception("Enrolled Event Record with student id: ${updateEnrolledSocietyRecordDto.studentId} and society id: ${updateEnrolledSocietyRecordDto.societyId} is not found")
         }
 
-        jwtUtil.verifyUserEnrolledSociety(
+        jwtUtil.verifyUserAdminRoleOfSociety(
             jwtToken = jwtToken,
             enrolledSocietyRecordEntity.societyEntity.name
         )
@@ -31,7 +31,7 @@ class EnrolledSocietyRecordService(
     }
 
     fun getEnrolledSocietyRecord(jwtToken: String, societyName: String): List<StudentEnrolledEventRecord> {
-        jwtUtil.verifyUserEnrolledSociety(
+        jwtUtil.verifyUserAdminRoleOfSociety(
             jwtToken = jwtToken,
             societyName
         )
