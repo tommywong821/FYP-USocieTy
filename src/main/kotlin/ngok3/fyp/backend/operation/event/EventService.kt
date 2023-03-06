@@ -156,4 +156,8 @@ class EventService(
 
         eventRepository.save(eventEntity)
     }
+
+    fun getEventWithUuid(jwtToken: String, eventUuid: String): EventDto {
+        TODO("Not yet implemented")
+    }
 }
