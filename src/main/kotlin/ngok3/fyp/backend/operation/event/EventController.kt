@@ -63,4 +63,13 @@ class EventController(
     ) {
         eventService.updateEvent(jwtToken, eventId, eventDto, uploadFile)
     }
+
+    @Operation(summary = "get event with event id")
+    @GetMapping("/{eventId}")
+    fun getEventWithEventId(
+        @CookieValue("token") jwtToken: String,
+        @PathVariable eventId: String,
+    ): EventDto {
+        return eventService.getEventWithUuid(jwtToken, eventId)
+    }
 }

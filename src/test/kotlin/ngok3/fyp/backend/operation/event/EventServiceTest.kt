@@ -17,10 +17,13 @@ import ngok3.fyp.backend.operation.society.SocietyRepository
 import ngok3.fyp.backend.operation.student.StudentRepository
 import ngok3.fyp.backend.util.DateUtil
 import ngok3.fyp.backend.util.JWTUtil
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertIterableEquals
 import org.junit.jupiter.api.Test
 import org.springframework.mock.web.MockMultipartFile
 import java.io.InputStream
+import java.time.LocalDateTime
+import java.time.ZoneId
 import java.util.*
 
 class EventServiceTest {
@@ -167,5 +170,39 @@ class EventServiceTest {
         }
         verify(exactly = 1) { eventRepository.save(mockEventEntity) }
 
+    }
+
+    @Test
+    fun getEventWithUuid() {
+        val uuid: String = UUID.randomUUID().toString()
+        val societyEntity: SocietyEntity = SocietyEntity(mockAuthRepository.testSocietyName)
+        val mockEventEntity: EventEntity = EventEntity(
+            "test event 1",
+            "test poster 1",
+            10,
+            LocalDateTime.now(ZoneId.of("Asia/Hong_Kong")),
+            "test location 1",
+            LocalDateTime.now(ZoneId.of("Asia/Hong_Kong")),
+            LocalDateTime.now(ZoneId.of("Asia/Hong_Kong"))
+        )
+        mockEventEntity.societyEntity = societyEntity
+
+        every {
+            eventRepository.findById(UUID.fromString(uuid))
+        } returns Optional.of(mockEventEntity)
+
+        every {
+            studentRoleEntityRepository.findByStudentItscAndSocietyNameAndRole(
+                mockAuthRepository.validUserItsc,
+                mockAuthRepository.testSocietyName,
+                Role.ROLE_SOCIETY_MEMBER
+            )
+        } returns Optional.of(StudentRoleEntity())
+
+        val eventDto: EventDto = eventService.getEventWithUuid(mockAuthRepository.validUserCookieToken, uuid)
+
+        assertEquals(mockEventEntity.name, eventDto.name)
+        assertEquals(mockEventEntity.societyEntity.name, eventDto.society)
+        assertEquals(mockEventEntity.poster, eventDto.poster)
     }
 }

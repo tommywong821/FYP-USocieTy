@@ -192,4 +192,67 @@ class EventControllerTest @Autowired constructor(
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
         ).andExpect(status().isNoContent)
     }
+
+    @Test
+    fun `should get event with event id`() {
+        val uuid: String = UUID.randomUUID().toString()
+        val eventDto = EventDto(
+            name = "update name",
+            maxParticipation = 10,
+            applyDeadline = "2022-01-12T12:10:10.222Z",
+            location = "update location",
+            startDate = "2022-01-10T12:10:10.222Z",
+            endDate = "2022-01-15T12:10:10.222Z",
+            category = "update category",
+            description = "update description",
+            fee = 12.3,
+            society = "test society"
+        )
+
+        every { eventService.getEventWithUuid(mockAuthRepository.validUserCookieToken, uuid) } returns eventDto
+
+        mockMvc.get("/event/{eventId}", uuid) {
+            headers {
+                contentType = MediaType.APPLICATION_JSON
+                cookie(Cookie("token", mockAuthRepository.validUserCookieToken))
+            }
+            pathInfo
+        }.andDo { print() }.andExpect {
+            status { isOk() }
+            content { contentType(MediaType.APPLICATION_JSON) }
+            jsonPath("$.name") {
+                value(eventDto.name)
+            }
+            jsonPath("$.maxParticipation") {
+                value(eventDto.maxParticipation)
+            }
+            jsonPath("$.applyDeadline") {
+                value(eventDto.applyDeadline)
+            }
+            jsonPath("$.maxParticipation") {
+                value(eventDto.maxParticipation)
+            }
+            jsonPath("$.location") {
+                value(eventDto.location)
+            }
+            jsonPath("$.startDate") {
+                value(eventDto.startDate)
+            }
+            jsonPath("$.endDate") {
+                value(eventDto.endDate)
+            }
+            jsonPath("$.category") {
+                value(eventDto.category)
+            }
+            jsonPath("$.description") {
+                value(eventDto.description)
+            }
+            jsonPath("$.fee") {
+                value(eventDto.fee)
+            }
+            jsonPath("$.society") {
+                value(eventDto.society)
+            }
+        }
+    }
 }

@@ -156,4 +156,14 @@ class EventService(
 
         eventRepository.save(eventEntity)
     }
+
+    fun getEventWithUuid(jwtToken: String, eventUuid: String): EventDto {
+        val eventEntity: EventEntity = eventRepository.findById(UUID.fromString(eventUuid)).orElseThrow {
+            Exception("event: $eventUuid does not exist")
+        }
+
+        jwtUtil.verifyUserAdminRoleOfSociety(jwtToken, eventEntity.societyEntity.name)
+
+        return EventDto().createFromEntity(eventEntity)
+    }
 }
