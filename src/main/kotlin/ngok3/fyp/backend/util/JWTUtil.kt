@@ -9,6 +9,7 @@ import ngok3.fyp.backend.authentication.role.Role
 import ngok3.fyp.backend.authentication.student_role.StudentRoleEntity
 import ngok3.fyp.backend.authentication.student_role.StudentRoleEntityRepository
 import ngok3.fyp.backend.operation.student.StudentEntity
+import org.apache.commons.lang3.StringUtils
 import org.springframework.security.access.AccessDeniedException
 import org.springframework.stereotype.Component
 import java.security.Key
@@ -25,8 +26,10 @@ class JWTUtil(
         claims["itsc"] = studentEntity.itsc
         claims["name"] = studentEntity.nickname
         claims["mail"] = studentEntity.mail
-        claims["role"] =
+        val role =
             studentEntity.studentRoleEntities.joinToString(separator = ",") { studentRoleEntity: StudentRoleEntity -> studentRoleEntity.roleEntity.role.toString() }
+        claims["role"] = if (StringUtils.isBlank(role)) Role.ROLE_STUDENT.toString() else role
+
 
         //set token only valid in 24 hours
         val calendar: Calendar = Calendar.getInstance()
