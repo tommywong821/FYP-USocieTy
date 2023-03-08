@@ -37,7 +37,8 @@ jobs:
         echo "aws.region=region" >> application.properties
         echo "aws.credentials.accessKey=accessKey" >> application.properties
         echo "aws.credentials.secretKey=secretKey" >> application.properties
-        echo "aws.bucketName=bucketName" >> application.properties
+        echo "aws.bucket.name=bucketName" >> application.properties
+        echo "aws.bucket.domain=bucketDomain" >> application.properties
         cd ../../..
     
     # Assembles and tests this project.
