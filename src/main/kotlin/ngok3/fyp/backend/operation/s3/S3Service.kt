@@ -13,7 +13,7 @@ import java.util.*
 class S3Service(
     val s3Client: S3Client,
 ) {
-    @Value("\${aws.bucketName}")
+    @Value("\${aws.bucket.name}")
     lateinit var bucketName: String
     fun getBucketFileList(bucketName: String): List<String> {
         return s3Client
