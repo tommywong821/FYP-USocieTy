@@ -93,10 +93,6 @@ class AuthService(
 
     fun createNewStudentEntityInDB(itsc: String, name: String, mail: String): StudentEntity {
         val newStudentEntity = StudentEntity(itsc, name, mail)
-//        TODO update
-//        newStudentEntity.roles = mutableSetOf(
-//            roleEntityRepository.findByRole(Role.ROLE_STUDENT)
-//                .orElseThrow { Exception("Role: ${Role.ROLE_STUDENT} does not exist") })
         return studentRepository.save(newStudentEntity)
     }
 
