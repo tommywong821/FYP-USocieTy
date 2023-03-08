@@ -2,6 +2,7 @@ package ngok3.fyp.backend.operation.event.dto
 
 import ngok3.fyp.backend.operation.event.EventEntity
 import ngok3.fyp.backend.util.DateUtil
+import org.springframework.beans.factory.annotation.Value
 import java.io.Serializable
 
 /**
@@ -25,6 +26,9 @@ data class EventDto(
 
     private var dateUtil: DateUtil = DateUtil()
 
+    @Value("\${aws.bucket.domain}")
+    private val s3BucketDomain: String? = null
+
     fun createFromEntity(eventEntity: EventEntity) = EventDto(
         id = eventEntity.uuid.toString(),
         name = eventEntity.name,
@@ -36,7 +40,7 @@ data class EventDto(
         category = eventEntity.category,
         description = eventEntity.description,
         fee = eventEntity.fee,
-        poster = eventEntity.poster,
+        poster = "${s3BucketDomain}/${eventEntity.societyEntity.name.replace(' ', '+')}/event/${eventEntity.poster}",
         version = eventEntity.version,
         society = eventEntity.societyEntity.name
     )

@@ -203,6 +203,6 @@ class EventServiceTest {
 
         assertEquals(mockEventEntity.name, eventDto.name)
         assertEquals(mockEventEntity.societyEntity.name, eventDto.society)
-        assertEquals(mockEventEntity.poster, eventDto.poster)
+        assertEquals("null/${societyEntity.name.replace(' ', '+')}/event/${mockEventEntity.poster}", eventDto.poster)
     }
 }
