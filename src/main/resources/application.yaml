@@ -23,4 +23,6 @@ aws:
   credentials:
     accessKey: ${AWS_ACCESS_KEY}
     secretKey: ${AWS_SECRET_KEY}
-  bucketName: ${AWS_BUCKET_NAME}
+  bucket:
+    name: ${AWS_BUCKET_NAME}
+    domain: ${AWS_BUCKET_DOMAIN}

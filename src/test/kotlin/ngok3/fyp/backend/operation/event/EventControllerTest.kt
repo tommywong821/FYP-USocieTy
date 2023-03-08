@@ -65,7 +65,7 @@ class EventControllerTest @Autowired constructor(
                     value(allEventList.map { eventEntity -> eventEntity.name })
                 }
                 jsonPath("$[*].poster") {
-                    value(allEventList.map { eventEntity -> eventEntity.poster })
+                    value(allEventList.map { eventEntity -> "null//event/${eventEntity.poster}" })
                 }
                 jsonPath("$[*].maxParticipation") {
                     value(allEventList.map { eventEntity -> eventEntity.maxParticipation })
@@ -117,7 +117,7 @@ class EventControllerTest @Autowired constructor(
                     value(allEventList.map { eventEntity -> eventEntity.name })
                 }
                 jsonPath("$[*].poster") {
-                    value(allEventList.map { eventEntity -> eventEntity.poster })
+                    value(allEventList.map { eventEntity -> "null//event/${eventEntity.poster}" })
                 }
                 jsonPath("$[*].maxParticipation") {
                     value(allEventList.map { eventEntity -> eventEntity.maxParticipation })
