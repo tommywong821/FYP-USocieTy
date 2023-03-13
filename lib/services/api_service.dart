@@ -41,7 +41,8 @@ class ApiService {
         return handler.next(response);
       },
       onError: (DioError e, handler) {
-        print(e);
+        print("API Error:");
+        print("${e.response?.statusCode} ${e.message}");
         return handler.next(e);
       },
     ));
