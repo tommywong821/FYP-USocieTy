@@ -92,13 +92,17 @@ class AttendanceServiceTest {
     @Test
     fun getAllAttendance() {
         val studentEntity1: StudentEntity = StudentEntity(nickname = "nickname 1")
+        val eventEntity1: EventEntity = EventEntity(name = "test event 1")
         val attendanceEntity1: AttendanceEntity = AttendanceEntity()
         attendanceEntity1.studentEntity = studentEntity1
+        attendanceEntity1.eventEntity = eventEntity1
         attendanceEntity1.createdAt = LocalDateTime.now()
 
         val studentEntity2: StudentEntity = StudentEntity(nickname = "nickname 2")
+        val eventEntity2: EventEntity = EventEntity(name = "test event 2")
         val attendanceEntity2: AttendanceEntity = AttendanceEntity()
         attendanceEntity2.studentEntity = studentEntity2
+        attendanceEntity2.eventEntity = eventEntity2
         attendanceEntity2.createdAt = LocalDateTime.now()
 
         val mockAttendanceEntityList: List<AttendanceEntity> = listOf(
@@ -124,6 +128,10 @@ class AttendanceServiceTest {
             mockAttendanceEntityList[0].createdAt.toString(),
             studentAttendanceDtoList[0].attendanceCreatedAt
         )
+        Assertions.assertEquals(
+            mockAttendanceEntityList[0].eventEntity?.name,
+            studentAttendanceDtoList[0].eventName
+        )
 
         Assertions.assertEquals(
             mockAttendanceEntityList[1].studentEntity?.uuid.toString(),
@@ -136,6 +144,10 @@ class AttendanceServiceTest {
         Assertions.assertEquals(
             mockAttendanceEntityList[1].createdAt.toString(),
             studentAttendanceDtoList[1].attendanceCreatedAt
+        )
+        Assertions.assertEquals(
+            mockAttendanceEntityList[1].eventEntity?.name,
+            studentAttendanceDtoList[1].eventName
         )
     }
 }

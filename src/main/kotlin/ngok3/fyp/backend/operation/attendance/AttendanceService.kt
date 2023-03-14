@@ -62,7 +62,8 @@ class AttendanceService(
             StudentAttendanceDto(
                 attendanceEntity.studentEntity?.uuid.toString(),
                 attendanceEntity.studentEntity?.nickname,
-                attendanceEntity.createdAt.toString()
+                attendanceEntity.createdAt.toString(),
+                attendanceEntity.eventEntity?.name
             )
         }
     }
