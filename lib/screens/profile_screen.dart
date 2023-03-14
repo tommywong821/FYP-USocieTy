@@ -4,7 +4,7 @@ import 'package:ngok3fyp_frontend_flutter/model/profile_screen_arguments.dart';
 import '../constants.dart';
 import '../services/aad_oauth_service.dart';
 import '../services/storage_service.dart';
-import '../services/styles.dart';
+import '../model/styles.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({

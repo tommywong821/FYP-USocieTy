@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ngok3fyp_frontend_flutter/model/profile_screen_arguments.dart';
 import 'package:intl/intl.dart';
-import 'package:ngok3fyp_frontend_flutter/services/styles.dart';
+import 'package:ngok3fyp_frontend_flutter/model/styles.dart';
 
 class AppBarWidget extends StatelessWidget {
   const AppBarWidget({Key? key}) : super(key: key);

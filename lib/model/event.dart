@@ -10,35 +10,36 @@ class Event {
   final String category;
   final String description;
   final num fee;
+  final String society;
 
-  const Event({
-    required this.id,
-    required this.name,
-    required this.poster,
-    required this.maxParticipation,
-    required this.applyDeadline,
-    required this.location,
-    required this.startDate,
-    required this.endDate,
-    required this.category,
-    required this.description,
-    required this.fee,
-  });
+  const Event(
+      {required this.id,
+      required this.name,
+      required this.poster,
+      required this.maxParticipation,
+      required this.applyDeadline,
+      required this.location,
+      required this.startDate,
+      required this.endDate,
+      required this.category,
+      required this.description,
+      required this.fee,
+      required this.society});
 
   factory Event.fromJson(Map<String, dynamic> json) {
     return Event(
-      id: json['id'],
-      name: json['name'],
-      poster: json['poster'],
-      maxParticipation: json['maxParticipation'],
-      applyDeadline: json['applyDeadline'],
-      location: json['location'],
-      startDate: json['startDate'],
-      endDate: json['endDate'],
-      category: json['category'],
-      description: json['description'],
-      fee: json['fee'],
-    );
+        id: json['id'],
+        name: json['name'],
+        poster: json['poster'],
+        maxParticipation: json['maxParticipation'],
+        applyDeadline: json['applyDeadline'],
+        location: json['location'],
+        startDate: json['startDate'],
+        endDate: json['endDate'],
+        category: json['category'],
+        description: json['description'],
+        fee: json['fee'],
+        society: json['society']);
   }
 
   @override

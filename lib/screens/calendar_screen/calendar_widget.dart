@@ -86,7 +86,7 @@ class _CalendarWidgetState extends State<CalendarWidget> {
           if (snapshot.hasData) {
             return _buildFullUi();
           }
-          return CircularProgressIndicator();
+          return Center(child: CircularProgressIndicator());
         },
       ),
     );

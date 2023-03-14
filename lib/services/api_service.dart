@@ -7,6 +7,7 @@ import 'package:ngok3fyp_frontend_flutter/model/auth/aad_profile.dart';
 import 'package:ngok3fyp_frontend_flutter/model/auth/jwt_token.dart';
 import 'package:ngok3fyp_frontend_flutter/model/enrolled_event/enrolled_event.dart';
 import 'package:ngok3fyp_frontend_flutter/model/event.dart';
+import 'package:ngok3fyp_frontend_flutter/model/society.dart';
 import 'package:ngok3fyp_frontend_flutter/model/student.dart';
 
 import 'storage_service.dart';
@@ -126,5 +127,23 @@ class ApiService {
       return true;
     else
       return false;
+  }
+
+  Future<List<Society>> getAllSociety(
+      [num pageNum = -1, num pageSize = -1]) async {
+    final uri = Uri.https(backendDomain, '/society', {
+      'pageNum': pageNum == -1 ? '0' : pageNum.toString(),
+      'pageSize': pageSize == -1 ? '10' : pageSize.toString()
+    });
+    final response = await _dio.getUri(uri);
+
+    if (response.statusCode == 200) {
+      List<dynamic> societyJsonList = jsonDecode(response.data);
+      return societyJsonList
+          .map((socetyJson) => Society.fromJson(socetyJson))
+          .toList();
+    } else {
+      throw Exception('Failed to load all society:');
+    }
   }
 }

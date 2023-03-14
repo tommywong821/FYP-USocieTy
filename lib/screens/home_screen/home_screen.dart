@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:ngok3fyp_frontend_flutter/screens/home_screen/home_widget.dart';
 import 'package:ngok3fyp_frontend_flutter/screens/profile_screen.dart';
 import 'package:ngok3fyp_frontend_flutter/screens/calendar_screen/calendar_widget.dart';
-import 'package:ngok3fyp_frontend_flutter/services/styles.dart';
+import 'package:ngok3fyp_frontend_flutter/model/styles.dart';
 
 import '../notification_screen/notification_widget.dart';
 
@@ -70,22 +70,8 @@ class _HomeScreenState extends State<HomeScreen> {
           label: 'Calendar',
           backgroundColor: Colors.white),
       BottomNavigationBarItem(
-          icon: Badge(
-            shape: BadgeShape.circle,
-            position: BadgePosition.topEnd(),
-            borderRadius: BorderRadius.circular(50),
-            child: Icon(
-              Icons.notifications,
-            ),
-            badgeContent: Text(
-              '1',
-              style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-          label: 'Notifications',
+          icon: Icon(Icons.fact_check),
+          label: 'Status',
           backgroundColor: Colors.white),
       BottomNavigationBarItem(
           icon: Icon(

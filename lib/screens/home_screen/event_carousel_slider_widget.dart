@@ -1,21 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:ngok3fyp_frontend_flutter/services/styles.dart';
+import 'package:ngok3fyp_frontend_flutter/model/styles.dart';
 import 'package:ngok3fyp_frontend_flutter/model/event.dart';
 import 'package:intl/intl.dart';
 
-class CarouselSliderWidget extends StatefulWidget {
+class EventCarouselSliderWidget extends StatefulWidget {
   final List<Event> event;
   final bool reducedForm;
-  const CarouselSliderWidget(
+  const EventCarouselSliderWidget(
       {Key? key, required this.event, this.reducedForm = false})
       : super(key: key);
 
   @override
-  _CarouselSliderWidgetState createState() => _CarouselSliderWidgetState();
+  _EventCarouselSliderWidgetState createState() =>
+      _EventCarouselSliderWidgetState();
 }
 
-class _CarouselSliderWidgetState extends State<CarouselSliderWidget> {
+class _EventCarouselSliderWidgetState extends State<EventCarouselSliderWidget> {
   @override
   Widget build(BuildContext context) {
     return widget.reducedForm == false

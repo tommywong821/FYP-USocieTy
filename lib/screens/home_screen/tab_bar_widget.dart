@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:ngok3fyp_frontend_flutter/screens/home_screen/carousel_slider_widget.dart';
-import 'package:ngok3fyp_frontend_flutter/services/styles.dart';
+import 'package:ngok3fyp_frontend_flutter/screens/home_screen/event_carousel_slider_widget.dart';
+import 'package:ngok3fyp_frontend_flutter/model/styles.dart';
 import 'package:ngok3fyp_frontend_flutter/model/event.dart';
 
 class TabBarWidget extends StatefulWidget {
@@ -74,15 +74,15 @@ class _TabBarWidgetState extends State<TabBarWidget>
           child: Container(
             height: 250,
             child: TabBarView(controller: _tabController, children: [
-              CarouselSliderWidget(
+              EventCarouselSliderWidget(
                 event: widget.event,
                 reducedForm: true,
               ),
-              CarouselSliderWidget(
+              EventCarouselSliderWidget(
                 event: widget.event,
                 reducedForm: true,
               ),
-              CarouselSliderWidget(
+              EventCarouselSliderWidget(
                 event: widget.event,
                 reducedForm: true,
               )
