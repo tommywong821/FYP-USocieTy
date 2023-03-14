@@ -35,6 +35,7 @@
           class="cursor-pointer"
           *ngFor="let event of eventTable.data"
         >
+          <td (click)="toggleViewEvent(event.id!!)">{{ event.society }}</td>
           <td (click)="toggleViewEvent(event.id!!)">{{ event.name }}</td>
           <td (click)="toggleViewEvent(event.id!!)">{{ event.category }}</td>
           <td (click)="toggleViewEvent(event.id!!)">{{ event.location }}</td>

@@ -34,7 +34,7 @@ export class EventViewComponent implements OnInit {
     startDate: new Date(),
     endDate: new Date(),
     category: EventCategory.OrientationCamp,
-    description: '',
+    description: 'This is the best Ocamp! hahaha',
     fee: 100,
     society: 'HKUSTSU',
   };

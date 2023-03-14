@@ -1,35 +1,41 @@
 <div class="m-5 px-8">
   <div class="mt-5 space-y-6 pt-4">
     <div class="flex bg-white">
-      <h1 class="mr-4 text-xl">Event Detail</h1>
+      <h1 class="mr-4 text-xl">Event Details</h1>
+    </div>
+  </div>
+  <div>
+    <div class="mt-4 mb-6">
+      <nz-descriptions
+        *ngIf="event"
+        nzBordered
+        nzSize="middle"
+      >
+        <nz-descriptions-item nzTitle="Society">{{ event.society }}</nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Name">{{ event.name }}</nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Category">{{ event.category }}</nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Location">{{ event.location }}</nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Max Participates">{{ event.maxParticipation }}</nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Fee">{{ event.fee }}</nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Application Deadline"
+          >{{ event.applyDeadline | date : 'dd/MM/yyyy hh:mm' }}
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Start Date"
+          >{{ event.startDate | date : 'dd/MM/yyyy hh:mm' }}
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="End Date">{{ event.endDate | date : 'dd/MM/yyyy hh:mm' }}</nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Description">
+          {{ event.description }}
+        </nz-descriptions-item>
+      </nz-descriptions>
       <button
         nz-button
+        class="mt-6"
         nzType="primary"
         (click)="toggleUpdateEvent()"
       >
         Update Event
       </button>
-    </div>
-  </div>
-  <div>
-    <div
-      *ngIf="event"
-      class="mt-4 mb-6"
-    >
-      <div class="mb-2 indent-1"><span class="font-bold">Name:</span> {{ event.name }}</div>
-      <div class="mb-2 indent-1"><span class="font-bold">Category:</span> {{ event.category }}</div>
-      <div class="mb-2 indent-1"><span class="font-bold">Location:</span> {{ event.location }}</div>
-      <div class="mb-2 indent-1"><span class="font-bold">Max Participates</span> {{ event.maxParticipation }}</div>
-      <div class="mb-2 indent-1"><span class="font-bold">Fee:</span> {{ event.fee }}</div>
-      <div class="mb-2 indent-1">
-        <span class="font-bold">Apply Deadline</span> {{ event.applyDeadline | date : 'dd/MM/yyyy hh:mm' }}
-      </div>
-      <div class="mb-2 indent-1">
-        <span class="font-bold">Start Date</span> {{ event.startDate | date : 'dd/MM/yyyy hh:mm' }}
-      </div>
-      <div class="mb-2 indent-1">
-        <span class="font-bold">End Date</span>: {{ event.endDate | date : 'dd/MM/yyyy hh:mm' }}
-      </div>
     </div>
     <div>
       <h1 class="mb-4 text-xl">Event Enrollment Record</h1>
