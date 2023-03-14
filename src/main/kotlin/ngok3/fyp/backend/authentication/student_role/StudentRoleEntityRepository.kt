@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.CrudRepository
 import java.util.*
 
-interface StudentRoleEntityRepository : CrudRepository<StudentRoleEntity, StudentRoleEntityKey> {
+interface StudentRoleEntityRepository : CrudRepository<StudentRoleEntity, UUID> {
 
 
     @Query(
