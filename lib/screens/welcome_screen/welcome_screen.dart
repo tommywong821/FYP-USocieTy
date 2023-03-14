@@ -38,7 +38,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             isBusy
-                ? const CircularProgressIndicator()
+                ? Center(child: const CircularProgressIndicator())
                 : LoginWidget(login, errorMessage),
           ]),
     ));

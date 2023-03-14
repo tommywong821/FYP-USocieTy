@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ngok3fyp_frontend_flutter/screens/calendar_screen/horizontal_card_widget.dart';
-import 'package:ngok3fyp_frontend_flutter/services/styles.dart';
+import 'package:ngok3fyp_frontend_flutter/model/styles.dart';
 
 class IncomingEvnetScreen extends StatefulWidget {
   const IncomingEvnetScreen({Key? key}) : super(key: key);

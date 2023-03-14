@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:ngok3fyp_frontend_flutter/services/styles.dart';
+import 'package:ngok3fyp_frontend_flutter/model/styles.dart';
 import 'package:ngok3fyp_frontend_flutter/model/event.dart';
 import 'package:ngok3fyp_frontend_flutter/services/api_service.dart';
 
@@ -19,9 +19,11 @@ class _EventScreenState extends State<EventScreen> {
     final Event event = ModalRoute.of(context)!.settings.arguments as Event;
     String eventImage = event.poster;
     String eventTitle = event.name;
-    String eventContent = event.name;
+    String eventContent = event.description;
     String eventLocation = event.location;
     String eventDate = event.startDate;
+    String eventSociety = event.society;
+    String eventFee = event.fee.toString();
     return Scaffold(
         bottomNavigationBar: BottomRegisterButton(context, event),
         body: Container(
@@ -121,7 +123,7 @@ class _EventScreenState extends State<EventScreen> {
                                         padding: const EdgeInsets.only(
                                           left: 15,
                                         ),
-                                        child: Text("Lorem ipsum Soceity",
+                                        child: Text(eventSociety,
                                             style: Styles.eventScreenBlackText),
                                       ),
                                       //Society events count
@@ -222,17 +224,9 @@ class _EventScreenState extends State<EventScreen> {
                                       padding: const EdgeInsets.only(
                                         left: 15,
                                       ),
-                                      child: Text("\$100 per Member",
+                                      child: Text(eventFee + " per Member",
                                           style: Styles.eventScreenBlackText),
                                     ),
-                                    //Price details
-                                    Padding(
-                                        padding:
-                                            const EdgeInsets.only(left: 15),
-                                        child: Text(
-                                          "\$150 per Non-member",
-                                          style: Styles.eventScreenGreyText,
-                                        )),
                                   ],
                                 ),
                               ],

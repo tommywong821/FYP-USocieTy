@@ -41,7 +41,7 @@ class _NotificationWidgetState extends State<NotificationWidget> {
           if (snapshot.hasData) {
             return _buildNotificationUi();
           }
-          return CircularProgressIndicator();
+          return Center(child: CircularProgressIndicator());
         },
       ),
     );

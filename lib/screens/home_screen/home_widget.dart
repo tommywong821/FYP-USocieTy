@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:ngok3fyp_frontend_flutter/model/society.dart';
 import 'package:ngok3fyp_frontend_flutter/screens/home_screen/app_bar_widget.dart';
 import 'package:ngok3fyp_frontend_flutter/screens/home_screen/tab_bar_widget.dart';
-import 'package:ngok3fyp_frontend_flutter/screens/home_screen/carousel_slider_widget.dart';
-import 'package:ngok3fyp_frontend_flutter/services/styles.dart';
+import 'package:ngok3fyp_frontend_flutter/screens/home_screen/event_carousel_slider_widget.dart';
+import 'package:ngok3fyp_frontend_flutter/model/styles.dart';
 import 'package:ngok3fyp_frontend_flutter/model/event.dart';
 import 'package:ngok3fyp_frontend_flutter/services/api_service.dart';
 
@@ -18,26 +19,34 @@ class HomeWidget extends StatefulWidget {
 class _HomeWidget extends State<HomeWidget> {
   var seeAllTextColor1 = true;
   var seeAllTextColor2 = true;
-  late Future<List<Event>> enrolledEventListFutre;
+  late Future<List<Event>> enrolledEventListFuture;
   late List<Event> enrolledEventList;
+  late Future<List<Society>> societyFuture;
+  late List<Society> societyList;
 
   Future<void> initEvent() async {
-    enrolledEventListFutre = ApiService().getAllEvent();
-    enrolledEventList = await enrolledEventListFutre;
+    enrolledEventListFuture = ApiService().getAllEvent();
+    enrolledEventList = await enrolledEventListFuture;
+  }
+
+  Future<void> initSociety() async {
+    societyFuture = ApiService().getAllSociety();
+    societyList = await societyFuture;
   }
 
   @override
   void initState() {
     super.initState();
     initEvent();
+    initSociety();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Styles.backGroundColor,
-        body: FutureBuilder<List<Event>>(
-          future: enrolledEventListFutre,
+        body: FutureBuilder<List<dynamic>>(
+          future: Future.wait([enrolledEventListFuture, societyFuture]),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               return Column(children: [
@@ -115,7 +124,7 @@ class _HomeWidget extends State<HomeWidget> {
                     //TODO: deal with incoming events
                     Padding(
                       padding: const EdgeInsets.only(top: 10),
-                      child: CarouselSliderWidget(
+                      child: EventCarouselSliderWidget(
                         event: enrolledEventList,
                       ),
                     ),
@@ -171,7 +180,7 @@ class _HomeWidget extends State<HomeWidget> {
                     //Society Carousel
                     Padding(
                       padding: const EdgeInsets.only(top: 10, bottom: 10),
-                      child: CarouselSliderWidget(
+                      child: EventCarouselSliderWidget(
                         event: enrolledEventList,
                       ),
                     ),
@@ -179,7 +188,7 @@ class _HomeWidget extends State<HomeWidget> {
                 ))),
               ]);
             }
-            return CircularProgressIndicator();
+            return Center(child: CircularProgressIndicator());
           },
         ));
   }
