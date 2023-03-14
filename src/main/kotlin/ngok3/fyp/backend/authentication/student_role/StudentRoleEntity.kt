@@ -3,21 +3,20 @@ package ngok3.fyp.backend.authentication.student_role
 import ngok3.fyp.backend.authentication.role.RoleEntity
 import ngok3.fyp.backend.operation.society.SocietyEntity
 import ngok3.fyp.backend.operation.student.StudentEntity
-import javax.persistence.*
+import ngok3.fyp.backend.util.entity.BaseEntity
+import javax.persistence.Entity
+import javax.persistence.JoinColumn
+import javax.persistence.ManyToOne
+import javax.persistence.Table
 
 @Entity
 @Table(name = "student_role_entity")
-open class StudentRoleEntity {
-    @EmbeddedId
-    open var studentRoleEntityKey: StudentRoleEntityKey? = null
-
+open class StudentRoleEntity() : BaseEntity() {
     @ManyToOne
-    @MapsId("studentUuid")
     @JoinColumn(name = "student_uuid")
     open var studentEntity: StudentEntity = StudentEntity()
 
     @ManyToOne
-    @MapsId("roleId")
     @JoinColumn(name = "role_id")
     open var roleEntity: RoleEntity = RoleEntity()
 
