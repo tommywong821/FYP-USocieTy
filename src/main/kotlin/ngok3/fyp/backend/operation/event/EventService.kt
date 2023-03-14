@@ -13,6 +13,7 @@ import ngok3.fyp.backend.operation.student.StudentEntity
 import ngok3.fyp.backend.operation.student.StudentRepository
 import ngok3.fyp.backend.util.DateUtil
 import ngok3.fyp.backend.util.JWTUtil
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
@@ -33,6 +34,10 @@ class EventService(
     private val dateUtil: DateUtil,
     private val s3Service: S3Service,
 ) {
+
+    @Value("\${aws.bucket.domain}")
+    val s3BucketDomain: String = ""
+
     fun getAllEvent(pageNum: Int, pageSize: Int): List<EventDto> {
         val firstPageNumWithPageSizeElement: Pageable = PageRequest.of(pageNum, pageSize)
         println("LocalDateTime.now(ZoneId.of(\"Asia/Hong_Kong\")): ${LocalDateTime.now(ZoneId.of("Asia/Hong_Kong"))}")
@@ -43,7 +48,7 @@ class EventService(
         ).content
 
         return allEvent.map { event ->
-            EventDto().createFromEntity(event)
+            EventDto().createFromEntity(event, s3BucketDomain)
         }
     }
 
@@ -165,6 +170,6 @@ class EventService(
 
         jwtUtil.verifyUserAdminRoleOfSociety(jwtToken, eventEntity.societyEntity.name)
 
-        return EventDto().createFromEntity(eventEntity)
+        return EventDto().createFromEntity(eventEntity, s3BucketDomain)
     }
 }
