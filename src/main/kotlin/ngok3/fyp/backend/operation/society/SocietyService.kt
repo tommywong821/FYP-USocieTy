@@ -59,6 +59,7 @@ class SocietyService(
     fun getAllSocietyMember(societyName: String): List<StudentDto> {
         return studentRepository.findByEnrolledSocietyName(societyName).map { studentEntity: StudentEntity ->
             StudentDto(
+                studentEntity.uuid.toString(),
                 studentEntity.itsc,
                 studentEntity.nickname,
                 studentEntity.mail,
