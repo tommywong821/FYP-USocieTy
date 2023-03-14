@@ -6,6 +6,7 @@ import java.io.Serializable
  * A DTO for the {@link ngok3.fyp.backend.student.StudentEntity} entity
  */
 data class StudentDto(
+    val uuid: String = "",
     val itsc: String = "",
     val nickname: String = "",
     val mail: String = "",
@@ -13,7 +14,11 @@ data class StudentDto(
     val roles: List<String> = emptyList()
 ) : Serializable {
     constructor(studentEntity: StudentEntity, enrolledSocietyList: List<String>) : this(
-        studentEntity.itsc, studentEntity.nickname, studentEntity.mail, enrolledSocieties = enrolledSocietyList
+        uuid = studentEntity.uuid.toString(),
+        itsc = studentEntity.itsc,
+        nickname = studentEntity.nickname,
+        mail = studentEntity.mail,
+        enrolledSocieties = enrolledSocietyList
     )
 
     constructor(studentEntity: StudentEntity, enrolledSocietyList: List<String>, roles: List<String>) : this(

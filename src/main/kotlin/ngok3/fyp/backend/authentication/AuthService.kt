@@ -92,7 +92,7 @@ class AuthService(
     }
 
     fun createNewStudentEntityInDB(itsc: String, name: String, mail: String): StudentEntity {
-        val newStudentEntity = StudentEntity(itsc, name, mail)
+        val newStudentEntity = StudentEntity(itsc = itsc, nickname = name, mail = mail)
         return studentRepository.save(newStudentEntity)
     }
 
