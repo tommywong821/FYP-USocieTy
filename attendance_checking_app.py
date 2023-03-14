@@ -10,8 +10,20 @@ from Crypto.Cipher import PKCS1_v1_5 as PKCS1_cipher
 from Crypto.PublicKey import RSA
 import json
 
-### layout ###
 
+
+
+### Global variable ###
+url = "https://ngok3fyp-backend.herokuapp.com/attendance"
+dummyEventID1 = "b33f74e2-e08d-4c28-b023-466f11e0d875"
+dummyEventID2 = "75abe7ef-c9cf-45bb-a7e2-94252c604e21"
+dummyStudentID = "984e6b48-fdc1-4d55-88b0-8fd3fee27983"
+dummyItsc = "asdfg"
+
+
+
+
+### layout ###
 class RFIDFrame(CTkFrame):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -39,41 +51,44 @@ class ControlFrame(CTkFrame):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
+        eventsArray = []
+        for event in events:
+            eventsArray.append(event['eventName'])
+
         #combo box
-        #TODO get user's holded event
-        self.comboBox = CTkOptionMenu(master=self, values=["test event 1", "test event 2", "test event 3"], command=comboBox_event, width=200, height=30)
+        self.comboBox = CTkOptionMenu(master=self, values=eventsArray, command=self.comboBox_event, width=200, height=30)
         self.comboBox.pack(pady=(40,30))
-        self.comboBox.set("test event 1")
+        self.comboBox.set(eventsArray[0])
         
         #button
-        self.insertBtn = CTkButton(master=self, text="Insert Record", command=insertBtn_event, height=30)
+        self.insertBtn = CTkButton(master=self, text="Insert Record", command=self.insertBtn_event, height=30)
         self.insertBtn.pack(pady=(0,30))
-        self.deleteBtn = CTkButton(master=self, text="Delete Record", command=deleteBtn_event, state="disabled", height=30)
+        self.deleteBtn = CTkButton(master=self, text="Delete Record", command=self.deleteBtn_event, state="disabled", height=30)
         self.deleteBtn.pack(pady=(0,40))
+    #TODO @!!!@@
+    def comboBox_event(self, choice):
+        app.listFrame.refreshRecord()
+    
+    def deleteBtn_event(self):
+        try:
+            app.listFrame.deleteRecord()
+        except:
+            pass
 
-def comboBox_event(choice):
-    print(app.controlFrame.comboBox.get())
-
-def deleteBtn_event():
-    try:
-        app.listFrame.deleteRecord()
-    except:
-        pass
-
-def insertBtn_event():
-    inputDialog = CTkInputDialog(text="Please type ITSC ID or UID:", title="Insert Record")
-    centerWindow(inputDialog)
-    inputStr = inputDialog.get_input()
-    #insert uid
-    if(checkNumeric(inputStr)):
-        app.listFrame.insertRecord(inputStr, getITSC(inputStr))
-        postEvent(inputStr)
-    #insert student name
-    elif (checkNumeric(inputStr) == False):
-        app.listFrame.insertRecord(getUID(inputStr), inputStr)
-        postEvent(getUID(inputStr))
-    else:
-        pass
+    def insertBtn_event(self):
+        inputDialog = CTkInputDialog(text="Please type ITSC ID or UID:", title="Insert Record")
+        centerWindow(inputDialog)
+        inputStr = inputDialog.get_input()
+        #insert uid
+        if(checkNumeric(inputStr)):
+            app.listFrame.insertRecord(inputStr, getITSC(inputStr))
+            postEvent(inputStr)
+        #insert student name
+        elif (checkNumeric(inputStr) == False):
+            app.listFrame.insertRecord(getUID(inputStr), inputStr)
+            postEvent(getUID(inputStr))
+        else:
+            pass
 
 
 
@@ -91,7 +106,7 @@ class ListFrame(CTkFrame):
         self.listBox.heading("2", text="Name")
         self.listBox.column("3", anchor=CENTER, stretch=NO)
         self.listBox.heading("3", text="Time")
-        self.listBox.bind("<<TreeviewSelect>>", treeview_callback)
+        self.listBox.bind("<<TreeviewSelect>>", self.treeview_callback)
         listBoxScrollBar = CTkScrollbar(self, command=self.listBox.yview)
         listBoxScrollBar.pack(fill='y',side='right', padx=(0,5), pady=5)
         self.listBox.config(yscrollcommand=listBoxScrollBar.set)
@@ -105,12 +120,20 @@ class ListFrame(CTkFrame):
         self.listBox.delete(self.listBox.selection())
         #TODO delete request
 
-def treeview_callback(event):
-    isSelectedItem = str(app.listFrame.listBox.selection()).startswith("('")
-    if(isSelectedItem):
-        app.controlFrame.deleteBtn.configure(state="normal")
-    else:
-        app.controlFrame.deleteBtn.configure(state="disabled")
+    #TODO to be fixed
+    def refreshRecord(self):
+        #delete all records
+        self.listBox.delete(*self.listBox.get_children())
+        #re-render records
+        
+
+
+    def treeview_callback(event):
+        isSelectedItem = str(app.listFrame.listBox.selection()).startswith("('")
+        if(isSelectedItem):
+            app.controlFrame.deleteBtn.configure(state="normal")
+        else:
+            app.controlFrame.deleteBtn.configure(state="disabled")
 
 
 
@@ -135,7 +158,7 @@ class App(CTk):
 
 
 
-### function ###
+### utilities ###
 
 def checkRFIDReader():
     try:
@@ -185,28 +208,52 @@ def encryptData(msg):
     return encrypt_text.decode('utf-8')
 
 def postEvent(uid):
-    eventID = app.controlFrame.comboBox.get()
-    url = "https://ngok3fyp-backend.herokuapp.com/attendance"
-    innerJson = {"eventId": eventID,"studentId": uid}
-    jsonData = {"data" : innerJson}
-    jsonStr = encryptData(json.dumps(jsonData))
-    response = requests.post(url, data=jsonStr)
-    print("JSON data: ",jsonData)
-    print("EncryptedJSON: ",jsonStr)
+    #get selected event ID to post
+    #eventID = app.controlFrame.comboBox.get()
+
+    header = {'Content-Type': 'application/json'}
+    innerJson = '{"eventId": "' +str(dummyEventID2)+ '", "studentId": "' +str(dummyStudentID)+ '", "userItsc": "' +str(dummyItsc)+ '"}'
+    jsonStr = innerJson
+
+    #encrypt part
+    #jsonStr = encryptData(json.dumps(innerJson))
+
+    jsonData = {'data': jsonStr}
+    response = requests.post(url, data=jsonStr, headers=header)
+    print("JSON data: ",innerJson)
+    #print("EncryptedJSON: ",jsonStr)
+    #print("Post data: ",json.dumps(jsonData))
     print("Status Code: ", response.status_code)
-    print("JSON Response: ", response.json())
+    print("JSON Response: ", response)
 
-#TODO with APIs
 def getEvent():
-    pass
+    global events
+    events = requests.get(url).json()
+    return events
 
-#TODO with APIs
+def getEventItems(eventName, item):
+    eventsArray = []
+    for event in events:
+        if(event['eventName'] == eventName):
+            eventsArray.append(event[item])
+    return eventsArray
+
+def deleteEvent(studentID, eventID):
+    print(requests.delete(url, params= {"studentUuid":dummyStudentID , "eventUuid": dummyEventID1}))
+
+#TODO to be fixed
 def getUID(itscID):
-    return "8888"
+    url = "https://ngok3fyp-backend.herokuapp.com/student"
+    uid = requests.get(url, params={"itsc": itscID}).json()
+    return uid['uuid']
 
-#TODO with APIs
+#TODO to be fixed
 def getITSC(uid):
-    return "test_ITSC"
+    url = "https://ngok3fyp-backend.herokuapp.com/student"
+    itsc = requests.get(url, params={"uuid": uid}).json()
+    return itsc['itsc']
+
+
 
 
 
@@ -214,6 +261,9 @@ def getITSC(uid):
 
 if __name__ == "__main__":
     set_appearance_mode("light")
+    getEvent()
+    print(getITSC(dummyStudentID))
+    print(getUID(dummyItsc))
     app = App()
     app.after(1000, checkRFIDReader())
     app.mainloop()
