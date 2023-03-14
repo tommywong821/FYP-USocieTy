@@ -26,6 +26,7 @@ class _CarouselSliderWidgetState extends State<CarouselSliderWidget> {
 
 Widget regularCarousel(List<Event> event) {
   final DateFormat dateFormatter = DateFormat('E , MMM d · ');
+  final DateFormat parseDateFormatter = DateFormat('M/dd/y');
   final time = '13:30 - 15:00';
   return Column(
     children: [
@@ -67,7 +68,10 @@ Widget regularCarousel(List<Event> event) {
                               child: Text(
                                 //"Mon, Nov 28 · 13:30 - 15:00",
                                 dateFormatter
-                                        .format(DateTime.parse(i.startDate))
+                                        .format(DateTime.parse(
+                                            parseDateFormatter
+                                                .parse(i.startDate)
+                                                .toString()))
                                         .toString() +
                                     time,
                                 style: Styles.carouselSliderDate,
@@ -133,6 +137,7 @@ Widget regularCarousel(List<Event> event) {
 
 Widget reducedCarousel(List<Event> event) {
   final DateFormat dateFormatter = DateFormat('E , MMM d · ');
+  final DateFormat parseDateFormatter = DateFormat('M/dd/y');
   final time = '13:30 - 15:00';
   return Column(
     children: [
@@ -181,7 +186,10 @@ Widget reducedCarousel(List<Event> event) {
                             child: Container(
                               child: Text(
                                 dateFormatter
-                                        .format(DateTime.parse(i.startDate))
+                                        .format(DateTime.parse(
+                                            parseDateFormatter
+                                                .parse(i.startDate)
+                                                .toString()))
                                         .toString() +
                                     time,
                                 style: Styles.carouselSliderDate,

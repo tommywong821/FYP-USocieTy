@@ -49,7 +49,7 @@ class _CalendarWidgetState extends State<CalendarWidget> {
     final kEventSource = Map<DateTime, List<Event>>();
     eventList.forEach((element) {
       DateTime elementDate =
-          DateFormat('yyyy-mm-dd').parse(element.startDate).toUtc();
+          DateFormat('M/dd/y').parse(element.startDate).toUtc();
       if (!kEventSource.containsKey(elementDate)) {
         kEventSource[elementDate] = List<Event>.generate(1, (index) => element);
       } else {
