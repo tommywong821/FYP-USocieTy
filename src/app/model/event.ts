@@ -10,20 +10,21 @@ export interface Event {
   category: EventCategory;
   description: string;
   fee: number;
+  society?: string;
 }
 
 export enum EventProperty {
-  id,
-  name,
-  poster,
-  maxParticipation,
-  applyDeadline,
-  location,
-  startDate,
-  endDate,
-  category,
-  description,
-  fee,
+  Id = 'Id',
+  Name = 'Name',
+  Poster = 'Poster',
+  MaxParticipation = 'Max Participation',
+  ApplyDeadline = 'Application Deadline',
+  Location = 'Location',
+  StartDate = 'Start Date',
+  EndDate = 'End Date',
+  Category = 'Category',
+  Description = 'Description',
+  Fee = 'Fee',
 }
 
 export interface EventFormData {
@@ -43,4 +44,20 @@ export enum EventCategory {
   Workshop = 'workshop',
   VoluntaryWork = 'voluntary work',
   Other = 'other',
+}
+
+export enum PaymentStatus {
+  Paid = 'Paid',
+  Unpaid = 'Unpaid',
+}
+
+export enum EventEnrollmentStatus {
+  Pending = 'Pending',
+  Enrolled = 'Enrolled',
+}
+
+export interface EventEnrollmentRecord {
+  itsc: string;
+  paymentStatus: PaymentStatus;
+  eventEnrollmentStatus: EventEnrollmentStatus;
 }

@@ -2,20 +2,50 @@ import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {first, Subject, switchMap, tap} from 'rxjs';
 import {Path} from 'src/app/app-routing.module';
+import {
+  EventCategory,
+  EventEnrollmentRecord,
+  EventEnrollmentStatus,
+  EventProperty,
+  PaymentStatus,
+} from 'src/app/model/event';
 import {ApiService} from 'src/app/services/api.service';
+import {Event} from '../../model/event';
 
-export const enrollmentTableColumn = [{title: 'itsc'}, {title: 'payment status'}, {title: 'enrollment status'}];
 @Component({
   selector: 'app-event-view',
   templateUrl: './event-view.component.html',
   styleUrls: ['./event-view.component.scss'],
 })
 export class EventViewComponent implements OnInit {
-  enrollmentTableColumn = enrollmentTableColumn;
+  EventProperty = EventProperty;
+
+  enrollmentTableColumn = [{title: 'itsc'}, {title: 'payment status'}, {title: 'enrollment status'}];
 
   eventId = '';
+  // event?: Event = undefined;
+  event?: Event = {
+    id: '',
+    name: 'Ocamp',
+    poster: '',
+    maxParticipation: 120,
+    applyDeadline: new Date(),
+    location: 'HKUST',
+    startDate: new Date(),
+    endDate: new Date(),
+    category: EventCategory.OrientationCamp,
+    description: '',
+    fee: 100,
+    society: 'HKUSTSU',
+  };
 
-  enrollmentRecords = [];
+  enrollmentRecords: EventEnrollmentRecord[] = [
+    {
+      itsc: 'cywongch',
+      paymentStatus: PaymentStatus.Paid,
+      eventEnrollmentStatus: EventEnrollmentStatus.Enrolled,
+    },
+  ];
   refreshEnrollmentRecords$ = new Subject();
 
   pageIndex = 1;
@@ -24,11 +54,13 @@ export class EventViewComponent implements OnInit {
   constructor(private router: Router, private ApiService: ApiService, private route: ActivatedRoute) {}
 
   ngOnInit(): void {
-    this.route.queryParams.pipe(
-      first(),
-      tap(params => (this.eventId = params['eventId'])),
-      switchMap(params => this.ApiService.getEvent(params['eventId']))
-    );
+    this.route.queryParams
+      .pipe(
+        first(),
+        tap(params => (this.eventId = params['eventId'])),
+        switchMap(params => this.ApiService.getEvent(params['eventId']))
+      )
+      .subscribe(event => (this.event = event));
 
     // TODO
     // this.refreshEnrollmentRecords$

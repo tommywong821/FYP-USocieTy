@@ -1,9 +1,8 @@
 <div class="m-5 px-8">
-  <div class="my-5 space-y-6 py-4">
+  <div class="mt-5 space-y-6 pt-4">
     <div class="flex bg-white">
-      <h1 class="text-xl">Event Detail</h1>
+      <h1 class="mr-4 text-xl">Event Detail</h1>
       <button
-        class="ml-auto"
         nz-button
         nzType="primary"
         (click)="toggleUpdateEvent()"
@@ -13,30 +12,52 @@
     </div>
   </div>
   <div>
-    <nz-table
-      #enrollmentTable
-      [nzPageIndex]="pageIndex"
-      [nzTotal]="pageSize"
-      (nzPageIndexChange)="changePageIndex()"
-      [nzData]="enrollmentRecords"
+    <div
+      *ngIf="event"
+      class="mt-4 mb-6"
     >
-      <thead>
-        <tr>
-          <th
-            *ngFor="let column of enrollmentTableColumn"
-            [nzColumnKey]="column.title"
-          >
-            {{ column.title }}
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let enrollment of enrollmentTable.data">
-          <!-- <td>{{ enrollment.itsc }}</td> -->
-          <!-- <td>{{ enrollment. }}</td>
-          <td>{{ enrollment. }}</td> -->
-        </tr>
-      </tbody>
-    </nz-table>
+      <div class="mb-2 indent-1"><span class="font-bold">Name:</span> {{ event.name }}</div>
+      <div class="mb-2 indent-1"><span class="font-bold">Category:</span> {{ event.category }}</div>
+      <div class="mb-2 indent-1"><span class="font-bold">Location:</span> {{ event.location }}</div>
+      <div class="mb-2 indent-1"><span class="font-bold">Max Participates</span> {{ event.maxParticipation }}</div>
+      <div class="mb-2 indent-1"><span class="font-bold">Fee:</span> {{ event.fee }}</div>
+      <div class="mb-2 indent-1">
+        <span class="font-bold">Apply Deadline</span> {{ event.applyDeadline | date : 'dd/MM/yyyy hh:mm' }}
+      </div>
+      <div class="mb-2 indent-1">
+        <span class="font-bold">Start Date</span> {{ event.startDate | date : 'dd/MM/yyyy hh:mm' }}
+      </div>
+      <div class="mb-2 indent-1">
+        <span class="font-bold">End Date</span>: {{ event.endDate | date : 'dd/MM/yyyy hh:mm' }}
+      </div>
+    </div>
+    <div>
+      <h1 class="mb-4 text-xl">Event Enrollment Record</h1>
+      <nz-table
+        #enrollmentTable
+        [nzPageIndex]="pageIndex"
+        [nzTotal]="pageSize"
+        (nzPageIndexChange)="changePageIndex()"
+        [nzData]="enrollmentRecords"
+      >
+        <thead>
+          <tr>
+            <th
+              *ngFor="let column of enrollmentTableColumn"
+              [nzColumnKey]="column.title"
+            >
+              {{ column.title }}
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let enrollmentRecord of enrollmentTable.data">
+            <td>{{ enrollmentRecord.itsc }}</td>
+            <td>{{ enrollmentRecord.paymentStatus }}</td>
+            <td>{{ enrollmentRecord.eventEnrollmentStatus }}</td>
+          </tr>
+        </tbody>
+      </nz-table>
+    </div>
   </div>
 </div>

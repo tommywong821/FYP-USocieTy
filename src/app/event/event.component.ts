@@ -7,9 +7,9 @@ import {ApiService} from '../services/api.service';
 import {Event, EventCategory} from '../model/event';
 
 export const EventTableColumn = [
-  // {
-  //   title: 'society',
-  // },
+  {
+    title: 'society',
+  },
   {
     title: 'Name',
   },
@@ -62,6 +62,7 @@ export class EventComponent implements OnInit {
       category: EventCategory.OrientationCamp,
       description: '',
       fee: 100,
+      society: 'HKUSTSU',
     },
   ];
   refreshEvents$ = new Subject();
