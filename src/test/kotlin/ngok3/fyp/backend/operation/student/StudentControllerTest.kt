@@ -30,6 +30,7 @@ class StudentControllerTest @Autowired constructor(
     @DisplayName("GET /student?itsc={itsc}")
     fun `should return test student profile with itsc`() {
         every { studentService.getStudentProfile(mockStudentRepository.testItsc, "") } returns StudentDto(
+            mockStudentEntity.uuid.toString(),
             mockStudentEntity.itsc,
             mockStudentEntity.nickname,
             mockStudentEntity.mail,
@@ -40,6 +41,9 @@ class StudentControllerTest @Autowired constructor(
             .andExpect {
                 status { isOk() }
                 content { contentType(MediaType.APPLICATION_JSON) }
+                jsonPath("$.uuid") {
+                    value(mockStudentRepository.testStudentEntity.uuid.toString())
+                }
                 jsonPath("$.itsc") {
                     value(mockStudentRepository.testStudentEntity.itsc)
                 }
@@ -57,6 +61,7 @@ class StudentControllerTest @Autowired constructor(
     fun `should return test student profile with uuid`() {
         val mockUuid: String = UUID.randomUUID().toString()
         every { studentService.getStudentProfile("", mockUuid) } returns StudentDto(
+            mockStudentEntity.uuid.toString(),
             mockStudentEntity.itsc,
             mockStudentEntity.nickname,
             mockStudentEntity.mail,
@@ -67,6 +72,9 @@ class StudentControllerTest @Autowired constructor(
             .andExpect {
                 status { isOk() }
                 content { contentType(MediaType.APPLICATION_JSON) }
+                jsonPath("$.uuid") {
+                    value(mockStudentRepository.testStudentEntity.uuid.toString())
+                }
                 jsonPath("$.itsc") {
                     value(mockStudentRepository.testStudentEntity.itsc)
                 }

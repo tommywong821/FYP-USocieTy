@@ -36,7 +36,7 @@ data class EventDto(
         category = eventEntity.category,
         description = eventEntity.description,
         fee = eventEntity.fee,
-        poster = "${s3BucketDomain}${eventEntity.societyEntity.name.replace(' ', '+')}/event/${eventEntity.poster}",
+        poster = "${s3BucketDomain}${eventEntity.poster}",
         version = eventEntity.version,
         society = eventEntity.societyEntity.name
     )
