@@ -43,7 +43,7 @@ class EventControllerTest @Autowired constructor(
                 mockEventRepository.testPageSizeWithoutSid
             )
         } returns mockEventRepository.allTestEventList.map { eventEntity ->
-            EventDto().createFromEntity(eventEntity)
+            EventDto().createFromEntity(eventEntity, "s3Bucket")
         }
 
         val allEventList = mockEventRepository.allTestEventList
@@ -65,7 +65,7 @@ class EventControllerTest @Autowired constructor(
                     value(allEventList.map { eventEntity -> eventEntity.name })
                 }
                 jsonPath("$[*].poster") {
-                    value(allEventList.map { eventEntity -> "null//event/${eventEntity.poster}" })
+                    value(allEventList.map { eventEntity -> "s3Bucket/event/${eventEntity.poster}" })
                 }
                 jsonPath("$[*].maxParticipation") {
                     value(allEventList.map { eventEntity -> eventEntity.maxParticipation })
@@ -92,7 +92,7 @@ class EventControllerTest @Autowired constructor(
             mockEventRepository.testFromIndex,
             mockEventRepository.testToIndex
         ).map { eventEntity ->
-            EventDto().createFromEntity(eventEntity)
+            EventDto().createFromEntity(eventEntity, "s3Bucket")
         }
 
         val allEventList = mockEventRepository.allTestEventList.subList(
@@ -117,7 +117,7 @@ class EventControllerTest @Autowired constructor(
                     value(allEventList.map { eventEntity -> eventEntity.name })
                 }
                 jsonPath("$[*].poster") {
-                    value(allEventList.map { eventEntity -> "null//event/${eventEntity.poster}" })
+                    value(allEventList.map { eventEntity -> "s3Bucket/event/${eventEntity.poster}" })
                 }
                 jsonPath("$[*].maxParticipation") {
                     value(allEventList.map { eventEntity -> eventEntity.maxParticipation })

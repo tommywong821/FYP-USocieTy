@@ -69,10 +69,10 @@ class EventServiceTest {
             mockEventRepository.testPageNumWithoutSid,
             mockEventRepository.testPageSizeWithoutSid
         ).map { eventEntity ->
-            EventDto().createFromEntity(eventEntity)
+            EventDto().createFromEntity(eventEntity, "")
         }
 
-        assertIterableEquals(allEvent, expectedResult)
+        assertIterableEquals(expectedResult, allEvent)
     }
 
     @Test
@@ -203,6 +203,6 @@ class EventServiceTest {
 
         assertEquals(mockEventEntity.name, eventDto.name)
         assertEquals(mockEventEntity.societyEntity.name, eventDto.society)
-        assertEquals("null/${societyEntity.name.replace(' ', '+')}/event/${mockEventEntity.poster}", eventDto.poster)
+        assertEquals("${societyEntity.name.replace(' ', '+')}/event/${mockEventEntity.poster}", eventDto.poster)
     }
 }
