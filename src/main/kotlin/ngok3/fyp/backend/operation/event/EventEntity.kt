@@ -18,7 +18,7 @@ open class EventEntity(
     open var location: String = "",
     open var startDate: LocalDateTime = LocalDateTime.now(ZoneId.of("Asia/Hong_Kong")),
     open var endDate: LocalDateTime = LocalDateTime.now(ZoneId.of("Asia/Hong_Kong")),
-    open var category: EventCategory? = null,
+    @Enumerated(EnumType.STRING) open var category: EventCategory? = null,
     open var description: String = "",
     open var fee: Double = -1.0,
     @Version open var version: Long = 0
