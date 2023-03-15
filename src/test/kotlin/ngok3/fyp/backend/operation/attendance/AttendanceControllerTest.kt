@@ -59,11 +59,13 @@ class AttendanceControllerTest @Autowired constructor(
                 UUID.randomUUID().toString(),
                 "nickname 1",
                 LocalDateTime.now().toString(),
+                LocalDateTime.now().toString(),
                 "test event 1"
             ),
             StudentAttendanceDto(
                 UUID.randomUUID().toString(),
                 "nickname 2",
+                LocalDateTime.now().toString(),
                 LocalDateTime.now().toString(),
                 "test event 2"
             ),
@@ -95,6 +97,9 @@ class AttendanceControllerTest @Autowired constructor(
                 }
                 jsonPath("$[*].attendanceCreatedAt") {
                     value(studentAttendanceDtoList.map { studentAttendance -> studentAttendance.attendanceCreatedAt })
+                }
+                jsonPath("$[*].attendanceUpdatedAt") {
+                    value(studentAttendanceDtoList.map { studentAttendance -> studentAttendance.attendanceUpdatedAt })
                 }
                 jsonPath("$[*].eventName") {
                     value(studentAttendanceDtoList.map { studentAttendance -> studentAttendance.eventName })
