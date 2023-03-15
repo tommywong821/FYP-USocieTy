@@ -156,4 +156,17 @@ export class ApiService {
 
     this.restful.put(`${environment.backend_url}/enrolledEventRecord`, body);
   }
+
+
+
+  //Society
+  getAllSociety(
+    pageNum = 0,
+    pageSize = 12,
+  ): Observable<any> {
+    return this.restful.get<any>(
+      `${environment.backend_url}/society?pageNum=${pageNum}&pageSize=${pageSize}`
+    );
+  }
+
 }
