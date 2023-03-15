@@ -160,7 +160,7 @@ class EventControllerTest @Autowired constructor(
             location = "update location",
             startDate = "2022-01-10T12:10:10.222Z",
             endDate = "2022-01-15T12:10:10.222Z",
-            category = "update category",
+            category = EventCategory.OUTDOOR,
             description = "update description",
             fee = 12.3
         )
@@ -185,7 +185,7 @@ class EventControllerTest @Autowired constructor(
                         "event",
                         "test.json",
                         MediaType.APPLICATION_JSON.toString(),
-                        "{\"name\":\"update name\",\"maxParticipation\":10,\"applyDeadline\":\"2022-01-12T12:10:10.222Z\",\"location\":\"update location\",\"startDate\":\"2022-01-10T12:10:10.222Z\",\"endDate\":\"2022-01-15T12:10:10.222Z\",\"category\":\"update category\",\"description\":\"update description\",\"fee\":12.3}".encodeToByteArray()
+                        "{\"name\":\"update name\",\"maxParticipation\":10,\"applyDeadline\":\"2022-01-12T12:10:10.222Z\",\"location\":\"update location\",\"startDate\":\"2022-01-10T12:10:10.222Z\",\"endDate\":\"2022-01-15T12:10:10.222Z\",\"category\":\"OUTDOOR\",\"description\":\"update description\",\"fee\":12.3}".encodeToByteArray()
                     )
                 )
                 .cookie(Cookie("token", mockAuthRepository.validUserCookieToken))
@@ -203,7 +203,7 @@ class EventControllerTest @Autowired constructor(
             location = "update location",
             startDate = "2022-01-10T12:10:10.222Z",
             endDate = "2022-01-15T12:10:10.222Z",
-            category = "update category",
+            category = EventCategory.OUTDOOR,
             description = "update description",
             fee = 12.3,
             society = "test society"
@@ -242,7 +242,7 @@ class EventControllerTest @Autowired constructor(
                 value(eventDto.endDate)
             }
             jsonPath("$.category") {
-                value(eventDto.category)
+                value(eventDto.category.toString())
             }
             jsonPath("$.description") {
                 value(eventDto.description)
