@@ -73,6 +73,10 @@ class AttendanceServiceTest {
         } returns Optional.of(eventEntity)
 
         every {
+            attendanceRepository.findById(any())
+        } returns Optional.empty()
+
+        every {
             attendanceRepository.save(any())
         } returns attendanceEntity
 

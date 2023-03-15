@@ -17,6 +17,8 @@ open class StudentEntity(
     open var nickname: String = "",
     open var mail: String = "",
 ) : BaseEntity() {
+    open var cardId: String = ""
+
     @OneToMany(mappedBy = "studentEntity")
     open var enrolledEventRecordEntities: MutableSet<EnrolledEventRecordEntity> = mutableSetOf()
 

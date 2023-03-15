@@ -29,7 +29,7 @@ class StudentControllerTest @Autowired constructor(
     @Test
     @DisplayName("GET /student?itsc={itsc}")
     fun `should return test student profile with itsc`() {
-        every { studentService.getStudentProfile(mockStudentRepository.testItsc, "") } returns StudentDto(
+        every { studentService.getStudentProfile(mockStudentRepository.testItsc, "", "") } returns StudentDto(
             mockStudentEntity.uuid.toString(),
             mockStudentEntity.itsc,
             mockStudentEntity.nickname,
@@ -57,10 +57,10 @@ class StudentControllerTest @Autowired constructor(
     }
 
     @Test
-    @DisplayName("GET /student?itsc={itsc}")
+    @DisplayName("GET /student?uuid={mockUuid}")
     fun `should return test student profile with uuid`() {
         val mockUuid: String = UUID.randomUUID().toString()
-        every { studentService.getStudentProfile("", mockUuid) } returns StudentDto(
+        every { studentService.getStudentProfile("", mockUuid, "") } returns StudentDto(
             mockStudentEntity.uuid.toString(),
             mockStudentEntity.itsc,
             mockStudentEntity.nickname,
@@ -68,6 +68,36 @@ class StudentControllerTest @Autowired constructor(
         )
 
         mockMvc.get("/student?uuid=${mockUuid}")
+            .andDo { print() }
+            .andExpect {
+                status { isOk() }
+                content { contentType(MediaType.APPLICATION_JSON) }
+                jsonPath("$.uuid") {
+                    value(mockStudentRepository.testStudentEntity.uuid.toString())
+                }
+                jsonPath("$.itsc") {
+                    value(mockStudentRepository.testStudentEntity.itsc)
+                }
+                jsonPath("$.nickname") {
+                    value(mockStudentRepository.testStudentEntity.nickname)
+                }
+                jsonPath("$.mail") {
+                    value(mockStudentRepository.testStudentEntity.mail)
+                }
+            }
+    }
+
+    @Test
+    @DisplayName("GET /student?cardId={cardId}")
+    fun `should return test student profile with cardId`() {
+        every { studentService.getStudentProfile("", "", "cardId") } returns StudentDto(
+            mockStudentEntity.uuid.toString(),
+            mockStudentEntity.itsc,
+            mockStudentEntity.nickname,
+            mockStudentEntity.mail,
+        )
+
+        mockMvc.get("/student?cardId=cardId")
             .andDo { print() }
             .andExpect {
                 status { isOk() }

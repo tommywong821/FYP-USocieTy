@@ -1,5 +1,6 @@
 package ngok3.fyp.backend.operation.event.dto
 
+import ngok3.fyp.backend.operation.event.EventCategory
 import ngok3.fyp.backend.operation.event.EventEntity
 import ngok3.fyp.backend.util.DateUtil
 import java.io.Serializable
@@ -16,7 +17,7 @@ data class EventDto(
     val location: String = "",
     val startDate: String = "",
     val endDate: String = "",
-    val category: String = "",
+    val category: EventCategory? = null,
     val description: String = "",
     val fee: Double = 0.0,
     val version: Long = 0,
@@ -29,10 +30,10 @@ data class EventDto(
         id = eventEntity.uuid.toString(),
         name = eventEntity.name,
         maxParticipation = eventEntity.maxParticipation,
-        applyDeadline = dateUtil.convertLocalDateTimeToString(eventEntity.applyDeadline),
+        applyDeadline = dateUtil.convertLocalDateTimeToStringWithTime(eventEntity.applyDeadline),
         location = eventEntity.location,
-        startDate = dateUtil.convertLocalDateTimeToString(eventEntity.startDate),
-        endDate = dateUtil.convertLocalDateTimeToString(eventEntity.endDate),
+        startDate = dateUtil.convertLocalDateTimeToStringWithTime(eventEntity.startDate),
+        endDate = dateUtil.convertLocalDateTimeToStringWithTime(eventEntity.endDate),
         category = eventEntity.category,
         description = eventEntity.description,
         fee = eventEntity.fee,
