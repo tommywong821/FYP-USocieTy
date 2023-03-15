@@ -72,7 +72,7 @@ class EventControllerTest @Autowired constructor(
                 }
                 jsonPath("$[*].applyDeadline") {
                     value(allEventList.map { eventEntity ->
-                        dateUtil.convertLocalDateTimeToString(eventEntity.applyDeadline)
+                        dateUtil.convertLocalDateTimeToStringWithTime(eventEntity.applyDeadline)
                     })
                 }
                 jsonPath("$[*].location") {
@@ -124,7 +124,7 @@ class EventControllerTest @Autowired constructor(
                 }
                 jsonPath("$[*].applyDeadline") {
                     value(allEventList.map { eventEntity ->
-                        dateUtil.convertLocalDateTimeToString(eventEntity.applyDeadline)
+                        dateUtil.convertLocalDateTimeToStringWithTime(eventEntity.applyDeadline)
                     })
                 }
                 jsonPath("$[*].location") {

@@ -9,10 +9,15 @@ import java.time.format.DateTimeFormatter
 @Component
 class DateUtil {
     val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("M/d/yyyy")
+    val formatterWithHour: DateTimeFormatter = DateTimeFormatter.ofPattern("M/d/yyyy HH:mm")
     val formatterWithTimeStamp: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSX")
     val currentLocalDateTime: LocalDateTime = LocalDateTime.now(ZoneId.of("Asia/Hong_Kong"))
     fun convertLocalDateTimeToString(localDateTime: LocalDateTime?): String {
         return if (localDateTime != null) localDateTime.format(formatter) else ""
+    }
+
+    fun convertLocalDateTimeToStringWithTime(localDateTime: LocalDateTime?): String {
+        return if (localDateTime != null) localDateTime.format(formatterWithHour) else ""
     }
 
     fun convertStringToLocalDateTime(dateString: String): LocalDateTime {
