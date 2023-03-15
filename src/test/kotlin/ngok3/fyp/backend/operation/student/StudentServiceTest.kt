@@ -21,7 +21,7 @@ class StudentServiceTest() {
         every { studentRepository.findByItsc(mockStudentEntityItsc) } returns Optional.of(mockStudentEntity)
 
         //mock service operation
-        val mockStudentDto: StudentDto = studentService.getStudentProfile(mockStudentEntityItsc, "")
+        val mockStudentDto: StudentDto = studentService.getStudentProfile(mockStudentEntityItsc, "", "")
 
         //test value
         assertEquals(mockStudentDto.itsc, mockStudentEntity.itsc)
@@ -40,7 +40,26 @@ class StudentServiceTest() {
         every { studentRepository.findById(UUID.fromString(mockUuid)) } returns Optional.of(mockStudentEntity)
 
         //mock service operation
-        val mockStudentDto: StudentDto = studentService.getStudentProfile("", mockUuid)
+        val mockStudentDto: StudentDto = studentService.getStudentProfile("", mockUuid, "")
+
+        //test value
+        assertEquals(mockStudentDto.itsc, mockStudentEntity.itsc)
+        assertEquals(mockStudentDto.nickname, mockStudentEntity.nickname)
+        assertEquals(mockStudentDto.mail, mockStudentEntity.mail)
+    }
+
+    @Test
+    fun `should get test student profile with cardId`() {
+        //create mock student entity
+        val mockStudentEntity: StudentEntity = mockStudentRepository.testStudentEntity
+        val mockStudentEntityItsc: String = mockStudentRepository.testItsc
+        val mockUuid: String = UUID.randomUUID().toString()
+
+        //mock db operation
+        every { studentRepository.findByCardId("cardId") } returns Optional.of(mockStudentEntity)
+
+        //mock service operation
+        val mockStudentDto: StudentDto = studentService.getStudentProfile("", "", "cardId")
 
         //test value
         assertEquals(mockStudentDto.itsc, mockStudentEntity.itsc)
