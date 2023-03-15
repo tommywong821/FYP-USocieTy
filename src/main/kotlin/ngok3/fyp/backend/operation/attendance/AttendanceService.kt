@@ -49,11 +49,13 @@ class AttendanceService(
         attendanceKey.eventUuid = UUID.fromString(eventId)
         attendanceKey.studentUuid = UUID.fromString(studentId)
 
-        val attendanceEntity: AttendanceEntity = AttendanceEntity()
-        attendanceEntity.attendanceKey = attendanceKey
-        attendanceEntity.eventEntity = eventEntity
-        attendanceEntity.studentEntity = studentEntity
-
+        val attendanceEntity: AttendanceEntity = attendanceRepository.findById(attendanceKey).orElseGet {
+            val newAttendanceEntity: AttendanceEntity = AttendanceEntity()
+            newAttendanceEntity.attendanceKey = attendanceKey
+            newAttendanceEntity.eventEntity = eventEntity
+            newAttendanceEntity.studentEntity = studentEntity
+            return@orElseGet newAttendanceEntity
+        }
         attendanceRepository.save(attendanceEntity)
     }
 
@@ -63,6 +65,7 @@ class AttendanceService(
                 attendanceEntity.studentEntity?.uuid.toString(),
                 attendanceEntity.studentEntity?.nickname,
                 attendanceEntity.createdAt.toString(),
+                attendanceEntity.updatedAt.toString(),
                 attendanceEntity.eventEntity?.name
             )
         }
