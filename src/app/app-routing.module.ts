@@ -11,6 +11,7 @@ import {AuthGuard} from './services/auth.guard';
 import {MainComponent} from './main/main.component';
 import {EventComponent} from './event/event.component';
 import {EventViewComponent} from './event/event-view/event-view.component';
+import { SocietyComponent } from './society/society.component';
 
 export enum Path {
   Main = 'main',
@@ -22,6 +23,7 @@ export enum Path {
   ViewEvent = 'view',
   Finance = 'finance',
   CreateFinance = 'create',
+  Society="society",
 }
 
 const routes: Routes = [
@@ -71,6 +73,10 @@ const routes: Routes = [
             component: FinanceCreateComponent,
           },
         ],
+      },
+      {
+        path: Path.Society,
+        component: SocietyComponent,
       },
     ],
   },

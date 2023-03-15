@@ -18,6 +18,11 @@ export class MainComponent implements OnInit {
       icon: faHome,
     },
     {
+      name: 'Societies',
+      link: Path.Society,
+      icon: faUsers,
+    },
+    {
       name: 'Event',
       link: Path.Event,
       icon: faUsers,
