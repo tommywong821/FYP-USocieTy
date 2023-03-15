@@ -4,6 +4,7 @@ import 'package:ngok3fyp_frontend_flutter/model/society.dart';
 import 'package:ngok3fyp_frontend_flutter/screens/home_screen/app_bar_widget.dart';
 import 'package:ngok3fyp_frontend_flutter/screens/home_screen/tab_bar_widget.dart';
 import 'package:ngok3fyp_frontend_flutter/screens/home_screen/event_carousel_slider_widget.dart';
+import 'package:ngok3fyp_frontend_flutter/screens/home_screen/society_carousel_slider_widget.dart';
 import 'package:ngok3fyp_frontend_flutter/model/styles.dart';
 import 'package:ngok3fyp_frontend_flutter/model/event.dart';
 import 'package:ngok3fyp_frontend_flutter/services/api_service.dart';
@@ -23,6 +24,8 @@ class _HomeWidget extends State<HomeWidget> {
   late List<Event> enrolledEventList;
   late Future<List<Society>> societyFuture;
   late List<Society> societyList;
+  //spare
+  List<String> societyNameList = [];
 
   Future<void> initEvent() async {
     enrolledEventListFuture = ApiService().getAllEvent();
@@ -32,6 +35,7 @@ class _HomeWidget extends State<HomeWidget> {
   Future<void> initSociety() async {
     societyFuture = ApiService().getAllSociety();
     societyList = await societyFuture;
+    societyList.forEach((element) => societyNameList.add(element.getName()));
   }
 
   @override
@@ -89,10 +93,8 @@ class _HomeWidget extends State<HomeWidget> {
                             padding: const EdgeInsets.only(right: 15),
                             child: GestureDetector(
                               onTap: () {
-                                Navigator.pushNamed(
-                                  context,
-                                  '/inc',
-                                );
+                                Navigator.pushNamed(context, '/inc',
+                                    arguments: enrolledEventList);
                               },
                               onTapUp: (details) => {
                                 setState(() {
@@ -146,10 +148,8 @@ class _HomeWidget extends State<HomeWidget> {
                             padding: const EdgeInsets.only(right: 15),
                             child: GestureDetector(
                               onTap: () {
-                                Navigator.pushNamed(
-                                  context,
-                                  '/society',
-                                );
+                                Navigator.pushNamed(context, '/allsociety',
+                                    arguments: societyList);
                               },
                               onTapUp: (details) => {
                                 setState(() {
@@ -180,15 +180,18 @@ class _HomeWidget extends State<HomeWidget> {
                     //Society Carousel
                     Padding(
                       padding: const EdgeInsets.only(top: 10, bottom: 10),
-                      child: EventCarouselSliderWidget(
-                        event: enrolledEventList,
+                      child: SocietyCarouselSliderWidget(
+                        societyList: societyList,
                       ),
                     ),
                   ],
                 ))),
               ]);
             }
-            return Center(child: CircularProgressIndicator());
+            return Center(
+                child: CircularProgressIndicator(
+              color: Styles.primaryColor,
+            ));
           },
         ));
   }

@@ -3,7 +3,8 @@ import 'dart:collection';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:ngok3fyp_frontend_flutter/model/event.dart';
-import 'package:ngok3fyp_frontend_flutter/screens/calendar_screen/horizontal_card_widget.dart';
+import 'package:ngok3fyp_frontend_flutter/model/styles.dart';
+import 'package:ngok3fyp_frontend_flutter/screens/home_screen/horizontal_event_card_widget.dart';
 import 'package:ngok3fyp_frontend_flutter/services/api_service.dart';
 import 'package:ngok3fyp_frontend_flutter/services/calendar_utils.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -48,8 +49,7 @@ class _CalendarWidgetState extends State<CalendarWidget> {
     //count number to create flexible list dot in calendar
     final kEventSource = Map<DateTime, List<Event>>();
     eventList.forEach((element) {
-      DateTime elementDate =
-          DateFormat('M/dd/y').parse(element.startDate).toUtc();
+      DateTime elementDate = DateFormat('M/dd/y').parse(element.startDate);
       if (!kEventSource.containsKey(elementDate)) {
         kEventSource[elementDate] = List<Event>.generate(1, (index) => element);
       } else {
@@ -86,7 +86,10 @@ class _CalendarWidgetState extends State<CalendarWidget> {
           if (snapshot.hasData) {
             return _buildFullUi();
           }
-          return Center(child: CircularProgressIndicator());
+          return Center(
+              child: CircularProgressIndicator(
+            color: Styles.primaryColor,
+          ));
         },
       ),
     );
@@ -136,9 +139,8 @@ class _CalendarWidgetState extends State<CalendarWidget> {
         return ListView.builder(
           itemCount: eventList.length,
           itemBuilder: (context, index) {
-            return HorizontalCardWidget(
-              eventID: index,
-              eventObj: eventList[index],
+            return HorizontalEventCardWidget(
+              event: eventList[index],
             );
           },
         );

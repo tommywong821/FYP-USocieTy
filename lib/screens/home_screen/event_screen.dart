@@ -1,8 +1,8 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ngok3fyp_frontend_flutter/model/styles.dart';
 import 'package:ngok3fyp_frontend_flutter/model/event.dart';
 import 'package:ngok3fyp_frontend_flutter/services/api_service.dart';
+import 'package:intl/intl.dart';
 
 class EventScreen extends StatefulWidget {
   const EventScreen({
@@ -16,6 +16,8 @@ class EventScreen extends StatefulWidget {
 class _EventScreenState extends State<EventScreen> {
   @override
   Widget build(BuildContext context) {
+    final DateFormat dateFormatter = DateFormat('E , MMM d');
+    final DateFormat parseDateFormatter = DateFormat('M/dd/y');
     final Event event = ModalRoute.of(context)!.settings.arguments as Event;
     String eventImage = event.poster;
     String eventTitle = event.name;
@@ -164,7 +166,13 @@ class _EventScreenState extends State<EventScreen> {
                                       padding: const EdgeInsets.only(
                                         left: 15,
                                       ),
-                                      child: Text("Mon, Nov 28",
+                                      child: Text(
+                                          dateFormatter
+                                              .format(DateTime.parse(
+                                                  parseDateFormatter
+                                                      .parse(eventDate)
+                                                      .toString()))
+                                              .toString(),
                                           style: Styles.eventScreenBlackText),
                                     ),
                                     //Event time
@@ -267,9 +275,13 @@ Widget BottomRegisterButton(BuildContext context, Event event) {
                 context: context,
                 builder: (context) => AlertDialog(
                   title: Text('Are you sure?'),
-                  content: Text('***'),
+                  content: Text(' '),
                   actions: [
                     ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor:
+                              Styles.primaryColor, // Background color
+                        ),
                         onPressed: () async {
                           bool response =
                               await ApiService().registerEvent(event.id);
@@ -282,6 +294,10 @@ Widget BottomRegisterButton(BuildContext context, Event event) {
                         },
                         child: Text('Yes')),
                     ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor:
+                              Styles.primaryColor, // Background color
+                        ),
                         onPressed: () {
                           Navigator.pop(context);
                         },

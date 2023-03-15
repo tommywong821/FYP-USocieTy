@@ -6,6 +6,7 @@ import 'package:ngok3fyp_frontend_flutter/screens/welcome_screen/welcome_screen.
 import 'package:ngok3fyp_frontend_flutter/screens/home_screen/home_screen.dart';
 import 'package:ngok3fyp_frontend_flutter/screens/incoming_event_screen.dart';
 import 'package:ngok3fyp_frontend_flutter/screens/society_screen.dart';
+import 'package:ngok3fyp_frontend_flutter/screens/home_screen/all_society_screen.dart';
 
 // void main() => runApp(MyApp());
 void main() async {
@@ -31,6 +32,7 @@ class MyApp extends StatelessWidget {
         '/event': (context) => const EventScreen(),
         '/inc': (context) => const IncomingEvnetScreen(),
         '/society': (context) => const SocietyScreen(),
+        '/allsociety': (context) => const AllSocietyScreen(),
       },
       navigatorKey: navigatorKey,
     );

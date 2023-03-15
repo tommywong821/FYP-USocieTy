@@ -90,7 +90,7 @@ class ApiService {
   }
 
   Future<List<EnrolledEvent>> getAllEnrolledEvent() async {
-    final uri = Uri.https(backendDomain, '/event/enrolled',
+    final uri = Uri.https(backendDomain, '/enrolledEventRecord',
         {'itsc': await _storageService.readSecureData(ITSC_KEY)});
     final response = await _dio.getUri(uri);
 
