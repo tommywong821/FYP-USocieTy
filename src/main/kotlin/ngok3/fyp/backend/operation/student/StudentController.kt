@@ -16,8 +16,9 @@ class StudentController(
     fun getStudentProfile(
         @RequestParam(name = "itsc", required = false, defaultValue = "") itsc: String,
         @RequestParam(name = "uuid", required = false, defaultValue = "") uuid: String,
+        @RequestParam(name = "cardId", required = false, defaultValue = "") cardId: String,
     ): StudentDto {
-        return studentService.getStudentProfile(itsc, uuid)
+        return studentService.getStudentProfile(itsc, uuid, cardId)
     }
 }
 
