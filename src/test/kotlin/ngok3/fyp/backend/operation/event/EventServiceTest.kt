@@ -124,7 +124,7 @@ class EventServiceTest {
             location = "update location",
             startDate = "2022-01-10T12:10:10.222Z",
             endDate = "2022-01-15T12:10:10.222Z",
-            category = "update category",
+            category = EventCategory.OUTDOOR,
             description = "update description",
             fee = 12.3
         )

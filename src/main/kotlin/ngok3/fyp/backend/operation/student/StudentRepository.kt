@@ -33,4 +33,7 @@ where s.uuid in ?1 and enrolledSocietyRecordEntity.societyEntity.name = ?2 and e
         status: EnrolledStatus
     ): List<StudentEntity>
 
+
+    @Query("select s from StudentEntity s where s.cardId = ?1")
+    fun findByCardId(cardId: String): Optional<StudentEntity>
 }
