@@ -19,7 +19,6 @@ import {FinanceCreateComponent} from './finance/finance-create/finance-create.co
 import {FinancePieChartComponent} from './finance/finance-pie-chart/finance-pie-chart.component';
 import {FinanceTableComponent} from './finance/finance-table/finance-table.component';
 import {FinanceComponent} from './finance/finance.component';
-import {HomeComponent} from './home/home.component';
 import {NetworkRequestInterceptor} from './interceptor/network-request-interceptor';
 import {NetworkResponseInterceptor} from './interceptor/network-response-interceptor';
 import {MainComponent} from './main/main.component';
@@ -30,7 +29,6 @@ registerLocaleData(en);
 @NgModule({
   declarations: [
     AppComponent,
-    HomeComponent,
     SignInComponent,
     EventCreateComponent,
     MainComponent,

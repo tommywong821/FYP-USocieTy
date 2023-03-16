@@ -24,8 +24,7 @@ export interface EventFormData {
 }
 
 export enum EventCategory {
-  OrientationCamp = 'orientation camp',
-  Workshop = 'workshop',
-  VoluntaryWork = 'voluntary work',
-  Other = 'other',
+  Sport = 'Sport',
+  Outdoor = 'Outdoor',
+  Indoor = 'Indoor',
 }
