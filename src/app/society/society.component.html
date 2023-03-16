@@ -1,32 +1,31 @@
 <div class="m-5 px-8">
-    <div class="my-5 space-y-6 py-4">
-      <div class="flex bg-white">
-        <h1 class="text-xl">Society Management</h1>
-      </div>
+  <div class="my-5 space-y-6 py-4">
+    <div class="flex bg-white">
+      <h1 class="text-xl">Society Management</h1>
     </div>
-    <div>
-      <nz-table
-        #societyTable
-        [nzData]="societyList"
-      >
-        <thead>
-          <tr>
-            <th>
-              Society name
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr
-            class="cursor-pointer"
-            *ngFor="let data of societyTable.data"
-          >
-            <td >{{data.name }}</td>
-
-          </tr>
-        </tbody>
-      </nz-table>
-    </div>
-  
   </div>
-  
+  <div>
+    <nz-table
+      #societyTable
+      [nzData]="societyList"
+    >
+      <thead>
+        <tr>
+          <th>
+            Society Name
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          class="cursor-pointer"
+          *ngFor="let data of societyTable.data"
+        >
+          <td (click)="toggleViewEvent(data.name!!)">{{data.name }}</td>
+
+        </tr>
+      </tbody>
+    </nz-table>
+  </div>
+
+</div>

@@ -26,6 +26,7 @@ import {MainComponent} from './main/main.component';
 import {NgZorroAntdModule} from './ng-zorro-antd.module';
 import {EventViewComponent} from './event/event-view/event-view.component';
 import { SocietyComponent } from './society/society.component';
+import { SocietyViewComponent } from './society/society-view/society-view.component';
 
 registerLocaleData(en);
 
@@ -45,6 +46,7 @@ registerLocaleData(en);
     FinanceCreateComponent,
     EventViewComponent,
     SocietyComponent,
+    SocietyViewComponent,
   ],
   imports: [
     BrowserModule,

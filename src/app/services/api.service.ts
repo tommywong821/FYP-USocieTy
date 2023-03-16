@@ -169,4 +169,11 @@ export class ApiService {
     );
   }
 
+  
+  getAllSocietyMember(societyName:string|null): Observable<any> {
+    return this.restful.get<any>(
+      `${environment.backend_url}/society/member?societyName=${societyName}`
+    );
+  }
+
 }

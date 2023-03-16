@@ -12,6 +12,7 @@ import {MainComponent} from './main/main.component';
 import {EventComponent} from './event/event.component';
 import {EventViewComponent} from './event/event-view/event-view.component';
 import { SocietyComponent } from './society/society.component';
+import { SocietyViewComponent } from './society/society-view/society-view.component';
 
 export enum Path {
   Main = 'main',
@@ -76,7 +77,16 @@ const routes: Routes = [
       },
       {
         path: Path.Society,
-        component: SocietyComponent,
+        children: [
+          {
+            path: '',
+            component: SocietyComponent,
+          },
+          {
+            path: Path.ViewEvent,
+            component: SocietyViewComponent,
+          },
+        ],
       },
     ],
   },

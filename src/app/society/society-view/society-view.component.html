@@ -1,0 +1,47 @@
+<div class="m-5 px-8">
+    <div class="my-5 space-y-6 py-4">
+      <div class="flex bg-white">
+        <h1 class="text-xl">Society Member</h1>
+      </div>
+    </div>
+    <div>
+<nz-table 
+#societyMemberTable
+[nzData]="societyMemberlist"
+>
+<thead>
+    <tr>
+        <th>
+         ITSC
+        </th>
+        <th>
+         NAME
+        </th>
+        <th>
+         ROLES
+        </th>
+        <th>
+        ACTION
+        </th>
+      </tr>
+</thead>
+<tbody>
+  <tr
+  class="cursor-pointer" 
+  *ngFor="let data of societyMemberTable.data">
+    <td>{{data.itsc}}</td>
+    <td>{{data.nickname}}</td>
+    <td>{{data.roles}}</td>
+    <td>            <button
+        nz-button
+        nzDanger
+        nzType="primary"
+      >
+        Remove
+      </button></td>
+  </tr>
+</tbody>
+</nz-table>
+</div>
+  
+</div>
