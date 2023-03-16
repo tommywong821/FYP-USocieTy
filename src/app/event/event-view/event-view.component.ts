@@ -19,6 +19,7 @@ import {Event} from '../../model/event';
 })
 export class EventViewComponent implements OnInit {
   EventProperty = EventProperty;
+  EventEnrollmentStatus = EventEnrollmentStatus;
 
   enrollmentTableColumn = [{title: 'itsc'}, {title: 'payment status'}, {title: 'enrollment status'}];
 

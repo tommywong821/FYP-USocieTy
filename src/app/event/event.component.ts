@@ -20,7 +20,7 @@ export const EventTableColumn = [
     title: 'Location',
   },
   {
-    title: 'Max Participation',
+    title: 'Max Participant',
   },
   {
     title: 'Fee',
@@ -89,10 +89,6 @@ export class EventComponent implements OnInit {
 
   changePageIndex(): void {
     this.refreshEvents$.next({});
-  }
-
-  getEventPropByKey(event: Event, key: string): any {
-    return event[key as keyof Event];
   }
 
   toggleCreateEvent(): void {

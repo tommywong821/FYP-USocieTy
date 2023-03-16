@@ -60,7 +60,25 @@
           <tr *ngFor="let enrollmentRecord of enrollmentTable.data">
             <td>{{ enrollmentRecord.itsc }}</td>
             <td>{{ enrollmentRecord.paymentStatus }}</td>
-            <td>{{ enrollmentRecord.eventEnrollmentStatus }}</td>
+            <td>
+              <ng-container [ngSwitch]="enrollmentRecord.eventEnrollmentStatus">
+                <nz-badge
+                  nzStatus="success"
+                  [nzText]="enrollmentRecord.eventEnrollmentStatus"
+                  *ngSwitchCase="EventEnrollmentStatus.Enrolled"
+                ></nz-badge>
+                <nz-badge
+                  nzStatus="warning"
+                  [nzText]="enrollmentRecord.eventEnrollmentStatus"
+                  *ngSwitchCase="EventEnrollmentStatus.Pending"
+                ></nz-badge>
+                <nz-badge
+                  nzStatus="error"
+                  [nzText]="enrollmentRecord.eventEnrollmentStatus"
+                  *ngSwitchCase="EventEnrollmentStatus.Rejected"
+                ></nz-badge>
+              </ng-container>
+            </td>
           </tr>
         </tbody>
       </nz-table>

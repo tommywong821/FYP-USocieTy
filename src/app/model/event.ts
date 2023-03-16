@@ -54,6 +54,7 @@ export enum PaymentStatus {
 export enum EventEnrollmentStatus {
   Pending = 'Pending',
   Enrolled = 'Enrolled',
+  Rejected = 'Rejected',
 }
 
 export interface EventEnrollmentRecord {
