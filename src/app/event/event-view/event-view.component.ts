@@ -104,5 +104,6 @@ export class EventViewComponent implements OnInit {
       eventEnrollmentStatus: val.eventEnrollmentStatus,
     }));
     this.ApiService.updateEventEnrollmentRecords(this.eventId, records);
+    this.toBeUpdatedEnrollmentRecords = {};
   }
 }
