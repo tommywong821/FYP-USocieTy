@@ -35,7 +35,7 @@ export const EventTableColumn = [
     title: 'End Date',
   },
   {
-    title: '',
+    title: 'Action',
   },
 ];
 

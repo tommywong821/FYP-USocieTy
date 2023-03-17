@@ -8,7 +8,7 @@ import {Request} from '../api/common';
 import {FinanceChartRecord} from '../finance/model/IFinanceChartRecord';
 import {FinanceRecordTotalNumber} from '../finance/model/IFinanceRecordTotalNumber';
 import {FinanceTableRecord} from '../finance/model/IFinanceTableRecord';
-import {Event} from '../model/event';
+import {Event, EventEnrollmentRecord} from '../model/event';
 
 @Injectable({
   providedIn: 'root',
@@ -147,13 +147,16 @@ export class ApiService {
     this.restful.delete(`${environment.backend_url}/event/${eventId}`);
   }
 
-  updateEnrollmentStatus(eventId: string, studentId: string, status: string): void {
-    const body = {
-      eventId,
-      studentId,
-      status,
-    };
+  getEventEnrollmentRecord(eventId: string, pageIndex: number, pageSize: number): Observable<EventEnrollmentRecord[]> {
+    const queryParams = new HttpParams().append('pageIndex', pageIndex).append('pageSize', pageSize);
 
-    this.restful.put(`${environment.backend_url}/enrolledEventRecord`, body);
+    return this.restful.get<EventEnrollmentRecord[]>(`${environment.backend_url}/event/${eventId}`, {
+      params: queryParams,
+    });
+  }
+
+  updateEventEnrollmentRecords(eventId: string, records: EventEnrollmentRecord[]): void {
+    // TODO
+    // this.restful.put(`${environment.backend_url}/enrolledEventRecord`, body);
   }
 }

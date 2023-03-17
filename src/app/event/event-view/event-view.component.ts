@@ -12,6 +12,11 @@ import {
 import {ApiService} from 'src/app/services/api.service';
 import {Event} from '../../model/event';
 
+export interface EnrollmentStatus {
+  paymentStatus: PaymentStatus;
+  eventEnrollmentStatus: EventEnrollmentStatus;
+}
+
 @Component({
   selector: 'app-event-view',
   templateUrl: './event-view.component.html',
@@ -20,6 +25,7 @@ import {Event} from '../../model/event';
 export class EventViewComponent implements OnInit {
   EventProperty = EventProperty;
   EventEnrollmentStatus = EventEnrollmentStatus;
+  PaymentStatus = PaymentStatus;
 
   enrollmentTableColumn = [{title: 'itsc'}, {title: 'payment status'}, {title: 'enrollment status'}];
 
@@ -49,6 +55,8 @@ export class EventViewComponent implements OnInit {
   ];
   refreshEnrollmentRecords$ = new Subject();
 
+  toBeUpdatedEnrollmentRecords: Record<string, EnrollmentStatus> = {};
+
   pageIndex = 1;
   pageSize = 15;
 
@@ -63,10 +71,9 @@ export class EventViewComponent implements OnInit {
       )
       .subscribe(event => (this.event = event));
 
-    // TODO
-    // this.refreshEnrollmentRecords$
-    //   .pipe(switchMap(() => this.ApiService.(this.pageIndex, this.pageSize)))
-    //   .subscribe(event => (this.events = ([] as Event[]).concat(event)));
+    this.refreshEnrollmentRecords$
+      .pipe(switchMap(() => this.ApiService.getEventEnrollmentRecord(this.eventId, this.pageIndex, this.pageSize)))
+      .subscribe(record => (this.enrollmentRecords = ([] as EventEnrollmentRecord[]).concat(record)));
   }
 
   changePageIndex(): void {
@@ -77,7 +84,36 @@ export class EventViewComponent implements OnInit {
     this.router.navigate([Path.Main, Path.Event, Path.ViewEvent], {queryParams: {eventId: this.eventId}});
   }
 
-  updateEnrollmentStatusOfStudent(studentId: string, status: string): void {
-    this.ApiService.updateEnrollmentStatus(this.eventId, studentId, status);
+  recordPaymentStatusChanges(itsc: string, paymentStatus: PaymentStatus): void {
+    this.toBeUpdatedEnrollmentRecords[itsc] = this.toBeUpdatedEnrollmentRecords[itsc]
+      ? {...this.toBeUpdatedEnrollmentRecords[itsc], paymentStatus}
+      : this.enrollmentRecords.find(record => {
+          if (record.itsc === itsc) {
+            return {...record, paymentStatus};
+          }
+          return false;
+        })!;
+  }
+
+  recordEnrollmentStatusChanges(itsc: string, eventEnrollmentStatus: EventEnrollmentStatus): void {
+    this.toBeUpdatedEnrollmentRecords[itsc] = this.toBeUpdatedEnrollmentRecords[itsc]
+      ? {...this.toBeUpdatedEnrollmentRecords[itsc], eventEnrollmentStatus}
+      : this.enrollmentRecords.find(record => {
+          if (record.itsc === itsc) {
+            return {...record, eventEnrollmentStatus};
+          }
+          return false;
+        })!;
+  }
+
+  updateEnrollmentRecords(): void {
+    const records = Object.entries(this.toBeUpdatedEnrollmentRecords).map(([key, val]) => ({
+      itsc: key,
+      paymentStatus: val.paymentStatus,
+      eventEnrollmentStatus: val.eventEnrollmentStatus,
+    }));
+    console.log(records);
+
+    this.ApiService.updateEventEnrollmentRecords(this.eventId, records);
   }
 }
