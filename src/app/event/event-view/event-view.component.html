@@ -28,20 +28,25 @@
           {{ event.description }}
         </nz-descriptions-item>
       </nz-descriptions>
-      <button
-        nz-button
-        class="mt-6"
-        nzType="primary"
-        (click)="toggleUpdateEvent()"
-      >
-        Update Event
-      </button>
-    </div>
-    <div>
       <div class="flex">
-        <h1 class="mb-4 mr-4 text-xl">Event Enrollment Record</h1>
         <button
           nz-button
+          class="mt-6 ml-auto"
+          nzType="primary"
+          (click)="toggleUpdateEvent()"
+        >
+          Update Event
+        </button>
+      </div>
+    </div>
+    <nz-divider></nz-divider>
+    <div>
+      <div class="mb-2 flex">
+        <h1 class="mb-4 mr-4 text-xl">Event Enrollment Record</h1>
+        <button
+          class="ml-auto"
+          nz-button
+          [disabled]="objectKeys(toBeUpdatedEnrollmentRecords).length <= 0"
           nzType="primary"
           (click)="updateEnrollmentRecords()"
         >
@@ -69,7 +74,11 @@
           <tr *ngFor="let enrollmentRecord of enrollmentTable.data">
             <td>{{ enrollmentRecord.itsc }}</td>
             <td>
-              <nz-select [ngModel]="enrollmentRecord.paymentStatus">
+              <nz-select
+                [nzBorderless]="true"
+                [ngModel]="enrollmentRecord.paymentStatus"
+                (ngModelChange)="recordPaymentStatusChanges($event, enrollmentRecord.itsc)"
+              >
                 <nz-option
                   *ngFor="let paymentStatus of PaymentStatus | keyvalue"
                   [nzValue]="paymentStatus.key"
@@ -78,23 +87,11 @@
               </nz-select>
             </td>
             <td>
-              <!-- <ng-container
-                [ngSwitch]="enrollmentRecord.eventEnrollmentStatus"
+              <nz-select
+                [nzBorderless]="true"
+                [ngModel]="enrollmentRecord.eventEnrollmentStatus"
+                (ngModelChange)="recordEnrollmentStatusChanges($event, enrollmentRecord.itsc)"
               >
-                <nz-badge
-                  nzStatus="success"
-                  *ngSwitchCase="EventEnrollmentStatus.Enrolled"
-                ></nz-badge>
-                <nz-badge
-                  nzStatus="warning"
-                  *ngSwitchCase="EventEnrollmentStatus.Pending"
-                ></nz-badge>
-                <nz-badge
-                  nzStatus="error"
-                  *ngSwitchCase="EventEnrollmentStatus.Rejected"
-                ></nz-badge>
-              </ng-container> -->
-              <nz-select [ngModel]="enrollmentRecord.eventEnrollmentStatus">
                 <nz-option
                   *ngFor="let eventEnrollmentStatus of EventEnrollmentStatus | keyvalue"
                   [nzValue]="eventEnrollmentStatus.key"

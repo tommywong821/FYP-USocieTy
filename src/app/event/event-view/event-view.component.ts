@@ -23,6 +23,7 @@ export interface EnrollmentStatus {
   styleUrls: ['./event-view.component.scss'],
 })
 export class EventViewComponent implements OnInit {
+  objectKeys = Object.keys;
   EventProperty = EventProperty;
   EventEnrollmentStatus = EventEnrollmentStatus;
   PaymentStatus = PaymentStatus;
@@ -84,26 +85,16 @@ export class EventViewComponent implements OnInit {
     this.router.navigate([Path.Main, Path.Event, Path.ViewEvent], {queryParams: {eventId: this.eventId}});
   }
 
-  recordPaymentStatusChanges(itsc: string, paymentStatus: PaymentStatus): void {
+  recordPaymentStatusChanges(paymentStatus: PaymentStatus, itsc: string): void {
     this.toBeUpdatedEnrollmentRecords[itsc] = this.toBeUpdatedEnrollmentRecords[itsc]
       ? {...this.toBeUpdatedEnrollmentRecords[itsc], paymentStatus}
-      : this.enrollmentRecords.find(record => {
-          if (record.itsc === itsc) {
-            return {...record, paymentStatus};
-          }
-          return false;
-        })!;
+      : {...this.enrollmentRecords.find(record => record.itsc === itsc)!, paymentStatus};
   }
 
-  recordEnrollmentStatusChanges(itsc: string, eventEnrollmentStatus: EventEnrollmentStatus): void {
+  recordEnrollmentStatusChanges(eventEnrollmentStatus: EventEnrollmentStatus, itsc: string): void {
     this.toBeUpdatedEnrollmentRecords[itsc] = this.toBeUpdatedEnrollmentRecords[itsc]
       ? {...this.toBeUpdatedEnrollmentRecords[itsc], eventEnrollmentStatus}
-      : this.enrollmentRecords.find(record => {
-          if (record.itsc === itsc) {
-            return {...record, eventEnrollmentStatus};
-          }
-          return false;
-        })!;
+      : {...this.enrollmentRecords.find(record => record.itsc === itsc)!, eventEnrollmentStatus};
   }
 
   updateEnrollmentRecords(): void {
@@ -112,8 +103,6 @@ export class EventViewComponent implements OnInit {
       paymentStatus: val.paymentStatus,
       eventEnrollmentStatus: val.eventEnrollmentStatus,
     }));
-    console.log(records);
-
     this.ApiService.updateEventEnrollmentRecords(this.eventId, records);
   }
 }

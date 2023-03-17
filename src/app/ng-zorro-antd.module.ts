@@ -12,6 +12,7 @@ import {NzUploadModule} from 'ng-zorro-antd/upload';
 import {NzModalModule} from 'ng-zorro-antd/modal';
 import {NzDescriptionsModule} from 'ng-zorro-antd/descriptions';
 import {NzBadgeModule} from 'ng-zorro-antd/badge';
+import {NzDividerModule} from 'ng-zorro-antd/divider';
 
 @NgModule({
   imports: [
@@ -28,6 +29,7 @@ import {NzBadgeModule} from 'ng-zorro-antd/badge';
     NzModalModule,
     NzDescriptionsModule,
     NzBadgeModule,
+    NzDividerModule,
   ],
   exports: [
     NzIconModule,
@@ -43,6 +45,7 @@ import {NzBadgeModule} from 'ng-zorro-antd/badge';
     NzModalModule,
     NzDescriptionsModule,
     NzBadgeModule,
+    NzDividerModule,
   ],
 })
 export class NgZorroAntdModule {}
