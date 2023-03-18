@@ -62,8 +62,8 @@ class _StatusWidgetState extends State<StatusWidget> {
           children: [
             buildEventCard(index),
             Divider(
-              color: Colors.black,
-              height: 0,
+              thickness: 2,
+              height: 10,
             ),
           ],
         );

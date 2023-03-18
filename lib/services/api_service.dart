@@ -129,6 +129,20 @@ class ApiService {
       return false;
   }
 
+  Future<bool> registerSociety(String societyName) async {
+    final uri = Uri.https(backendDomain, '/society', {
+      'itsc': await _storageService.readSecureData(ITSC_KEY),
+      'societyName': societyName
+    });
+    final response = await _dio.postUri(
+      uri,
+    );
+    if (response.statusCode == 200)
+      return true;
+    else
+      return false;
+  }
+
   Future<List<Society>> getAllSociety(
       [num pageNum = -1, num pageSize = -1]) async {
     final uri = Uri.https(backendDomain, '/society', {

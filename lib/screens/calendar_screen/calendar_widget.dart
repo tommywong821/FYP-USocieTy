@@ -122,6 +122,10 @@ class _CalendarWidgetState extends State<CalendarWidget> {
       eventLoader: _getEventsForDay,
       startingDayOfWeek: StartingDayOfWeek.monday,
       calendarStyle: CalendarStyle(
+        todayDecoration:
+            BoxDecoration(color: Colors.grey[500], shape: BoxShape.circle),
+        selectedDecoration:
+            BoxDecoration(color: Styles.primaryColor, shape: BoxShape.circle),
         // Use `CalendarStyle` to customize the UI
         outsideDaysVisible: false,
       ),

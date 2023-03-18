@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:ngok3fyp_frontend_flutter/model/event.dart';
 import 'package:ngok3fyp_frontend_flutter/model/styles.dart';
 import 'package:ngok3fyp_frontend_flutter/model/society.dart';
 import 'package:intl/intl.dart';
+import 'package:ngok3fyp_frontend_flutter/model/screen_arguments.dart';
 
 class SocietyCarouselSliderWidget extends StatefulWidget {
+  final List<Event> eventList;
   final List<Society> societyList;
-  const SocietyCarouselSliderWidget({super.key, required this.societyList});
+  const SocietyCarouselSliderWidget(
+      {super.key, required this.eventList, required this.societyList});
 
   @override
   State<SocietyCarouselSliderWidget> createState() =>
@@ -49,11 +53,16 @@ class _SocietyCarouselSliderWidgetState
                                 ),
                               ),
                             ),
-                            Container(
-                              alignment: Alignment.center,
-                              child: Text(i.name,
-                                  style: Styles.societyCarouselSliderTitle,
-                                  overflow: TextOverflow.ellipsis),
+                            Padding(
+                              padding: const EdgeInsets.only(left: 5, right: 5),
+                              child: Container(
+                                alignment: Alignment.center,
+                                child: Text(i.name,
+                                    maxLines: 1,
+                                    style: Styles.societyCarouselSliderTitle,
+                                    textAlign: TextAlign.center,
+                                    overflow: TextOverflow.ellipsis),
+                              ),
                             ),
                             Divider(
                               thickness: 3,
@@ -78,10 +87,13 @@ class _SocietyCarouselSliderWidgetState
                         margin: EdgeInsets.all(10),
                       ),
                       onTap: () {
+                        List<Society> societyList = [];
+                        societyList.add(i);
                         Navigator.pushNamed(
                           context,
                           '/society',
-                          arguments: i,
+                          arguments:
+                              ScreenArguments(widget.eventList, societyList),
                         );
                       },
                     ),

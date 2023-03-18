@@ -47,7 +47,7 @@ class Styles {
 
 //styles for screens/society_carousel_slider_widget.dart
   static TextStyle societyCarouselSliderTitle = GoogleFonts.ptSans(
-      fontSize: 26, fontWeight: FontWeight.w600, color: Colors.black);
+      fontSize: 20, fontWeight: FontWeight.w600, color: Colors.black);
   static TextStyle societyCarouselSliderDesc = GoogleFonts.ptSans(
       fontSize: 12, fontWeight: FontWeight.w600, color: Colors.grey);
 

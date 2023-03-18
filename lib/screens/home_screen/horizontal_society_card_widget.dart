@@ -1,11 +1,14 @@
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/material.dart';
 import 'package:ngok3fyp_frontend_flutter/model/society.dart';
 import 'package:ngok3fyp_frontend_flutter/model/styles.dart';
+import 'package:ngok3fyp_frontend_flutter/model/event.dart';
+import 'package:ngok3fyp_frontend_flutter/model/screen_arguments.dart';
 
 class HorizontalSocietyCardWidget extends StatefulWidget {
   final Society society;
-  const HorizontalSocietyCardWidget({Key? key, required this.society})
+  final List<Event> eventList;
+  const HorizontalSocietyCardWidget(
+      {Key? key, required this.society, required this.eventList})
       : super(key: key);
 
   @override
@@ -24,46 +27,44 @@ class _HorizontalSocietyCardWidgetState
         //Card view
         child: Card(
           child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               //image
-              SizedBox(
-                width: cardImageWidth,
-                height: 150,
-                child: Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Colors.transparent,
-                      width: 10,
+              Column(
+                children: [
+                  SizedBox(
+                    width: cardImageWidth,
+                    height: 150,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: Colors.transparent,
+                          width: 10,
+                        ),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Icon(
+                        Icons.groups_outlined,
+                        size: 100,
+                        color: Styles.primaryColor,
+                      ),
                     ),
-                    borderRadius: BorderRadius.circular(20),
                   ),
-                  child: Icon(
-                    Icons.groups_outlined,
-                    size: 100,
-                    color: Styles.primaryColor,
-                  ),
-                ),
+                ],
               ),
               Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.only(top: 60, left: 20),
-                    child: Container(
-                      // width: MediaQuery.of(context).size.width -
-                      //     (cardImageWidth + 20),
-                      alignment: Alignment.centerLeft,
-                      child: Row(
-                        children: <Widget>[
-                          Text(
-                            widget.society.getName(),
-                            style: Styles.HCardTitle,
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 1,
-                          ),
-                        ],
-                      ),
+                  Container(
+                    alignment: Alignment.center,
+                    constraints: BoxConstraints(
+                        maxWidth: MediaQuery.of(context).size.width - 200),
+                    child: Text(
+                      widget.society.getName(),
+                      style: Styles.HCardTitle,
+                      overflow: TextOverflow.visible,
+                      maxLines: 3,
+                      textAlign: TextAlign.center,
                     ),
                   ),
                 ],
@@ -76,11 +77,10 @@ class _HorizontalSocietyCardWidgetState
           elevation: 0,
         ),
         onTap: () {
-          // Navigator.pushNamed(
-          //   context,
-          //   '/****',
-          //   arguments: eventID
-          // );
+          List<Society> societyList = [];
+          societyList.add(widget.society);
+          Navigator.pushNamed(context, '/society',
+              arguments: ScreenArguments(widget.eventList, societyList));
         },
       ),
     );

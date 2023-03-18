@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:ngok3fyp_frontend_flutter/model/society.dart';
 import 'package:ngok3fyp_frontend_flutter/model/styles.dart';
 import 'package:ngok3fyp_frontend_flutter/screens/home_screen/horizontal_society_card_widget.dart';
+import 'package:ngok3fyp_frontend_flutter/model/screen_arguments.dart';
+import 'package:ngok3fyp_frontend_flutter/model/event.dart';
 
 class AllSocietyScreen extends StatefulWidget {
   const AllSocietyScreen({super.key});
@@ -13,8 +15,9 @@ class AllSocietyScreen extends StatefulWidget {
 class _AllSocietyScreenState extends State<AllSocietyScreen> {
   @override
   Widget build(BuildContext context) {
-    final List<Society> societyList =
-        ModalRoute.of(context)!.settings.arguments as List<Society>;
+    final ScreenArguments screenArguments =
+        ModalRoute.of(context)!.settings.arguments as ScreenArguments;
+    final List<Society> societyList = screenArguments.societyList;
     return Scaffold(
       body: SafeArea(
           child: Column(
@@ -42,6 +45,7 @@ class _AllSocietyScreenState extends State<AllSocietyScreen> {
               itemBuilder: ((context, index) {
                 return HorizontalSocietyCardWidget(
                   society: societyList[index],
+                  eventList: screenArguments.enrolledEventList,
                 );
               }),
             ),

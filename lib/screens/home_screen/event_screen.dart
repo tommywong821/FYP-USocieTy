@@ -260,6 +260,7 @@ class _EventScreenState extends State<EventScreen> {
 }
 
 Widget BottomRegisterButton(BuildContext context, Event event) {
+  String eventName = event.name;
   Color hkustColor = Color.fromARGB(255, 0, 51, 102);
   return Material(
       color: Colors.white,
@@ -274,11 +275,19 @@ Widget BottomRegisterButton(BuildContext context, Event event) {
               showDialog(
                 context: context,
                 builder: (context) => AlertDialog(
-                  title: Text('Are you sure?'),
-                  content: Text(' '),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(15))),
+                  title: Text(
+                    'Do you want to join $eventName??',
+                    style: Styles.HCardTitle,
+                  ),
+                  actionsAlignment: MainAxisAlignment.spaceEvenly,
                   actions: [
                     ElevatedButton(
                         style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15),
+                          ),
                           backgroundColor:
                               Styles.primaryColor, // Background color
                         ),
@@ -292,16 +301,19 @@ Widget BottomRegisterButton(BuildContext context, Event event) {
                           }
                           Navigator.pop(context);
                         },
-                        child: Text('Yes')),
+                        child: Text('    Yes    ')),
                     ElevatedButton(
                         style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15),
+                          ),
                           backgroundColor:
                               Styles.primaryColor, // Background color
                         ),
                         onPressed: () {
                           Navigator.pop(context);
                         },
-                        child: Text('No'))
+                        child: Text('    No    '))
                   ],
                 ),
               );
