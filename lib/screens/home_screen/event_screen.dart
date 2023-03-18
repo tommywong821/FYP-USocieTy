@@ -1,8 +1,8 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ngok3fyp_frontend_flutter/model/styles.dart';
 import 'package:ngok3fyp_frontend_flutter/model/event.dart';
 import 'package:ngok3fyp_frontend_flutter/services/api_service.dart';
+import 'package:intl/intl.dart';
 
 class EventScreen extends StatefulWidget {
   const EventScreen({
@@ -16,6 +16,8 @@ class EventScreen extends StatefulWidget {
 class _EventScreenState extends State<EventScreen> {
   @override
   Widget build(BuildContext context) {
+    final DateFormat dateFormatter = DateFormat('E , MMM d');
+    final DateFormat parseDateFormatter = DateFormat('M/dd/y');
     final Event event = ModalRoute.of(context)!.settings.arguments as Event;
     String eventImage = event.poster;
     String eventTitle = event.name;
@@ -164,7 +166,13 @@ class _EventScreenState extends State<EventScreen> {
                                       padding: const EdgeInsets.only(
                                         left: 15,
                                       ),
-                                      child: Text("Mon, Nov 28",
+                                      child: Text(
+                                          dateFormatter
+                                              .format(DateTime.parse(
+                                                  parseDateFormatter
+                                                      .parse(eventDate)
+                                                      .toString()))
+                                              .toString(),
                                           style: Styles.eventScreenBlackText),
                                     ),
                                     //Event time
@@ -252,6 +260,7 @@ class _EventScreenState extends State<EventScreen> {
 }
 
 Widget BottomRegisterButton(BuildContext context, Event event) {
+  String eventName = event.name;
   Color hkustColor = Color.fromARGB(255, 0, 51, 102);
   return Material(
       color: Colors.white,
@@ -266,10 +275,22 @@ Widget BottomRegisterButton(BuildContext context, Event event) {
               showDialog(
                 context: context,
                 builder: (context) => AlertDialog(
-                  title: Text('Are you sure?'),
-                  content: Text('***'),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(15))),
+                  title: Text(
+                    'Do you want to join $eventName??',
+                    style: Styles.HCardTitle,
+                  ),
+                  actionsAlignment: MainAxisAlignment.spaceEvenly,
                   actions: [
                     ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          backgroundColor:
+                              Styles.primaryColor, // Background color
+                        ),
                         onPressed: () async {
                           bool response =
                               await ApiService().registerEvent(event.id);
@@ -280,12 +301,19 @@ Widget BottomRegisterButton(BuildContext context, Event event) {
                           }
                           Navigator.pop(context);
                         },
-                        child: Text('Yes')),
+                        child: Text('    Yes    ')),
                     ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          backgroundColor:
+                              Styles.primaryColor, // Background color
+                        ),
                         onPressed: () {
                           Navigator.pop(context);
                         },
-                        child: Text('No'))
+                        child: Text('    No    '))
                   ],
                 ),
               );

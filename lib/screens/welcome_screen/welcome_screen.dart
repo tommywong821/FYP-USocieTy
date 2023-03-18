@@ -4,6 +4,7 @@ import 'package:ngok3fyp_frontend_flutter/model/profile_screen_arguments.dart';
 import 'package:ngok3fyp_frontend_flutter/services/aad_oauth_service.dart';
 import 'package:ngok3fyp_frontend_flutter/services/api_service.dart';
 import 'package:ngok3fyp_frontend_flutter/services/storage_service.dart';
+import 'package:ngok3fyp_frontend_flutter/model/styles.dart';
 
 import '../../constants.dart';
 import '../../model/auth/aad_profile.dart';
@@ -38,7 +39,10 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             isBusy
-                ? Center(child: const CircularProgressIndicator())
+                ? Center(
+                    child: CircularProgressIndicator(
+                    color: Styles.primaryColor,
+                  ))
                 : LoginWidget(login, errorMessage),
           ]),
     ));

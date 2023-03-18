@@ -5,7 +5,7 @@ import 'package:ngok3fyp_frontend_flutter/screens/profile_screen.dart';
 import 'package:ngok3fyp_frontend_flutter/screens/calendar_screen/calendar_widget.dart';
 import 'package:ngok3fyp_frontend_flutter/model/styles.dart';
 
-import '../notification_screen/notification_widget.dart';
+import '../status_screen/status_widget.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({
@@ -21,7 +21,7 @@ class _HomeScreenState extends State<HomeScreen> {
   List<Widget> _pages = <Widget>[
     HomeWidget(),
     CalendarWidget(),
-    NotificationWidget(),
+    StatusWidget(),
     ProfileScreen(),
   ];
 

@@ -1,5 +1,3 @@
-import 'package:flutter/cupertino.dart';
-
 class Society {
   final String id;
   final String name;
@@ -11,5 +9,9 @@ class Society {
       id: json['id'],
       name: json['name'],
     );
+  }
+
+  String getName(){
+    return name;
   }
 }

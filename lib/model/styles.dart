@@ -37,12 +37,18 @@ class Styles {
   static TextStyle carouselTitle = GoogleFonts.ptSans(
       fontSize: 20, fontWeight: FontWeight.w600, color: primaryColor);
 
-//styles for screens/carousel_slider_widget.dart
+//styles for screens/event_carousel_slider_widget.dart
   static TextStyle carouselSliderTitle = GoogleFonts.ptSans(
       fontSize: 14, fontWeight: FontWeight.w600, color: Colors.black);
   static TextStyle carouselSliderDate = GoogleFonts.ptSans(
       fontSize: 12, fontWeight: FontWeight.w500, color: primaryColor);
   static TextStyle carouselSliderLocation = GoogleFonts.ptSans(
+      fontSize: 12, fontWeight: FontWeight.w600, color: Colors.grey);
+
+//styles for screens/society_carousel_slider_widget.dart
+  static TextStyle societyCarouselSliderTitle = GoogleFonts.ptSans(
+      fontSize: 20, fontWeight: FontWeight.w600, color: Colors.black);
+  static TextStyle societyCarouselSliderDesc = GoogleFonts.ptSans(
       fontSize: 12, fontWeight: FontWeight.w600, color: Colors.grey);
 
 //styles for horizontal_card_widget.dart

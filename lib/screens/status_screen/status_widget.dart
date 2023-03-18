@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:ngok3fyp_frontend_flutter/model/enrolled_event/status_constants.dart';
-
 import '../../model/enrolled_event/enrolled_event.dart';
 import '../../services/api_service.dart';
+import 'package:ngok3fyp_frontend_flutter/model/styles.dart';
 
-class NotificationWidget extends StatefulWidget {
-  const NotificationWidget({super.key});
+class StatusWidget extends StatefulWidget {
+  const StatusWidget({super.key});
 
   @override
-  State<NotificationWidget> createState() => _NotificationWidgetState();
+  State<StatusWidget> createState() => _StatusWidgetState();
 }
 
-class _NotificationWidgetState extends State<NotificationWidget> {
+class _StatusWidgetState extends State<StatusWidget> {
   final double ICON_SIZE = 36.0;
   late final Future<List<EnrolledEvent>> enrolledEventFuture;
   late final List<EnrolledEvent> enrolledEvent;
@@ -32,8 +32,12 @@ class _NotificationWidgetState extends State<NotificationWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Styles.backGroundColor,
         centerTitle: true,
-        title: const Text("Registered Event"),
+        title: Text(
+          "Registered Event",
+          style: TextStyle(color: Styles.primaryColor),
+        ),
       ),
       body: FutureBuilder<List<EnrolledEvent>>(
         future: enrolledEventFuture,
@@ -41,7 +45,10 @@ class _NotificationWidgetState extends State<NotificationWidget> {
           if (snapshot.hasData) {
             return _buildNotificationUi();
           }
-          return Center(child: CircularProgressIndicator());
+          return Center(
+              child: CircularProgressIndicator(
+            color: Styles.primaryColor,
+          ));
         },
       ),
     );
@@ -55,8 +62,8 @@ class _NotificationWidgetState extends State<NotificationWidget> {
           children: [
             buildEventCard(index),
             Divider(
-              color: Colors.black,
-              height: 0,
+              thickness: 2,
+              height: 10,
             ),
           ],
         );

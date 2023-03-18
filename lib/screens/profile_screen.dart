@@ -141,27 +141,31 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ]),
                 )),
             Padding(
-                padding: EdgeInsets.symmetric(horizontal: 140, vertical: 10),
-                child: TextButton(
-                  style: TextButton.styleFrom(
-                    side: BorderSide(color: Styles.primaryColor),
-                    padding: EdgeInsets.all(10),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(35)),
-                    backgroundColor: Colors.white,
+                padding: EdgeInsets.only(top: 10),
+                child: Container(
+                  width: 140,
+                  child: TextButton(
+                    style: TextButton.styleFrom(
+                      side: BorderSide(color: Styles.primaryColor),
+                      padding: EdgeInsets.all(10),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(35)),
+                      backgroundColor: Colors.white,
+                    ),
+                    //notice
+                    onPressed: () {
+                      logout();
+                    },
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.exit_to_app_outlined,
+                              color: Styles.primaryColor),
+                          SizedBox(width: 15),
+                          Text("Log Out",
+                              style: TextStyle(color: Colors.black)),
+                        ]),
                   ),
-                  //notice
-                  onPressed: () {
-                    logout();
-                  },
-                  child: Row(children: [
-                    Icon(Icons.exit_to_app_outlined,
-                        color: Styles.primaryColor),
-                    SizedBox(width: 15),
-                    Expanded(
-                        child: Text("LOG OUT",
-                            style: TextStyle(color: Colors.black))),
-                  ]),
                 )),
           ],
         ),
