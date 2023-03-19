@@ -119,4 +119,8 @@ export class EventUpdateComponent implements OnInit {
   saveFileBuffer({file}: NzUploadChangeParam): void {
     this.pictureFile = file.originFileObj;
   }
+
+  backToEventPage(): void {
+    this.router.navigate([Path.Main, Path.Event]);
+  }
 }

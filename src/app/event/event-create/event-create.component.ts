@@ -3,11 +3,13 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {NzMessageService} from 'ng-zorro-antd/message';
 import {NzUploadChangeParam} from 'ng-zorro-antd/upload';
 import {filter, map, Subject, takeUntil, tap, zip} from 'rxjs';
+import {Path} from 'src/app/app-routing.module';
 import {EventCategory} from 'src/app/model/event';
 import {AuthService} from 'src/app/services/auth.service';
 import {convertFormDataToEvent} from 'src/util/event.util';
 import {Event} from '../../model/event';
 import {ApiService} from './../../services/api.service';
+import {Router} from '@angular/router';
 
 export enum CreateEventFormFields {
   Name = 'name',
@@ -47,7 +49,8 @@ export class EventCreateComponent implements OnInit {
     private ApiService: ApiService,
     private formBuilder: FormBuilder,
     private message: NzMessageService,
-    private AuthService: AuthService
+    private AuthService: AuthService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -118,5 +121,9 @@ export class EventCreateComponent implements OnInit {
 
   saveFileBuffer({file}: NzUploadChangeParam): void {
     this.pictureFile = file.originFileObj;
+  }
+
+  backToEventPage(): void {
+    this.router.navigate([Path.Main, Path.Event]);
   }
 }

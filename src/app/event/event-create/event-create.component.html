@@ -7,7 +7,23 @@
     >
       <div class="sm:overflow-hidden sm:rounded-md">
         <div class="space-y-6 bg-white px-4 py-5 sm:p-6">
-          <h1 class="text-xl">Create Event</h1>
+          <div class="flex">
+            <h1 class="text-xl">Create Event</h1>
+            <button
+              class="ml-auto"
+              nz-button
+              nzType="primary"
+              nzGhost
+              (click)="backToEventPage()"
+            >
+              <span
+                nz-icon
+                nzType="left"
+              ></span>
+              back
+            </button>
+          </div>
+
           <div class="col-span-6 sm:col-span-4">
             <label class="mb-2 block text-sm font-medium text-gray-700">Event Title</label>
             <nz-form-control

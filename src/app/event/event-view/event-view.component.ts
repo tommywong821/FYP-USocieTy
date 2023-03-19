@@ -86,4 +86,8 @@ export class EventViewComponent implements OnInit {
     this.ApiService.updateEventEnrollmentRecords(this.eventId, records);
     this.toBeUpdatedEnrollmentRecords = {};
   }
+
+  backToEventPage(): void {
+    this.router.navigate([Path.Main, Path.Event]);
+  }
 }
