@@ -83,3 +83,14 @@ export function getUpdateEventRequest(eventId: string, event: Event, society: st
 
   return request;
 }
+
+export function getPictureNameFromUrl(url: string): string {
+  const regex = /\/(.*\.png)/g;
+  const match = url.match(regex);
+
+  if (match) {
+    return match[0];
+  }
+
+  return '';
+}

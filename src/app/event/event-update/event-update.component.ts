@@ -3,10 +3,10 @@ import {ApiService} from './../../services/api.service';
 import {Component, OnInit} from '@angular/core';
 import {FormGroup, FormBuilder, Validators} from '@angular/forms';
 import {NzMessageRef, NzMessageService} from 'ng-zorro-antd/message';
-import {NzUploadChangeParam} from 'ng-zorro-antd/upload';
+import {NzUploadChangeParam, NzUploadFile} from 'ng-zorro-antd/upload';
 import {Subject, filter, tap, switchMap, first} from 'rxjs';
 import {EventCategory} from 'src/app/model/event';
-import {convertFormDataToEvent} from 'src/util/event.util';
+import {convertFormDataToEvent, getPictureNameFromUrl} from 'src/util/event.util';
 import {Event} from '../../model/event';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Path} from 'src/app/app-routing.module';
@@ -34,6 +34,8 @@ export class EventUpdateComponent implements OnInit {
 
   updateEventForm!: FormGroup;
   pictureFile: File | undefined;
+
+  fileList: NzUploadFile[] = [];
 
   enrolledSocieties: string[] = [];
 
@@ -63,6 +65,12 @@ export class EventUpdateComponent implements OnInit {
           tap(() => (this.loadingMessage = this.message.loading('Fetching event details...'))),
           tap(params => (this.eventId = params['eventId'])),
           switchMap(params => this.ApiService.getEvent(params['eventId'])),
+          tap(
+            event =>
+              (this.fileList = [
+                {uid: '1', name: getPictureNameFromUrl(event.poster), status: 'done', url: event.poster},
+              ])
+          ),
           tap(event => console.log(event)),
           tap(() => this.message.remove(this.loadingMessage?.messageId))
         )
