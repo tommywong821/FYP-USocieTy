@@ -22,7 +22,7 @@ class SocietyController(
     }
 
     @Operation(summary = "join society with student itsc and society id")
-    @PostMapping
+    @PostMapping("/join")
     fun joinSociety(
         @RequestBody joinSocietyDto: JoinSocietyDto
     ): Boolean {
