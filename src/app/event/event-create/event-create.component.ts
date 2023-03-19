@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {NzMessageService} from 'ng-zorro-antd/message';
 import {NzUploadChangeParam} from 'ng-zorro-antd/upload';
-import {filter, map, Subject, switchMap, takeUntil, tap, zip} from 'rxjs';
+import {filter, finalize, map, Subject, switchMap, takeUntil, tap, zip} from 'rxjs';
 import {Path} from 'src/app/app-routing.module';
 import {EventCategory} from 'src/app/model/event';
 import {AuthService} from 'src/app/services/auth.service';
@@ -32,8 +32,12 @@ export class EventCreateComponent implements OnInit {
   CreateEventFormFields = CreateEventFormFields;
   EventCategory = EventCategory;
 
+  enrolledSocieties: string[] = [];
+
   createEventForm!: FormGroup;
   pictureFile: File | undefined;
+
+  isProcessing = false;
 
   event$ = new Subject<Event>();
 
@@ -43,6 +47,7 @@ export class EventCreateComponent implements OnInit {
     private ApiService: ApiService,
     private formBuilder: FormBuilder,
     private message: NzMessageService,
+    private AuthService: AuthService,
     private router: Router
   ) {}
 
@@ -59,9 +64,15 @@ export class EventCreateComponent implements OnInit {
       fee: ['', [Validators.required]],
     });
 
+    this.AuthService.user$
+      .pipe(filter(user => !!user))
+      .subscribe(user => (this.enrolledSocieties = [...user!.enrolledSocieties]));
+
     this.event$
       .pipe(
-        switchMap(event => this.ApiService.createEvent(event, this.pictureFile!, this.createEventForm.value.society))
+        switchMap(event => this.ApiService.createEvent(event, this.pictureFile!, this.createEventForm.value.society)),
+        tap(() => (this.isProcessing = false)),
+        tap(() => this.router.navigate([Path.Main, Path.Event]))
       )
       .subscribe();
   }
@@ -82,6 +93,7 @@ export class EventCreateComponent implements OnInit {
       return;
     }
 
+    this.isProcessing = true;
     this.event$.next(convertFormDataToEvent({...this.createEventForm.value}));
   }
 
