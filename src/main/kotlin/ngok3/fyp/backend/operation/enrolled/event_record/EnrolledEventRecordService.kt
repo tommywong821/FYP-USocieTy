@@ -1,6 +1,7 @@
 package ngok3.fyp.backend.operation.enrolled.event_record
 
 import ngok3.fyp.backend.operation.enrolled.event_record.model.EnrolledEventDto
+import ngok3.fyp.backend.operation.enrolled.event_record.model.StudentEnrolledEventRecordDto
 import ngok3.fyp.backend.operation.enrolled.event_record.model.UpdateEnrolledEventRecordDto
 import ngok3.fyp.backend.util.JWTUtil
 import org.springframework.stereotype.Service
@@ -59,5 +60,14 @@ class EnrolledEventRecordService(
             itsc,
             LocalDateTime.now(ZoneId.of("Asia/Hong_Kong"))
         )
+    }
+
+    fun getStudentEnrolledEventRecord(
+        eventUuid: String,
+        pageNum: Int,
+        pageSize: Int
+    ): List<StudentEnrolledEventRecordDto> {
+        TODO("Not yet implemented")
+        return emptyList<StudentEnrolledEventRecordDto>()
     }
 }
