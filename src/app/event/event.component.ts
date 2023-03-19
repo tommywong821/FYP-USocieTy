@@ -63,6 +63,8 @@ export class EventComponent implements OnInit {
   constructor(private router: Router, private ApiService: ApiService) {}
 
   ngOnInit(): void {
+    this.refreshEvents$.next({});
+
     this.refreshEvents$
       .pipe(switchMap(() => this.ApiService.getEvents(this.pageIndex, this.pageSize)))
       .subscribe(event => (this.events = ([] as Event[]).concat(event)));
