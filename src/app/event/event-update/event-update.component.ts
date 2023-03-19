@@ -69,7 +69,7 @@ export class EventUpdateComponent implements OnInit {
         .subscribe(
           event =>
             (this.updateEventForm = this.formBuilder.group({
-              eventTitle: [event.name, [Validators.required]],
+              name: [event.name, [Validators.required]],
               location: [event.location, [Validators.required]],
               society: [event.society, [Validators.required]],
               maxParticipation: [event.maxParticipation, [Validators.required]],
