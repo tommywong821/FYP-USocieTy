@@ -40,9 +40,9 @@ export interface EventFormData {
 }
 
 export enum EventCategory {
-  Sport = 'Sport',
-  Outdoor = 'Outdoor',
-  Indoor = 'Indoor',
+  Sport = 'SPORT',
+  Outdoor = 'OUTDOOR',
+  Indoor = 'INDOOR',
 }
 
 export enum PaymentStatus {
