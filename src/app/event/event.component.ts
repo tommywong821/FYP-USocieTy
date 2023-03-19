@@ -84,7 +84,7 @@ export class EventComponent implements OnInit {
         switchMap(() => this.ApiService.getEvents(this.pageIndex, this.pageSize)),
         tap(() => this.message.remove(this.loadingMessage?.messageId))
       )
-      .subscribe(events => (this.events = events.filter(event => this.enrolledSocieties.includes(event.id!))));
+      .subscribe(event => (this.events = ([] as Event[]).concat(event)));
 
     this.deleteEvent$
       .pipe(
