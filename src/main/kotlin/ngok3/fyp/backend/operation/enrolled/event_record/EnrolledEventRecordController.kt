@@ -2,6 +2,7 @@ package ngok3.fyp.backend.operation.enrolled.event_record
 
 import io.swagger.v3.oas.annotations.Operation
 import ngok3.fyp.backend.operation.enrolled.event_record.model.EnrolledEventDto
+import ngok3.fyp.backend.operation.enrolled.event_record.model.StudentEnrolledEventRecordDto
 import ngok3.fyp.backend.operation.enrolled.event_record.model.UpdateEnrolledEventRecordDto
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
@@ -16,9 +17,9 @@ class EnrolledEventRecordController(
     @PutMapping
     fun updateEnrolledEventRecord(
         @CookieValue("token") jwtToken: String,
-        @RequestBody updateEnrolledEventRecordDto: UpdateEnrolledEventRecordDto
+        @RequestBody updateEnrolledEventRecordDtoList: List<UpdateEnrolledEventRecordDto>
     ) {
-        return enrolledEventService.updateEnrolledEventRecord(jwtToken, updateEnrolledEventRecordDto)
+        return enrolledEventService.updateEnrolledEventRecord(jwtToken, updateEnrolledEventRecordDtoList)
     }
 
     @Operation(summary = "get all enrolled event of student with itsc")
@@ -39,5 +40,16 @@ class EnrolledEventRecordController(
         @RequestParam("itsc", required = false, defaultValue = "") itsc: String
     ): Long {
         return enrolledEventService.countEnrolledEvent(itsc)
+    }
+
+    @Operation(summary = "get all students of an enrolled event with event id")
+    @GetMapping("/{eventId}")
+    fun getStudentEnrolledEventRecord(
+        @CookieValue("token") jwtToken: String,
+        @PathVariable eventId: String,
+        @RequestParam("pageNum", required = false, defaultValue = "0") pageNum: Int,
+        @RequestParam("pageSize", required = false, defaultValue = "10") pageSize: Int
+    ): List<StudentEnrolledEventRecordDto> {
+        return enrolledEventService.getStudentEnrolledEventRecord(jwtToken, eventId, pageNum, pageSize)
     }
 }
