@@ -54,17 +54,15 @@ class EventService(
     }
 
     fun joinEvent(itsc: String, eventId: String): Boolean {
-        val studentEntityOptional: Optional<StudentEntity> = studentRepository.findByItsc(itsc)
-        if (studentEntityOptional.isEmpty) {
-            throw Exception("student with itsc:$itsc is not found")
+        val studentEntity: StudentEntity = studentRepository.findByItsc(itsc).orElseThrow {
+            Exception("student with itsc:$itsc is not found")
         }
 
-        val eventEntityOptional: Optional<EventEntity> = eventRepository.findById(UUID.fromString(eventId))
-        if (eventEntityOptional.isEmpty) {
-            throw Exception("Event with id:$eventId is not found")
+        val eventEntity: EventEntity = eventRepository.findById(UUID.fromString(eventId)).orElseThrow {
+            Exception("Event with id:$eventId is not found")
         }
 
-        val eventEntity: EventEntity = eventEntityOptional.get()
+
 //        check maxParticipation and apply deadline
         val numberOfParticipation: Long = enrolledEventRecordRepository.countById_EventUuid(UUID.fromString(eventId));
         if (LocalDateTime.now(ZoneId.of("Asia/Hong_Kong"))
@@ -73,9 +71,8 @@ class EventService(
             throw Exception("Event is not able to register")
         }
 
-        val studentEntity: StudentEntity = studentEntityOptional.get()
         val enrolledEventRecordEntity = EnrolledEventRecordEntity(
-            EnrolledEventRecordKey(studentEntity.uuid, eventEntity.uuid), EnrolledStatus.PENDING
+            id = EnrolledEventRecordKey(studentEntity.uuid, eventEntity.uuid), enrollStatus = EnrolledStatus.PENDING
         )
         enrolledEventRecordEntity.studentEntity = studentEntity
         enrolledEventRecordEntity.eventEntity = eventEntity
