@@ -1,7 +1,7 @@
 import {EventProperty} from './../model/event';
 import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
-import {ReplaySubject, Subject, switchMap} from 'rxjs';
+import {ReplaySubject, Subject, switchMap, tap} from 'rxjs';
 import {Path} from '../app-routing.module';
 import {ApiService} from '../services/api.service';
 import {Event, EventCategory} from '../model/event';
@@ -63,15 +63,18 @@ export class EventComponent implements OnInit {
   constructor(private router: Router, private ApiService: ApiService) {}
 
   ngOnInit(): void {
-    this.refreshEvents$.next({});
-
     this.refreshEvents$
-      .pipe(switchMap(() => this.ApiService.getEvents(this.pageIndex, this.pageSize)))
+      .pipe(
+        switchMap(() => this.ApiService.getEvents(this.pageIndex, this.pageSize)),
+        tap(event => console.log(event))
+      )
       .subscribe(event => (this.events = ([] as Event[]).concat(event)));
 
     this.deleteEvent$
       .pipe(switchMap(() => this.deleteEventId$.asObservable()))
       .subscribe(eventId => this.ApiService.deleteEvent(eventId));
+
+    this.refreshEvents$.next({});
   }
 
   changePageIndex(): void {
