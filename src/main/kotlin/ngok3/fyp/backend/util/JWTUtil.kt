@@ -51,7 +51,7 @@ class JWTUtil(
         }
     }
 
-    fun verifyUserAdminRoleOfSociety(jwtToken: String, societyName: String) {
+    fun verifyUserMemberRoleOfSociety(jwtToken: String, societyName: String) {
         val claims: Claims = verifyToken(jwtToken)
         val itsc: String = claims["itsc"].toString()
 

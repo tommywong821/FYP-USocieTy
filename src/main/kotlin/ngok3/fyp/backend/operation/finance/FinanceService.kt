@@ -32,7 +32,7 @@ class FinanceService(
         isAscend: Boolean,
         category: List<String>
     ): List<FinanceTableDto> {
-        jwtUtil.verifyUserAdminRoleOfSociety(jwtToken, societyName)
+        jwtUtil.verifyUserMemberRoleOfSociety(jwtToken, societyName)
 
         val financeEntityTableList: List<FinanceEntity>? =
             financeEntityDao.findFinanceTableDataWithSocietyNameWithPageAngFilter(
@@ -74,7 +74,7 @@ class FinanceService(
         fromDateString: String,
         toDateString: String
     ): List<FinanceChartDto> {
-        jwtUtil.verifyUserAdminRoleOfSociety(jwtToken, societyName)
+        jwtUtil.verifyUserMemberRoleOfSociety(jwtToken, societyName)
 
         return financeEntityRepository.findFinancePieChartData(
             societyName,
@@ -89,7 +89,7 @@ class FinanceService(
         fromDate: String,
         toDate: String
     ): List<FinanceChartDto> {
-        jwtUtil.verifyUserAdminRoleOfSociety(jwtToken, societyName)
+        jwtUtil.verifyUserMemberRoleOfSociety(jwtToken, societyName)
 
         return financeEntityRepository.findFinanceBarChartData(
             societyName,
@@ -105,7 +105,7 @@ class FinanceService(
             throw Exception("Society name can not be null")
         }
 
-        jwtUtil.verifyUserAdminRoleOfSociety(jwtToken, societyName)
+        jwtUtil.verifyUserMemberRoleOfSociety(jwtToken, societyName)
 
         val itsc: String = jwtUtil.getClaimFromJWTToken(jwtToken, "itsc")
 
@@ -152,7 +152,7 @@ class FinanceService(
         societyName: String,
         deleteIdList: List<FinanceDeleteDto>
     ): List<FinanceDeleteDto> {
-        jwtUtil.verifyUserAdminRoleOfSociety(jwtToken, societyName)
+        jwtUtil.verifyUserMemberRoleOfSociety(jwtToken, societyName)
 
         financeEntityRepository.deleteAllById(deleteIdList.map { deleteId -> UUID.fromString(deleteId.id) })
 
@@ -175,7 +175,7 @@ class FinanceService(
         toDateString: String,
         category: List<String>
     ): FinanceRecordTotalNumberDto {
-        jwtUtil.verifyUserAdminRoleOfSociety(jwtToken, societyName)
+        jwtUtil.verifyUserMemberRoleOfSociety(jwtToken, societyName)
 
         return financeEntityDao.countTotalNumberOfFinanceRecordWithinDateRange(
             societyName,
@@ -192,7 +192,7 @@ class FinanceService(
         fromDateString: String,
         toDateString: String
     ): List<FinanceRecordCategoryDto> {
-        jwtUtil.verifyUserAdminRoleOfSociety(jwtToken, societyName)
+        jwtUtil.verifyUserMemberRoleOfSociety(jwtToken, societyName)
 
         return financeEntityRepository.getAllCategoryOfFinanceRecordWithinDateRange(
             societyName,

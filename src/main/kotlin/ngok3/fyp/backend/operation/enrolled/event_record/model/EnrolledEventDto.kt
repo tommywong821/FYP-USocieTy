@@ -1,7 +1,6 @@
 package ngok3.fyp.backend.operation.enrolled.event_record.model
 
 import ngok3.fyp.backend.operation.enrolled.event_record.EnrolledEventRecordEntity
-import ngok3.fyp.backend.operation.event.EventCategory
 import java.io.Serializable
 import java.time.format.DateTimeFormatter
 
@@ -10,19 +9,21 @@ data class EnrolledEventDto(
     val location: String = "",
     val startDate: String = "",
     val endDate: String = "",
-    val category: EventCategory? = null,
+    val category: String? = "",
     val status: String = "",
+    val paymentStatus: String = "",
 ) : Serializable {
     constructor(enrolledEventRecordEntity: EnrolledEventRecordEntity) : this(
-        enrolledEventRecordEntity.eventEntity.name,
-        enrolledEventRecordEntity.eventEntity.location,
-        enrolledEventRecordEntity.eventEntity.startDate.format(
+        name = enrolledEventRecordEntity.eventEntity.name,
+        location = enrolledEventRecordEntity.eventEntity.location,
+        startDate = enrolledEventRecordEntity.eventEntity.startDate.format(
             DateTimeFormatter.ofPattern("yyyy-MM-dd")
         ),
-        enrolledEventRecordEntity.eventEntity.endDate.format(
+        endDate = enrolledEventRecordEntity.eventEntity.endDate.format(
             DateTimeFormatter.ofPattern("yyyy-MM-dd")
         ),
-        enrolledEventRecordEntity.eventEntity.category,
-        enrolledEventRecordEntity.status.status
+        category = enrolledEventRecordEntity.eventEntity.category?.category,
+        status = enrolledEventRecordEntity.enrollStatus.status,
+        paymentStatus = enrolledEventRecordEntity.paymentStatus.status
     )
 }
