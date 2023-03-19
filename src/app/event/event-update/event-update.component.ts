@@ -63,6 +63,7 @@ export class EventUpdateComponent implements OnInit {
           tap(() => (this.loadingMessage = this.message.loading('Fetching event details...'))),
           tap(params => (this.eventId = params['eventId'])),
           switchMap(params => this.ApiService.getEvent(params['eventId'])),
+          tap(event => console.log(event)),
           tap(() => this.message.remove(this.loadingMessage?.messageId))
         )
         .subscribe(
