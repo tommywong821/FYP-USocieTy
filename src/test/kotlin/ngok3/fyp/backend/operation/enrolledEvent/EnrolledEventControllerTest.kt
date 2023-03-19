@@ -34,10 +34,12 @@ class EnrolledEventControllerTest @Autowired constructor(
         every {
             enrolledEventService.updateEnrolledEventRecord(
                 mockAuthRepository.validUserCookieToken,
-                UpdateEnrolledEventRecordDto(
-                    eventId = eventUUID.toString(),
-                    studentId = studentUUID.toString(),
-                    status = EnrolledStatus.SUCCESS
+                listOf(
+                    UpdateEnrolledEventRecordDto(
+                        eventId = eventUUID.toString(),
+                        studentId = studentUUID.toString(),
+                        status = EnrolledStatus.SUCCESS
+                    )
                 )
             )
         } returns Unit
@@ -48,7 +50,7 @@ class EnrolledEventControllerTest @Autowired constructor(
                 cookie(Cookie("token", mockAuthRepository.validUserCookieToken))
             }
 
-            content = "{\"eventId\":\"$eventUUID\",\"studentId\":\"$studentUUID\",\"status\":\"SUCCESS\"}"
+            content = "[{\"eventId\":\"$eventUUID\",\"studentId\":\"$studentUUID\",\"status\":\"SUCCESS\"}]"
         }.andDo { print() }.andExpect { status { isNoContent() } }
     }
 

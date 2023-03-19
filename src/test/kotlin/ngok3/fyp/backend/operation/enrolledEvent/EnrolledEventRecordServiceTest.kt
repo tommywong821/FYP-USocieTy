@@ -41,13 +41,15 @@ class EnrolledEventRecordServiceTest {
         mockEnrolledEventRecordEntity.eventEntity.societyEntity.name = mockAuthRepository.testSocietyName
 
         every {
-            enrolledEventRecordRepository.findById(
-                EnrolledEventRecordKey(
-                    studentUuid = studentUUID,
-                    eventUuid = eventUUID,
+            enrolledEventRecordRepository.findAllById(
+                listOf(
+                    EnrolledEventRecordKey(
+                        studentUuid = studentUUID,
+                        eventUuid = eventUUID,
+                    )
                 )
             )
-        } returns Optional.of(mockEnrolledEventRecordEntity)
+        } returns listOf(mockEnrolledEventRecordEntity)
 
         every {
             studentRoleEntityRepository.findByStudentItscAndSocietyNameAndRole(
@@ -58,15 +60,17 @@ class EnrolledEventRecordServiceTest {
         } returns Optional.of(StudentRoleEntity())
 
         every {
-            enrolledEventRecordRepository.save(mockEnrolledEventRecordEntity)
-        } returns mockEnrolledEventRecordEntity
+            enrolledEventRecordRepository.saveAll(listOf(mockEnrolledEventRecordEntity))
+        } returns listOf(mockEnrolledEventRecordEntity)
 
         enrolledEventService.updateEnrolledEventRecord(
             mockAuthRepository.validUserCookieToken,
-            UpdateEnrolledEventRecordDto(
-                eventId = eventUUID.toString(),
-                studentId = studentUUID.toString(),
-                status = EnrolledStatus.SUCCESS
+            listOf(
+                UpdateEnrolledEventRecordDto(
+                    eventId = eventUUID.toString(),
+                    studentId = studentUUID.toString(),
+                    status = EnrolledStatus.SUCCESS
+                )
             )
         )
 
@@ -78,15 +82,17 @@ class EnrolledEventRecordServiceTest {
             )
         }
         verify(exactly = 1) {
-            enrolledEventRecordRepository.findById(
-                EnrolledEventRecordKey(
-                    studentUuid = studentUUID,
-                    eventUuid = eventUUID,
+            enrolledEventRecordRepository.findAllById(
+                listOf(
+                    EnrolledEventRecordKey(
+                        studentUuid = studentUUID,
+                        eventUuid = eventUUID,
+                    )
                 )
             )
         }
         verify(exactly = 1) {
-            enrolledEventRecordRepository.save(mockEnrolledEventRecordEntity)
+            enrolledEventRecordRepository.saveAll(listOf(mockEnrolledEventRecordEntity))
         }
     }
 }
