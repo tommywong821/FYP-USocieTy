@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
+import {NzMessageRef, NzMessageService} from 'ng-zorro-antd/message';
 import {first, Subject, switchMap, tap} from 'rxjs';
 import {Path} from 'src/app/app-routing.module';
 import {
@@ -41,14 +42,23 @@ export class EventViewComponent implements OnInit {
   pageIndex = 1;
   pageSize = 15;
 
-  constructor(private router: Router, private ApiService: ApiService, private route: ActivatedRoute) {}
+  loadingMessage: NzMessageRef | null = null;
+
+  constructor(
+    private router: Router,
+    private ApiService: ApiService,
+    private route: ActivatedRoute,
+    private message: NzMessageService
+  ) {}
 
   ngOnInit(): void {
     this.route.queryParams
       .pipe(
         first(),
+        tap(() => (this.loadingMessage = this.message.loading('Fetching event details...'))),
         tap(params => (this.eventId = params['eventId'])),
-        switchMap(params => this.ApiService.getEvent(params['eventId']))
+        switchMap(params => this.ApiService.getEvent(params['eventId'])),
+        tap(() => this.message.remove(this.loadingMessage?.messageId))
       )
       .subscribe(event => (this.event = event));
 
@@ -62,7 +72,7 @@ export class EventViewComponent implements OnInit {
   }
 
   toggleUpdateEvent(): void {
-    this.router.navigate([Path.Main, Path.Event, Path.ViewEvent], {queryParams: {eventId: this.eventId}});
+    this.router.navigate([Path.Main, Path.Event, Path.UpdateEvent], {queryParams: {eventId: this.eventId}});
   }
 
   recordPaymentStatusChanges(paymentStatus: PaymentStatus, itsc: string): void {

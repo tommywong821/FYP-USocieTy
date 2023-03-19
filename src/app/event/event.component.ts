@@ -4,7 +4,8 @@ import {Router} from '@angular/router';
 import {ReplaySubject, Subject, switchMap, tap} from 'rxjs';
 import {Path} from '../app-routing.module';
 import {ApiService} from '../services/api.service';
-import {Event, EventCategory} from '../model/event';
+import {Event} from '../model/event';
+import {NzMessageRef, NzMessageService} from 'ng-zorro-antd/message';
 
 export const EventTableColumn = [
   {
@@ -60,18 +61,24 @@ export class EventComponent implements OnInit {
 
   showModal = false;
 
-  constructor(private router: Router, private ApiService: ApiService) {}
+  loadingMessage: NzMessageRef | null = null;
+
+  constructor(private router: Router, private ApiService: ApiService, private message: NzMessageService) {}
 
   ngOnInit(): void {
     this.refreshEvents$
       .pipe(
+        tap(() => (this.loadingMessage = this.message.loading('Fetching events...'))),
         switchMap(() => this.ApiService.getEvents(this.pageIndex, this.pageSize)),
-        tap(event => console.log(event))
+        tap(() => this.message.remove(this.loadingMessage?.messageId))
       )
       .subscribe(event => (this.events = ([] as Event[]).concat(event)));
 
     this.deleteEvent$
-      .pipe(switchMap(() => this.deleteEventId$.asObservable()))
+      .pipe(
+        switchMap(() => this.deleteEventId$.asObservable()),
+        tap(eventId => console.log(eventId))
+      )
       .subscribe(eventId => this.ApiService.deleteEvent(eventId));
 
     this.refreshEvents$.next({});
