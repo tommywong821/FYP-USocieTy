@@ -159,4 +159,17 @@ export class ApiService {
     // TODO
     // this.restful.put(`${environment.backend_url}/enrolledEventRecord`, body);
   }
+  createEvent(eventDto: Event, poster: File, societyName: string) {
+    const formData: FormData = new FormData();
+
+    const eventJson: Blob = new Blob([JSON.stringify(eventDto)], {type: 'application/json'});
+    formData.append('event', eventJson);
+    formData.append('poster', poster);
+    formData.append('society', societyName);
+
+    return this.restful.post(`${environment.backend_url}/event`, formData, {
+      reportProgress: true,
+      responseType: 'text',
+    });
+  }
 }
