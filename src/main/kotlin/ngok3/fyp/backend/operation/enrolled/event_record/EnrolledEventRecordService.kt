@@ -13,24 +13,38 @@ class EnrolledEventRecordService(
     private val enrolledEventRecordRepository: EnrolledEventRecordRepository,
     private val jwtUtil: JWTUtil
 ) {
-    fun updateEnrolledEventRecord(jwtToken: String, updateEnrolledEventRecordDto: UpdateEnrolledEventRecordDto) {
-        val enrolledEventRecordEntity: EnrolledEventRecordEntity = enrolledEventRecordRepository.findById(
-            EnrolledEventRecordKey(
-                UUID.fromString(updateEnrolledEventRecordDto.studentId),
-                UUID.fromString(updateEnrolledEventRecordDto.eventId)
-            )
-        ).orElseThrow {
-            Exception("Enrolled Event Record with student id: ${updateEnrolledEventRecordDto.studentId} and event id: ${updateEnrolledEventRecordDto.eventId} is not found")
-        }
+    fun updateEnrolledEventRecord(
+        jwtToken: String,
+        updateEnrolledEventRecordDtoList: List<UpdateEnrolledEventRecordDto>
+    ) {
+        val enrolledEventRecordEntityMap = enrolledEventRecordRepository.findAllById(
+            updateEnrolledEventRecordDtoList.map { updateEnrolledEventRecordDto ->
+                EnrolledEventRecordKey(
+                    UUID.fromString(updateEnrolledEventRecordDto.studentId),
+                    UUID.fromString(updateEnrolledEventRecordDto.eventId)
+                )
+            }
+        ).toList().associateBy({ it.id }, { it }).toMutableMap()
+
 
         jwtUtil.verifyUserAdminRoleOfSociety(
             jwtToken = jwtToken,
-            enrolledEventRecordEntity.eventEntity.societyEntity.name
+            enrolledEventRecordEntityMap.values.first().eventEntity.societyEntity.name
         )
 
-        enrolledEventRecordEntity.status = updateEnrolledEventRecordDto.status
+        updateEnrolledEventRecordDtoList.forEach { updateEnrolledEventRecordDto: UpdateEnrolledEventRecordDto ->
+            run {
+                val key: EnrolledEventRecordKey = EnrolledEventRecordKey(
+                    studentUuid = UUID.fromString(updateEnrolledEventRecordDto.studentId),
+                    eventUuid = UUID.fromString(updateEnrolledEventRecordDto.eventId)
+                )
+                if (enrolledEventRecordEntityMap.containsKey(key)) {
+                    enrolledEventRecordEntityMap[key]?.status = updateEnrolledEventRecordDto.status
+                }
+            }
+        }
 
-        enrolledEventRecordRepository.save(enrolledEventRecordEntity)
+        enrolledEventRecordRepository.saveAll(enrolledEventRecordEntityMap.values.toList())
     }
 
     fun getAllEnrolledEvent(itsc: String, pageNum: Int, pageSize: Int): List<EnrolledEventDto> {

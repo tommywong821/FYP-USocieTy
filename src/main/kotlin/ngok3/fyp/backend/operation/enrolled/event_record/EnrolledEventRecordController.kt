@@ -16,9 +16,9 @@ class EnrolledEventRecordController(
     @PutMapping
     fun updateEnrolledEventRecord(
         @CookieValue("token") jwtToken: String,
-        @RequestBody updateEnrolledEventRecordDto: UpdateEnrolledEventRecordDto
+        @RequestBody updateEnrolledEventRecordDtoList: List<UpdateEnrolledEventRecordDto>
     ) {
-        return enrolledEventService.updateEnrolledEventRecord(jwtToken, updateEnrolledEventRecordDto)
+        return enrolledEventService.updateEnrolledEventRecord(jwtToken, updateEnrolledEventRecordDtoList)
     }
 
     @Operation(summary = "get all enrolled event of student with itsc")
