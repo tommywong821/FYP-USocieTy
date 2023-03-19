@@ -1,4 +1,3 @@
-import {UpdateEventRequest} from './../api/event';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {NzTableFilterList} from 'ng-zorro-antd/table';
@@ -174,13 +173,12 @@ export class ApiService {
   getEventEnrollmentRecord(eventId: string, pageIndex: number, pageSize: number): Observable<EventEnrollmentRecord[]> {
     const queryParams = new HttpParams().append('pageIndex', pageIndex).append('pageSize', pageSize);
 
-    return this.restful.get<EventEnrollmentRecord[]>(`${environment.backend_url}/event/${eventId}`, {
+    return this.restful.get<EventEnrollmentRecord[]>(`${environment.backend_url}/enrolledEventRecord/${eventId}`, {
       params: queryParams,
     });
   }
 
   updateEventEnrollmentRecords(eventId: string, records: EventEnrollmentRecord[]): void {
-    // TODO
-    // this.restful.put(`${environment.backend_url}/enrolledEventRecord`, body);
+    this.restful.put(`${environment.backend_url}/enrolledEventRecord/${eventId}`, records);
   }
 }

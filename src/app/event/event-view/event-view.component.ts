@@ -3,20 +3,11 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {NzMessageRef, NzMessageService} from 'ng-zorro-antd/message';
 import {first, Subject, switchMap, tap} from 'rxjs';
 import {Path} from 'src/app/app-routing.module';
-import {
-  EventCategory,
-  EventEnrollmentRecord,
-  EventEnrollmentStatus,
-  EventProperty,
-  PaymentStatus,
-} from 'src/app/model/event';
+import {EventEnrollmentRecord, EventEnrollmentStatus, EventProperty, PaymentStatus} from 'src/app/model/event';
 import {ApiService} from 'src/app/services/api.service';
 import {Event} from '../../model/event';
 
-export interface EnrollmentStatus {
-  paymentStatus: PaymentStatus;
-  eventEnrollmentStatus: EventEnrollmentStatus;
-}
+export type EnrollmentStatus = Partial<EventEnrollmentRecord>;
 
 @Component({
   selector: 'app-event-view',
@@ -65,6 +56,8 @@ export class EventViewComponent implements OnInit {
     this.refreshEnrollmentRecords$
       .pipe(switchMap(() => this.ApiService.getEventEnrollmentRecord(this.eventId, this.pageIndex, this.pageSize)))
       .subscribe(record => (this.enrollmentRecords = ([] as EventEnrollmentRecord[]).concat(record)));
+
+    this.refreshEnrollmentRecords$.next({});
   }
 
   changePageIndex(): void {
@@ -90,10 +83,11 @@ export class EventViewComponent implements OnInit {
   updateEnrollmentRecords(): void {
     const records = Object.entries(this.toBeUpdatedEnrollmentRecords).map(([key, val]) => ({
       itsc: key,
+      studentId: val.studentId,
       paymentStatus: val.paymentStatus,
       eventEnrollmentStatus: val.eventEnrollmentStatus,
     }));
-    this.ApiService.updateEventEnrollmentRecords(this.eventId, records);
+    this.ApiService.updateEventEnrollmentRecords(this.eventId, records as EventEnrollmentRecord[]);
     this.toBeUpdatedEnrollmentRecords = {};
   }
 

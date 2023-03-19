@@ -58,6 +58,7 @@ export enum EventEnrollmentStatus {
 
 export interface EventEnrollmentRecord {
   itsc: string;
+  studentId: string;
   paymentStatus: PaymentStatus;
   eventEnrollmentStatus: EventEnrollmentStatus;
 }
