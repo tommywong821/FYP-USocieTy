@@ -1,47 +1,109 @@
 <div class="m-5 px-8">
-    <div class="my-5 space-y-6 py-4">
-      <div class="flex bg-white">
-        <h1 class="text-xl">Society Member</h1>
-      </div>
+  <div class="my-5 space-y-6 py-4">
+    <div class="flex bg-white">
+      <h1 class="text-xl">Society Member</h1>
     </div>
-    <div>
+  </div>
+  <div>
 <nz-table 
 #societyMemberTable
 [nzData]="societyMemberlist"
 >
 <thead>
-    <tr>
-        <th>
-         ITSC
-        </th>
-        <th>
-         NAME
-        </th>
-        <th>
-         ROLES
-        </th>
-        <th>
-        ACTION
-        </th>
-      </tr>
+  <tr>
+      <th>
+       ITSC
+      </th>
+      <th>
+       NAME
+      </th>
+      <th>
+       ROLES
+      </th>
+      <th>
+      ACTION
+      </th>
+    </tr>
 </thead>
 <tbody>
-  <tr
-  class="cursor-pointer" 
-  *ngFor="let data of societyMemberTable.data">
-    <td>{{data.itsc}}</td>
-    <td>{{data.nickname}}</td>
-    <td>{{data.roles}}</td>
-    <td>            <button
-        nz-button
-        nzDanger
-        nzType="primary"
+<tr
+class="cursor-pointer" 
+*ngFor="let data of societyMemberTable.data">
+  <td>{{data.itsc}}</td>
+  <td>{{data.nickname}}</td>
+  <td>{{data.roles}}</td>
+  <td>         
+  <button  *ngIf="data.roles=='Society Member' "
+  nz-button
+  nzType="primary"
+  class="bg-green-500"
+  (click)="deleteSocietyMember(data.uuid)"
+  >
+  Set as Student
+</button>
+
+ <button
+      nz-button
+      nzDanger
+      nzType="primary"
+      *ngIf="data.roles=='Student' "
+      (click)="setAsSocietyMember(data.uuid)"
       >
-        Remove
-      </button></td>
-  </tr>
+      Set as Society Member
+    </button></td>
+</tr>
 </tbody>
 </nz-table>
 </div>
-  
 </div>
+
+
+<div class="m-5 px-8">
+<div class="my-5 space-y-6 py-4">
+  <div class="flex bg-white">
+    <h1 class="text-xl">Enroll Society Request</h1>
+  </div>
+</div>
+<div>
+<nz-table 
+#enrolledSocietiesListTable
+[nzData]="enrolledSocietiesList"
+>
+<thead>
+<tr>
+    <th>
+     ITSC
+    </th>
+    <th>
+     NAME
+    </th>
+    <th>
+     STATUS
+    </th>
+    <th>
+    ACTION
+    </th>
+  </tr>
+</thead>
+<tbody>
+<tr
+class="cursor-pointer" 
+*ngFor="let data of enrolledSocietiesListTable.data">
+<td>{{data.itsc}}</td>
+<td>{{data.nickname}}</td>
+<td>{{data.status}}</td>
+<td>         
+  <button  
+  nz-button
+  nzType="primary"
+  (click)="approveSocietyRequest(data.uuid)"
+  >
+  Approve
+</button>
+</td>
+</tr>
+</tbody>
+</nz-table>
+</div>
+</div>
+
