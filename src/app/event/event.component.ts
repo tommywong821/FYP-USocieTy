@@ -49,22 +49,7 @@ export class EventComponent implements OnInit {
   EventTableColumn = EventTableColumn;
   eventTableHeaders = EventTableColumn.map(col => col.title);
 
-  events: Event[] = [
-    {
-      id: '',
-      name: 'Ocamp',
-      poster: '',
-      maxParticipation: 120,
-      applyDeadline: new Date(),
-      location: 'HKUST',
-      startDate: new Date(),
-      endDate: new Date(),
-      category: EventCategory.OrientationCamp,
-      description: '',
-      fee: 100,
-      society: 'HKUSTSU',
-    },
-  ];
+  events: Event[] = [];
   refreshEvents$ = new Subject();
 
   pageIndex = 1;

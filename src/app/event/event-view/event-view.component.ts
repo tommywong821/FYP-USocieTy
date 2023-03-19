@@ -31,29 +31,9 @@ export class EventViewComponent implements OnInit {
   enrollmentTableColumn = [{title: 'itsc'}, {title: 'payment status'}, {title: 'enrollment status'}];
 
   eventId = '';
-  // event?: Event = undefined;
-  event?: Event = {
-    id: '',
-    name: 'Ocamp',
-    poster: '',
-    maxParticipation: 120,
-    applyDeadline: new Date(),
-    location: 'HKUST',
-    startDate: new Date(),
-    endDate: new Date(),
-    category: EventCategory.OrientationCamp,
-    description: 'This is the best Ocamp! hahaha',
-    fee: 100,
-    society: 'HKUSTSU',
-  };
+  event?: Event = undefined;
 
-  enrollmentRecords: EventEnrollmentRecord[] = [
-    {
-      itsc: 'cywongch',
-      paymentStatus: PaymentStatus.Paid,
-      eventEnrollmentStatus: EventEnrollmentStatus.Enrolled,
-    },
-  ];
+  enrollmentRecords: EventEnrollmentRecord[] = [];
   refreshEnrollmentRecords$ = new Subject();
 
   toBeUpdatedEnrollmentRecords: Record<string, EnrollmentStatus> = {};
