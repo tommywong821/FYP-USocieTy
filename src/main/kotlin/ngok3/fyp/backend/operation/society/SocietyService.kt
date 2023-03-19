@@ -35,20 +35,17 @@ class SocietyService(
     }
 
     fun joinSociety(itsc: String, societyName: String): Boolean {
-        val studentEntityOptional: Optional<StudentEntity> = studentRepository.findByItsc(itsc)
-        if (studentEntityOptional.isEmpty) {
+        val studentEntity: StudentEntity = studentRepository.findByItsc(itsc).orElseThrow {
             throw Exception("student with itsc:$itsc is not found")
         }
 
-        val societyEntityOptional: Optional<SocietyEntity> = societyRepository.findByName(societyName)
-        if (societyEntityOptional.isEmpty) {
-            throw Exception("Society with id:$societyName is not found")
+
+        val societyEntity: SocietyEntity = societyRepository.findByName(societyName).orElseThrow {
+            Exception("Society with id:$societyName is not found")
         }
 
-        val studentEntity: StudentEntity = studentEntityOptional.get()
-        val societyEntity: SocietyEntity = societyEntityOptional.get()
         val enrolledSocietyRecordEntity = EnrolledSocietyRecordEntity(
-            EnrolledSocietyRecordKey(studentEntity.uuid, societyEntity.uuid), EnrolledStatus.PENDING
+            id = EnrolledSocietyRecordKey(studentEntity.uuid, societyEntity.uuid), status = EnrolledStatus.PENDING
         )
         enrolledSocietyRecordEntity.studentEntity = studentEntity
         enrolledSocietyRecordEntity.societyEntity = societyEntity
