@@ -4,6 +4,7 @@ import ngok3.fyp.backend.operation.enrolled.EnrolledStatus
 import ngok3.fyp.backend.operation.enrolled.event_record.EnrolledEventRecordEntity
 import ngok3.fyp.backend.operation.enrolled.event_record.EnrolledEventRecordKey
 import ngok3.fyp.backend.operation.enrolled.event_record.EnrolledEventRecordRepository
+import ngok3.fyp.backend.operation.enrolled.event_record.PaymentStatus
 import ngok3.fyp.backend.operation.event.dto.EventDto
 import ngok3.fyp.backend.operation.s3.S3BulkResponseEntity
 import ngok3.fyp.backend.operation.s3.S3Service
@@ -78,6 +79,7 @@ class EventService(
         )
         enrolledEventRecordEntity.studentEntity = studentEntity
         enrolledEventRecordEntity.eventEntity = eventEntity
+        enrolledEventRecordEntity.paymentStatus = PaymentStatus.UNPAID
         enrolledEventRecordRepository.save(enrolledEventRecordEntity)
         return true
     }
