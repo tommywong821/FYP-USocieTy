@@ -15,8 +15,8 @@ open class EnrolledEventRecordEntity(
     open var id: EnrolledEventRecordKey = EnrolledEventRecordKey(),
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "status")
-    open var status: EnrolledStatus = EnrolledStatus.PENDING,
+    @Column(name = "enrollStatus")
+    open var enrollStatus: EnrolledStatus = EnrolledStatus.PENDING,
 
     @Enumerated(EnumType.STRING)
     @Column(name = "paymentStatus")

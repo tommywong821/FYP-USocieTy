@@ -3,7 +3,10 @@ package ngok3.fyp.backend.operation.enrolled.event_record
 import ngok3.fyp.backend.operation.enrolled.event_record.model.EnrolledEventDto
 import ngok3.fyp.backend.operation.enrolled.event_record.model.StudentEnrolledEventRecordDto
 import ngok3.fyp.backend.operation.enrolled.event_record.model.UpdateEnrolledEventRecordDto
+import ngok3.fyp.backend.operation.event.EventEntity
+import ngok3.fyp.backend.operation.event.EventRepository
 import ngok3.fyp.backend.util.JWTUtil
+import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
 import java.time.ZoneId
@@ -12,6 +15,7 @@ import java.util.*
 @Service
 class EnrolledEventRecordService(
     private val enrolledEventRecordRepository: EnrolledEventRecordRepository,
+    private val eventRepository: EventRepository,
     private val jwtUtil: JWTUtil
 ) {
     fun updateEnrolledEventRecord(
@@ -28,7 +32,7 @@ class EnrolledEventRecordService(
         ).toList().associateBy({ it.id }, { it }).toMutableMap()
 
 
-        jwtUtil.verifyUserAdminRoleOfSociety(
+        jwtUtil.verifyUserMemberRoleOfSociety(
             jwtToken = jwtToken,
             enrolledEventRecordEntityMap.values.first().eventEntity.societyEntity.name
         )
@@ -40,7 +44,7 @@ class EnrolledEventRecordService(
                     eventUuid = UUID.fromString(updateEnrolledEventRecordDto.eventId)
                 )
                 if (enrolledEventRecordEntityMap.containsKey(key)) {
-                    enrolledEventRecordEntityMap[key]?.status = updateEnrolledEventRecordDto.status
+                    enrolledEventRecordEntityMap[key]?.enrollStatus = updateEnrolledEventRecordDto.status
                 }
             }
         }
@@ -63,11 +67,28 @@ class EnrolledEventRecordService(
     }
 
     fun getStudentEnrolledEventRecord(
+        jwtToken: String,
         eventUuid: String,
         pageNum: Int,
         pageSize: Int
     ): List<StudentEnrolledEventRecordDto> {
-        TODO("Not yet implemented")
-        return emptyList<StudentEnrolledEventRecordDto>()
+        val eventUuidObj: UUID = UUID.fromString(eventUuid)
+        val eventEntity: EventEntity = eventRepository.findById(eventUuidObj).orElseThrow {
+            Exception("Event with id: $eventUuid is not found")
+        }
+
+        jwtUtil.verifyUserMemberRoleOfSociety(jwtToken = jwtToken, societyName = eventEntity.societyEntity.name)
+
+        return enrolledEventRecordRepository.findAllEnrolledRecordStudentByEventIdWithPaging(
+            eventUuidObj,
+            PageRequest.of(pageNum, pageSize)
+        ).map { enrolledEventRecordEntity: EnrolledEventRecordEntity ->
+            StudentEnrolledEventRecordDto(
+                studentId = enrolledEventRecordEntity.studentEntity.uuid.toString(),
+                itsc = enrolledEventRecordEntity.studentEntity.itsc,
+                paymentStatus = enrolledEventRecordEntity.paymentStatus.status,
+                enrolledStatus = enrolledEventRecordEntity.enrollStatus.status
+            )
+        }
     }
 }
