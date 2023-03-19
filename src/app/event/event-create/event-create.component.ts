@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {NzMessageService} from 'ng-zorro-antd/message';
 import {NzUploadChangeParam} from 'ng-zorro-antd/upload';
-import {filter, map, Subject, takeUntil, tap, zip} from 'rxjs';
+import {filter, map, Subject, switchMap, takeUntil, tap, zip} from 'rxjs';
 import {Path} from 'src/app/app-routing.module';
 import {EventCategory} from 'src/app/model/event';
 import {AuthService} from 'src/app/services/auth.service';
@@ -35,21 +35,14 @@ export class EventCreateComponent implements OnInit {
   createEventForm!: FormGroup;
   pictureFile: File | undefined;
 
-  enrolledSocieties: string[] = [];
-
   event$ = new Subject<Event>();
 
   destroy$ = new Subject<void>();
-
-  loadingMessage: string | undefined;
-
-  isProcessing = false;
 
   constructor(
     private ApiService: ApiService,
     private formBuilder: FormBuilder,
     private message: NzMessageService,
-    private AuthService: AuthService,
     private router: Router
   ) {}
 
@@ -66,25 +59,11 @@ export class EventCreateComponent implements OnInit {
       fee: ['', [Validators.required]],
     });
 
-    this.AuthService.user$
-      .pipe(filter(user => !!user))
-      .subscribe(user => (this.enrolledSocieties = [...user!.enrolledSocieties]));
-
-    zip([this.event$, this.AuthService.user$])
+    this.event$
       .pipe(
-        takeUntil(this.destroy$),
-        tap(() => (this.isProcessing = true)),
-        filter(([event, user]) => !!user)
-        // TODO FIX RXJS
-        // map(([event, user]) => getCreateEventRequest(event, this.createEventForm.value.society, user!)),
-        // switchMap(request => this.ApiService.call(request))
+        switchMap(event => this.ApiService.createEvent(event, this.pictureFile!, this.createEventForm.value.society))
       )
-      .subscribe(res => {
-        // console.log('send request');
-        // console.log(res);
-        // this.isProcessing = false;
-        // this.message.remove(this.loadingMessage);
-      });
+      .subscribe();
   }
 
   ngOnDestroy(): void {
@@ -103,20 +82,7 @@ export class EventCreateComponent implements OnInit {
       return;
     }
 
-    this.loadingMessage = this.message.loading('Request in progress...', {nzDuration: 0}).messageId;
-    this.ApiService.createEvent(
-      convertFormDataToEvent({...this.createEventForm.value}),
-      this.pictureFile,
-      this.createEventForm.value.society
-    ).subscribe({
-      next: res => {
-        console.log('send request');
-        console.log(res);
-
-        this.isProcessing = false;
-        this.message.remove(this.loadingMessage);
-      },
-    });
+    this.event$.next(convertFormDataToEvent({...this.createEventForm.value}));
   }
 
   saveFileBuffer({file}: NzUploadChangeParam): void {

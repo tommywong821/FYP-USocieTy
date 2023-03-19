@@ -139,6 +139,20 @@ export class ApiService {
     return this.restful.get<Event[]>(`${environment.backend_url}/event`, {params: queryParams});
   }
 
+  createEvent(eventDto: Event, poster: File, societyName: string) {
+    const formData: FormData = new FormData();
+
+    const eventJson: Blob = new Blob([JSON.stringify(eventDto)], {type: 'application/json'});
+    formData.append('event', eventJson);
+    formData.append('poster', poster);
+    formData.append('society', societyName);
+
+    return this.restful.post(`${environment.backend_url}/event`, formData, {
+      reportProgress: true,
+      responseType: 'text',
+    });
+  }
+
   updateEvent(updateEventRequest: UpdateEventRequest): void {
     this.restful.put(`${environment.backend_url}/event/${updateEventRequest.urlParams['id']}`, updateEventRequest.body);
   }
@@ -158,18 +172,5 @@ export class ApiService {
   updateEventEnrollmentRecords(eventId: string, records: EventEnrollmentRecord[]): void {
     // TODO
     // this.restful.put(`${environment.backend_url}/enrolledEventRecord`, body);
-  }
-  createEvent(eventDto: Event, poster: File, societyName: string) {
-    const formData: FormData = new FormData();
-
-    const eventJson: Blob = new Blob([JSON.stringify(eventDto)], {type: 'application/json'});
-    formData.append('event', eventJson);
-    formData.append('poster', poster);
-    formData.append('society', societyName);
-
-    return this.restful.post(`${environment.backend_url}/event`, formData, {
-      reportProgress: true,
-      responseType: 'text',
-    });
   }
 }

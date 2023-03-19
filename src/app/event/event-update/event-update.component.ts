@@ -2,7 +2,7 @@ import {AuthService} from 'src/app/services/auth.service';
 import {ApiService} from './../../services/api.service';
 import {Component, OnInit} from '@angular/core';
 import {FormGroup, FormBuilder, Validators} from '@angular/forms';
-import {NzMessageService} from 'ng-zorro-antd/message';
+import {NzMessageRef, NzMessageService} from 'ng-zorro-antd/message';
 import {NzUploadChangeParam} from 'ng-zorro-antd/upload';
 import {Subject, filter, zip, takeUntil, tap, map, switchMap, first, finalize} from 'rxjs';
 import {EventCategory} from 'src/app/model/event';
@@ -42,7 +42,7 @@ export class EventUpdateComponent implements OnInit {
 
   destroy$ = new Subject<void>();
 
-  loadingMessage: string | undefined;
+  loadingMessage: NzMessageRef | null = null;
 
   isProcessing = false;
 
@@ -60,8 +60,10 @@ export class EventUpdateComponent implements OnInit {
       this.route.queryParams
         .pipe(
           first(),
+          tap(() => (this.loadingMessage = this.message.loading('Fetching event details...'))),
           tap(params => (this.eventId = params['eventId'])),
-          switchMap(params => this.ApiService.getEvent(params['eventId']))
+          switchMap(params => this.ApiService.getEvent(params['eventId'])),
+          tap(() => this.message.remove(this.loadingMessage?.messageId))
         )
         .subscribe(
           event =>
@@ -110,7 +112,6 @@ export class EventUpdateComponent implements OnInit {
       return;
     }
 
-    this.loadingMessage = this.message.loading('Request in progress...', {nzDuration: 0}).messageId;
     convertFiletoBase64(this.pictureFile)
       .pipe(map(fileBuffer => convertFormDataToEvent({...this.updateEventForm.value, poster: fileBuffer})))
       .subscribe(event => this.event$.next(event));
