@@ -4,9 +4,9 @@ import {Component, OnInit} from '@angular/core';
 import {FormGroup, FormBuilder, Validators} from '@angular/forms';
 import {NzMessageRef, NzMessageService} from 'ng-zorro-antd/message';
 import {NzUploadChangeParam} from 'ng-zorro-antd/upload';
-import {Subject, filter, zip, takeUntil, tap, map, switchMap, first, finalize} from 'rxjs';
+import {Subject, filter, tap, switchMap, first} from 'rxjs';
 import {EventCategory} from 'src/app/model/event';
-import {getUpdateEventRequest, convertFiletoBase64, convertFormDataToEvent} from 'src/util/event.util';
+import {convertFormDataToEvent} from 'src/util/event.util';
 import {Event} from '../../model/event';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Path} from 'src/app/app-routing.module';
@@ -84,15 +84,13 @@ export class EventUpdateComponent implements OnInit {
         .pipe(filter(user => !!user))
         .subscribe(user => (this.enrolledSocieties = [...user!.enrolledSocieties]));
 
-      zip([this.event$, this.AuthService.user$])
+      this.event$
         .pipe(
-          takeUntil(this.destroy$),
-          tap(() => (this.isProcessing = true)),
-          filter(([event, user]) => !!user),
-          map(([event, user]) => getUpdateEventRequest(this.eventId, event, this.updateEventForm.value.society, user!)),
-          finalize(() => this.router.navigate([Path.Main, Path.Event]))
+          switchMap(event => this.ApiService.updateEvent(event, this.pictureFile!, this.updateEventForm.value.society)),
+          // tap(() => (this.isProcessing = false)),
+          tap(() => this.backToEventViewPage())
         )
-        .subscribe(request => this.ApiService.updateEvent(request));
+        .subscribe();
     }
   }
 
@@ -112,9 +110,8 @@ export class EventUpdateComponent implements OnInit {
       return;
     }
 
-    convertFiletoBase64(this.pictureFile)
-      .pipe(map(fileBuffer => convertFormDataToEvent({...this.updateEventForm.value, poster: fileBuffer})))
-      .subscribe(event => this.event$.next(event));
+    this.isProcessing = true;
+    this.event$.next(convertFormDataToEvent({...this.updateEventForm.value}));
   }
 
   saveFileBuffer({file}: NzUploadChangeParam): void {

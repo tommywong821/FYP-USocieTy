@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {NzMessageService} from 'ng-zorro-antd/message';
 import {NzUploadChangeParam} from 'ng-zorro-antd/upload';
-import {filter, finalize, map, Subject, switchMap, takeUntil, tap, zip} from 'rxjs';
+import {filter, Subject, switchMap, tap} from 'rxjs';
 import {Path} from 'src/app/app-routing.module';
 import {EventCategory} from 'src/app/model/event';
 import {AuthService} from 'src/app/services/auth.service';
@@ -71,7 +71,7 @@ export class EventCreateComponent implements OnInit {
     this.event$
       .pipe(
         switchMap(event => this.ApiService.createEvent(event, this.pictureFile!, this.createEventForm.value.society)),
-        tap(() => (this.isProcessing = false)),
+        // tap(() => (this.isProcessing = false)),
         tap(() => this.router.navigate([Path.Main, Path.Event]))
       )
       .subscribe();
