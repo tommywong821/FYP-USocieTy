@@ -66,25 +66,26 @@ class EnrolledEventControllerTest @Autowired constructor(
             StudentEnrolledEventRecordDto(
                 studentId = UUID.randomUUID().toString(),
                 itsc = "qwerty",
-                paymentStatus = PaymentStatus.UNPAID.paymentStatus,
+                paymentStatus = PaymentStatus.UNPAID.status,
                 enrolledStatus = EnrolledStatus.SUCCESS.status
             ),
             StudentEnrolledEventRecordDto(
                 studentId = UUID.randomUUID().toString(),
                 itsc = "asdfg",
-                paymentStatus = PaymentStatus.PAID.paymentStatus,
+                paymentStatus = PaymentStatus.PAID.status,
                 enrolledStatus = EnrolledStatus.PENDING.status
             ),
             StudentEnrolledEventRecordDto(
                 studentId = UUID.randomUUID().toString(),
                 itsc = "qwerty",
-                paymentStatus = PaymentStatus.UNPAID.paymentStatus,
+                paymentStatus = PaymentStatus.UNPAID.status,
                 enrolledStatus = EnrolledStatus.DECLINE.status
             ),
         )
 
         every {
             enrolledEventService.getStudentEnrolledEventRecord(
+                mockAuthRepository.validUserCookieToken,
                 eventUuid,
                 0, 10
             )

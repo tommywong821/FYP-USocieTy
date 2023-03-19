@@ -45,10 +45,11 @@ class EnrolledEventRecordController(
     @Operation(summary = "get all students of an enrolled event with event id")
     @GetMapping("/{eventId}")
     fun getStudentEnrolledEventRecord(
+        @CookieValue("token") jwtToken: String,
         @PathVariable eventId: String,
         @RequestParam("pageNum", required = false, defaultValue = "0") pageNum: Int,
         @RequestParam("pageSize", required = false, defaultValue = "10") pageSize: Int
     ): List<StudentEnrolledEventRecordDto> {
-        return enrolledEventService.getStudentEnrolledEventRecord(eventId, pageNum, pageSize)
+        return enrolledEventService.getStudentEnrolledEventRecord(jwtToken, eventId, pageNum, pageSize)
     }
 }
