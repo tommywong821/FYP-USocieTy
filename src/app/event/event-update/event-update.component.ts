@@ -68,10 +68,10 @@ export class EventUpdateComponent implements OnInit {
             (this.updateEventForm = this.formBuilder.group({
               eventTitle: [event.name, [Validators.required]],
               location: [event.location, [Validators.required]],
-              society: ['', [Validators.required]], // TODO
+              society: [event.society, [Validators.required]],
               maxParticipation: [event.maxParticipation, [Validators.required]],
               applyDeadline: [event.applyDeadline, [Validators.required]],
-              date: [{startDate: event.startDate, endDate: event.endDate}, [Validators.required]],
+              date: [[event.startDate, event.endDate], [Validators.required]],
               category: [event.category, [Validators.required]],
               description: [event.description, [Validators.required]],
               fee: [event.fee, [Validators.required]],
@@ -120,7 +120,7 @@ export class EventUpdateComponent implements OnInit {
     this.pictureFile = file.originFileObj;
   }
 
-  backToEventPage(): void {
-    this.router.navigate([Path.Main, Path.Event]);
+  backToEventViewPage(): void {
+    this.router.navigate([Path.Main, Path.Event, Path.ViewEvent], {queryParams: {eventId: this.eventId}});
   }
 }
