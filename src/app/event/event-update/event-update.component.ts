@@ -12,7 +12,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {Path} from 'src/app/app-routing.module';
 
 export enum UpdateEventFormFields {
-  EventTitle = 'eventTitle',
+  Name = 'name',
   Location = 'location',
   Society = 'society',
   MaxParticipation = 'maxParticipation',
