@@ -4,6 +4,7 @@ import ngok3.fyp.backend.operation.enrolled.EnrolledStatus
 import ngok3.fyp.backend.operation.enrolled.event_record.EnrolledEventRecordEntity
 import ngok3.fyp.backend.operation.enrolled.event_record.EnrolledEventRecordKey
 import ngok3.fyp.backend.operation.enrolled.event_record.EnrolledEventRecordRepository
+import ngok3.fyp.backend.operation.enrolled.event_record.PaymentStatus
 import ngok3.fyp.backend.operation.event.dto.EventDto
 import ngok3.fyp.backend.operation.s3.S3BulkResponseEntity
 import ngok3.fyp.backend.operation.s3.S3Service
@@ -75,13 +76,14 @@ class EventService(
         )
         enrolledEventRecordEntity.studentEntity = studentEntity
         enrolledEventRecordEntity.eventEntity = eventEntity
+        enrolledEventRecordEntity.paymentStatus = PaymentStatus.UNPAID
         enrolledEventRecordRepository.save(enrolledEventRecordEntity)
         return true
     }
 
     fun createEvent(jwtToken: String, uploadFile: MultipartFile, eventDto: EventDto, societyName: String): EventDto {
         //check if user belongs that society
-        jwtUtil.verifyUserAdminRoleOfSociety(jwtToken, societyName)
+        jwtUtil.verifyUserMemberRoleOfSociety(jwtToken, societyName)
 //        check if society exist
         val societyEntityOpt: Optional<SocietyEntity> = societyRepository.findByName(societyName)
         if (societyEntityOpt.isEmpty) {
@@ -105,7 +107,7 @@ class EventService(
 
     fun deleteEvent(jwtToken: String, eventId: String) {
         try {
-            jwtUtil.verifyUserAdminRoleOfSociety(
+            jwtUtil.verifyUserMemberRoleOfSociety(
                 jwtToken,
                 eventRepository.findById(UUID.fromString(eventId)).get().societyEntity.name
             )
@@ -130,7 +132,7 @@ class EventService(
         }
 
         //check user identify
-        jwtUtil.verifyUserAdminRoleOfSociety(
+        jwtUtil.verifyUserMemberRoleOfSociety(
             jwtToken,
             eventEntity.societyEntity.name
         )
@@ -165,7 +167,7 @@ class EventService(
             Exception("event: $eventUuid does not exist")
         }
 
-        jwtUtil.verifyUserAdminRoleOfSociety(jwtToken, eventEntity.societyEntity.name)
+        jwtUtil.verifyUserMemberRoleOfSociety(jwtToken, eventEntity.societyEntity.name)
 
         return EventDto().createFromEntity(eventEntity, s3BucketDomain)
     }
