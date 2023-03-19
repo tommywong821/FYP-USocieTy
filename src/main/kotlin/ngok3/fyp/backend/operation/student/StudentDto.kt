@@ -22,9 +22,9 @@ data class StudentDto(
     )
 
     constructor(studentEntity: StudentEntity, enrolledSocietyList: List<String>, roles: List<String>) : this(
-        studentEntity.itsc,
-        studentEntity.nickname,
-        studentEntity.mail,
+        itsc = studentEntity.itsc,
+        nickname = studentEntity.nickname,
+        mail = studentEntity.mail,
         enrolledSocieties = enrolledSocietyList,
         roles = roles
     )
