@@ -17,7 +17,7 @@ data class EventDto(
     val location: String = "",
     val startDate: String = "",
     val endDate: String = "",
-    val category: EventCategory? = null,
+    val category: EventCategory = EventCategory.OUTDOOR,
     val description: String = "",
     val fee: Double = 0.0,
     val version: Long = 0,
