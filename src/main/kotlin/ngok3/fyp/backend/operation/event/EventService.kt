@@ -72,7 +72,7 @@ class EventService(
         }
 
         val enrolledEventRecordEntity = EnrolledEventRecordEntity(
-            id = EnrolledEventRecordKey(studentEntity.uuid, eventEntity.uuid), status = EnrolledStatus.PENDING
+            id = EnrolledEventRecordKey(studentEntity.uuid, eventEntity.uuid), enrollStatus = EnrolledStatus.PENDING
         )
         enrolledEventRecordEntity.studentEntity = studentEntity
         enrolledEventRecordEntity.eventEntity = eventEntity
