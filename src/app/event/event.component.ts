@@ -1,7 +1,8 @@
 import {EventProperty} from './../model/event';
 import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
-import {ReplaySubject, Subject, switchMap, tap} from 'rxjs';
+import {filter, map, ReplaySubject, Subject, switchMap, tap} from 'rxjs';
+import {AuthService} from 'src/app/services/auth.service';
 import {Path} from '../app-routing.module';
 import {ApiService} from '../services/api.service';
 import {Event} from '../model/event';
@@ -53,6 +54,8 @@ export class EventComponent implements OnInit {
   events: Event[] = [];
   refreshEvents$ = new Subject();
 
+  enrolledSocieties: string[] = [];
+
   pageIndex = 1;
   pageSize = 15;
 
@@ -63,13 +66,23 @@ export class EventComponent implements OnInit {
 
   loadingMessage: NzMessageRef | null = null;
 
-  constructor(private router: Router, private ApiService: ApiService, private message: NzMessageService) {}
+  constructor(
+    private router: Router,
+    private ApiService: ApiService,
+    private message: NzMessageService,
+    private AuthService: AuthService
+  ) {}
 
   ngOnInit(): void {
+    this.AuthService.user$
+      .pipe(filter(user => !!user))
+      .subscribe(user => (this.enrolledSocieties = [...user!.enrolledSocieties]));
+
     this.refreshEvents$
       .pipe(
         tap(() => (this.loadingMessage = this.message.loading('Fetching events...'))),
         switchMap(() => this.ApiService.getEvents(this.pageIndex, this.pageSize)),
+        map(events => events.filter(event => this.enrolledSocieties.includes(event.id!))),
         tap(() => this.message.remove(this.loadingMessage?.messageId))
       )
       .subscribe(event => (this.events = ([] as Event[]).concat(event)));
