@@ -25,13 +25,13 @@ open class EventEntity(
 ) : BaseEntity() {
 
 
-    @OneToMany(mappedBy = "eventEntity")
+    @OneToMany(mappedBy = "eventEntity", cascade = [CascadeType.ALL])
     open var enrolledEventRecordEntity: MutableSet<EnrolledEventRecordEntity> = mutableSetOf()
 
     @ManyToOne
     @JoinColumn(name = "society_uuid", nullable = false)
     open var societyEntity: SocietyEntity = SocietyEntity()
 
-    @OneToMany(mappedBy = "eventEntity", orphanRemoval = true)
+    @OneToMany(mappedBy = "eventEntity", cascade = [CascadeType.ALL])
     open var attendanceEntities: MutableSet<AttendanceEntity> = mutableSetOf()
 }
