@@ -101,7 +101,7 @@ export class EventUpdateComponent implements OnInit {
 
       this.event$
         .pipe(
-          switchMap(event => this.ApiService.updateEvent(event, this.pictureFile!, this.updateEventForm.value.society)),
+          switchMap(event => this.ApiService.updateEvent(event, this.updateEventForm.value.society, this.pictureFile)),
           // tap(() => (this.isProcessing = false)),
           tap(() => this.message.remove(this.loadingMessage?.messageId)),
           tap(() => this.message.success('Successfully created event', {nzDuration: 3000})),

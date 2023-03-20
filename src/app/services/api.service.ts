@@ -152,13 +152,15 @@ export class ApiService {
     });
   }
 
-  updateEvent(eventDto: Event, poster: File, societyName: string) {
+  updateEvent(eventDto: Event, societyName: string, poster?: File) {
     const formData: FormData = new FormData();
 
     const eventJson: Blob = new Blob([JSON.stringify(eventDto)], {type: 'application/json'});
     formData.append('event', eventJson);
-    formData.append('poster', poster);
     formData.append('society', societyName);
+    if (poster) {
+      formData.append('poster', poster);
+    }
 
     return this.restful.put(`${environment.backend_url}/event`, formData, {
       reportProgress: true,
