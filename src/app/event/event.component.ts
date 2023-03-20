@@ -10,7 +10,7 @@ import {NzMessageRef, NzMessageService} from 'ng-zorro-antd/message';
 
 export const EventTableColumn = [
   {
-    title: 'society',
+    title: 'Society',
   },
   {
     title: 'Name',

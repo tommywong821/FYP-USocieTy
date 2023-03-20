@@ -20,7 +20,7 @@ export class EventViewComponent implements OnInit {
   EventEnrollmentStatus = EventEnrollmentStatus;
   PaymentStatus = PaymentStatus;
 
-  enrollmentTableColumn = [{title: 'itsc'}, {title: 'payment status'}, {title: 'enrollment status'}];
+  enrollmentTableColumn = [{title: 'Itsc'}, {title: 'Payment Status'}, {title: 'Enrollment Status'}];
 
   eventId = '';
   event?: Event = undefined;

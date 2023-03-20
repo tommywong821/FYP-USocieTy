@@ -68,7 +68,13 @@ export class EventUpdateComponent implements OnInit {
           tap(
             event =>
               (this.fileList = [
-                {uid: '1', name: getPictureNameFromUrl(event.poster), status: 'done', url: event.poster},
+                {
+                  uid: '1',
+                  name: getPictureNameFromUrl(event.poster),
+                  status: 'done',
+                  url: event.poster,
+                  thumbUrl: event.poster,
+                },
               ])
           ),
           tap(event => console.log(event)),
