@@ -63,7 +63,7 @@ class AttendanceService(
         return attendanceRepository.findAll().map { attendanceEntity: AttendanceEntity ->
             StudentAttendanceDto(
                 attendanceEntity.studentEntity?.uuid.toString(),
-                attendanceEntity.studentEntity?.nickname,
+                attendanceEntity.studentEntity?.itsc,
                 attendanceEntity.createdAt.toString(),
                 attendanceEntity.updatedAt.toString(),
                 attendanceEntity.eventEntity?.name
