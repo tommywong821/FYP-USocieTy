@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {NzMessageService} from 'ng-zorro-antd/message';
+import {NzMessageRef, NzMessageService} from 'ng-zorro-antd/message';
 import {NzUploadChangeParam} from 'ng-zorro-antd/upload';
 import {filter, Subject, switchMap, tap} from 'rxjs';
 import {Path} from 'src/app/app-routing.module';
@@ -37,6 +37,8 @@ export class EventCreateComponent implements OnInit {
   createEventForm!: FormGroup;
   pictureFile: File | undefined;
 
+  loadingMessage: NzMessageRef | null = null;
+
   isProcessing = false;
 
   event$ = new Subject<Event>();
@@ -72,7 +74,8 @@ export class EventCreateComponent implements OnInit {
       .pipe(
         switchMap(event => this.ApiService.createEvent(event, this.pictureFile!, this.createEventForm.value.society)),
         // tap(() => (this.isProcessing = false)),
-        tap(() => this.message.success('Successfully created event', {nzDuration: 3000})),
+        tap(() => this.message.remove(this.loadingMessage?.messageId)),
+        tap(() => this.message.success('Successfully created event', {nzDuration: 2000})),
         tap(() => this.router.navigate([Path.Main, Path.Event]))
       )
       .subscribe();
@@ -95,6 +98,7 @@ export class EventCreateComponent implements OnInit {
     }
 
     this.isProcessing = true;
+    this.loadingMessage = this.message.loading('Creating event...');
     this.event$.next(convertFormDataToEvent({...this.createEventForm.value}));
   }
 
