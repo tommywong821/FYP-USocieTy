@@ -116,13 +116,11 @@ class ApiService {
   }
 
   Future<bool> registerEvent(String eventID) async {
-    final uri = Uri.https(backendDomain, '/event', {
+    final url = Uri.https(backendDomain, '/event/join').toString();
+    final response = await _dio.post(url, data: {
       'itsc': await _storageService.readSecureData(ITSC_KEY),
       'eventId': eventID
     });
-    final response = await _dio.postUri(
-      uri,
-    );
     if (response.statusCode == 200)
       return true;
     else
@@ -130,13 +128,11 @@ class ApiService {
   }
 
   Future<bool> registerSociety(String societyName) async {
-    final uri = Uri.https(backendDomain, '/society', {
+    final url = Uri.https(backendDomain, '/society/join').toString();
+    final response = await _dio.post(url, data: {
       'itsc': await _storageService.readSecureData(ITSC_KEY),
       'societyName': societyName
     });
-    final response = await _dio.postUri(
-      uri,
-    );
     if (response.statusCode == 200)
       return true;
     else
