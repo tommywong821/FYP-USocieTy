@@ -71,4 +71,15 @@ class EventController(
     ): EventDto {
         return eventService.getEventWithUuid(jwtToken, eventId)
     }
+
+    @Operation(summary = "get event with society name")
+    @GetMapping("/society/{societyName}")
+    fun getEventWithSocietyName(
+        @CookieValue("token") jwtToken: String,
+        @PathVariable societyName: String,
+        @RequestParam("pageNum", required = false, defaultValue = "0") pageNum: Int,
+        @RequestParam("pageSize", required = false, defaultValue = "10") pageSize: Int
+    ): List<EventDto> {
+        return eventService.getEventWithSocietyName(jwtToken, societyName, pageNum, pageSize)
+    }
 }
