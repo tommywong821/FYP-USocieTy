@@ -38,9 +38,9 @@ class EnrolledSocietyRecordService(
         return enrolledSocietyRepository.findBySocietyEntity_NameAndStatusNotEqual(societyName, EnrolledStatus.SUCCESS)
             .map { enrolledSocietyRecordEntity ->
                 StudentEnrolledEventRecord(
-                    enrolledSocietyRecordEntity.studentEntity.itsc,
-                    enrolledSocietyRecordEntity.studentEntity.nickname,
-                    enrolledSocietyRecordEntity.status
+                    studentId = enrolledSocietyRecordEntity.studentEntity.uuid.toString(),
+                    societyId = enrolledSocietyRecordEntity.societyEntity.uuid.toString(),
+                    status = enrolledSocietyRecordEntity.status
                 )
             }
     }

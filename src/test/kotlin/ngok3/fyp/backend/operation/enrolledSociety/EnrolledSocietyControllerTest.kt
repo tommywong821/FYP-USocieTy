@@ -58,8 +58,16 @@ class EnrolledSocietyControllerTest @Autowired constructor(
     @Test
     fun `should get student with enrolled society status != SUCCESS`() {
         val mockStudentListNotInSuccess: List<StudentEnrolledEventRecord> = listOf(
-            StudentEnrolledEventRecord("qwert", "nickname 1", EnrolledStatus.PENDING),
-            StudentEnrolledEventRecord("asdfg", "nickname 2", EnrolledStatus.DECLINE),
+            StudentEnrolledEventRecord(
+                UUID.randomUUID().toString(),
+                UUID.randomUUID().toString(),
+                EnrolledStatus.PENDING
+            ),
+            StudentEnrolledEventRecord(
+                UUID.randomUUID().toString(),
+                UUID.randomUUID().toString(),
+                EnrolledStatus.DECLINE
+            ),
         )
 
         every {
@@ -86,11 +94,11 @@ class EnrolledSocietyControllerTest @Autowired constructor(
             jsonPath("$.size()") {
                 value(mockStudentListNotInSuccess.size)
             }
-            jsonPath("$[*].itsc") {
-                value(mockStudentListNotInSuccess.map { mockData -> mockData.itsc })
+            jsonPath("$[*].studentId") {
+                value(mockStudentListNotInSuccess.map { mockData -> mockData.studentId })
             }
-            jsonPath("$[*].nickname") {
-                value(mockStudentListNotInSuccess.map { mockData -> mockData.nickname })
+            jsonPath("$[*].societyId") {
+                value(mockStudentListNotInSuccess.map { mockData -> mockData.societyId })
             }
             jsonPath("$[*].status") {
                 value(mockStudentListNotInSuccess.map { mockData -> mockData.status.toString() })
