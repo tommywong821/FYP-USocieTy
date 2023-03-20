@@ -29,7 +29,7 @@ class SocietyController(
         return societyService.joinSociety(joinSocietyDto.itsc, joinSocietyDto.societyName)
     }
 
-    @Operation(summary = "get all student of society")
+    @Operation(summary = "get all student enrolled in society but not society member")
     @GetMapping("/member")
     fun getAllSocietyMember(
         @RequestParam("societyName", required = true) societyName: String,
