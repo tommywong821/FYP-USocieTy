@@ -98,7 +98,9 @@ export class EventViewComponent implements OnInit {
     }));
     this.updateEnrollmentRecord$.next(records);
     this.message.loading('Updating event enrollment records...', {nzDuration: 2000});
-    this.refreshEnrollmentRecords$.next({});
+    setTimeout(() => {
+      this.refreshEnrollmentRecords$.next({});
+    }, 2000);
     this.toBeUpdatedEnrollmentRecords = {};
   }
 
