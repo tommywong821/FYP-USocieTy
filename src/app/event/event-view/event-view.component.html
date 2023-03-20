@@ -94,7 +94,7 @@
               >
                 <nz-option
                   *ngFor="let paymentStatus of PaymentStatus | keyvalue"
-                  [nzValue]="paymentStatus.key"
+                  [nzValue]="paymentStatus.value"
                   [nzLabel]="paymentStatus.key"
                 ></nz-option>
               </nz-select>
@@ -107,7 +107,7 @@
               >
                 <nz-option
                   *ngFor="let eventEnrollmentStatus of EventEnrollmentStatus | keyvalue"
-                  [nzValue]="eventEnrollmentStatus.key"
+                  [nzValue]="eventEnrollmentStatus.value"
                   [nzLabel]="eventEnrollmentStatus.key"
                 ></nz-option>
               </nz-select>

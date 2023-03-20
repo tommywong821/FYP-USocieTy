@@ -46,14 +46,14 @@ export enum EventCategory {
 }
 
 export enum PaymentStatus {
-  Paid = 'Paid',
-  Unpaid = 'Unpaid',
+  Paid = 'PAID',
+  Unpaid = 'UNPAID',
 }
 
 export enum EventEnrollmentStatus {
-  Pending = 'Pending',
-  Enrolled = 'Enrolled',
-  Rejected = 'Rejected',
+  Pending = 'PENDING',
+  Enrolled = 'SUCCESS',
+  Rejected = 'DECLINE',
 }
 
 export interface EventEnrollmentRecord {
