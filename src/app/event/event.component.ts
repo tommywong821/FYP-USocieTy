@@ -1,7 +1,7 @@
 import {EventProperty} from './../model/event';
 import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
-import {filter, ReplaySubject, Subject, switchMap, tap} from 'rxjs';
+import {filter, ReplaySubject, Subject, switchMap, tap, timeout} from 'rxjs';
 import {AuthService} from 'src/app/services/auth.service';
 import {Path} from '../app-routing.module';
 import {ApiService} from '../services/api.service';
@@ -87,11 +87,8 @@ export class EventComponent implements OnInit {
       .subscribe(event => (this.events = ([] as Event[]).concat(event)));
 
     this.deleteEvent$
-      .pipe(
-        switchMap(() => this.deleteEventId$.asObservable()),
-        switchMap(async eventId => this.ApiService.deleteEvent(eventId))
-      )
-      .subscribe();
+      .pipe(switchMap(() => this.deleteEventId$.asObservable()))
+      .subscribe(eventId => this.ApiService.deleteEvent(eventId));
 
     this.refreshEvents$.next({});
   }
@@ -116,7 +113,9 @@ export class EventComponent implements OnInit {
   confirmEventDeletion(): void {
     this.showModal = false;
     this.deleteEvent$.next({});
-    this.refreshEvents$.next({});
+    setTimeout(() => {
+      this.refreshEvents$.next({});
+    }, 2000);
   }
 
   cancelEventDeletion(): void {

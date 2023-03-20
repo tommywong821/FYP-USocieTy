@@ -169,9 +169,7 @@ export class ApiService {
   }
 
   deleteEvent(eventId: string): void {
-    console.log('deleteEvent triggered');
-
-    this.restful.delete(`${environment.backend_url}/event/${eventId}`);
+    this.restful.delete(`${environment.backend_url}/event/${eventId}`).subscribe();
   }
 
   getEventEnrollmentRecord(eventId: string, pageIndex: number, pageSize: number): Observable<EventEnrollmentRecord[]> {
