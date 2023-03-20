@@ -178,6 +178,6 @@ export class ApiService {
   }
 
   updateEventEnrollmentRecords(eventId: string, records: UpdateEventEnrollmentRecordPayload[]): Observable<void> {
-    return this.restful.put<void>(`${environment.backend_url}/enrolledEventRecord/${eventId}`, records);
+    return this.restful.put<void>(`${environment.backend_url}/enrolledEventRecord`, records);
   }
 }
