@@ -1,7 +1,7 @@
 import {EventProperty} from './../model/event';
 import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
-import {filter, map, ReplaySubject, Subject, switchMap, tap, zip} from 'rxjs';
+import {filter, ReplaySubject, Subject, switchMap, tap} from 'rxjs';
 import {AuthService} from 'src/app/services/auth.service';
 import {Path} from '../app-routing.module';
 import {ApiService} from '../services/api.service';
@@ -74,23 +74,17 @@ export class EventComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    zip([
-      this.refreshEvents$.pipe(
+    this.AuthService.user$
+      .pipe(filter(user => !!user))
+      .subscribe(user => (this.enrolledSocieties = [...user!.enrolledSocieties]));
+
+    this.refreshEvents$
+      .pipe(
         tap(() => (this.loadingMessage = this.message.loading('Fetching events...'))),
         switchMap(() => this.ApiService.getEvents(this.pageIndex, this.pageSize)),
         tap(() => this.message.remove(this.loadingMessage?.messageId))
-      ),
-      this.AuthService.user$.pipe(filter(user => !!user)),
-    ])
-      .pipe(
-        tap(([events, user]) => {
-          console.log(events);
-          console.log(user);
-        })
       )
-      .subscribe(
-        ([events, user]) => (this.events = events.filter(event => user?.enrolledSocieties.includes(event.id as string)))
-      );
+      .subscribe(event => (this.events = ([] as Event[]).concat(event)));
 
     this.deleteEvent$
       .pipe(

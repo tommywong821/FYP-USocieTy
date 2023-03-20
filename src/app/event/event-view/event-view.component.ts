@@ -88,6 +88,8 @@ export class EventViewComponent implements OnInit {
       eventEnrollmentStatus: val.eventEnrollmentStatus,
     }));
     this.ApiService.updateEventEnrollmentRecords(this.eventId, records as EventEnrollmentRecord[]);
+    this.message.loading('Updating event enrollment records...', {nzDuration: 2000});
+    this.refreshEnrollmentRecords$.next({});
     this.toBeUpdatedEnrollmentRecords = {};
   }
 
