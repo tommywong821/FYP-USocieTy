@@ -1,5 +1,6 @@
 package ngok3.fyp.backend.operation.student
 
+import ngok3.fyp.backend.authentication.student_role.StudentRoleEntity
 import org.springframework.stereotype.Service
 import java.util.*
 
@@ -16,8 +17,10 @@ class StudentService(
         }.orElseThrow {
             Exception("student is not found in database")
         }
+
+
         val enrolledSocietyList: List<String> =
-            studentEntity.enrolledSocietyRecordEntities.map { it.societyEntity.name }
+            studentEntity.studentRoleEntities.map { studentRoleEntity: StudentRoleEntity -> studentRoleEntity.societyEntity.name }
 
         return StudentDto(studentEntity, enrolledSocietyList)
     }

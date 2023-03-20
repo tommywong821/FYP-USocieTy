@@ -20,7 +20,6 @@ class EventController(
         @RequestParam("pageNum", required = false, defaultValue = "0") pageNum: Int,
         @RequestParam("pageSize", required = false, defaultValue = "10") pageSize: Int
     ): List<EventDto> {
-        print("pageSize: $pageSize pageNum: $pageNum ")
         return eventService.getAllEvent(pageNum, pageSize)
     }
 

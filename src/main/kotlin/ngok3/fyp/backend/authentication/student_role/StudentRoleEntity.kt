@@ -22,5 +22,5 @@ open class StudentRoleEntity() : BaseEntity() {
 
     @ManyToOne
     @JoinColumn(name = "society_uuid")
-    open var societyEntity: SocietyEntity? = null
+    open var societyEntity: SocietyEntity = SocietyEntity()
 }

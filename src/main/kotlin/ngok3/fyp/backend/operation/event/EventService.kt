@@ -41,7 +41,6 @@ class EventService(
 
     fun getAllEvent(pageNum: Int, pageSize: Int): List<EventDto> {
         val firstPageNumWithPageSizeElement: Pageable = PageRequest.of(pageNum, pageSize)
-        println("LocalDateTime.now(ZoneId.of(\"Asia/Hong_Kong\")): ${LocalDateTime.now(ZoneId.of("Asia/Hong_Kong"))}")
 
         //get all event
         val allEvent: List<EventEntity> = eventRepository.findByApplyDeadlineGreaterThanEqualOrderByApplyDeadlineAsc(
