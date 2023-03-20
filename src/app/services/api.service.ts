@@ -169,6 +169,8 @@ export class ApiService {
   }
 
   deleteEvent(eventId: string): void {
+    console.log('deleteEvent triggered');
+
     this.restful.delete(`${environment.backend_url}/event/${eventId}`);
   }
 
