@@ -20,4 +20,8 @@ interface EventRepository : PagingAndSortingRepository<EventEntity, UUID> {
         pageable: Pageable
     ): Page<EventEntity>
 
+
+    @Query("select e from EventEntity e where e.societyEntity.name = ?1")
+    fun findAllBySocietyName(name: String, pageable: Pageable): List<EventEntity>
+
 }

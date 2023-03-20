@@ -170,4 +170,13 @@ class EventService(
 
         return EventDto().createFromEntity(eventEntity, s3BucketDomain)
     }
+
+    fun getEventWithSocietyName(jwtToken: String, societyName: String, pageNum: Int, pageSize: Int): List<EventDto> {
+        jwtUtil.verifyUserMemberRoleOfSociety(jwtToken, societyName)
+
+        return eventRepository.findAllBySocietyName(societyName, PageRequest.of(pageNum, pageSize))
+            .map { eventEntity: EventEntity ->
+                EventDto().createFromEntity(eventEntity, s3BucketDomain)
+            }
+    }
 }
