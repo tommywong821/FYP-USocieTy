@@ -89,9 +89,10 @@ export class EventComponent implements OnInit {
     this.deleteEvent$
       .pipe(
         switchMap(() => this.deleteEventId$.asObservable()),
+        switchMap(eventId => this.ApiService.deleteEvent(eventId)),
         tap(() => this.message.loading('Deleting event...', {nzDuration: 2000}))
       )
-      .subscribe(eventId => this.ApiService.deleteEvent(eventId));
+      .subscribe();
 
     this.refreshEvents$.next({});
   }
