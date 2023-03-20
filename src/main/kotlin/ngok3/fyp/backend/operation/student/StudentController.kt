@@ -1,10 +1,8 @@
 package ngok3.fyp.backend.operation.student
 
 import io.swagger.v3.oas.annotations.Operation
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestParam
-import org.springframework.web.bind.annotation.RestController
+import ngok3.fyp.backend.operation.event.dto.EventDto
+import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/student")
@@ -19,6 +17,16 @@ class StudentController(
         @RequestParam(name = "cardId", required = false, defaultValue = "") cardId: String,
     ): StudentDto {
         return studentService.getStudentProfile(itsc, uuid, cardId)
+    }
+
+    @Operation(summary = "Get all event by student with society member")
+    @GetMapping("/{studentId}/event")
+    fun getAllEventWithSocietyMember(
+        @PathVariable studentId: String,
+        @RequestParam("pageNum", required = false, defaultValue = "0") pageNum: Int,
+        @RequestParam("pageSize", required = false, defaultValue = "10") pageSize: Int
+    ): List<EventDto> {
+        return studentService.getAllEventWithSocietyMember(studentId, pageNum, pageSize)
     }
 }
 
