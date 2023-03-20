@@ -152,7 +152,7 @@ export class ApiService {
     });
   }
 
-  updateEvent(eventDto: Event, societyName: string, poster?: File) {
+  updateEvent(eventDto: Event, societyName: string, poster?: File): Observable<void> {
     const formData: FormData = new FormData();
 
     const eventJson: Blob = new Blob([JSON.stringify(eventDto)], {type: 'application/json'});
@@ -162,10 +162,7 @@ export class ApiService {
       formData.append('poster', poster);
     }
 
-    return this.restful.put(`${environment.backend_url}/event`, formData, {
-      reportProgress: true,
-      responseType: 'text',
-    });
+    return this.restful.put<void>(`${environment.backend_url}/event`, formData);
   }
 
   deleteEvent(eventId: string): Observable<void> {
@@ -180,7 +177,7 @@ export class ApiService {
     });
   }
 
-  updateEventEnrollmentRecords(eventId: string, records: EventEnrollmentRecord[]): void {
-    this.restful.put(`${environment.backend_url}/enrolledEventRecord/${eventId}`, records);
+  updateEventEnrollmentRecords(eventId: string, records: EventEnrollmentRecord[]): Observable<void> {
+    return this.restful.put<void>(`${environment.backend_url}/enrolledEventRecord/${eventId}`, records);
   }
 }

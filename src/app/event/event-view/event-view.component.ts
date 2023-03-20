@@ -30,6 +30,8 @@ export class EventViewComponent implements OnInit {
 
   toBeUpdatedEnrollmentRecords: Record<string, EnrollmentStatus> = {};
 
+  updateEnrollmentRecord$ = new Subject<EventEnrollmentRecord[]>();
+
   pageIndex = 1;
   pageSize = 15;
 
@@ -52,6 +54,10 @@ export class EventViewComponent implements OnInit {
         tap(() => this.message.remove(this.loadingMessage?.messageId))
       )
       .subscribe(event => (this.event = event));
+
+    this.updateEnrollmentRecord$
+      .pipe(switchMap(records => this.ApiService.updateEventEnrollmentRecords(this.eventId, records)))
+      .subscribe();
 
     this.refreshEnrollmentRecords$
       .pipe(
@@ -86,11 +92,11 @@ export class EventViewComponent implements OnInit {
   updateEnrollmentRecords(): void {
     const records = Object.entries(this.toBeUpdatedEnrollmentRecords).map(([key, val]) => ({
       itsc: key,
-      studentId: val.studentId,
-      paymentStatus: val.paymentStatus,
-      enrolledStatus: val.enrolledStatus,
+      studentId: val.studentId!,
+      paymentStatus: val.paymentStatus!,
+      enrolledStatus: val.enrolledStatus!,
     }));
-    this.ApiService.updateEventEnrollmentRecords(this.eventId, records as EventEnrollmentRecord[]);
+    this.updateEnrollmentRecord$.next(records);
     this.message.loading('Updating event enrollment records...', {nzDuration: 2000});
     this.refreshEnrollmentRecords$.next({});
     this.toBeUpdatedEnrollmentRecords = {};
