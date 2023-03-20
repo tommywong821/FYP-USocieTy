@@ -168,8 +168,8 @@ export class ApiService {
     });
   }
 
-  deleteEvent(eventId: string): void {
-    this.restful.delete(`${environment.backend_url}/event/${eventId}`).subscribe();
+  deleteEvent(eventId: string): Observable<void> {
+    return this.restful.delete<void>(`${environment.backend_url}/event/${eventId}`);
   }
 
   getEventEnrollmentRecord(eventId: string, pageIndex: number, pageSize: number): Observable<EventEnrollmentRecord[]> {
