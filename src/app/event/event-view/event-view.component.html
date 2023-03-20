@@ -89,7 +89,7 @@
             <td>
               <nz-select
                 [nzBorderless]="true"
-                [ngModel]="enrollmentRecord.paymentStatus"
+                [(ngModel)]="enrollmentRecord.paymentStatus"
                 (ngModelChange)="recordPaymentStatusChanges($event, enrollmentRecord.itsc)"
               >
                 <nz-option
@@ -102,7 +102,7 @@
             <td>
               <nz-select
                 [nzBorderless]="true"
-                [ngModel]="enrollmentRecord.eventEnrollmentStatus"
+                [(ngModel)]="enrollmentRecord.enrolledStatus"
                 (ngModelChange)="recordEnrollmentStatusChanges($event, enrollmentRecord.itsc)"
               >
                 <nz-option

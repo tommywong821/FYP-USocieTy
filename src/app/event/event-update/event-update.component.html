@@ -75,7 +75,7 @@
                 >
                   <nz-option
                     *ngFor="let category of EventCategory | keyvalue"
-                    [nzLabel]="category.value"
+                    [nzLabel]="category.key"
                     [nzValue]="category.value"
                   ></nz-option>
                 </nz-select>

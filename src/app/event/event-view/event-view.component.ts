@@ -77,10 +77,10 @@ export class EventViewComponent implements OnInit {
       : {...this.enrollmentRecords.find(record => record.itsc === itsc)!, paymentStatus};
   }
 
-  recordEnrollmentStatusChanges(eventEnrollmentStatus: EventEnrollmentStatus, itsc: string): void {
+  recordEnrollmentStatusChanges(enrolledStatus: EventEnrollmentStatus, itsc: string): void {
     this.toBeUpdatedEnrollmentRecords[itsc] = this.toBeUpdatedEnrollmentRecords[itsc]
-      ? {...this.toBeUpdatedEnrollmentRecords[itsc], eventEnrollmentStatus}
-      : {...this.enrollmentRecords.find(record => record.itsc === itsc)!, eventEnrollmentStatus};
+      ? {...this.toBeUpdatedEnrollmentRecords[itsc], enrolledStatus}
+      : {...this.enrollmentRecords.find(record => record.itsc === itsc)!, enrolledStatus};
   }
 
   updateEnrollmentRecords(): void {
@@ -88,7 +88,7 @@ export class EventViewComponent implements OnInit {
       itsc: key,
       studentId: val.studentId,
       paymentStatus: val.paymentStatus,
-      eventEnrollmentStatus: val.eventEnrollmentStatus,
+      enrolledStatus: val.enrolledStatus,
     }));
     this.ApiService.updateEventEnrollmentRecords(this.eventId, records as EventEnrollmentRecord[]);
     this.message.loading('Updating event enrollment records...', {nzDuration: 2000});
