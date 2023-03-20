@@ -3,7 +3,13 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {NzMessageRef, NzMessageService} from 'ng-zorro-antd/message';
 import {first, Subject, switchMap, tap} from 'rxjs';
 import {Path} from 'src/app/app-routing.module';
-import {EventEnrollmentRecord, EventEnrollmentStatus, EventProperty, PaymentStatus} from 'src/app/model/event';
+import {
+  EventEnrollmentRecord,
+  EventEnrollmentStatus,
+  EventProperty,
+  PaymentStatus,
+  UpdateEventEnrollmentRecordPayload,
+} from 'src/app/model/event';
 import {ApiService} from 'src/app/services/api.service';
 import {Event} from '../../model/event';
 
@@ -30,7 +36,7 @@ export class EventViewComponent implements OnInit {
 
   toBeUpdatedEnrollmentRecords: Record<string, EnrollmentStatus> = {};
 
-  updateEnrollmentRecord$ = new Subject<EventEnrollmentRecord[]>();
+  updateEnrollmentRecord$ = new Subject<UpdateEventEnrollmentRecordPayload[]>();
 
   pageIndex = 1;
   pageSize = 15;
@@ -91,7 +97,7 @@ export class EventViewComponent implements OnInit {
 
   updateEnrollmentRecords(): void {
     const records = Object.entries(this.toBeUpdatedEnrollmentRecords).map(([key, val]) => ({
-      itsc: key,
+      eventId: this.eventId,
       studentId: val.studentId!,
       paymentStatus: val.paymentStatus!,
       enrolledStatus: val.enrolledStatus!,

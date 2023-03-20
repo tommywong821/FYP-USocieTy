@@ -62,3 +62,10 @@ export interface EventEnrollmentRecord {
   paymentStatus: PaymentStatus;
   enrolledStatus: EventEnrollmentStatus;
 }
+
+export interface UpdateEventEnrollmentRecordPayload {
+  eventId: string;
+  studentId: string;
+  paymentStatus: PaymentStatus;
+  enrolledStatus: EventEnrollmentStatus;
+}
