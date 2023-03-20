@@ -54,7 +54,10 @@ export class EventViewComponent implements OnInit {
       .subscribe(event => (this.event = event));
 
     this.refreshEnrollmentRecords$
-      .pipe(switchMap(() => this.ApiService.getEventEnrollmentRecord(this.eventId, this.pageIndex, this.pageSize)))
+      .pipe(
+        switchMap(() => this.ApiService.getEventEnrollmentRecord(this.eventId, this.pageIndex, this.pageSize)),
+        tap(records => console.log(records))
+      )
       .subscribe(record => (this.enrollmentRecords = ([] as EventEnrollmentRecord[]).concat(record)));
 
     this.refreshEnrollmentRecords$.next({});
