@@ -61,6 +61,7 @@
 
   <nz-modal
     [(nzVisible)]="showModal"
+    (nzOnCancel)="cancelEventDeletion()"
     nzTitle="Warning"
     [nzFooter]="modalFooter"
   >
