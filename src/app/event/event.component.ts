@@ -81,9 +81,16 @@ export class EventComponent implements OnInit {
         tap(() => this.message.remove(this.loadingMessage?.messageId))
       ),
       this.AuthService.user$.pipe(filter(user => !!user)),
-    ]).subscribe(
-      ([events, user]) => (this.events = events.filter(event => user?.enrolledSocieties.includes(event.id as string)))
-    );
+    ])
+      .pipe(
+        tap(([events, user]) => {
+          console.log(events);
+          console.log(user);
+        })
+      )
+      .subscribe(
+        ([events, user]) => (this.events = events.filter(event => user?.enrolledSocieties.includes(event.id as string)))
+      );
 
     this.deleteEvent$
       .pipe(
