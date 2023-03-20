@@ -33,6 +33,7 @@
               <input
                 nz-input
                 required
+                type="text"
                 [formControlName]="UpdateEventFormFields.Name"
               />
             </nz-form-control>
@@ -51,6 +52,7 @@
               <input
                 nz-input
                 required
+                type="text"
                 [formControlName]="UpdateEventFormFields.Location"
               />
             </nz-form-control>
@@ -199,8 +201,9 @@
             <div>
               <nz-upload
                 nzType="drag"
+                nzListType="picture"
                 [nzLimit]="1"
-                [nzFileList]="fileList"
+                [(nzFileList)]="fileList"
                 (nzChange)="saveFileBuffer($event)"
               >
                 <p class="ant-upload-drag-icon">

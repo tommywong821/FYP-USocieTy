@@ -85,9 +85,15 @@
         </thead>
         <tbody>
           <tr *ngFor="let enrollmentRecord of enrollmentTable.data">
-            <td>{{ enrollmentRecord.itsc }}</td>
             <td>
-              <span>{{ enrollmentRecord.paymentStatus }}</span>
+              <nz-badge
+                *ngIf="toBeUpdatedEnrollmentRecords[enrollmentRecord.itsc]"
+                nzStatus="processing"
+              >
+              </nz-badge>
+              {{ enrollmentRecord.itsc }}
+            </td>
+            <td>
               <nz-select
                 [nzBorderless]="true"
                 [(ngModel)]="enrollmentRecord.paymentStatus"
@@ -101,7 +107,6 @@
               </nz-select>
             </td>
             <td>
-              <span>{{ enrollmentRecord.enrolledStatus }}</span>
               <nz-select
                 [nzBorderless]="true"
                 [(ngModel)]="enrollmentRecord.enrolledStatus"
