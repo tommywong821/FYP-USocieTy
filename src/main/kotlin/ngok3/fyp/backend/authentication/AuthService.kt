@@ -4,6 +4,7 @@ import com.fasterxml.jackson.dataformat.xml.XmlMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import ngok3.fyp.backend.authentication.model.*
 import ngok3.fyp.backend.authentication.role.RoleEntityRepository
+import ngok3.fyp.backend.authentication.student_role.StudentRoleEntity
 import ngok3.fyp.backend.operation.student.StudentDto
 import ngok3.fyp.backend.operation.student.StudentEntity
 import ngok3.fyp.backend.operation.student.StudentRepository
@@ -78,7 +79,8 @@ class AuthService(
         val enrolledSocietyList: List<String> =
             studentEntity.enrolledSocietyRecordEntities.map { it.societyEntity.name }
         // create role list string
-        val roleList: List<String> = studentEntity.studentRoleEntities.map { it.roleEntity.role.toString() }
+        val roleList: List<String> =
+            studentEntity.studentRoleEntities.map { studentRoleEntity: StudentRoleEntity -> studentRoleEntity.societyEntity.name }
         return StudentDto(studentEntity, enrolledSocietyList, roleList)
     }
 
@@ -117,7 +119,8 @@ class AuthService(
         val enrolledSocietyList: List<String> =
             studentEntity.enrolledSocietyRecordEntities.map { it.societyEntity.name }
         // create role list string
-        val roleList: List<String> = studentEntity.studentRoleEntities.map { it.roleEntity.role.toString() }
+        val roleList: List<String> =
+            studentEntity.studentRoleEntities.map { studentRoleEntity: StudentRoleEntity -> studentRoleEntity.societyEntity.name }
 
         val mockResponse = CasServiceResponse()
         mockResponse.authenticationFailure = AuthenticationFailure(null, null)
