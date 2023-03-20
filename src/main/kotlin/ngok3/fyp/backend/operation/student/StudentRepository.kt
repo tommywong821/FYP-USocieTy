@@ -17,6 +17,16 @@ interface StudentRepository : CrudRepository<StudentEntity, UUID> {
 
 
     @Query(
+        """select distinct s from StudentEntity s inner join s.enrolledSocietyRecordEntities enrolledSocietyRecordEntities inner join s.studentRoleEntities studentRoleEntities
+where enrolledSocietyRecordEntities.societyEntity.name = ?1 and enrolledSocietyRecordEntities.status = ?2 and studentRoleEntities.societyEntity.name <> ?3"""
+    )
+    fun findAllStudentEnrolledInSocietyButNotSocietyMember(
+        name: String,
+        status: EnrolledStatus,
+        name1: String
+    ): List<StudentEntity>
+
+    @Query(
         """select s from StudentEntity s inner join s.enrolledSocietyRecordEntities enrolledSocietyRecordEntity
 where enrolledSocietyRecordEntity.societyEntity.name = ?1"""
     )
