@@ -24,7 +24,8 @@ class AttendanceController(
         attendanceService.createAttendance(
             studentId = attendanceDto.studentId,
             eventId = attendanceDto.eventId,
-            userItsc = attendanceDto.userItsc
+            userItsc = attendanceDto.userItsc,
+            currentTime = attendanceDto.currentTime
         )
     }
 

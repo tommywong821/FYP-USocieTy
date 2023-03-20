@@ -10,6 +10,7 @@ import ngok3.fyp.backend.operation.event.EventEntity
 import ngok3.fyp.backend.operation.event.EventRepository
 import ngok3.fyp.backend.operation.student.StudentEntity
 import ngok3.fyp.backend.operation.student.StudentRepository
+import ngok3.fyp.backend.util.DateUtil
 import org.springframework.security.access.AccessDeniedException
 import org.springframework.stereotype.Service
 import java.util.*
@@ -20,9 +21,10 @@ class AttendanceService(
     private val studentRepository: StudentRepository,
     private val eventRepository: EventRepository,
     private val attendanceRepository: AttendanceRepository,
-    private val studentRoleEntityRepository: StudentRoleEntityRepository
+    private val studentRoleEntityRepository: StudentRoleEntityRepository,
+    private val dateUtil: DateUtil
 ) {
-    fun createAttendance(studentId: String, eventId: String, userItsc: String) {
+    fun createAttendance(studentId: String, eventId: String, userItsc: String, currentTime: String) {
         studentRoleEntityRepository.findByUserItscAndUserRoleAndHisSocietyIsHoldingEvent(
             userItsc,
             Role.ROLE_SOCIETY_MEMBER,
@@ -54,8 +56,10 @@ class AttendanceService(
             newAttendanceEntity.attendanceKey = attendanceKey
             newAttendanceEntity.eventEntity = eventEntity
             newAttendanceEntity.studentEntity = studentEntity
+            newAttendanceEntity.createdAt = dateUtil.convertStringWithTimeStampToLocalDateTime(currentTime)
             return@orElseGet newAttendanceEntity
         }
+        attendanceEntity.updatedAt = dateUtil.convertStringWithTimeStampToLocalDateTime(currentTime)
         attendanceRepository.save(attendanceEntity)
     }
 
