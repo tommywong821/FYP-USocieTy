@@ -4,6 +4,7 @@ import ngok3.fyp.backend.authentication.role.Role
 import ngok3.fyp.backend.authentication.role.RoleEntity
 import ngok3.fyp.backend.authentication.role.RoleEntityRepository
 import ngok3.fyp.backend.authentication.student_role.StudentRoleEntity
+import ngok3.fyp.backend.authentication.student_role.StudentRoleEntityRepository
 import ngok3.fyp.backend.operation.enrolled.EnrolledStatus
 import ngok3.fyp.backend.operation.enrolled.society_record.EnrolledSocietyRecordEntity
 import ngok3.fyp.backend.operation.enrolled.society_record.EnrolledSocietyRecordKey
@@ -21,7 +22,8 @@ class SocietyService(
     private val societyRepository: SocietyRepository,
     private val studentRepository: StudentRepository,
     private val enrolledSocietyRecordRepository: EnrolledSocietyRecordRepository,
-    private val roleEntityRepository: RoleEntityRepository
+    private val roleEntityRepository: RoleEntityRepository,
+    private val studentRoleEntityRepository: StudentRoleEntityRepository
 ) {
     fun getAllSocieties(pageNum: Int, pageSize: Int): List<SocietyDto> {
         val firstPageNumWithPageSizeElement: Pageable = PageRequest.of(pageNum, pageSize)
@@ -80,18 +82,16 @@ class SocietyService(
             Exception("Society: $societyName does not exist")
         }
 
+        val studentRoleEntityList: ArrayList<StudentRoleEntity> = ArrayList()
 
         for (studentEntity in studentEntityList) {
             val studentRoleEntity: StudentRoleEntity = StudentRoleEntity()
             studentRoleEntity.roleEntity = roleEntity
             studentRoleEntity.studentEntity = studentEntity
             studentRoleEntity.societyEntity = societyEntity
-
-            studentEntity.studentRoleEntities.add(studentRoleEntity)
+            studentRoleEntityList.add(studentRoleEntity)
         }
-
-
-        studentRepository.saveAll(studentEntityList)
+        studentRoleEntityRepository.saveAll(studentRoleEntityList)
     }
 
     fun removeSocietyMemberRole(societyName: String, studentIdList: List<String>) {
