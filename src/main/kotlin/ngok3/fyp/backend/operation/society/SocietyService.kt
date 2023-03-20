@@ -56,19 +56,22 @@ class SocietyService(
     }
 
     fun getAllSocietyMember(societyName: String): List<StudentDto> {
-        return studentRepository.findAllStudentEnrolledInSocietyButNotSocietyMember(
-            societyName,
-            EnrolledStatus.SUCCESS,
-            societyName
-        ).map { studentEntity: StudentEntity ->
-            StudentDto(
-                studentEntity.uuid.toString(),
-                studentEntity.itsc,
-                studentEntity.nickname,
-                studentEntity.mail,
-                emptyList(),
-                emptyList()
-            )
+
+        val allStudentList = studentRepository.getAllStudentByEnrolledInSociety(societyName).toMutableList()
+
+        val allSocietyMemberStudentList =
+            studentRepository.getAllStudentWithSocietyMember(societyName, Role.ROLE_SOCIETY_MEMBER)
+
+        allSocietyMemberStudentList.forEach { studentEntity: StudentEntity ->
+            run {
+                if (allStudentList.contains(studentEntity)) {
+                    allStudentList.remove(studentEntity)
+                }
+            }
+        }
+
+        return allStudentList.map { studentEntity: StudentEntity ->
+            StudentDto(studentEntity, emptyList())
         }
     }
 
