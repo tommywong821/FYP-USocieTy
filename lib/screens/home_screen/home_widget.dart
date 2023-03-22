@@ -11,10 +11,10 @@ import 'package:ngok3fyp_frontend_flutter/services/api_service.dart';
 import 'package:ngok3fyp_frontend_flutter/model/screen_arguments.dart';
 
 class HomeWidget extends StatefulWidget {
-  final List<Event> enrolledEventList;
+  final List<Event> eventList;
   final List<Society> societyList;
   const HomeWidget(
-      {Key? key, required this.enrolledEventList, required this.societyList})
+      {Key? key, required this.eventList, required this.societyList})
       : super(key: key);
   @override
   State<HomeWidget> createState() => _HomeWidget();
@@ -26,7 +26,7 @@ class _HomeWidget extends State<HomeWidget> {
 
   @override
   Widget build(BuildContext context) {
-    List<Event> enrolledEventList = widget.enrolledEventList;
+    List<Event> enrolledEventList = widget.eventList;
     List<Society> societyList = widget.societyList;
     return Scaffold(
         backgroundColor: Styles.backGroundColor,

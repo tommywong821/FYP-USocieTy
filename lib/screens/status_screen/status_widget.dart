@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:ngok3fyp_frontend_flutter/model/enrolled_event/status_constants.dart';
 import '../../model/enrolled_event/enrolled_event.dart';
-import '../../services/api_service.dart';
 import 'package:ngok3fyp_frontend_flutter/model/styles.dart';
 
 class StatusWidget extends StatefulWidget {
-  const StatusWidget({super.key});
+  final List<EnrolledEvent> enrolledEvent;
+  const StatusWidget({super.key, required this.enrolledEvent});
 
   @override
   State<StatusWidget> createState() => _StatusWidgetState();
@@ -13,54 +13,47 @@ class StatusWidget extends StatefulWidget {
 
 class _StatusWidgetState extends State<StatusWidget> {
   final double ICON_SIZE = 36.0;
-  late final Future<List<EnrolledEvent>> enrolledEventFuture;
-  late final List<EnrolledEvent> enrolledEvent;
 
-  @override
-  void initState() {
-    super.initState();
-
-    initEventData();
-  }
-
-  Future<void> initEventData() async {
-    enrolledEventFuture = ApiService().getAllEnrolledEvent();
-    enrolledEvent = await enrolledEventFuture;
-  }
+  var items = ["Event Enrollment Status", "Society Enrollment Status"];
+  var dropdownvalue = "Event Enrollment Status";
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Styles.backGroundColor,
-        centerTitle: true,
-        title: Text(
-          "Registered Event",
-          style: TextStyle(color: Styles.primaryColor),
-        ),
-      ),
-      body: FutureBuilder<List<EnrolledEvent>>(
-        future: enrolledEventFuture,
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return _buildNotificationUi();
-          }
-          return Center(
-              child: CircularProgressIndicator(
-            color: Styles.primaryColor,
-          ));
-        },
-      ),
-    );
+        appBar: AppBar(
+            backgroundColor: Styles.backGroundColor,
+            centerTitle: true,
+            title: StatefulBuilder(
+                builder: (BuildContext context, StateSetter setState) {
+              return DropdownButton(
+                value: dropdownvalue,
+                icon: const Icon(Icons.keyboard_arrow_down),
+                items: items.map((String items) {
+                  return DropdownMenuItem(
+                    value: items,
+                    child: Text(
+                      items,
+                      style: Styles.carouselTitle,
+                    ),
+                  );
+                }).toList(),
+                onChanged: (String? value) {
+                  setState(() {
+                    dropdownvalue = value!;
+                  });
+                },
+              );
+            })),
+        body: _buildNotificationUi(widget.enrolledEvent));
   }
 
-  ListView _buildNotificationUi() {
+  ListView _buildNotificationUi(List<EnrolledEvent> enrolledEvent) {
     return ListView.builder(
       itemCount: enrolledEvent.length,
       itemBuilder: ((context, index) {
         return Column(
           children: [
-            buildEventCard(index),
+            buildEventCard(index, enrolledEvent),
             Divider(
               thickness: 2,
               height: 10,
@@ -71,12 +64,12 @@ class _StatusWidgetState extends State<StatusWidget> {
     );
   }
 
-  ListTile buildEventCard(int index) {
+  ListTile buildEventCard(int index, List<EnrolledEvent> enrolledEvent) {
     return ListTile(
       dense: true,
       visualDensity: VisualDensity(horizontal: 0, vertical: 0),
       contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 0),
-      leading: buildLeadingIcon(index),
+      leading: buildLeadingIcon(index, enrolledEvent),
       title: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -96,7 +89,7 @@ class _StatusWidgetState extends State<StatusWidget> {
     );
   }
 
-  Icon buildLeadingIcon(int index) {
+  Icon buildLeadingIcon(int index, List<EnrolledEvent> enrolledEvent) {
     return (enrolledEvent[index].status == PENDING)
         // pending state icon
         ? Icon(

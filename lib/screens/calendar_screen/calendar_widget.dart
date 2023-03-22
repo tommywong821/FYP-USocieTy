@@ -9,10 +9,9 @@ import 'package:ngok3fyp_frontend_flutter/services/calendar_utils.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class CalendarWidget extends StatefulWidget {
-  final List<Event> enrolledEventList;
+  final List<Event> eventList;
 
-  const CalendarWidget({Key? key, required this.enrolledEventList})
-      : super(key: key);
+  const CalendarWidget({Key? key, required this.eventList}) : super(key: key);
 
   @override
   _CalendarWidgetState createState() => _CalendarWidgetState();
@@ -28,7 +27,7 @@ class _CalendarWidgetState extends State<CalendarWidget> {
 
   @override
   void initState() {
-    List<Event> eventList = widget.enrolledEventList;
+    List<Event> eventList = widget.eventList;
     super.initState();
     _selectedDay = _focusedDay;
     initCalendarEvent(eventList);

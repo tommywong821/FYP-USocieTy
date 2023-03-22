@@ -1,5 +1,6 @@
 import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
+import 'package:ngok3fyp_frontend_flutter/model/enrolled_event/enrolled_event.dart';
 import 'package:ngok3fyp_frontend_flutter/screens/home_screen/home_widget.dart';
 import 'package:ngok3fyp_frontend_flutter/screens/profile_screen.dart';
 import 'package:ngok3fyp_frontend_flutter/screens/calendar_screen/calendar_widget.dart';
@@ -20,20 +21,27 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  late Future<List<Event>> enrolledEventListFuture;
-  late List<Event> enrolledEventList;
+  late Future<List<Event>> eventListFuture;
+  late List<Event> eventList;
   late Future<List<Society>> societyFuture;
   late List<Society> societyList;
+  late Future<List<EnrolledEvent>> enrolledEventFuture;
+  late List<EnrolledEvent> enrolledEventList;
   int _selectedIndex = 0;
 
   Future<void> initEvent() async {
-    enrolledEventListFuture = ApiService().getAllEvent();
-    enrolledEventList = await enrolledEventListFuture;
+    eventListFuture = ApiService().getAllEvent();
+    eventList = await eventListFuture;
   }
 
   Future<void> initSociety() async {
     societyFuture = ApiService().getAllSociety();
     societyList = await societyFuture;
+  }
+
+  Future<void> initEnrolledEvent() async {
+    enrolledEventFuture = ApiService().getAllEnrolledEvent();
+    enrolledEventList = await enrolledEventFuture;
   }
 
   void _onItemTapped(int index) {
@@ -46,6 +54,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     initEvent();
     initSociety();
+    initEnrolledEvent();
     super.initState();
   }
 
@@ -54,15 +63,14 @@ class _HomeScreenState extends State<HomeScreen> {
     return SafeArea(
       child: Scaffold(
         body: FutureBuilder<List<dynamic>>(
-            future: Future.wait([enrolledEventListFuture, societyFuture]),
+            future: Future.wait(
+                [eventListFuture, societyFuture, enrolledEventFuture]),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 List<Widget> _pages = <Widget>[
-                  HomeWidget(
-                      enrolledEventList: enrolledEventList,
-                      societyList: societyList),
-                  CalendarWidget(enrolledEventList: enrolledEventList),
-                  StatusWidget(),
+                  HomeWidget(eventList: eventList, societyList: societyList),
+                  CalendarWidget(eventList: eventList),
+                  StatusWidget(enrolledEvent: enrolledEventList),
                   ProfileScreen(),
                 ];
                 return RefreshIndicator(
@@ -70,6 +78,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   onRefresh: () async {
                     initEvent();
                     initSociety();
+                    initEnrolledEvent();
                     setState(() {});
                   },
                   child: IndexedStack(
