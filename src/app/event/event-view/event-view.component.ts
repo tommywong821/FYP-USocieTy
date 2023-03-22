@@ -73,6 +73,7 @@ export class EventViewComponent implements OnInit {
             records.map(record => ({
               ...record,
               paymentStatus: record.paymentStatus.toUpperCase(),
+              enrolledStatus: record.enrolledStatus.toLocaleUpperCase(),
             })) as EventEnrollmentRecord[]
         ),
         tap(records => console.log(records))
