@@ -4,6 +4,9 @@ import 'package:ngok3fyp_frontend_flutter/screens/home_screen/home_widget.dart';
 import 'package:ngok3fyp_frontend_flutter/screens/profile_screen.dart';
 import 'package:ngok3fyp_frontend_flutter/screens/calendar_screen/calendar_widget.dart';
 import 'package:ngok3fyp_frontend_flutter/model/styles.dart';
+import 'package:ngok3fyp_frontend_flutter/model/event.dart';
+import 'package:ngok3fyp_frontend_flutter/model/society.dart';
+import 'package:ngok3fyp_frontend_flutter/services/api_service.dart';
 
 import '../status_screen/status_widget.dart';
 
@@ -17,13 +20,21 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  late Future<List<Event>> enrolledEventListFuture;
+  late List<Event> enrolledEventList;
+  late Future<List<Society>> societyFuture;
+  late List<Society> societyList;
   int _selectedIndex = 0;
-  List<Widget> _pages = <Widget>[
-    HomeWidget(),
-    CalendarWidget(),
-    StatusWidget(),
-    ProfileScreen(),
-  ];
+
+  Future<void> initEvent() async {
+    enrolledEventListFuture = ApiService().getAllEvent();
+    enrolledEventList = await enrolledEventListFuture;
+  }
+
+  Future<void> initSociety() async {
+    societyFuture = ApiService().getAllSociety();
+    societyList = await societyFuture;
+  }
 
   void _onItemTapped(int index) {
     setState(() {
@@ -32,13 +43,47 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   @override
+  void initState() {
+    initEvent();
+    initSociety();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        body: IndexedStack(
-          index: _selectedIndex,
-          children: _pages,
-        ),
+        body: FutureBuilder<List<dynamic>>(
+            future: Future.wait([enrolledEventListFuture, societyFuture]),
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                List<Widget> _pages = <Widget>[
+                  HomeWidget(
+                      enrolledEventList: enrolledEventList,
+                      societyList: societyList),
+                  CalendarWidget(enrolledEventList: enrolledEventList),
+                  StatusWidget(),
+                  ProfileScreen(),
+                ];
+                return RefreshIndicator(
+                  color: Styles.primaryColor,
+                  onRefresh: () async {
+                    initEvent();
+                    initSociety();
+                    setState(() {});
+                  },
+                  child: IndexedStack(
+                    index: _selectedIndex,
+                    children: _pages,
+                  ),
+                );
+              } else {
+                return Center(
+                    child: CircularProgressIndicator(
+                  color: Styles.primaryColor,
+                ));
+              }
+            }),
         bottomNavigationBar: BottomNavigationBar(
           type: BottomNavigationBarType.fixed,
           items: _bottomNavigationBarItem,

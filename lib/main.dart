@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'AAD OAuth Demo',
+      title: 'Usociety',
       theme: ThemeData(
           scaffoldBackgroundColor: Color.fromARGB(255, 250, 250, 250)),
       routes: {
