@@ -44,7 +44,8 @@ class EnrolledEventRecordService(
                     eventUuid = UUID.fromString(updateEnrolledEventRecordDto.eventId)
                 )
                 if (enrolledEventRecordEntityMap.containsKey(key)) {
-                    enrolledEventRecordEntityMap[key]?.enrollStatus = updateEnrolledEventRecordDto.status
+                    enrolledEventRecordEntityMap[key]?.enrollStatus = updateEnrolledEventRecordDto.enrolledStatus
+                    enrolledEventRecordEntityMap[key]?.paymentStatus = updateEnrolledEventRecordDto.paymentStatus
                 }
             }
         }
