@@ -13,7 +13,7 @@ class EnrolledEventRecordController(
     private val enrolledEventService: EnrolledEventRecordService
 ) {
     @Operation(summary = "update enrolled event record")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ResponseStatus(HttpStatus.OK)
     @PutMapping
     fun updateEnrolledEventRecord(
         @CookieValue("token") jwtToken: String,
