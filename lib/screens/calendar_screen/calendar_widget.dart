@@ -81,59 +81,54 @@ class _CalendarWidgetState extends State<CalendarWidget> {
   }
 
   Widget _buildFullUi() {
-    return Column(
-      children: [
-        _buildTableCalendar(),
-        // padding
-        const SizedBox(height: 8.0),
-        Expanded(
-          child: _buildEventList(),
-        )
-      ],
-    );
-  }
-
-  Widget _buildTableCalendar() {
-    return TableCalendar<Event>(
-      headerStyle: HeaderStyle(
-        formatButtonVisible: false,
-      ),
-      firstDay: kFirstDay,
-      lastDay: kLastDay,
-      focusedDay: _focusedDay,
-      selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
-      calendarFormat: CalendarFormat.month,
-      // controll event dot in caldendar
-      eventLoader: _getEventsForDay,
-      startingDayOfWeek: StartingDayOfWeek.monday,
-      calendarStyle: CalendarStyle(
-        todayDecoration:
-            BoxDecoration(color: Colors.grey[500], shape: BoxShape.circle),
-        selectedDecoration:
-            BoxDecoration(color: Styles.primaryColor, shape: BoxShape.circle),
-        // Use `CalendarStyle` to customize the UI
-        outsideDaysVisible: false,
-      ),
-      onDaySelected: _onDaySelected,
-      onPageChanged: (focusedDay) {
-        _focusedDay = focusedDay;
-      },
-    );
-  }
-
-  Widget _buildEventList() {
-    return ValueListenableBuilder<List<Event>>(
-      valueListenable: _selectedEvents,
-      builder: (context, eventList, _) {
-        return ListView.builder(
-          itemCount: eventList.length,
-          itemBuilder: (context, index) {
-            return HorizontalEventCardWidget(
-              event: eventList[index],
-            );
-          },
-        );
-      },
-    );
+    return StatefulBuilder(
+        builder: (BuildContext context, StateSetter setState) {
+      return Column(
+        children: [
+          TableCalendar<Event>(
+            headerStyle: HeaderStyle(
+              formatButtonVisible: false,
+            ),
+            firstDay: kFirstDay,
+            lastDay: kLastDay,
+            focusedDay: _focusedDay,
+            selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
+            calendarFormat: CalendarFormat.month,
+            // controll event dot in caldendar
+            eventLoader: _getEventsForDay,
+            startingDayOfWeek: StartingDayOfWeek.monday,
+            calendarStyle: CalendarStyle(
+              todayDecoration: BoxDecoration(
+                  color: Colors.grey[500], shape: BoxShape.circle),
+              selectedDecoration: BoxDecoration(
+                  color: Styles.primaryColor, shape: BoxShape.circle),
+              // Use `CalendarStyle` to customize the UI
+              outsideDaysVisible: false,
+            ),
+            onDaySelected: _onDaySelected,
+            onPageChanged: (focusedDay) {
+              _focusedDay = focusedDay;
+            },
+          ),
+          // padding
+          const SizedBox(height: 8.0),
+          Expanded(
+            child: ValueListenableBuilder<List<Event>>(
+              valueListenable: _selectedEvents,
+              builder: (context, eventList, _) {
+                return ListView.builder(
+                  itemCount: eventList.length,
+                  itemBuilder: (context, index) {
+                    return HorizontalEventCardWidget(
+                      event: eventList[index],
+                    );
+                  },
+                );
+              },
+            ),
+          )
+        ],
+      );
+    });
   }
 }
