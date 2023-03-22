@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {NzMessageRef, NzMessageService} from 'ng-zorro-antd/message';
-import {first, Subject, switchMap, tap} from 'rxjs';
+import {first, map, Subject, switchMap, tap} from 'rxjs';
 import {Path} from 'src/app/app-routing.module';
 import {
   EventEnrollmentRecord,
@@ -68,6 +68,13 @@ export class EventViewComponent implements OnInit {
     this.refreshEnrollmentRecords$
       .pipe(
         switchMap(() => this.ApiService.getEventEnrollmentRecord(this.eventId, this.pageIndex, this.pageSize)),
+        map(
+          records =>
+            records.map(record => ({
+              ...record,
+              paymentStatus: record.paymentStatus.toUpperCase(),
+            })) as EventEnrollmentRecord[]
+        ),
         tap(records => console.log(records))
       )
       .subscribe(record => (this.enrollmentRecords = ([] as EventEnrollmentRecord[]).concat(record)));
