@@ -42,7 +42,7 @@ class EventController(
     }
 
     @Operation(summary = "delete event with event id")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ResponseStatus(HttpStatus.OK)
     @DeleteMapping("/{eventId}")
     fun deleteEvent(
         @CookieValue("token") jwtToken: String,
@@ -52,7 +52,7 @@ class EventController(
     }
 
     @Operation(summary = "update event with event id")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ResponseStatus(HttpStatus.OK)
     @PutMapping("/{eventId}")
     fun updateEvent(
         @CookieValue("token") jwtToken: String,

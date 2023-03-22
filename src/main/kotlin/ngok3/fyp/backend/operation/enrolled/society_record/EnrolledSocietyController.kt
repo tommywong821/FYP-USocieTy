@@ -11,7 +11,7 @@ class EnrolledSocietyController(
 ) {
 
     @Operation(summary = "update enrolled society record")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ResponseStatus(HttpStatus.OK)
     @PutMapping
     fun updateEnrolledSocietyRecord(
         @CookieValue("token") jwtToken: String,
