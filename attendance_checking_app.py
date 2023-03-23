@@ -7,6 +7,7 @@ from smartcard.System import readers
 import base64
 from Crypto.Cipher import PKCS1_v1_5 as PKCS1_cipher
 from Crypto.PublicKey import RSA
+from datetime import datetime
 import json
 
 
@@ -88,8 +89,11 @@ class ControlFrame(CTkFrame):
         inputDialog = CTkInputDialog(text="Please type Student UID:", title="Insert Record")
         centerWindow(inputDialog)
         inputStr = inputDialog.get_input()
+        if(inputStr == ""):
+            return
         if(postAttendance(inputStr, getITSC(inputStr)) == 201): #HTTP 201 == create
-            app.listFrame.insertRecord(inputStr, getITSC(inputStr) ,"dummy date")
+            currentDate = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")[:-3]
+            app.listFrame.insertRecord(inputStr, getITSC(inputStr) , currentDate)
     
 
     def initListFrame(self):
@@ -190,7 +194,8 @@ def receivedRFIDSignal(uid):
         response = postAttendance(studentID, itsc)
         app.rfidFrame.changeImage("rfid1.png")
         if(response == 201):
-            app.listFrame.insertRecord(studentID, itsc, "dummy date")
+            currentDate = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")[:-3]
+            app.listFrame.insertRecord(studentID, itsc, currentDate)
     except Exception as e: print(e)
 
 def centerWindow(window):
@@ -215,7 +220,8 @@ def encryptData(msg):
 def postAttendance(studentID, itsc):
     url = "https://ngok3fyp-backend.herokuapp.com/attendance"
     header = {'Content-Type': 'application/json'}
-    innerJson = '{"eventId": "' +str(getEventID(str.strip(comboBoxChoice)))+ '", "studentId": "' +str(studentID)+ '", "userItsc": "' +str(itsc)+ '"}'
+    currentDate = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")[:-3] + "Z"
+    innerJson = '{"eventId": "' +str(getEventID(str.strip(comboBoxChoice)))+ '", "studentId": "' +str(studentID)+ '", "userItsc": "' +str(itsc)+ '", "currentTime": "'+currentDate+'"}'
     jsonStr = innerJson
 
     #encrypt part
@@ -255,7 +261,7 @@ def getAttendance(eventName):
     attendanceArray = []
     for attendance in attendances:
         if(attendance['eventName'] == eventName):
-            tuples = (attendance['studentUuid'], attendance['studentNickname'], attendance['attendanceCreatedAt'])
+            tuples = (attendance['studentUuid'], attendance['studentItsc'], attendance['attendanceCreatedAt'])
             attendanceArray.append(tuples)
     return attendanceArray
 
