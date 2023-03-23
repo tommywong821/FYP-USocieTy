@@ -9,6 +9,8 @@ import 'package:ngok3fyp_frontend_flutter/model/event.dart';
 import 'package:ngok3fyp_frontend_flutter/model/society.dart';
 import 'package:ngok3fyp_frontend_flutter/services/api_service.dart';
 
+import 'package:dio/dio.dart';
+
 import '../status_screen/status_widget.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -27,6 +29,10 @@ class _HomeScreenState extends State<HomeScreen> {
   late List<Society> societyList;
   late Future<List<EnrolledEvent>> enrolledEventFuture;
   late List<EnrolledEvent> enrolledEventList;
+
+  // late Future<Map<String, dynamic>> testDateFuture;
+  // late Map<String, dynamic> testDate;
+
   int _selectedIndex = 0;
 
   Future<void> initEvent() async {
@@ -44,6 +50,24 @@ class _HomeScreenState extends State<HomeScreen> {
     enrolledEventList = await enrolledEventFuture;
   }
 
+  // For testing refresh feature
+  // Future<Map<String, dynamic>> testAPI() async {
+  //   Dio _dio = Dio();
+  //   final uri = Uri.https('worldtimeapi.org', '/api/timezone/Asia/Hong_Kong');
+  //   final response = await _dio.getUri(uri);
+
+  //   if (response.statusCode == 200) {
+  //     return response.data;
+  //   } else {
+  //     throw Exception('Failed to get time');
+  //   }
+  // }
+
+  // Future<void> initTestDate() async {
+  //   testDateFuture = testAPI();
+  //   testDate = await testDateFuture;
+  // }
+
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
@@ -55,6 +79,7 @@ class _HomeScreenState extends State<HomeScreen> {
     initEvent();
     initSociety();
     initEnrolledEvent();
+    // initTestDate();
     super.initState();
   }
 
@@ -63,13 +88,18 @@ class _HomeScreenState extends State<HomeScreen> {
     return SafeArea(
       child: Scaffold(
         body: FutureBuilder<List<dynamic>>(
-            future: Future.wait(
-                [eventListFuture, societyFuture, enrolledEventFuture]),
+            future: Future.wait([
+              eventListFuture,
+              societyFuture,
+              enrolledEventFuture,
+            ]),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 List<Widget> _pages = <Widget>[
                   HomeWidget(eventList: eventList, societyList: societyList),
-                  CalendarWidget(eventList: eventList),
+                  CalendarWidget(
+                    eventList: eventList,
+                  ),
                   StatusWidget(enrolledEvent: enrolledEventList),
                   ProfileScreen(),
                 ];
@@ -79,6 +109,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     initEvent();
                     initSociety();
                     initEnrolledEvent();
+                    // initTestDate();
                     setState(() {});
                   },
                   child: IndexedStack(

@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ngok3fyp_frontend_flutter/model/society.dart';
@@ -26,7 +28,7 @@ class _HomeWidget extends State<HomeWidget> {
 
   @override
   Widget build(BuildContext context) {
-    List<Event> enrolledEventList = widget.eventList;
+    List<Event> eventList = widget.eventList;
     List<Society> societyList = widget.societyList;
     return Scaffold(
         backgroundColor: Styles.backGroundColor,
@@ -51,7 +53,7 @@ class _HomeWidget extends State<HomeWidget> {
               //TODO hero animation for carousel
               //Tab Bar with Carousel slider
               TabBarWidget(
-                event: enrolledEventList,
+                eventList: eventList,
               ),
               //Incoming Title
               Padding(
@@ -70,7 +72,7 @@ class _HomeWidget extends State<HomeWidget> {
                       child: GestureDetector(
                         onTap: () {
                           Navigator.pushNamed(context, '/inc',
-                              arguments: enrolledEventList);
+                              arguments: eventList);
                         },
                         onTapUp: (details) => {
                           setState(() {
@@ -103,7 +105,7 @@ class _HomeWidget extends State<HomeWidget> {
               Padding(
                 padding: const EdgeInsets.only(top: 10),
                 child: EventCarouselSliderWidget(
-                  event: enrolledEventList,
+                  event: eventList,
                 ),
               ),
               //Society Title
@@ -127,8 +129,7 @@ class _HomeWidget extends State<HomeWidget> {
                           Navigator.pushNamed(
                             context,
                             '/allsociety',
-                            arguments:
-                                ScreenArguments(enrolledEventList, societyList),
+                            arguments: ScreenArguments(eventList, societyList),
                           );
                         },
                         onTapUp: (details) => {
@@ -161,7 +162,7 @@ class _HomeWidget extends State<HomeWidget> {
               Padding(
                 padding: const EdgeInsets.only(top: 10, bottom: 10),
                 child: SocietyCarouselSliderWidget(
-                  eventList: enrolledEventList,
+                  eventList: eventList,
                   societyList: societyList,
                 ),
               ),

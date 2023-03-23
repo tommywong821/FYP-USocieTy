@@ -18,7 +18,7 @@ class CalendarWidget extends StatefulWidget {
 }
 
 class _CalendarWidgetState extends State<CalendarWidget> {
-  late final ValueNotifier<List<Event>> _selectedEvents;
+  late ValueNotifier<List<Event>> _selectedEvents;
   DateTime _focusedDay = DateTime.now();
   DateTime? _selectedDay;
 
@@ -27,10 +27,8 @@ class _CalendarWidgetState extends State<CalendarWidget> {
 
   @override
   void initState() {
-    List<Event> eventList = widget.eventList;
     super.initState();
     _selectedDay = _focusedDay;
-    initCalendarEvent(eventList);
   }
 
   @override
@@ -46,7 +44,7 @@ class _CalendarWidgetState extends State<CalendarWidget> {
 
   void initCalendarEvent(List<Event> eventList) {
     //count number to create flexible list dot in calendar
-    final kEventSource = Map<DateTime, List<Event>>();
+    var kEventSource = Map<DateTime, List<Event>>();
     eventList.forEach((element) {
       DateTime elementDate = DateFormat('M/dd/y').parse(element.startDate);
       if (!kEventSource.containsKey(elementDate)) {
@@ -81,11 +79,12 @@ class _CalendarWidgetState extends State<CalendarWidget> {
   }
 
   Widget _buildFullUi() {
+    initCalendarEvent(widget.eventList);
     return StatefulBuilder(
         builder: (BuildContext context, StateSetter setState) {
       return Column(
         children: [
-          TableCalendar<Event>(
+          new TableCalendar<Event>(
             headerStyle: HeaderStyle(
               formatButtonVisible: false,
             ),

@@ -19,13 +19,14 @@ class _StatusWidgetState extends State<StatusWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-            backgroundColor: Styles.backGroundColor,
-            centerTitle: true,
-            title: StatefulBuilder(
-                builder: (BuildContext context, StateSetter setState) {
-              return DropdownButton(
+    return Scaffold(body:
+        StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
+      return Column(
+        children: [
+          AppBar(
+              backgroundColor: Styles.backGroundColor,
+              centerTitle: true,
+              title: DropdownButton(
                 value: dropdownvalue,
                 icon: const Icon(Icons.keyboard_arrow_down),
                 items: items.map((String items) {
@@ -37,23 +38,67 @@ class _StatusWidgetState extends State<StatusWidget> {
                     ),
                   );
                 }).toList(),
-                onChanged: (String? value) {
+                onChanged: (String? newValue) {
                   setState(() {
-                    dropdownvalue = value!;
+                    dropdownvalue = newValue!;
                   });
                 },
-              );
-            })),
-        body: _buildNotificationUi(widget.enrolledEvent));
+              )),
+          (dropdownvalue == "Event Enrollment Status")
+              ? _buildEventStatusUi(widget.enrolledEvent)
+              : _buildSocietyStatusUi(widget.enrolledEvent),
+        ],
+      );
+    }));
   }
 
-  ListView _buildNotificationUi(List<EnrolledEvent> enrolledEvent) {
+  Widget _buildEventStatusUi(
+    List<EnrolledEvent> enrolledEvent,
+  ) {
     return ListView.builder(
+      scrollDirection: Axis.vertical,
+      shrinkWrap: true,
       itemCount: enrolledEvent.length,
       itemBuilder: ((context, index) {
         return Column(
           children: [
-            buildEventCard(index, enrolledEvent),
+            ListTile(
+              dense: true,
+              visualDensity: VisualDensity(horizontal: 0, vertical: 0),
+              contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 0),
+              leading: (enrolledEvent[index].status == PENDING)
+                  // pending state icon
+                  ? Icon(
+                      Icons.pending_actions_rounded,
+                      size: ICON_SIZE,
+                    )
+                  : (enrolledEvent[index].status == SUCCESS)
+                      // success state icon
+                      ? Icon(
+                          Icons.check_circle_outline_rounded,
+                          size: ICON_SIZE,
+                          color: Colors.green,
+                        )
+                      // fail state icon
+                      : Icon(Icons.highlight_off_rounded,
+                          size: ICON_SIZE, color: Colors.red),
+              title: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(enrolledEvent[index].category),
+                  Text(enrolledEvent[index].name)
+                ],
+              ),
+              subtitle: Row(
+                children: [
+                  Text(enrolledEvent[index].startDate),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Text(enrolledEvent[index].location),
+                ],
+              ),
+            ),
             Divider(
               thickness: 2,
               height: 10,
@@ -64,47 +109,10 @@ class _StatusWidgetState extends State<StatusWidget> {
     );
   }
 
-  ListTile buildEventCard(int index, List<EnrolledEvent> enrolledEvent) {
-    return ListTile(
-      dense: true,
-      visualDensity: VisualDensity(horizontal: 0, vertical: 0),
-      contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 0),
-      leading: buildLeadingIcon(index, enrolledEvent),
-      title: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(enrolledEvent[index].category),
-          Text(enrolledEvent[index].name)
-        ],
-      ),
-      subtitle: Row(
-        children: [
-          Text(enrolledEvent[index].startDate),
-          SizedBox(
-            width: 10,
-          ),
-          Text(enrolledEvent[index].location),
-        ],
-      ),
-    );
-  }
-
-  Icon buildLeadingIcon(int index, List<EnrolledEvent> enrolledEvent) {
-    return (enrolledEvent[index].status == PENDING)
-        // pending state icon
-        ? Icon(
-            Icons.pending_actions_rounded,
-            size: ICON_SIZE,
-          )
-        : (enrolledEvent[index].status == SUCCESS)
-            // success state icon
-            ? Icon(
-                Icons.check_circle_outline_rounded,
-                size: ICON_SIZE,
-                color: Colors.green,
-              )
-            // fail state icon
-            : Icon(Icons.highlight_off_rounded,
-                size: ICON_SIZE, color: Colors.red);
+//TODO with APIs
+  Widget _buildSocietyStatusUi(
+    List<dynamic> enrolledEvent,
+  ) {
+    return Text("TODO with APIs");
   }
 }

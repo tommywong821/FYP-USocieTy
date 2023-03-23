@@ -4,8 +4,8 @@ import 'package:ngok3fyp_frontend_flutter/model/styles.dart';
 import 'package:ngok3fyp_frontend_flutter/model/event.dart';
 
 class TabBarWidget extends StatefulWidget {
-  final List<Event> event;
-  const TabBarWidget({Key? key, required this.event}) : super(key: key);
+  final List<Event> eventList;
+  const TabBarWidget({Key? key, required this.eventList}) : super(key: key);
 
   @override
   _TabBarWidgetState createState() => _TabBarWidgetState();
@@ -13,6 +13,28 @@ class TabBarWidget extends StatefulWidget {
 
 class _TabBarWidgetState extends State<TabBarWidget>
     with TickerProviderStateMixin {
+  List<Event> sportEvent = [];
+  List<Event> outdoorEvent = [];
+  List<Event> indoorEvent = [];
+
+  @override
+  void initState() {
+    for (Event event in widget.eventList) {
+      switch (event.category) {
+        case "SPORT":
+          sportEvent.add(event);
+          break;
+        case "OUTDOOR":
+          outdoorEvent.add(event);
+          break;
+        case "INDOOR":
+          indoorEvent.add(event);
+          break;
+      }
+    }
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     TabController _tabController = TabController(length: 3, vsync: this);
@@ -75,15 +97,15 @@ class _TabBarWidgetState extends State<TabBarWidget>
             height: 250,
             child: TabBarView(controller: _tabController, children: [
               EventCarouselSliderWidget(
-                event: widget.event,
+                event: sportEvent,
                 reducedForm: true,
               ),
               EventCarouselSliderWidget(
-                event: widget.event,
+                event: outdoorEvent,
                 reducedForm: true,
               ),
               EventCarouselSliderWidget(
-                event: widget.event,
+                event: indoorEvent,
                 reducedForm: true,
               )
             ]),
