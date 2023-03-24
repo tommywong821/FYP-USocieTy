@@ -5,6 +5,7 @@ import 'package:ngok3fyp_frontend_flutter/model/society.dart';
 import 'package:ngok3fyp_frontend_flutter/model/styles.dart';
 import 'package:ngok3fyp_frontend_flutter/services/api_service.dart';
 import 'package:ngok3fyp_frontend_flutter/screens/home_screen/horizontal_event_card_widget.dart';
+import 'package:quickalert/quickalert.dart';
 
 class SocietyScreen extends StatefulWidget {
   const SocietyScreen({Key? key}) : super(key: key);
@@ -107,51 +108,41 @@ class _SocietyScreenState extends State<SocietyScreen> {
                 child: ElevatedButton(
               child: Text("Register"),
               onPressed: () {
-                showDialog(
+                QuickAlert.show(
                   context: context,
-                  builder: (context) => AlertDialog(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(15))),
-                    title: Text(
-                      'Do you want to join $societyName?',
-                      style: Styles.HCardTitle,
-                    ),
-                    actionsAlignment: MainAxisAlignment.spaceEvenly,
-                    actions: [
-                      //TODO success/fail dialog
-                      ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15),
-                            ),
-                            backgroundColor:
-                                Styles.primaryColor, // Background color
-                          ),
-                          onPressed: () async {
-                            bool response =
-                                await ApiService().registerSociety(societyName);
-                            if (response) {
-                              print("success");
-                            } else {
-                              print("fail");
-                            }
-                            Navigator.pop(context);
-                          },
-                          child: Text('    Yes    ')),
-                      ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15),
-                            ),
-                            backgroundColor:
-                                Styles.primaryColor, // Background color
-                          ),
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          child: Text('    No    '))
-                    ],
-                  ),
+                  type: QuickAlertType.confirm,
+                  title: "Do you want to register for " + societyName + "?",
+                  confirmBtnColor: Styles.primaryColor,
+                  confirmBtnText: "Yes",
+                  cancelBtnText: "No",
+                  onConfirmBtnTap: () async {
+                    Navigator.pop(context);
+                    QuickAlert.show(
+                        context: context,
+                        type: QuickAlertType.loading,
+                        text: "",
+                        title: "Loading");
+                    bool response =
+                        await ApiService().registerSociety(societyName);
+                    if (response) {
+                      Navigator.pop(context);
+                      QuickAlert.show(
+                          context: context,
+                          type: QuickAlertType.success,
+                          title: "SUCCESS",
+                          text: "Please wait for the approval",
+                          confirmBtnText: "OK",
+                          confirmBtnColor: Styles.primaryColor);
+                    } else {
+                      Navigator.pop(context);
+                      QuickAlert.show(
+                          context: context,
+                          type: QuickAlertType.error,
+                          title: "ERROR",
+                          confirmBtnText: "OK",
+                          confirmBtnColor: Styles.primaryColor);
+                    }
+                  },
                 );
               },
               style: ElevatedButton.styleFrom(

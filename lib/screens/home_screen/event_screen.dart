@@ -3,6 +3,7 @@ import 'package:ngok3fyp_frontend_flutter/model/styles.dart';
 import 'package:ngok3fyp_frontend_flutter/model/event.dart';
 import 'package:ngok3fyp_frontend_flutter/services/api_service.dart';
 import 'package:intl/intl.dart';
+import 'package:quickalert/quickalert.dart';
 
 class EventScreen extends StatefulWidget {
   const EventScreen({
@@ -240,6 +241,42 @@ class _EventScreenState extends State<EventScreen> {
                               ],
                             ),
                           ),
+                          //apply deadline
+                          Padding(
+                            padding: const EdgeInsets.only(
+                                top: 20, left: 20, bottom: 10),
+                            child: Row(
+                              children: [
+                                Icon(Icons.event_available),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                        left: 15,
+                                      ),
+                                      child: Text("Apply Deadline",
+                                          style: Styles.eventScreenBlackText),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(left: 15),
+                                      child: Text(
+                                        "14:00 - 20:00 GMT+8",
+                                        style: Styles.eventScreenGreyText,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                          Divider(
+                            indent: 20,
+                            endIndent: 20,
+                            thickness: 0.5,
+                            color: Colors.grey.withOpacity(0.5),
+                          ),
+
                           Padding(
                             padding: const EdgeInsets.only(top: 20, left: 20),
                             child: Text("Description",
@@ -272,50 +309,40 @@ Widget BottomRegisterButton(BuildContext context, Event event) {
               child: ElevatedButton(
             child: Text("Register"),
             onPressed: () {
-              showDialog(
+              QuickAlert.show(
                 context: context,
-                builder: (context) => AlertDialog(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(15))),
-                  title: Text(
-                    'Do you want to join $eventName??',
-                    style: Styles.HCardTitle,
-                  ),
-                  actionsAlignment: MainAxisAlignment.spaceEvenly,
-                  actions: [
-                    ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          backgroundColor:
-                              Styles.primaryColor, // Background color
-                        ),
-                        onPressed: () async {
-                          bool response =
-                              await ApiService().registerEvent(event.id);
-                          if (response) {
-                            print("success");
-                          } else {
-                            print("fail");
-                          }
-                          Navigator.pop(context);
-                        },
-                        child: Text('    Yes    ')),
-                    ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          backgroundColor:
-                              Styles.primaryColor, // Background color
-                        ),
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        child: Text('    No    '))
-                  ],
-                ),
+                type: QuickAlertType.confirm,
+                title: "Do you want to register for " + eventName + "?",
+                confirmBtnColor: Styles.primaryColor,
+                confirmBtnText: "Yes",
+                cancelBtnText: "No",
+                onConfirmBtnTap: () async {
+                  Navigator.pop(context);
+                  QuickAlert.show(
+                      context: context,
+                      type: QuickAlertType.loading,
+                      text: "",
+                      title: "Loading");
+                  bool response = await ApiService().registerEvent(event.id);
+                  if (response) {
+                    Navigator.pop(context);
+                    QuickAlert.show(
+                        context: context,
+                        type: QuickAlertType.success,
+                        title: "SUCCESS",
+                        text: "Please wait for the approval",
+                        confirmBtnText: "OK",
+                        confirmBtnColor: Styles.primaryColor);
+                  } else {
+                    Navigator.pop(context);
+                    QuickAlert.show(
+                        context: context,
+                        type: QuickAlertType.error,
+                        title: "ERROR",
+                        confirmBtnText: "OK",
+                        confirmBtnColor: Styles.primaryColor);
+                  }
+                },
               );
             },
             style: ElevatedButton.styleFrom(
