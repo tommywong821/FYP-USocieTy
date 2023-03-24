@@ -108,8 +108,20 @@ class EnrolledSocietyRecordServiceTest {
         )
 
         val mockStudentListNotInSuccess: List<StudentEnrolledEventRecord> = listOf(
-            StudentEnrolledEventRecord("qwert", "nickname 1", EnrolledStatus.PENDING),
-            StudentEnrolledEventRecord("asdfg", "nickname 2", EnrolledStatus.DECLINE),
+            StudentEnrolledEventRecord(
+                studentId = "qwert",
+                societyId = "",
+                itsc = "qwert",
+                name = "nickname 1",
+                status = EnrolledStatus.PENDING
+            ),
+            StudentEnrolledEventRecord(
+                studentId = "qwert",
+                societyId = "",
+                itsc = "asdfg",
+                name = "nickname 2",
+                status = EnrolledStatus.DECLINE
+            ),
         )
 
         every {

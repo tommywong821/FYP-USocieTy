@@ -2,6 +2,9 @@ package ngok3.fyp.backend.operation.student
 
 import io.mockk.every
 import io.mockk.mockk
+import ngok3.fyp.backend.authentication.student_role.StudentRoleEntityRepository
+import ngok3.fyp.backend.operation.event.EventRepository
+import ngok3.fyp.backend.util.JWTUtil
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import java.util.*
@@ -9,7 +12,13 @@ import java.util.*
 class StudentServiceTest() {
     private val mockStudentRepository: MockStudentRepository = MockStudentRepository()
     private val studentRepository: StudentRepository = mockk()
-    private val studentService: StudentService = StudentService(studentRepository)
+    private val eventRepository: EventRepository = mockk()
+    private val studentRoleEntityRepository: StudentRoleEntityRepository = mockk()
+
+    private val jwtUtil: JWTUtil = JWTUtil(studentRoleEntityRepository = studentRoleEntityRepository)
+
+    private val studentService: StudentService =
+        StudentService(studentRepository = studentRepository, jwtUtil = jwtUtil, eventRepository = eventRepository)
 
     @Test
     fun `should get test student profile with itsc`() {

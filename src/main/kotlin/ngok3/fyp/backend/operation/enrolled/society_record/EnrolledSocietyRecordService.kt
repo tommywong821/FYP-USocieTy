@@ -40,6 +40,8 @@ class EnrolledSocietyRecordService(
                 StudentEnrolledEventRecord(
                     studentId = enrolledSocietyRecordEntity.studentEntity.uuid.toString(),
                     societyId = enrolledSocietyRecordEntity.societyEntity.uuid.toString(),
+                    itsc = enrolledSocietyRecordEntity.studentEntity.itsc,
+                    name = enrolledSocietyRecordEntity.studentEntity.nickname,
                     status = enrolledSocietyRecordEntity.status
                 )
             }
