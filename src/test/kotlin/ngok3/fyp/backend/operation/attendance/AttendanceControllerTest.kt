@@ -57,18 +57,16 @@ class AttendanceControllerTest @Autowired constructor(
     fun `should get all attendance`() {
         val studentAttendanceDtoList: List<StudentAttendanceDto> = listOf(
             StudentAttendanceDto(
-                UUID.randomUUID().toString(),
-                "nickname 1",
-                LocalDateTime.now().toString(),
-                LocalDateTime.now().toString(),
-                "test event 1"
+                studentUuid = UUID.randomUUID().toString(),
+                studentItsc = "nickname 1",
+                attendanceCreatedAt = LocalDateTime.now().toString(),
+                eventName = "test event 1"
             ),
             StudentAttendanceDto(
-                UUID.randomUUID().toString(),
-                "nickname 2",
-                LocalDateTime.now().toString(),
-                LocalDateTime.now().toString(),
-                "test event 2"
+                studentUuid = UUID.randomUUID().toString(),
+                studentItsc = "nickname 2",
+                attendanceCreatedAt = LocalDateTime.now().toString(),
+                eventName = "test event 2"
             ),
         )
 
@@ -98,9 +96,6 @@ class AttendanceControllerTest @Autowired constructor(
                 }
                 jsonPath("$[*].attendanceCreatedAt") {
                     value(studentAttendanceDtoList.map { studentAttendance -> studentAttendance.attendanceCreatedAt })
-                }
-                jsonPath("$[*].attendanceUpdatedAt") {
-                    value(studentAttendanceDtoList.map { studentAttendance -> studentAttendance.attendanceUpdatedAt })
                 }
                 jsonPath("$[*].eventName") {
                     value(studentAttendanceDtoList.map { studentAttendance -> studentAttendance.eventName })
