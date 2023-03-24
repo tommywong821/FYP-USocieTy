@@ -2,6 +2,7 @@ package ngok3.fyp.backend.operation.society
 
 import com.ninjasquad.springmockk.MockkBean
 import io.mockk.every
+import ngok3.fyp.backend.authentication.role.Role
 import ngok3.fyp.backend.controller.authentication.model.MockAuthRepository
 import ngok3.fyp.backend.operation.student.StudentDto
 import org.junit.jupiter.api.Test
@@ -30,8 +31,8 @@ class SocietyControllerTest @Autowired constructor(
     fun `should get all student belong to society`() {
 
         val memberOfSociety: List<StudentDto> = listOf<StudentDto>(
-            StudentDto("qwerty", "nickname 1"),
-            StudentDto("asdfg", "nickname 2"),
+            StudentDto(itsc = "qwerty", nickname = "nickname 1", roles = listOf(Role.ROLE_SOCIETY_MEMBER.toString())),
+            StudentDto(itsc = "asdfg", nickname = "nickname 2", roles = listOf()),
         )
 
         every {
@@ -60,6 +61,9 @@ class SocietyControllerTest @Autowired constructor(
             }
             jsonPath("$[*].nickname") {
                 value(memberOfSociety.map { studentDto -> studentDto.nickname })
+            }
+            jsonPath("$[*].roles") {
+                value(memberOfSociety.map { studentDto -> studentDto.roles })
             }
         }
     }
