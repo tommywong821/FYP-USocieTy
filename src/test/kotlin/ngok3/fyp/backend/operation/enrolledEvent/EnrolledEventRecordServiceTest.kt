@@ -76,7 +76,8 @@ class EnrolledEventRecordServiceTest {
                 UpdateEnrolledEventRecordDto(
                     eventId = eventUUID.toString(),
                     studentId = studentUUID.toString(),
-                    status = EnrolledStatus.SUCCESS
+                    enrolledStatus = EnrolledStatus.SUCCESS,
+                    paymentStatus = PaymentStatus.PAID
                 )
             )
         )

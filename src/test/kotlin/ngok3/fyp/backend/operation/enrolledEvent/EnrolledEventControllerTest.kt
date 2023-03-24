@@ -42,7 +42,8 @@ class EnrolledEventControllerTest @Autowired constructor(
                     UpdateEnrolledEventRecordDto(
                         eventId = eventUUID.toString(),
                         studentId = studentUUID.toString(),
-                        status = EnrolledStatus.SUCCESS
+                        enrolledStatus = EnrolledStatus.SUCCESS,
+                        paymentStatus = PaymentStatus.PAID
                     )
                 )
             )
@@ -54,8 +55,9 @@ class EnrolledEventControllerTest @Autowired constructor(
                 cookie(Cookie("token", mockAuthRepository.validUserCookieToken))
             }
 
-            content = "[{\"eventId\":\"$eventUUID\",\"studentId\":\"$studentUUID\",\"status\":\"SUCCESS\"}]"
-        }.andDo { print() }.andExpect { status { isNoContent() } }
+            content =
+                "[{\"eventId\":\"$eventUUID\",\"studentId\":\"$studentUUID\",\"enrolledStatus\":\"SUCCESS\",\"paymentStatus\":\"PAID\"}]"
+        }.andDo { print() }.andExpect { status { isOk() } }
     }
 
     @Test

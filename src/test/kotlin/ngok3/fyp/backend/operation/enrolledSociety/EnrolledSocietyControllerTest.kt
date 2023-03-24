@@ -52,21 +52,25 @@ class EnrolledSocietyControllerTest @Autowired constructor(
             }
 
             content = "{\"societyId\":\"$societyUUID\",\"studentId\":\"$studentUUID\",\"status\":\"SUCCESS\"}"
-        }.andDo { print() }.andExpect { status { isNoContent() } }
+        }.andDo { print() }.andExpect { status { isOk() } }
     }
 
     @Test
     fun `should get student with enrolled society status != SUCCESS`() {
         val mockStudentListNotInSuccess: List<StudentEnrolledEventRecord> = listOf(
             StudentEnrolledEventRecord(
-                UUID.randomUUID().toString(),
-                UUID.randomUUID().toString(),
-                EnrolledStatus.PENDING
+                studentId = UUID.randomUUID().toString(),
+                societyId = UUID.randomUUID().toString(),
+                itsc = "qwert",
+                name = "test1",
+                status = EnrolledStatus.PENDING
             ),
             StudentEnrolledEventRecord(
-                UUID.randomUUID().toString(),
-                UUID.randomUUID().toString(),
-                EnrolledStatus.DECLINE
+                studentId = UUID.randomUUID().toString(),
+                societyId = UUID.randomUUID().toString(),
+                itsc = "asdfg",
+                name = "test2",
+                status = EnrolledStatus.DECLINE
             ),
         )
 
