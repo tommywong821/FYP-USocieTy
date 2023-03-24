@@ -26,7 +26,7 @@ class EnrolledSocietyController(
     fun getEnrolledSocietyRecord(
         @CookieValue("token") jwtToken: String,
         @RequestParam("societyName") societyName: String,
-    ): List<StudentEnrolledEventRecord> {
+    ): List<StudentEnrolledSocietyRecordDto> {
         return enrolledSocietyService.getEnrolledSocietyRecord(jwtToken, societyName)
     }
 }

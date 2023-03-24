@@ -1,9 +1,11 @@
 package ngok3.fyp.backend.operation.student
 
 import ngok3.fyp.backend.authentication.student_role.StudentRoleEntity
+import ngok3.fyp.backend.operation.enrolled.society_record.EnrolledSocietyRecordEntity
 import ngok3.fyp.backend.operation.event.EventEntity
 import ngok3.fyp.backend.operation.event.EventRepository
 import ngok3.fyp.backend.operation.event.dto.EventDto
+import ngok3.fyp.backend.util.DateUtil
 import ngok3.fyp.backend.util.JWTUtil
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.data.domain.PageRequest
@@ -14,6 +16,7 @@ import java.util.*
 class StudentService(
     private val studentRepository: StudentRepository,
     private val jwtUtil: JWTUtil, private val eventRepository: EventRepository,
+    private val dateUtil: DateUtil
 ) {
     @Value("\${aws.bucket.domain}")
     val s3BucketDomain: String = ""
@@ -46,5 +49,18 @@ class StudentService(
             .map { eventEntity: EventEntity ->
                 EventDto().createFromEntity(eventEntity, s3BucketDomain)
             }
+    }
+
+    fun getStudentSocietyStatus(itsc: String): List<StudentEnrolledSocietyStatusDto> {
+        val studentEntity: StudentEntity = studentRepository.findByItsc(itsc).orElseThrow {
+            Exception("student with itsc: $itsc is not exist")
+        }
+        return studentEntity.enrolledSocietyRecordEntities.map { enrolledSocietyRecordEntity: EnrolledSocietyRecordEntity ->
+            StudentEnrolledSocietyStatusDto(
+                societyName = enrolledSocietyRecordEntity.societyEntity.name,
+                registerDate = dateUtil.convertLocalDateTimeToStringWithTime(enrolledSocietyRecordEntity.createdAt),
+                enrolledStatus = enrolledSocietyRecordEntity.status
+            )
+        }
     }
 }
