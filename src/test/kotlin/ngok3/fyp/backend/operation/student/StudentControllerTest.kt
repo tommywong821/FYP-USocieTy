@@ -3,6 +3,8 @@ package ngok3.fyp.backend.operation.student
 import com.ninjasquad.springmockk.MockkBean
 import io.mockk.every
 import ngok3.fyp.backend.controller.authentication.model.MockAuthRepository
+import ngok3.fyp.backend.operation.enrolled.EnrolledStatus
+import ngok3.fyp.backend.util.DateUtil
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -11,6 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.get
+import java.time.LocalDateTime
 import java.util.*
 
 @SpringBootTest
@@ -22,6 +25,7 @@ class StudentControllerTest @Autowired constructor(
     private val mockStudentEntity = mockStudentRepository.testStudentEntity
 
     private val mockAuthRepository: MockAuthRepository = MockAuthRepository()
+    private val dateUtil: DateUtil = DateUtil()
 
     @MockkBean
     lateinit var studentService: StudentService
@@ -113,6 +117,40 @@ class StudentControllerTest @Autowired constructor(
                 }
                 jsonPath("$.mail") {
                     value(mockStudentRepository.testStudentEntity.mail)
+                }
+            }
+    }
+
+    @Test
+    fun `should return student with society status`() {
+        every { studentService.getStudentSocietyStatus("qwert") } returns listOf<StudentEnrolledSocietyStatusDto>(
+            StudentEnrolledSocietyStatusDto(
+                societyName = "test society 1", registerDate = dateUtil.convertLocalDateTimeToStringWithTime(
+                    LocalDateTime.now()
+                ), enrolledStatus = EnrolledStatus.PENDING
+            ),
+            StudentEnrolledSocietyStatusDto(
+                societyName = "test society 2", registerDate = dateUtil.convertLocalDateTimeToStringWithTime(
+                    LocalDateTime.now()
+                ), enrolledStatus = EnrolledStatus.SUCCESS
+            )
+        )
+
+        val result: List<StudentEnrolledSocietyStatusDto> = studentService.getStudentSocietyStatus("qwert")
+
+        mockMvc.get("/student/societyStatus?itsc=qwert")
+            .andDo { print() }
+            .andExpect {
+                status { isOk() }
+                content { contentType(MediaType.APPLICATION_JSON) }
+                jsonPath("$[*].societyName") {
+                    value(result.map { studentEnrolledSocietyStatusDto: StudentEnrolledSocietyStatusDto -> studentEnrolledSocietyStatusDto.societyName })
+                }
+                jsonPath("$[*].registerDate") {
+                    value(result.map { studentEnrolledSocietyStatusDto: StudentEnrolledSocietyStatusDto -> studentEnrolledSocietyStatusDto.registerDate })
+                }
+                jsonPath("$[*].enrolledStatus") {
+                    value(result.map { studentEnrolledSocietyStatusDto: StudentEnrolledSocietyStatusDto -> studentEnrolledSocietyStatusDto.enrolledStatus.toString() })
                 }
             }
     }

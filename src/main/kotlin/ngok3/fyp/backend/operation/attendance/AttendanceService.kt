@@ -11,6 +11,7 @@ import ngok3.fyp.backend.operation.event.EventRepository
 import ngok3.fyp.backend.operation.student.StudentEntity
 import ngok3.fyp.backend.operation.student.StudentRepository
 import ngok3.fyp.backend.util.DateUtil
+import org.springframework.dao.DuplicateKeyException
 import org.springframework.security.access.AccessDeniedException
 import org.springframework.stereotype.Service
 import java.util.*
@@ -51,26 +52,26 @@ class AttendanceService(
         attendanceKey.eventUuid = UUID.fromString(eventId)
         attendanceKey.studentUuid = UUID.fromString(studentId)
 
-        val attendanceEntity: AttendanceEntity = attendanceRepository.findById(attendanceKey).orElseGet {
-            val newAttendanceEntity: AttendanceEntity = AttendanceEntity()
-            newAttendanceEntity.attendanceKey = attendanceKey
-            newAttendanceEntity.eventEntity = eventEntity
-            newAttendanceEntity.studentEntity = studentEntity
-            newAttendanceEntity.createdAt = dateUtil.convertStringWithTimeStampToLocalDateTime(currentTime)
-            return@orElseGet newAttendanceEntity
+        val attendanceEntity: Optional<AttendanceEntity> = attendanceRepository.findById(attendanceKey)
+        if (attendanceEntity.isPresent) {
+            throw DuplicateKeyException("Attendance of event: $eventId and student: $studentId is created already")
         }
-        attendanceEntity.updatedAt = dateUtil.convertStringWithTimeStampToLocalDateTime(currentTime)
-        attendanceRepository.save(attendanceEntity)
+
+        val newAttendanceEntity: AttendanceEntity = AttendanceEntity()
+        newAttendanceEntity.attendanceKey = attendanceKey
+        newAttendanceEntity.eventEntity = eventEntity
+        newAttendanceEntity.studentEntity = studentEntity
+        newAttendanceEntity.createdAt = dateUtil.convertStringWithTimeStampToLocalDateTime(currentTime)
+        attendanceRepository.save(newAttendanceEntity)
     }
 
     fun getAllAttendance(): List<StudentAttendanceDto> {
         return attendanceRepository.findAll().map { attendanceEntity: AttendanceEntity ->
             StudentAttendanceDto(
-                attendanceEntity.studentEntity?.uuid.toString(),
-                attendanceEntity.studentEntity?.itsc,
-                attendanceEntity.createdAt.toString(),
-                attendanceEntity.updatedAt.toString(),
-                attendanceEntity.eventEntity?.name
+                studentUuid = attendanceEntity.studentEntity?.uuid.toString(),
+                studentItsc = attendanceEntity.studentEntity?.itsc,
+                attendanceCreatedAt = attendanceEntity.createdAt.toString(),
+                eventName = attendanceEntity.eventEntity?.name
             )
         }
     }

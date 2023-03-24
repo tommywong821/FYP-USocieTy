@@ -15,6 +15,7 @@ import ngok3.fyp.backend.operation.event.EventEntity
 import ngok3.fyp.backend.operation.event.EventRepository
 import ngok3.fyp.backend.operation.student.StudentEntity
 import ngok3.fyp.backend.operation.student.StudentRepository
+import ngok3.fyp.backend.util.DateUtil
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
@@ -30,12 +31,15 @@ class AttendanceServiceTest {
     private val attendanceRepository: AttendanceRepository = mockk(relaxed = true)
     private val studentRoleEntityRepository: StudentRoleEntityRepository = mockk(relaxed = true)
 
+    private val dateUtil: DateUtil = DateUtil()
+
     private val attendanceService: AttendanceService = AttendanceService(
         enrolledEventRecordRepository = enrolledEventRecordRepository,
         studentRepository = studentRepository,
         eventRepository = eventRepository,
         attendanceRepository = attendanceRepository,
-        studentRoleEntityRepository = studentRoleEntityRepository
+        studentRoleEntityRepository = studentRoleEntityRepository,
+        dateUtil = dateUtil
     )
 
 
@@ -80,7 +84,12 @@ class AttendanceServiceTest {
             attendanceRepository.save(any())
         } returns attendanceEntity
 
-        attendanceService.createAttendance(studentId = studentId.toString(), eventId = eventId.toString(), userItsc)
+        attendanceService.createAttendance(
+            studentId = studentId.toString(),
+            eventId = eventId.toString(),
+            userItsc,
+            currentTime = "2023-03-24T15:33:23.123Z"
+        )
 
         verify(exactly = 1) {
             enrolledEventRecordRepository.findByIdAndStatus(
@@ -125,8 +134,8 @@ class AttendanceServiceTest {
             studentAttendanceDtoList[0].studentUuid
         )
         Assertions.assertEquals(
-            mockAttendanceEntityList[0].studentEntity?.nickname,
-            studentAttendanceDtoList[0].studentNickname
+            mockAttendanceEntityList[0].studentEntity?.itsc,
+            studentAttendanceDtoList[0].studentItsc
         )
         Assertions.assertEquals(
             mockAttendanceEntityList[0].createdAt.toString(),
@@ -142,8 +151,8 @@ class AttendanceServiceTest {
             studentAttendanceDtoList[1].studentUuid
         )
         Assertions.assertEquals(
-            mockAttendanceEntityList[1].studentEntity?.nickname,
-            studentAttendanceDtoList[1].studentNickname
+            mockAttendanceEntityList[1].studentEntity?.itsc,
+            studentAttendanceDtoList[1].studentItsc
         )
         Assertions.assertEquals(
             mockAttendanceEntityList[1].createdAt.toString(),

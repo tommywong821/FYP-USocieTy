@@ -30,16 +30,18 @@ class EnrolledSocietyRecordService(
         enrolledSocietyRepository.save(enrolledSocietyRecordEntity)
     }
 
-    fun getEnrolledSocietyRecord(jwtToken: String, societyName: String): List<StudentEnrolledEventRecord> {
+    fun getEnrolledSocietyRecord(jwtToken: String, societyName: String): List<StudentEnrolledSocietyRecordDto> {
         jwtUtil.verifyUserMemberRoleOfSociety(
             jwtToken = jwtToken,
             societyName
         )
         return enrolledSocietyRepository.findBySocietyEntity_NameAndStatusNotEqual(societyName, EnrolledStatus.SUCCESS)
             .map { enrolledSocietyRecordEntity ->
-                StudentEnrolledEventRecord(
+                StudentEnrolledSocietyRecordDto(
                     studentId = enrolledSocietyRecordEntity.studentEntity.uuid.toString(),
                     societyId = enrolledSocietyRecordEntity.societyEntity.uuid.toString(),
+                    itsc = enrolledSocietyRecordEntity.studentEntity.itsc,
+                    name = enrolledSocietyRecordEntity.studentEntity.nickname,
                     status = enrolledSocietyRecordEntity.status
                 )
             }

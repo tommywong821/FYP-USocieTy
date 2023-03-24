@@ -36,7 +36,8 @@ class AttendanceControllerTest @Autowired constructor(
             attendanceService.createAttendance(
                 studentId = studentId.toString(),
                 eventId = eventId.toString(),
-                userItsc = "itsc"
+                userItsc = "itsc",
+                currentTime = "2023-03-24T15:33:23.123Z"
             )
         } returns Unit
 
@@ -45,7 +46,7 @@ class AttendanceControllerTest @Autowired constructor(
                 contentType = MediaType.APPLICATION_JSON
             }
             content =
-                "{\"eventId\":\"6c8180b4-0681-4d88-950f-c8f16859f9d6\",\"studentId\":\"cead8c1e-7cbe-44c6-8fc1-dabe57c80168\",\"userItsc\":\"itsc\"}"
+                "{\"eventId\":\"6c8180b4-0681-4d88-950f-c8f16859f9d6\",\"studentId\":\"cead8c1e-7cbe-44c6-8fc1-dabe57c80168\",\"userItsc\":\"itsc\",\"currentTime\":\"2023-03-24T15:33:23.123Z\"}"
 //            TODO enable encryption
 //            content =
 //                "{\"data\":\"dc3XrBxZHE0urCUzKlehtgXvLwl93WIgb+udouUxs2uxT56+ptMptD9I3VNxL3fTXGvyIXDlU6zVZcRuaMfV/6OBuCIylFigdChzngIg7WuEQ0kgtvP4aG/6eqyEz8eOdW/4czE+kxwYKq1yhC3y9PPwwY6fyhr0PZmV5jftXN4=\"}"
@@ -56,18 +57,16 @@ class AttendanceControllerTest @Autowired constructor(
     fun `should get all attendance`() {
         val studentAttendanceDtoList: List<StudentAttendanceDto> = listOf(
             StudentAttendanceDto(
-                UUID.randomUUID().toString(),
-                "nickname 1",
-                LocalDateTime.now().toString(),
-                LocalDateTime.now().toString(),
-                "test event 1"
+                studentUuid = UUID.randomUUID().toString(),
+                studentItsc = "nickname 1",
+                attendanceCreatedAt = LocalDateTime.now().toString(),
+                eventName = "test event 1"
             ),
             StudentAttendanceDto(
-                UUID.randomUUID().toString(),
-                "nickname 2",
-                LocalDateTime.now().toString(),
-                LocalDateTime.now().toString(),
-                "test event 2"
+                studentUuid = UUID.randomUUID().toString(),
+                studentItsc = "nickname 2",
+                attendanceCreatedAt = LocalDateTime.now().toString(),
+                eventName = "test event 2"
             ),
         )
 
@@ -92,14 +91,11 @@ class AttendanceControllerTest @Autowired constructor(
                 jsonPath("$[*].studentUuid") {
                     value(studentAttendanceDtoList.map { studentAttendance -> studentAttendance.studentUuid })
                 }
-                jsonPath("$[*].studentNickname") {
-                    value(studentAttendanceDtoList.map { studentAttendance -> studentAttendance.studentNickname })
+                jsonPath("$[*].studentItsc") {
+                    value(studentAttendanceDtoList.map { studentAttendance -> studentAttendance.studentItsc })
                 }
                 jsonPath("$[*].attendanceCreatedAt") {
                     value(studentAttendanceDtoList.map { studentAttendance -> studentAttendance.attendanceCreatedAt })
-                }
-                jsonPath("$[*].attendanceUpdatedAt") {
-                    value(studentAttendanceDtoList.map { studentAttendance -> studentAttendance.attendanceUpdatedAt })
                 }
                 jsonPath("$[*].eventName") {
                     value(studentAttendanceDtoList.map { studentAttendance -> studentAttendance.eventName })
