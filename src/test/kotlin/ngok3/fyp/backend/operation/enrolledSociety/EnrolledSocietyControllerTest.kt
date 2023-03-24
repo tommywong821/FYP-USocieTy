@@ -5,7 +5,7 @@ import io.mockk.every
 import ngok3.fyp.backend.controller.authentication.model.MockAuthRepository
 import ngok3.fyp.backend.operation.enrolled.EnrolledStatus
 import ngok3.fyp.backend.operation.enrolled.society_record.EnrolledSocietyRecordService
-import ngok3.fyp.backend.operation.enrolled.society_record.StudentEnrolledEventRecord
+import ngok3.fyp.backend.operation.enrolled.society_record.StudentEnrolledSocietyRecordDto
 import ngok3.fyp.backend.operation.enrolled.society_record.UpdateEnrolledSocietyRecordDto
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -57,15 +57,15 @@ class EnrolledSocietyControllerTest @Autowired constructor(
 
     @Test
     fun `should get student with enrolled society status != SUCCESS`() {
-        val mockStudentListNotInSuccess: List<StudentEnrolledEventRecord> = listOf(
-            StudentEnrolledEventRecord(
+        val mockStudentListNotInSuccess: List<StudentEnrolledSocietyRecordDto> = listOf(
+            StudentEnrolledSocietyRecordDto(
                 studentId = UUID.randomUUID().toString(),
                 societyId = UUID.randomUUID().toString(),
                 itsc = "qwert",
                 name = "test1",
                 status = EnrolledStatus.PENDING
             ),
-            StudentEnrolledEventRecord(
+            StudentEnrolledSocietyRecordDto(
                 studentId = UUID.randomUUID().toString(),
                 societyId = UUID.randomUUID().toString(),
                 itsc = "asdfg",
