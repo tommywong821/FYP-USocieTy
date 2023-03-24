@@ -6,6 +6,7 @@ import io.mockk.verify
 import ngok3.fyp.backend.authentication.role.Role
 import ngok3.fyp.backend.authentication.role.RoleEntity
 import ngok3.fyp.backend.authentication.role.RoleEntityRepository
+import ngok3.fyp.backend.authentication.student_role.StudentRoleEntity
 import ngok3.fyp.backend.authentication.student_role.StudentRoleEntityRepository
 import ngok3.fyp.backend.controller.authentication.model.MockAuthRepository
 import ngok3.fyp.backend.operation.enrolled.EnrolledStatus
@@ -39,20 +40,30 @@ class SocietyServiceTest {
 
     @Test
     fun getAllSocietyMember() {
+        val role: RoleEntity = RoleEntity(role = Role.ROLE_SOCIETY_MEMBER)
+        val student1: StudentEntity = StudentEntity(itsc = "qwerty", nickname = "nickname 1")
+        val studentRoleEntity: StudentRoleEntity = StudentRoleEntity()
+        studentRoleEntity.roleEntity = role
+        student1.studentRoleEntities = mutableSetOf(studentRoleEntity)
+
+        val student2: StudentEntity = StudentEntity(itsc = "asdfg", nickname = "nickname 2")
+
         every {
-            studentRepository.findByEnrolledSocietyName(mockAuthRepository.testSocietyName)
+            studentRepository.getAllStudentByEnrolledInSociety(mockAuthRepository.testSocietyName)
         } returns listOf(
-            StudentEntity("qwerty", "nickname 1"),
-            StudentEntity("asdfg", "nickname 2"),
+            student1,
+            student2
         )
 
         val allMembers: List<StudentDto> = societyService.getAllSocietyMember(mockAuthRepository.testSocietyName)
 
         assertEquals("qwerty", allMembers[0].itsc)
         assertEquals("nickname 1", allMembers[0].nickname)
+        assertEquals(arrayListOf(Role.ROLE_SOCIETY_MEMBER.toString()), allMembers[0].roles)
 
         assertEquals("asdfg", allMembers[1].itsc)
         assertEquals("nickname 2", allMembers[1].nickname)
+        assertEquals(arrayListOf<String>(), allMembers[1].roles)
     }
 
     @Test
