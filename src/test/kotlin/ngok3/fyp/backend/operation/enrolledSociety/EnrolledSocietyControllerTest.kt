@@ -5,7 +5,7 @@ import io.mockk.every
 import ngok3.fyp.backend.controller.authentication.model.MockAuthRepository
 import ngok3.fyp.backend.operation.enrolled.EnrolledStatus
 import ngok3.fyp.backend.operation.enrolled.society_record.EnrolledSocietyRecordService
-import ngok3.fyp.backend.operation.enrolled.society_record.StudentEnrolledEventRecord
+import ngok3.fyp.backend.operation.enrolled.society_record.StudentEnrolledSocietyRecordDto
 import ngok3.fyp.backend.operation.enrolled.society_record.UpdateEnrolledSocietyRecordDto
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -52,21 +52,25 @@ class EnrolledSocietyControllerTest @Autowired constructor(
             }
 
             content = "{\"societyId\":\"$societyUUID\",\"studentId\":\"$studentUUID\",\"status\":\"SUCCESS\"}"
-        }.andDo { print() }.andExpect { status { isNoContent() } }
+        }.andDo { print() }.andExpect { status { isOk() } }
     }
 
     @Test
     fun `should get student with enrolled society status != SUCCESS`() {
-        val mockStudentListNotInSuccess: List<StudentEnrolledEventRecord> = listOf(
-            StudentEnrolledEventRecord(
-                UUID.randomUUID().toString(),
-                UUID.randomUUID().toString(),
-                EnrolledStatus.PENDING
+        val mockStudentListNotInSuccess: List<StudentEnrolledSocietyRecordDto> = listOf(
+            StudentEnrolledSocietyRecordDto(
+                studentId = UUID.randomUUID().toString(),
+                societyId = UUID.randomUUID().toString(),
+                itsc = "qwert",
+                name = "test1",
+                status = EnrolledStatus.PENDING
             ),
-            StudentEnrolledEventRecord(
-                UUID.randomUUID().toString(),
-                UUID.randomUUID().toString(),
-                EnrolledStatus.DECLINE
+            StudentEnrolledSocietyRecordDto(
+                studentId = UUID.randomUUID().toString(),
+                societyId = UUID.randomUUID().toString(),
+                itsc = "asdfg",
+                name = "test2",
+                status = EnrolledStatus.DECLINE
             ),
         )
 

@@ -146,7 +146,7 @@ class EventControllerTest @Autowired constructor(
             }
             pathInfo
         }.andDo { print() }.andExpect {
-            status { isNoContent() }
+            status { isOk() }
         }
     }
 
@@ -190,7 +190,7 @@ class EventControllerTest @Autowired constructor(
                 )
                 .cookie(Cookie("token", mockAuthRepository.validUserCookieToken))
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-        ).andExpect(status().isNoContent)
+        ).andExpect(status().isOk)
     }
 
     @Test

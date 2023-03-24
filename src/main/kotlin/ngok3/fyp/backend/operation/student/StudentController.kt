@@ -28,5 +28,13 @@ class StudentController(
     ): List<EventDto> {
         return studentService.getAllEventWithSocietyMember(studentId, pageNum, pageSize)
     }
+
+    @Operation(summary = "Get all event by student with society member")
+    @GetMapping("/societyStatus")
+    fun getStudentSocietyStatus(
+        @RequestParam("itsc") itsc: String
+    ): List<StudentEnrolledSocietyStatusDto> {
+        return studentService.getStudentSocietyStatus(itsc)
+    }
 }
 
