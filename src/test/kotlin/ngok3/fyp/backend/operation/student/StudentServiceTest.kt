@@ -2,6 +2,7 @@ package ngok3.fyp.backend.operation.student
 
 import io.mockk.every
 import io.mockk.mockk
+import ngok3.fyp.backend.authentication.student_role.StudentRoleEntity
 import ngok3.fyp.backend.authentication.student_role.StudentRoleEntityRepository
 import ngok3.fyp.backend.operation.enrolled.EnrolledStatus
 import ngok3.fyp.backend.operation.enrolled.society_record.EnrolledSocietyRecordEntity
@@ -122,5 +123,24 @@ class StudentServiceTest() {
         assertEquals(EnrolledStatus.SUCCESS, result[0].enrolledStatus)
         assertEquals(EnrolledStatus.PENDING, result[1].enrolledStatus)
 
+    }
+
+    @Test
+    fun countAllEventWithSocietyMember() {
+        val studentEntity: StudentEntity = StudentEntity()
+        val societyEntity: SocietyEntity = SocietyEntity("society 1")
+        val studentRoleEntity: StudentRoleEntity = StudentRoleEntity()
+        studentRoleEntity.societyEntity = societyEntity
+        studentEntity.studentRoleEntities = mutableSetOf(
+            studentRoleEntity
+        )
+
+        every { studentRepository.findById(any()) } returns Optional.of(studentEntity)
+
+        every { eventRepository.countBySocietyNameList(any()) } returns 23
+
+        val result = studentService.countAllEventWithSocietyMember(UUID.randomUUID().toString())
+
+        assertEquals(23, result.totalNumber)
     }
 }

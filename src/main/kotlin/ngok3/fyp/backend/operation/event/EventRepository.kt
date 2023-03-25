@@ -28,4 +28,7 @@ interface EventRepository : PagingAndSortingRepository<EventEntity, UUID> {
     @Query("select e from EventEntity e where e.societyEntity.name in ?1")
     fun findAllBySocietyNameList(names: MutableCollection<String>, pageable: Pageable): List<EventEntity>
 
+
+    @Query("select count(e) from EventEntity e where e.societyEntity.name in ?1")
+    fun countBySocietyNameList(names: MutableCollection<String>): Long
 }
