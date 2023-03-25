@@ -177,6 +177,14 @@ export class ApiService {
     });
   }
 
+  getEventCount(studentId: string): Observable<number> {
+    return this.restful.get<number>(`${environment.backend_url}/student/${studentId}/event/totalNumber`);
+  }
+
+  getEventEnrollmentRecordCount(eventId: string): Observable<number> {
+    return this.restful.get<number>(`${environment.backend_url}/enrolledEventRecord/${eventId}/totalNumber`);
+  }
+
   updateEventEnrollmentRecords(eventId: string, records: UpdateEventEnrollmentRecordPayload[]): Observable<void> {
     return this.restful.put<void>(`${environment.backend_url}/enrolledEventRecord`, records);
   }

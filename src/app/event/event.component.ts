@@ -52,6 +52,7 @@ export class EventComponent implements OnInit {
   eventTableHeaders = EventTableColumn.map(col => col.title);
 
   events: Event[] = [];
+  eventTotal = 0;
   refreshEvents$ = new Subject();
 
   enrolledSocieties: string[] = [];
@@ -75,8 +76,13 @@ export class EventComponent implements OnInit {
 
   ngOnInit(): void {
     this.AuthService.user$
-      .pipe(filter(user => !!user))
-      .subscribe(user => (this.enrolledSocieties = [...user!.enrolledSocieties]));
+      .pipe(
+        filter(user => !!user),
+        tap(user => (this.enrolledSocieties = [...user!.enrolledSocieties])),
+        switchMap(user => this.ApiService.getEventCount(user!.uuid)),
+        tap(eventTotal => (this.eventTotal = eventTotal))
+      )
+      .subscribe();
 
     this.refreshEvents$
       .pipe(

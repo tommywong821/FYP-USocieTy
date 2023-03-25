@@ -30,6 +30,7 @@ export class EventViewComponent implements OnInit {
 
   eventId = '';
   event?: Event = undefined;
+  recordTotal = 0;
 
   enrollmentRecords: EventEnrollmentRecord[] = [];
   refreshEnrollmentRecords$ = new Subject();
@@ -57,9 +58,12 @@ export class EventViewComponent implements OnInit {
         tap(() => (this.loadingMessage = this.message.loading('Fetching event details...'))),
         tap(params => (this.eventId = params['eventId'])),
         switchMap(params => this.ApiService.getEvent(params['eventId'])),
+        tap(event => (this.event = event)),
+        switchMap(event => this.ApiService.getEventEnrollmentRecordCount(event.id!)),
+        tap(recordCount => (this.recordTotal = recordCount)),
         tap(() => this.message.remove(this.loadingMessage?.messageId))
       )
-      .subscribe(event => (this.event = event));
+      .subscribe();
 
     this.updateEnrollmentRecord$
       .pipe(switchMap(records => this.ApiService.updateEventEnrollmentRecords(this.eventId, records)))

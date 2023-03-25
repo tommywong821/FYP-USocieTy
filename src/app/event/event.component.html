@@ -15,8 +15,9 @@
   <div>
     <nz-table
       #eventTable
+      [nzTotal]="eventTotal"
       [nzPageIndex]="pageIndex"
-      [nzTotal]="pageSize"
+      [nzPageSize]="pageSize"
       (nzPageIndexChange)="changePageIndex()"
       [nzData]="events"
     >

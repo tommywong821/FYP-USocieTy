@@ -68,8 +68,9 @@
       </div>
       <nz-table
         #enrollmentTable
+        [nzTotal]="recordTotal"
+        [nzPageSize]="pageSize"
         [nzPageIndex]="pageIndex"
-        [nzTotal]="pageSize"
         (nzPageIndexChange)="changePageIndex()"
         [nzData]="enrollmentRecords"
       >
