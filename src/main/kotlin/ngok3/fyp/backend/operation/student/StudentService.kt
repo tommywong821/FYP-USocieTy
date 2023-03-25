@@ -1,6 +1,7 @@
 package ngok3.fyp.backend.operation.student
 
 import ngok3.fyp.backend.authentication.student_role.StudentRoleEntity
+import ngok3.fyp.backend.operation.PaginationCountDto
 import ngok3.fyp.backend.operation.enrolled.society_record.EnrolledSocietyRecordEntity
 import ngok3.fyp.backend.operation.event.EventEntity
 import ngok3.fyp.backend.operation.event.EventRepository
@@ -62,5 +63,17 @@ class StudentService(
                 enrolledStatus = enrolledSocietyRecordEntity.status
             )
         }
+    }
+
+    fun countAllEventWithSocietyMember(studentId: String): PaginationCountDto {
+        val student: StudentEntity = studentRepository.findById(UUID.fromString(studentId)).orElseThrow {
+            Exception("student with id: $studentId is not found")
+        }
+
+        val societyNameList: MutableList<String> =
+            student.studentRoleEntities.map { studentRoleEntity: StudentRoleEntity -> studentRoleEntity.societyEntity.name }
+                .toMutableList()
+
+        return PaginationCountDto(eventRepository.countBySocietyNameList(societyNameList))
     }
 }
