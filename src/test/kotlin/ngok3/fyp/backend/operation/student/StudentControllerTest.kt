@@ -3,6 +3,7 @@ package ngok3.fyp.backend.operation.student
 import com.ninjasquad.springmockk.MockkBean
 import io.mockk.every
 import ngok3.fyp.backend.controller.authentication.model.MockAuthRepository
+import ngok3.fyp.backend.operation.PaginationCountDto
 import ngok3.fyp.backend.operation.enrolled.EnrolledStatus
 import ngok3.fyp.backend.util.DateUtil
 import org.junit.jupiter.api.DisplayName
@@ -151,6 +152,21 @@ class StudentControllerTest @Autowired constructor(
                 }
                 jsonPath("$[*].enrolledStatus") {
                     value(result.map { studentEnrolledSocietyStatusDto: StudentEnrolledSocietyStatusDto -> studentEnrolledSocietyStatusDto.enrolledStatus.toString() })
+                }
+            }
+    }
+
+    @Test
+    fun `should return total number of enrolled event by student id`() {
+        every { studentService.countAllEventWithSocietyMember("qwert") } returns PaginationCountDto(23)
+
+        mockMvc.get("/student/{studentId}/event/totalNumber", "qwert")
+            .andDo { print() }
+            .andExpect {
+                status { isOk() }
+                content { contentType(MediaType.APPLICATION_JSON) }
+                jsonPath("$.totalNumber") {
+                    value(23)
                 }
             }
     }
