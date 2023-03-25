@@ -1,6 +1,7 @@
 package ngok3.fyp.backend.operation.enrolled.event_record
 
 import io.swagger.v3.oas.annotations.Operation
+import ngok3.fyp.backend.operation.PaginationCountDto
 import ngok3.fyp.backend.operation.enrolled.event_record.model.EnrolledEventDto
 import ngok3.fyp.backend.operation.enrolled.event_record.model.StudentEnrolledEventRecordDto
 import ngok3.fyp.backend.operation.enrolled.event_record.model.UpdateEnrolledEventRecordDto
@@ -51,5 +52,13 @@ class EnrolledEventRecordController(
         @RequestParam("pageSize", required = false, defaultValue = "10") pageSize: Int
     ): List<StudentEnrolledEventRecordDto> {
         return enrolledEventService.getStudentEnrolledEventRecord(jwtToken, eventId, pageNum, pageSize)
+    }
+
+    @Operation(summary = "count all enrolled event with event id")
+    @GetMapping("/{eventId}/totalNumber")
+    fun getStudentEnrolledEventRecord(
+        @PathVariable eventId: String,
+    ): PaginationCountDto {
+        return enrolledEventService.countStudentEnrolledEventRecord(eventId)
     }
 }

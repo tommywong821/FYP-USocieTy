@@ -7,6 +7,7 @@ import ngok3.fyp.backend.authentication.role.Role
 import ngok3.fyp.backend.authentication.student_role.StudentRoleEntity
 import ngok3.fyp.backend.authentication.student_role.StudentRoleEntityRepository
 import ngok3.fyp.backend.controller.authentication.model.MockAuthRepository
+import ngok3.fyp.backend.operation.PaginationCountDto
 import ngok3.fyp.backend.operation.enrolled.EnrolledStatus
 import ngok3.fyp.backend.operation.enrolled.event_record.*
 import ngok3.fyp.backend.operation.enrolled.event_record.model.StudentEnrolledEventRecordDto
@@ -17,6 +18,7 @@ import ngok3.fyp.backend.operation.society.SocietyEntity
 import ngok3.fyp.backend.operation.student.StudentEntity
 import ngok3.fyp.backend.util.JWTUtil
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.data.domain.PageRequest
@@ -172,5 +174,18 @@ class EnrolledEventRecordServiceTest {
 
         assertThat(returnList).usingRecursiveComparison().ignoringFields("studentId")
             .isEqualTo(studentEnrolledEventRecordDtoList)
+    }
+
+    @Test
+    fun `should count all event with event id`() {
+        val eventUuid: UUID = UUID.randomUUID()
+
+        every { eventRepository.findById(eventUuid) } returns Optional.of(EventEntity())
+
+        every { enrolledEventRecordRepository.countById_EventUuid(eventUuid) } returns 14
+
+        val result: PaginationCountDto = enrolledEventService.countStudentEnrolledEventRecord(eventUuid.toString())
+
+        Assertions.assertEquals(14, result.totalNumber)
     }
 }
