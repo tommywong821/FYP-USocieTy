@@ -40,10 +40,10 @@ class SocietyServiceTest {
 
     @Test
     fun getAllSocietyMember() {
-        val role: RoleEntity = RoleEntity(role = Role.ROLE_SOCIETY_MEMBER)
+        val societyEntity: SocietyEntity = SocietyEntity(name = "test society 1")
         val student1: StudentEntity = StudentEntity(itsc = "qwerty", nickname = "nickname 1")
         val studentRoleEntity: StudentRoleEntity = StudentRoleEntity()
-        studentRoleEntity.roleEntity = role
+        studentRoleEntity.societyEntity = societyEntity
         student1.studentRoleEntities = mutableSetOf(studentRoleEntity)
 
         val student2: StudentEntity = StudentEntity(itsc = "asdfg", nickname = "nickname 2")
@@ -59,7 +59,7 @@ class SocietyServiceTest {
 
         assertEquals("qwerty", allMembers[0].itsc)
         assertEquals("nickname 1", allMembers[0].nickname)
-        assertEquals(arrayListOf(Role.ROLE_SOCIETY_MEMBER.toString()), allMembers[0].roles)
+        assertEquals(arrayListOf<String>("test society 1"), allMembers[0].roles)
 
         assertEquals("asdfg", allMembers[1].itsc)
         assertEquals("nickname 2", allMembers[1].nickname)

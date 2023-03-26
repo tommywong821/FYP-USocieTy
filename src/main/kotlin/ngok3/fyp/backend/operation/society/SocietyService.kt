@@ -61,9 +61,9 @@ class SocietyService(
 
         return allStudentList.map { studentEntity: StudentEntity ->
             StudentDto(
-                studentEntity,
-                emptyList(),
-                studentEntity.studentRoleEntities.map { studentRoleEntity: StudentRoleEntity -> studentRoleEntity.roleEntity.role.toString() })
+                studentEntity = studentEntity,
+                enrolledSocietyList = emptyList(),
+                roles = studentEntity.studentRoleEntities.map { studentRoleEntity: StudentRoleEntity -> studentRoleEntity.societyEntity.name })
         }
     }
 
