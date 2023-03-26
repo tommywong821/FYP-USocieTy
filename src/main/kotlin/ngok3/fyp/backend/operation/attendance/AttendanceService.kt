@@ -1,6 +1,5 @@
 package ngok3.fyp.backend.operation.attendance
 
-import ngok3.fyp.backend.authentication.role.Role
 import ngok3.fyp.backend.authentication.student_role.StudentRoleEntityRepository
 import ngok3.fyp.backend.operation.attendance.model.StudentAttendanceDto
 import ngok3.fyp.backend.operation.enrolled.EnrolledStatus
@@ -12,7 +11,6 @@ import ngok3.fyp.backend.operation.student.StudentEntity
 import ngok3.fyp.backend.operation.student.StudentRepository
 import ngok3.fyp.backend.util.DateUtil
 import org.springframework.dao.DuplicateKeyException
-import org.springframework.security.access.AccessDeniedException
 import org.springframework.stereotype.Service
 import java.util.*
 
@@ -26,13 +24,13 @@ class AttendanceService(
     private val dateUtil: DateUtil
 ) {
     fun createAttendance(studentId: String, eventId: String, userItsc: String, currentTime: String) {
-        studentRoleEntityRepository.findByUserItscAndUserRoleAndHisSocietyIsHoldingEvent(
-            userItsc,
-            Role.ROLE_SOCIETY_MEMBER,
-            UUID.fromString(eventId)
-        ).orElseThrow {
-            AccessDeniedException("User: $userItsc did not belong to this event's society member")
-        }
+//        studentRoleEntityRepository.findByUserItscAndUserRoleAndHisSocietyIsHoldingEvent(
+//            userItsc,
+//            Role.ROLE_SOCIETY_MEMBER,
+//            UUID.fromString(eventId)
+//        ).orElseThrow {
+//            AccessDeniedException("User: $userItsc did not belong to this event's society member")
+//        }
 
         enrolledEventRecordRepository.findByIdAndStatus(
             EnrolledEventRecordKey(studentUuid = UUID.fromString(studentId), eventUuid = UUID.fromString(eventId)),
