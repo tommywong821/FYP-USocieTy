@@ -69,20 +69,20 @@ class EnrolledEventControllerTest @Autowired constructor(
             StudentEnrolledEventRecordDto(
                 studentId = UUID.randomUUID().toString(),
                 itsc = "qwerty",
-                paymentStatus = PaymentStatus.UNPAID.status,
-                enrolledStatus = EnrolledStatus.SUCCESS.status
+                paymentStatus = PaymentStatus.UNPAID,
+                enrolledStatus = EnrolledStatus.SUCCESS
             ),
             StudentEnrolledEventRecordDto(
                 studentId = UUID.randomUUID().toString(),
                 itsc = "asdfg",
-                paymentStatus = PaymentStatus.PAID.status,
-                enrolledStatus = EnrolledStatus.PENDING.status
+                paymentStatus = PaymentStatus.PAID,
+                enrolledStatus = EnrolledStatus.PENDING
             ),
             StudentEnrolledEventRecordDto(
                 studentId = UUID.randomUUID().toString(),
                 itsc = "qwerty",
-                paymentStatus = PaymentStatus.UNPAID.status,
-                enrolledStatus = EnrolledStatus.DECLINE.status
+                paymentStatus = PaymentStatus.UNPAID,
+                enrolledStatus = EnrolledStatus.DECLINE
             ),
         )
 
@@ -119,10 +119,10 @@ class EnrolledEventControllerTest @Autowired constructor(
                 value(studentEnrolledEventRecordDtoList.map { studentEnrolledEventRecordDto -> studentEnrolledEventRecordDto.itsc })
             }
             jsonPath("$[*].paymentStatus") {
-                value(studentEnrolledEventRecordDtoList.map { studentEnrolledEventRecordDto -> studentEnrolledEventRecordDto.paymentStatus })
+                value(studentEnrolledEventRecordDtoList.map { studentEnrolledEventRecordDto -> studentEnrolledEventRecordDto.paymentStatus.toString() })
             }
             jsonPath("$[*].enrolledStatus") {
-                value(studentEnrolledEventRecordDtoList.map { studentEnrolledEventRecordDto -> studentEnrolledEventRecordDto.enrolledStatus })
+                value(studentEnrolledEventRecordDtoList.map { studentEnrolledEventRecordDto -> studentEnrolledEventRecordDto.enrolledStatus.toString() })
             }
         }
     }
