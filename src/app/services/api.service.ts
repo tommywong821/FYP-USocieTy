@@ -188,13 +188,15 @@ export class ApiService {
   }
 
 
-  setAsSocietyMember(societyName: string|null,studentId: string|null): void {
+  setAsSocietyMember(societyName: string|null,studentIdList: string[]|null): void {
     const body = {
       societyName,
-      studentId,
+      studentIdList,
     };
     this.restful.post(`${environment.backend_url}/society/member`,body).subscribe((res) => {
       console.log(res);
+    },(error)=>{
+      alert("Error");
     });
   }
 
@@ -206,6 +208,8 @@ export class ApiService {
     };
     this.restful.put(`${environment.backend_url}/enrolledSocietyRecord`, body).subscribe((res) => {
       console.log(res);
-    });;
+    },(error)=>{
+      alert(error.message);
+    });
   }
 }

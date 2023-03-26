@@ -1,7 +1,7 @@
 <div class="m-5 px-8">
   <div class="my-5 space-y-6 py-4">
     <div class="flex bg-white">
-      <h1 class="text-xl">Society Member</h1>
+      <h1 class="text-xl"><div class="text-blue-600">{{societyName}}</div> <br><br> Society Member</h1>
     </div>
   </div>
   <div>
@@ -39,14 +39,14 @@ class="cursor-pointer"
   class="bg-green-500"
   (click)="deleteSocietyMember(data.uuid)"
   >
-  Set as Student
+  Delete Society Member
 </button>
 
  <button
       nz-button
       nzDanger
       nzType="primary"
-      *ngIf="data.roles=='Student' "
+      *ngIf="data.roles=='' "
       (click)="setAsSocietyMember(data.uuid)"
       >
       Set as Society Member
@@ -90,13 +90,13 @@ class="cursor-pointer"
 class="cursor-pointer" 
 *ngFor="let data of enrolledSocietiesListTable.data">
 <td>{{data.itsc}}</td>
-<td>{{data.nickname}}</td>
+<td>{{data.name}}</td>
 <td>{{data.status}}</td>
 <td>         
   <button  
   nz-button
   nzType="primary"
-  (click)="approveSocietyRequest(data.uuid)"
+  (click)="approveSocietyRequest(data.societyId,data.studentId)"
   >
   Approve
 </button>
