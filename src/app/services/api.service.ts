@@ -234,7 +234,7 @@ export class ApiService {
 
   updateEnrolledSocietyRecord(societyName: string|null,studentId: string|null, status: string): void {
     const body = {
-      societyName,
+      societyId,
       studentId,
       status,
     };
