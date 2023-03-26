@@ -4,5 +4,5 @@ export interface User {
   nickname: string;
   email: string;
   enrolledSocieties: string[];
-  roles: string;
+  roles: string[];
 }

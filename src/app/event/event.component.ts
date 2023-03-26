@@ -78,6 +78,7 @@ export class EventComponent implements OnInit {
     this.AuthService.user$
       .pipe(
         filter(user => !!user),
+        tap(user => console.log(user)),
         tap(user => (this.enrolledSocieties = [...user!.enrolledSocieties])),
         switchMap(user => this.ApiService.getEventCount(user!.uuid)),
         tap(eventTotal => (this.eventTotal = eventTotal))
