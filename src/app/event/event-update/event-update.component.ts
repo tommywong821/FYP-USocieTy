@@ -37,7 +37,7 @@ export class EventUpdateComponent implements OnInit {
 
   fileList: NzUploadFile[] = [];
 
-  enrolledSocieties: string[] = [];
+  roles: string[] = [];
 
   eventId = '';
   event$ = new Subject<Event>();
@@ -95,9 +95,7 @@ export class EventUpdateComponent implements OnInit {
             }))
         );
 
-      this.AuthService.user$
-        .pipe(filter(user => !!user))
-        .subscribe(user => (this.enrolledSocieties = [...user!.enrolledSocieties]));
+      this.AuthService.user$.pipe(filter(user => !!user)).subscribe(user => (this.roles = [...user!.roles]));
 
       this.event$
         .pipe(
