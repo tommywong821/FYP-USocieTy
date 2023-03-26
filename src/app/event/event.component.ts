@@ -1,4 +1,4 @@
-import {EventProperty} from './../model/event';
+import {EventAction, EventProperty} from './../model/event';
 import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {filter, ReplaySubject, Subject, switchMap, tap} from 'rxjs';
@@ -67,6 +67,8 @@ export class EventComponent implements OnInit {
 
   loadingMessage: NzMessageRef | null = null;
 
+  messages?: Record<EventAction, NzMessageRef>;
+
   constructor(
     private router: Router,
     private ApiService: ApiService,
@@ -78,7 +80,6 @@ export class EventComponent implements OnInit {
     this.AuthService.user$
       .pipe(
         filter(user => !!user),
-        tap(user => console.log(user)),
         tap(user => (this.enrolledSocieties = [...user!.enrolledSocieties])),
         switchMap(user => this.ApiService.getEventCount(user!.uuid)),
         tap(eventTotal => (this.eventTotal = eventTotal))
@@ -87,17 +88,19 @@ export class EventComponent implements OnInit {
 
     this.refreshEvents$
       .pipe(
-        tap(() => (this.loadingMessage = this.message.loading('Fetching events...'))),
+        tap(() => (this.messages![EventAction.Fetch] = this.message.loading('Fetching events...'))),
         switchMap(() => this.ApiService.getEvents(this.pageIndex, this.pageSize)),
-        tap(() => this.message.remove(this.loadingMessage?.messageId))
+        tap(() => this.message.remove(this.messages![EventAction.Fetch].messageId))
       )
       .subscribe(event => (this.events = ([] as Event[]).concat(event)));
 
     this.deleteEvent$
       .pipe(
         switchMap(() => this.deleteEventId$.asObservable()),
-        tap(() => this.message.loading('Deleting event...', {nzDuration: 2000})),
-        switchMap(eventId => this.ApiService.deleteEvent(eventId))
+        tap(() => (this.messages![EventAction.Delete] = this.message.loading('Deleting event...'))),
+        switchMap(eventId => this.ApiService.deleteEvent(eventId)),
+        tap(() => this.message.remove(this.messages![EventAction.Delete].messageId)),
+        tap(() => this.message.success('Successfully deleted event'))
       )
       .subscribe();
 

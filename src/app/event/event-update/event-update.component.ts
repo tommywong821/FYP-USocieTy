@@ -101,10 +101,11 @@ export class EventUpdateComponent implements OnInit {
 
       this.event$
         .pipe(
+          tap(() => (this.loadingMessage = this.message.loading('Updating event...'))),
           switchMap(event => this.ApiService.updateEvent(event, this.updateEventForm.value.society, this.pictureFile)),
           // tap(() => (this.isProcessing = false)),
           tap(() => this.message.remove(this.loadingMessage?.messageId)),
-          tap(() => this.message.success('Successfully created event', {nzDuration: 3000})),
+          tap(() => this.message.success('Successfully created event', {nzDuration: 2000})),
           tap(() => this.backToEventViewPage())
         )
         .subscribe();
@@ -128,7 +129,6 @@ export class EventUpdateComponent implements OnInit {
     }
 
     this.isProcessing = true;
-    this.loadingMessage = this.message.loading('Updating event...');
     this.event$.next(convertFormDataToEvent({...this.updateEventForm.value}));
   }
 

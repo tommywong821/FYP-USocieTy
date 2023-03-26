@@ -1,3 +1,4 @@
+import {EventAction} from './../../model/event';
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {NzMessageRef, NzMessageService} from 'ng-zorro-antd/message';
@@ -42,7 +43,7 @@ export class EventViewComponent implements OnInit {
   pageIndex = 1;
   pageSize = 15;
 
-  loadingMessage: NzMessageRef | null = null;
+  messages?: Record<EventAction, NzMessageRef>;
 
   constructor(
     private router: Router,
@@ -55,18 +56,23 @@ export class EventViewComponent implements OnInit {
     this.route.queryParams
       .pipe(
         first(),
-        tap(() => (this.loadingMessage = this.message.loading('Fetching event details...'))),
+        tap(() => (this.messages![EventAction.Fetch] = this.message.loading('Fetching event details...'))),
         tap(params => (this.eventId = params['eventId'])),
         switchMap(params => this.ApiService.getEvent(params['eventId'])),
         tap(event => (this.event = event)),
         switchMap(event => this.ApiService.getEventEnrollmentRecordCount(event.id!)),
         tap(recordCount => (this.recordTotal = recordCount)),
-        tap(() => this.message.remove(this.loadingMessage?.messageId))
+        tap(() => this.message.remove(this.messages![EventAction.Fetch].messageId))
       )
       .subscribe();
 
     this.updateEnrollmentRecord$
-      .pipe(switchMap(records => this.ApiService.updateEventEnrollmentRecords(this.eventId, records)))
+      .pipe(
+        tap(() => (this.messages![EventAction.Update] = this.message.loading('Updating event enrollment records...'))),
+        switchMap(records => this.ApiService.updateEventEnrollmentRecords(this.eventId, records)),
+        tap(() => this.message.remove(this.messages![EventAction.Update].messageId)),
+        tap(() => this.message.success('Successfully updated event enrollment records'))
+      )
       .subscribe();
 
     this.refreshEnrollmentRecords$
@@ -79,8 +85,7 @@ export class EventViewComponent implements OnInit {
               paymentStatus: record.paymentStatus.toUpperCase(),
               enrolledStatus: record.enrolledStatus.toLocaleUpperCase(),
             })) as EventEnrollmentRecord[]
-        ),
-        tap(records => console.log(records))
+        )
       )
       .subscribe(record => (this.enrollmentRecords = ([] as EventEnrollmentRecord[]).concat(record)));
 
@@ -115,7 +120,6 @@ export class EventViewComponent implements OnInit {
       enrolledStatus: val.enrolledStatus!,
     }));
     this.updateEnrollmentRecord$.next(records);
-    this.message.loading('Updating event enrollment records...', {nzDuration: 2000});
     setTimeout(() => {
       this.refreshEnrollmentRecords$.next({});
     }, 2000);

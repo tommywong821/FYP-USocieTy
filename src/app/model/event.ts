@@ -69,3 +69,10 @@ export interface UpdateEventEnrollmentRecordPayload {
   paymentStatus: PaymentStatus;
   enrolledStatus: EventEnrollmentStatus;
 }
+
+export enum EventAction {
+  Create = 'CREATE',
+  Update = 'UPDATE',
+  Fetch = 'FETCH',
+  Delete = 'DELETE',
+}
