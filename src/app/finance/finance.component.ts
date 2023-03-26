@@ -41,9 +41,7 @@ export class FinanceComponent implements OnInit {
     // initial data picker value
     this.defaultDate = [this.getFirstDayOfYear(this.currentDate), this.getLastDayOfYear(this.currentDate)];
 
-    this.authService.user$
-      .pipe(filter(user => !!user))
-      .subscribe(user => (this.enrolledSocieties = [...user!.enrolledSocieties]));
+    this.authService.user$.pipe(filter(user => !!user)).subscribe(user => (this.enrolledSocieties = [...user!.roles]));
   }
 
   getFirstDayOfYear(date: Date): Date {
