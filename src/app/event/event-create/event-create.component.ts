@@ -32,7 +32,7 @@ export class EventCreateComponent implements OnInit {
   CreateEventFormFields = CreateEventFormFields;
   EventCategory = EventCategory;
 
-  enrolledSocieties: string[] = [];
+  roles: string[] = [];
 
   createEventForm!: FormGroup;
   pictureFile: File | undefined;
@@ -66,9 +66,7 @@ export class EventCreateComponent implements OnInit {
       fee: ['', [Validators.required]],
     });
 
-    this.AuthService.user$
-      .pipe(filter(user => !!user))
-      .subscribe(user => (this.enrolledSocieties = [...user!.enrolledSocieties]));
+    this.AuthService.user$.pipe(filter(user => !!user)).subscribe(user => (this.roles = [...user!.roles]));
 
     this.event$
       .pipe(
