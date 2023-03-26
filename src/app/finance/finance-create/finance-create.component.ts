@@ -29,9 +29,7 @@ export class FinanceCreateComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.authService.user$
-      .pipe(filter(user => !!user))
-      .subscribe(user => (this.enrolledSocieties = [...user!.enrolledSocieties]));
+    this.authService.user$.pipe(filter(user => !!user)).subscribe(user => (this.enrolledSocieties = [...user!.roles]));
 
     this.addField();
   }
