@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {IconProp} from '@fortawesome/fontawesome-svg-core';
-import {faPiggyBank, faUsers} from '@fortawesome/free-solid-svg-icons';
+import {faHouseUser, faPiggyBank, faUsers} from '@fortawesome/free-solid-svg-icons';
 import {Path} from '../app-routing.module';
 import {User} from '../model/user';
 import {AuthService} from '../services/auth.service';
@@ -22,6 +22,11 @@ export class MainComponent implements OnInit {
       name: 'Event',
       link: Path.Event,
       icon: faUsers,
+    },
+    {
+      name: 'Societies',
+      link: Path.Society,
+      icon: faHouseUser,
     },
     {
       name: 'Finance',
