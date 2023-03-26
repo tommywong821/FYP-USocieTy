@@ -1,14 +1,16 @@
-import {EventProperty} from './../model/event';
+import {EventAction, EventProperty} from './../model/event';
 import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
-import {ReplaySubject, Subject, switchMap} from 'rxjs';
+import {filter, ReplaySubject, Subject, switchMap, tap} from 'rxjs';
+import {AuthService} from 'src/app/services/auth.service';
 import {Path} from '../app-routing.module';
 import {ApiService} from '../services/api.service';
-import {Event, EventCategory} from '../model/event';
+import {Event} from '../model/event';
+import {NzMessageRef, NzMessageService} from 'ng-zorro-antd/message';
 
 export const EventTableColumn = [
   {
-    title: 'society',
+    title: 'Society',
   },
   {
     title: 'Name',
@@ -20,7 +22,7 @@ export const EventTableColumn = [
     title: 'Location',
   },
   {
-    title: 'Max Participation',
+    title: 'Max Participant',
   },
   {
     title: 'Fee',
@@ -35,7 +37,7 @@ export const EventTableColumn = [
     title: 'End Date',
   },
   {
-    title: '',
+    title: 'Action',
   },
 ];
 
@@ -49,23 +51,11 @@ export class EventComponent implements OnInit {
   EventTableColumn = EventTableColumn;
   eventTableHeaders = EventTableColumn.map(col => col.title);
 
-  events: Event[] = [
-    {
-      id: '',
-      name: 'Ocamp',
-      poster: '',
-      maxParticipation: 120,
-      applyDeadline: new Date(),
-      location: 'HKUST',
-      startDate: new Date(),
-      endDate: new Date(),
-      category: EventCategory.OrientationCamp,
-      description: '',
-      fee: 100,
-      society: 'HKUSTSU',
-    },
-  ];
+  events: Event[] = [];
+  eventTotal = 0;
   refreshEvents$ = new Subject();
+
+  enrolledSocieties: string[] = [];
 
   pageIndex = 1;
   pageSize = 15;
@@ -75,24 +65,55 @@ export class EventComponent implements OnInit {
 
   showModal = false;
 
-  constructor(private router: Router, private ApiService: ApiService) {}
+  loadingMessage: NzMessageRef | null = null;
+
+  messages: Record<EventAction, NzMessageRef | null> = {
+    [EventAction.Create]: null,
+    [EventAction.Update]: null,
+    [EventAction.Fetch]: null,
+    [EventAction.Delete]: null,
+  };
+
+  constructor(
+    private router: Router,
+    private ApiService: ApiService,
+    private message: NzMessageService,
+    private AuthService: AuthService
+  ) {}
 
   ngOnInit(): void {
+    this.AuthService.user$
+      .pipe(
+        filter(user => !!user),
+        tap(user => (this.enrolledSocieties = [...user!.enrolledSocieties])),
+        switchMap(user => this.ApiService.getEventCount(user!.uuid)),
+        tap(eventTotal => (this.eventTotal = eventTotal))
+      )
+      .subscribe();
+
     this.refreshEvents$
-      .pipe(switchMap(() => this.ApiService.getEvents(this.pageIndex, this.pageSize)))
+      .pipe(
+        tap(() => (this.messages[EventAction.Fetch] = this.message.loading('Fetching events...'))),
+        switchMap(() => this.ApiService.getEvents(this.pageIndex, this.pageSize)),
+        tap(() => this.message.remove(this.messages[EventAction.Fetch]!.messageId))
+      )
       .subscribe(event => (this.events = ([] as Event[]).concat(event)));
 
     this.deleteEvent$
-      .pipe(switchMap(() => this.deleteEventId$.asObservable()))
-      .subscribe(eventId => this.ApiService.deleteEvent(eventId));
+      .pipe(
+        switchMap(() => this.deleteEventId$.asObservable()),
+        tap(() => (this.messages![EventAction.Delete] = this.message.loading('Deleting event...'))),
+        switchMap(eventId => this.ApiService.deleteEvent(eventId)),
+        tap(() => this.message.remove(this.messages[EventAction.Delete]!.messageId)),
+        tap(() => this.message.success('Successfully deleted event'))
+      )
+      .subscribe();
+
+    this.refreshEvents$.next({});
   }
 
   changePageIndex(): void {
     this.refreshEvents$.next({});
-  }
-
-  getEventPropByKey(event: Event, key: string): any {
-    return event[key as keyof Event];
   }
 
   toggleCreateEvent(): void {
@@ -111,7 +132,9 @@ export class EventComponent implements OnInit {
   confirmEventDeletion(): void {
     this.showModal = false;
     this.deleteEvent$.next({});
-    this.refreshEvents$.next({});
+    setTimeout(() => {
+      this.refreshEvents$.next({});
+    }, 2000);
   }
 
   cancelEventDeletion(): void {

@@ -7,7 +7,22 @@
     >
       <div class="sm:overflow-hidden sm:rounded-md">
         <div class="space-y-6 bg-white px-4 py-5 sm:p-6">
-          <h1 class="text-xl">Update Event</h1>
+          <div class="flex">
+            <h1 class="text-xl">Update Event</h1>
+            <button
+              class="ml-auto"
+              nz-button
+              nzType="primary"
+              nzGhost
+              (click)="backToEventViewPage()"
+            >
+              <span
+                nz-icon
+                nzType="left"
+              ></span>
+              back
+            </button>
+          </div>
           <div class="col-span-6 sm:col-span-4">
             <label class="mb-2 block text-sm font-medium text-gray-700">Event Title</label>
             <nz-form-control
@@ -19,7 +34,7 @@
                 nz-input
                 required
                 type="text"
-                [formControlName]="UpdateEventFormFields.EventTitle"
+                [formControlName]="UpdateEventFormFields.Name"
               />
             </nz-form-control>
           </div>
@@ -37,7 +52,6 @@
               <input
                 nz-input
                 required
-                name="location"
                 type="text"
                 [formControlName]="UpdateEventFormFields.Location"
               />
@@ -61,7 +75,7 @@
                 >
                   <nz-option
                     *ngFor="let category of EventCategory | keyvalue"
-                    [nzLabel]="category.value"
+                    [nzLabel]="category.key"
                     [nzValue]="category.value"
                   ></nz-option>
                 </nz-select>
@@ -186,9 +200,10 @@
             <label class="mb-2 block text-sm font-medium text-gray-700">Cover Picture</label>
             <div>
               <nz-upload
-                [nzAction]="''"
                 nzType="drag"
+                nzListType="picture"
                 [nzLimit]="1"
+                [(nzFileList)]="fileList"
                 (nzChange)="saveFileBuffer($event)"
               >
                 <p class="ant-upload-drag-icon">
