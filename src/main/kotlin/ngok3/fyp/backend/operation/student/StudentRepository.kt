@@ -20,6 +20,7 @@ interface StudentRepository : CrudRepository<StudentEntity, UUID> {
         """select s from StudentEntity s inner join s.enrolledSocietyRecordEntities enrolledSocietyRecordEntities
 where enrolledSocietyRecordEntities.societyEntity.name = ?1"""
     )
+
     fun getAllStudentByEnrolledInSociety(name: String): List<StudentEntity>
 
 
@@ -39,6 +40,15 @@ where enrolledSocietyRecordEntity.societyEntity.name = ?1"""
     )
     fun findByEnrolledSocietyName(name: String): List<StudentEntity>
 
+
+    @Query(
+        """select s from StudentEntity s inner join s.enrolledSocietyRecordEntities enrolledSocietyRecordEntities
+where enrolledSocietyRecordEntities.status not in ?1 and enrolledSocietyRecordEntities.societyEntity.name = ?2"""
+    )
+    fun findByEnrolledSocietyRecordEntities_StatusNotInAndEnrolledSocietyRecordEntities_SocietyEntity_Name(
+        statuses: EnrolledStatus,
+        name: String
+    ): List<StudentEntity>
 
     @Query(
         """select s from StudentEntity s inner join s.enrolledSocietyRecordEntities enrolledSocietyRecordEntity
