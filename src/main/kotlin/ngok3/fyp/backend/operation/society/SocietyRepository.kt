@@ -11,6 +11,10 @@ interface SocietyRepository : PagingAndSortingRepository<SocietyEntity, UUID> {
     fun findByOrderByNameAsc(pageable: Pageable): Page<SocietyEntity>
 
 
+    @Query("select s from SocietyEntity s where s.name in ?1")
+    fun findByNameIn(names: MutableCollection<String>, pageable: Pageable): List<SocietyEntity>
+
+
     @Query("select s from SocietyEntity s where s.name = ?1")
     fun findByName(name: String): Optional<SocietyEntity>
 }

@@ -21,6 +21,16 @@ class SocietyController(
         return societyService.getAllSocieties(pageNum, pageSize)
     }
 
+    @Operation(summary = "get all societies with society member role")
+    @GetMapping("/withMemberRole")
+    fun getAllSocietiesWithSocietyMemberRole(
+        @CookieValue("token") jwtToken: String,
+        @RequestParam("pageNum", required = false, defaultValue = "0") pageNum: Int,
+        @RequestParam("pageSize", required = false, defaultValue = "10") pageSize: Int
+    ): List<SocietyDto> {
+        return societyService.getAllSocietiesWithSocietyMemberRole(jwtToken, pageNum, pageSize)
+    }
+
     @Operation(summary = "join society with student itsc and society id")
     @PostMapping("/join")
     fun joinSociety(

@@ -9,7 +9,7 @@ import ngok3.fyp.backend.authentication.role.Role
 import ngok3.fyp.backend.authentication.student_role.StudentRoleEntity
 import ngok3.fyp.backend.authentication.student_role.StudentRoleEntityRepository
 import ngok3.fyp.backend.operation.student.StudentEntity
-import org.apache.commons.lang3.StringUtils
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.security.access.AccessDeniedException
 import org.springframework.stereotype.Component
 import java.security.Key
@@ -21,19 +21,20 @@ class JWTUtil(
     val secretKey: Key = Keys.hmacShaKeyFor(KEY.toByteArray()),
     private val studentRoleEntityRepository: StudentRoleEntityRepository
 ) {
+    @Value("\${cookie.lifetime}")
+    val lifetime: String = "1"
     fun generateToken(studentEntity: StudentEntity): String {
         val claims: Claims = Jwts.claims()
         claims["itsc"] = studentEntity.itsc
         claims["name"] = studentEntity.nickname
         claims["mail"] = studentEntity.mail
-        val role =
-            studentEntity.studentRoleEntities.joinToString(separator = ",") { studentRoleEntity: StudentRoleEntity -> studentRoleEntity.roleEntity.role.toString() }
-        claims["role"] = if (StringUtils.isBlank(role)) Role.ROLE_STUDENT.toString() else role
+        claims["role"] =
+            studentEntity.studentRoleEntities.map { studentRoleEntity: StudentRoleEntity -> studentRoleEntity.societyEntity.name }
 
 
-        //set token only valid in 24 hours
+        //set token only valid in 7 days
         val calendar: Calendar = Calendar.getInstance()
-        calendar.add(Calendar.HOUR, 24)
+        calendar.add(Calendar.DATE, Integer.parseInt(lifetime))
         claims.expiration = calendar.time
 
         return Jwts.builder().setClaims(claims).signWith(secretKey).compact()
