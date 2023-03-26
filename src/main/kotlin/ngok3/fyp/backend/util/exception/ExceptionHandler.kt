@@ -3,6 +3,7 @@ package ngok3.fyp.backend.util.exception
 import io.jsonwebtoken.MalformedJwtException
 import ngok3.fyp.backend.util.exception.model.CASException
 import ngok3.fyp.backend.util.exception.model.ErrorMessage
+import ngok3.fyp.backend.util.exception.model.FlutterException
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.dao.DuplicateKeyException
@@ -15,6 +16,16 @@ import org.springframework.web.bind.annotation.ExceptionHandler
 @ControllerAdvice
 class ExceptionHandler {
     val logger: Logger = LoggerFactory.getLogger(this::class.java)
+
+    @ExceptionHandler
+    fun handleException(ex: FlutterException): ResponseEntity<ErrorMessage> {
+        logger.error("handleException: ${ex.message}")
+        val errorMessage = ErrorMessage(
+            HttpStatus.BAD_REQUEST.value(),
+            "Client Side Error: ${ex.message}"
+        )
+        return ResponseEntity(errorMessage, HttpStatus.BAD_REQUEST)
+    }
 
     @ExceptionHandler
     fun handleException(ex: DuplicateKeyException): ResponseEntity<ErrorMessage> {
