@@ -14,7 +14,9 @@ import ngok3.fyp.backend.operation.student.StudentEntity
 import ngok3.fyp.backend.operation.student.StudentRepository
 import ngok3.fyp.backend.util.DateUtil
 import ngok3.fyp.backend.util.JWTUtil
+import ngok3.fyp.backend.util.exception.model.FlutterException
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.dao.DuplicateKeyException
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
@@ -54,11 +56,11 @@ class EventService(
 
     fun joinEvent(itsc: String, eventId: String): Boolean {
         val studentEntity: StudentEntity = studentRepository.findByItsc(itsc).orElseThrow {
-            Exception("student with itsc:$itsc is not found")
+            DuplicateKeyException("student with itsc:$itsc is not found")
         }
 
         val eventEntity: EventEntity = eventRepository.findById(UUID.fromString(eventId)).orElseThrow {
-            Exception("Event with id:$eventId is not found")
+            DuplicateKeyException("Event with id:$eventId is not found")
         }
 
 
@@ -67,11 +69,18 @@ class EventService(
         if (LocalDateTime.now(ZoneId.of("Asia/Hong_Kong"))
                 .isAfter(eventEntity.applyDeadline) || numberOfParticipation >= eventEntity.maxParticipation
         ) {
-            throw Exception("Event is not able to register")
+            throw FlutterException("Event is not able to register")
+        }
+
+//        check if already join if joined 400 bad request
+        val enrolledEventEntityKey: EnrolledEventRecordKey =
+            EnrolledEventRecordKey(studentEntity.uuid, eventEntity.uuid)
+        if (enrolledEventRecordRepository.findById(enrolledEventEntityKey).isPresent) {
+            throw DuplicateKeyException("Event is already register")
         }
 
         val enrolledEventRecordEntity = EnrolledEventRecordEntity(
-            id = EnrolledEventRecordKey(studentEntity.uuid, eventEntity.uuid), enrollStatus = EnrolledStatus.PENDING
+            id = enrolledEventEntityKey, enrollStatus = EnrolledStatus.PENDING
         )
         enrolledEventRecordEntity.studentEntity = studentEntity
         enrolledEventRecordEntity.eventEntity = eventEntity
