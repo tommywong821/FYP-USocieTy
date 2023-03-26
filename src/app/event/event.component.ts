@@ -67,7 +67,12 @@ export class EventComponent implements OnInit {
 
   loadingMessage: NzMessageRef | null = null;
 
-  messages?: Record<EventAction, NzMessageRef>;
+  messages: Record<EventAction, NzMessageRef | null> = {
+    [EventAction.Create]: null,
+    [EventAction.Update]: null,
+    [EventAction.Fetch]: null,
+    [EventAction.Delete]: null,
+  };
 
   constructor(
     private router: Router,
@@ -88,9 +93,9 @@ export class EventComponent implements OnInit {
 
     this.refreshEvents$
       .pipe(
-        tap(() => (this.messages![EventAction.Fetch] = this.message.loading('Fetching events...'))),
+        tap(() => (this.messages[EventAction.Fetch] = this.message.loading('Fetching events...'))),
         switchMap(() => this.ApiService.getEvents(this.pageIndex, this.pageSize)),
-        tap(() => this.message.remove(this.messages![EventAction.Fetch].messageId))
+        tap(() => this.message.remove(this.messages[EventAction.Fetch]!.messageId))
       )
       .subscribe(event => (this.events = ([] as Event[]).concat(event)));
 
@@ -99,7 +104,7 @@ export class EventComponent implements OnInit {
         switchMap(() => this.deleteEventId$.asObservable()),
         tap(() => (this.messages![EventAction.Delete] = this.message.loading('Deleting event...'))),
         switchMap(eventId => this.ApiService.deleteEvent(eventId)),
-        tap(() => this.message.remove(this.messages![EventAction.Delete].messageId)),
+        tap(() => this.message.remove(this.messages[EventAction.Delete]!.messageId)),
         tap(() => this.message.success('Successfully deleted event'))
       )
       .subscribe();

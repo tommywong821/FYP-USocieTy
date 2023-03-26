@@ -43,7 +43,12 @@ export class EventViewComponent implements OnInit {
   pageIndex = 1;
   pageSize = 15;
 
-  messages?: Record<EventAction, NzMessageRef>;
+  messages: Record<EventAction, NzMessageRef | null> = {
+    [EventAction.Create]: null,
+    [EventAction.Update]: null,
+    [EventAction.Fetch]: null,
+    [EventAction.Delete]: null,
+  };
 
   constructor(
     private router: Router,
@@ -56,21 +61,21 @@ export class EventViewComponent implements OnInit {
     this.route.queryParams
       .pipe(
         first(),
-        tap(() => (this.messages![EventAction.Fetch] = this.message.loading('Fetching event details...'))),
+        tap(() => (this.messages[EventAction.Fetch] = this.message.loading('Fetching event details...'))),
         tap(params => (this.eventId = params['eventId'])),
         switchMap(params => this.ApiService.getEvent(params['eventId'])),
         tap(event => (this.event = event)),
         switchMap(event => this.ApiService.getEventEnrollmentRecordCount(event.id!)),
         tap(recordCount => (this.recordTotal = recordCount)),
-        tap(() => this.message.remove(this.messages![EventAction.Fetch].messageId))
+        tap(() => this.message.remove(this.messages[EventAction.Fetch]!.messageId))
       )
       .subscribe();
 
     this.updateEnrollmentRecord$
       .pipe(
-        tap(() => (this.messages![EventAction.Update] = this.message.loading('Updating event enrollment records...'))),
+        tap(() => (this.messages[EventAction.Update] = this.message.loading('Updating event enrollment records...'))),
         switchMap(records => this.ApiService.updateEventEnrollmentRecords(this.eventId, records)),
-        tap(() => this.message.remove(this.messages![EventAction.Update].messageId)),
+        tap(() => this.message.remove(this.messages[EventAction.Update]!.messageId)),
         tap(() => this.message.success('Successfully updated event enrollment records'))
       )
       .subscribe();
