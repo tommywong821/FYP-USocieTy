@@ -46,7 +46,10 @@ class StudentService(
             student.studentRoleEntities.map { studentRoleEntity: StudentRoleEntity -> studentRoleEntity.societyEntity.name }
                 .toMutableList()
 
-        return eventRepository.findAllBySocietyNameList(societyNameList, PageRequest.of(pageNum, pageSize))
+        return eventRepository.findAllBySocietyNameListOrderByApplyDeadlineDesc(
+            societyNameList,
+            PageRequest.of(pageNum, pageSize)
+        )
             .map { eventEntity: EventEntity ->
                 EventDto().createFromEntity(eventEntity, s3BucketDomain)
             }
