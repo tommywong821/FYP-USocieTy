@@ -115,14 +115,14 @@ class EnrolledEventRecordServiceTest {
             StudentEnrolledEventRecordDto(
                 studentId = student1Id,
                 itsc = "qwerty",
-                paymentStatus = PaymentStatus.PAID.status,
-                enrolledStatus = EnrolledStatus.SUCCESS.status
+                paymentStatus = PaymentStatus.PAID,
+                enrolledStatus = EnrolledStatus.SUCCESS
             ),
             StudentEnrolledEventRecordDto(
                 studentId = student2Id,
                 itsc = "asdfg",
-                paymentStatus = PaymentStatus.UNPAID.status,
-                enrolledStatus = EnrolledStatus.DECLINE.status
+                paymentStatus = PaymentStatus.UNPAID,
+                enrolledStatus = EnrolledStatus.DECLINE
             ),
         )
 

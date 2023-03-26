@@ -88,8 +88,8 @@ class EnrolledEventRecordService(
             StudentEnrolledEventRecordDto(
                 studentId = enrolledEventRecordEntity.studentEntity.uuid.toString(),
                 itsc = enrolledEventRecordEntity.studentEntity.itsc,
-                paymentStatus = enrolledEventRecordEntity.paymentStatus.status,
-                enrolledStatus = enrolledEventRecordEntity.enrollStatus.status
+                paymentStatus = enrolledEventRecordEntity.paymentStatus,
+                enrolledStatus = enrolledEventRecordEntity.enrollStatus
             )
         }
     }
