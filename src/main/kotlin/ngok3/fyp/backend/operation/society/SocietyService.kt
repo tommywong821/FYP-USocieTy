@@ -12,6 +12,7 @@ import ngok3.fyp.backend.operation.enrolled.society_record.EnrolledSocietyRecord
 import ngok3.fyp.backend.operation.student.StudentDto
 import ngok3.fyp.backend.operation.student.StudentEntity
 import ngok3.fyp.backend.operation.student.StudentRepository
+import ngok3.fyp.backend.util.JWTUtil
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
@@ -23,13 +24,13 @@ class SocietyService(
     private val studentRepository: StudentRepository,
     private val enrolledSocietyRecordRepository: EnrolledSocietyRecordRepository,
     private val roleEntityRepository: RoleEntityRepository,
-    private val studentRoleEntityRepository: StudentRoleEntityRepository
+    private val studentRoleEntityRepository: StudentRoleEntityRepository,
+    private val jwtUtil: JWTUtil
 ) {
     fun getAllSocieties(pageNum: Int, pageSize: Int): List<SocietyDto> {
         val firstPageNumWithPageSizeElement: Pageable = PageRequest.of(pageNum, pageSize)
-        val allSocieties = societyRepository.findByOrderByNameAsc(firstPageNumWithPageSizeElement).content
 
-        return allSocieties.map { societyEntity ->
+        return societyRepository.findByOrderByNameAsc(firstPageNumWithPageSizeElement).content.map { societyEntity ->
             SocietyDto(
                 societyEntity
             )
@@ -105,5 +106,18 @@ class SocietyService(
         studentEntityList.forEach { studentEntity -> studentEntity.studentRoleEntities.removeIf { studentRoleEntity -> Role.ROLE_SOCIETY_MEMBER == studentRoleEntity.roleEntity.role } }
 
         studentRepository.saveAll(studentEntityList)
+    }
+
+    fun getAllSocietiesWithSocietyMemberRole(jwtToken: String, pageNum: Int, pageSize: Int): List<SocietyDto> {
+        val societyNameString: String = jwtUtil.getClaimFromJWTToken(jwtToken, "role")
+        val societyNameList: MutableList<String> = societyNameString
+            .replace("[", "") // remove the opening square bracket
+            .replace("]", "") // remove the closing square bracket
+            .split(", ").toMutableList()
+        return societyRepository.findByNameIn(societyNameList, PageRequest.of(pageNum, pageSize)).map { societyEntity ->
+            SocietyDto(
+                societyEntity
+            )
+        }
     }
 }
