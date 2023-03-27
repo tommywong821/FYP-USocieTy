@@ -7,9 +7,10 @@ import java.io.Serializable
  */
 data class SocietyDto(
     val id: String = "",
-    val name: String = ""
+    val name: String = "",
+    val description: String = ""
 ) : Serializable {
     constructor(societyEntity: SocietyEntity) : this(
-        societyEntity.uuid.toString(), societyEntity.name
+        id = societyEntity.uuid.toString(), name = societyEntity.name, description = societyEntity.description
     )
 }

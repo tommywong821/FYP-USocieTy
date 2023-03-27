@@ -7,5 +7,5 @@ import org.springframework.boot.runApplication
 class Ngok3FYPApplication
 
 fun main(args: Array<String>) {
-	runApplication<Ngok3FYPApplication>(*args)
+    runApplication<Ngok3FYPApplication>(*args)
 }

@@ -1,6 +1,6 @@
 package ngok3.fyp.backend.operation.enrolled.event_record
 
-import ngok3.fyp.backend.operation.PaginationCountDto
+import ngok3.fyp.backend.operation.TotalCountDto
 import ngok3.fyp.backend.operation.enrolled.event_record.model.EnrolledEventDto
 import ngok3.fyp.backend.operation.enrolled.event_record.model.StudentEnrolledEventRecordDto
 import ngok3.fyp.backend.operation.enrolled.event_record.model.UpdateEnrolledEventRecordDto
@@ -94,12 +94,12 @@ class EnrolledEventRecordService(
         }
     }
 
-    fun countStudentEnrolledEventRecord(eventUuid: String): PaginationCountDto {
+    fun countStudentEnrolledEventRecord(eventUuid: String): TotalCountDto {
         val eventUuidObj: UUID = UUID.fromString(eventUuid)
         eventRepository.findById(eventUuidObj).orElseThrow {
             Exception("Event with id: $eventUuid is not found")
         }
 
-        return PaginationCountDto(enrolledEventRecordRepository.countById_EventUuid(eventUuidObj))
+        return TotalCountDto(enrolledEventRecordRepository.countById_EventUuid(eventUuidObj))
     }
 }

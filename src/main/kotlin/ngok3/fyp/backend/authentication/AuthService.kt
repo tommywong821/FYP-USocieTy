@@ -136,7 +136,6 @@ class AuthService(
             val studentEntityOptional: Optional<StudentEntity> =
                 studentRepository.findByItsc(aadProfile.itsc)
             //not exist: create new student and save in db
-//            todo commit wrong order
             studentEntity =
                 studentEntityOptional.orElseGet {
                     createNewStudentEntityInDB(

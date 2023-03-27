@@ -65,7 +65,7 @@ class EventService(
 
 
 //        check maxParticipation and apply deadline
-        val numberOfParticipation: Long = enrolledEventRecordRepository.countById_EventUuid(UUID.fromString(eventId));
+        val numberOfParticipation: Long = enrolledEventRecordRepository.countById_EventUuid(UUID.fromString(eventId))
         if (LocalDateTime.now(ZoneId.of("Asia/Hong_Kong"))
                 .isAfter(eventEntity.applyDeadline) || numberOfParticipation >= eventEntity.maxParticipation
         ) {

@@ -1,4 +1,4 @@
-package ngok3.fyp.backend.operation.attendance;
+package ngok3.fyp.backend.operation.attendance
 
 import org.springframework.data.jpa.repository.Modifying
 import org.springframework.data.jpa.repository.Query
