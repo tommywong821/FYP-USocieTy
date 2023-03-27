@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:ngok3fyp_frontend_flutter/model/society.dart';
 import 'package:ngok3fyp_frontend_flutter/screens/home_screen/widget/event_carousel_slider_widget.dart';
 import 'package:ngok3fyp_frontend_flutter/model/styles.dart';
 import 'package:ngok3fyp_frontend_flutter/model/event.dart';
 
 class TabBarWidget extends StatefulWidget {
   final List<Event> eventList;
-  const TabBarWidget({Key? key, required this.eventList}) : super(key: key);
+  final List<Society> societyList;
+  const TabBarWidget(
+      {Key? key, required this.eventList, required this.societyList})
+      : super(key: key);
 
   @override
   _TabBarWidgetState createState() => _TabBarWidgetState();
@@ -107,15 +111,15 @@ class _TabBarWidgetState extends State<TabBarWidget>
                 height: 250,
                 child: TabBarView(controller: _tabController, children: [
                   EventCarouselSliderWidget(
-                    event: sportEvent,
+                    eventList: sportEvent,
                     reducedForm: true,
                   ),
                   EventCarouselSliderWidget(
-                    event: outdoorEvent,
+                    eventList: outdoorEvent,
                     reducedForm: true,
                   ),
                   EventCarouselSliderWidget(
-                    event: indoorEvent,
+                    eventList: indoorEvent,
                     reducedForm: true,
                   )
                 ])),

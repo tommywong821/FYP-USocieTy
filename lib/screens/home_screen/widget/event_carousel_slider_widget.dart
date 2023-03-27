@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:ngok3fyp_frontend_flutter/model/society.dart';
 import 'package:ngok3fyp_frontend_flutter/model/styles.dart';
 import 'package:ngok3fyp_frontend_flutter/model/event.dart';
 import 'package:intl/intl.dart';
 
 class EventCarouselSliderWidget extends StatefulWidget {
-  final List<Event> event;
+  final List<Event> eventList;
   final bool reducedForm;
   const EventCarouselSliderWidget(
-      {Key? key, required this.event, this.reducedForm = false})
+      {Key? key, required this.eventList, this.reducedForm = false})
       : super(key: key);
 
   @override
@@ -20,8 +21,8 @@ class _EventCarouselSliderWidgetState extends State<EventCarouselSliderWidget> {
   @override
   Widget build(BuildContext context) {
     return widget.reducedForm == false
-        ? regularCarousel(widget.event)
-        : reducedCarousel(widget.event);
+        ? regularCarousel(widget.eventList)
+        : reducedCarousel(widget.eventList);
   }
 }
 

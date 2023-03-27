@@ -14,6 +14,14 @@ class SocietyScreen extends StatefulWidget {
   _SocietyScreenState createState() => _SocietyScreenState();
 }
 
+List<Event> findEventHoldBySociety(Society society, List<Event> eventList) {
+  List<Event> holdedEvent = [];
+  for (Event event in eventList) {
+    if (event.society == society.name) holdedEvent.add(event);
+  }
+  return holdedEvent;
+}
+
 class _SocietyScreenState extends State<SocietyScreen> {
   @override
   Widget build(BuildContext context) {
@@ -22,6 +30,7 @@ class _SocietyScreenState extends State<SocietyScreen> {
     final List<Society> societyList = screenArguments.societyList;
     final Society society = societyList[0];
     final List<Event> eventList = screenArguments.enrolledEventList;
+    List<Event> holdedEvent = findEventHoldBySociety(society, eventList);
     return Scaffold(
         bottomNavigationBar: BottomRegisterButton(context, society.name),
         body: Column(
@@ -65,7 +74,7 @@ class _SocietyScreenState extends State<SocietyScreen> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(
-                "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer eu. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer eu.",
+                society.description,
                 textAlign: TextAlign.center,
                 style: Styles.societyCarouselSliderDesc,
                 maxLines: 3,
@@ -80,14 +89,14 @@ class _SocietyScreenState extends State<SocietyScreen> {
             Expanded(
               child: ListView.separated(
                 padding: const EdgeInsets.only(left: 5, right: 5),
-                itemCount: eventList.length,
+                itemCount: holdedEvent.length,
                 separatorBuilder: ((context, index) {
                   return const SizedBox(height: 1);
                 }),
                 itemBuilder: ((context, index) {
                   //TODO: mapping correct events to this society
                   return HorizontalEventCardWidget(
-                    event: eventList[index],
+                    event: holdedEvent[index],
                   );
                 }),
               ),

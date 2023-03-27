@@ -1,6 +1,7 @@
 import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:ngok3fyp_frontend_flutter/model/enrolled_event/enrolled_event.dart';
+import 'package:ngok3fyp_frontend_flutter/model/enrolled_society.dart';
 import 'package:ngok3fyp_frontend_flutter/screens/home_screen/widget/home_widget.dart';
 import 'package:ngok3fyp_frontend_flutter/screens/profile_screen.dart';
 import 'package:ngok3fyp_frontend_flutter/screens/calendar_screen/calendar_widget.dart';
@@ -8,8 +9,6 @@ import 'package:ngok3fyp_frontend_flutter/model/styles.dart';
 import 'package:ngok3fyp_frontend_flutter/model/event.dart';
 import 'package:ngok3fyp_frontend_flutter/model/society.dart';
 import 'package:ngok3fyp_frontend_flutter/services/api_service.dart';
-
-import 'package:dio/dio.dart';
 
 import '../status_screen/status_widget.dart';
 
@@ -29,14 +28,13 @@ class _HomeScreenState extends State<HomeScreen> {
   late List<Society> societyList;
   late Future<List<EnrolledEvent>> enrolledEventFuture;
   late List<EnrolledEvent> enrolledEventList;
-
-  // late Future<Map<String, dynamic>> testDateFuture;
-  // late Map<String, dynamic> testDate;
+  late Future<List<EnrolledSociety>> enrolledSocietyFuture;
+  late List<EnrolledSociety> enrolledSocietyList;
 
   int _selectedIndex = 0;
 
   Future<void> initEvent() async {
-    eventListFuture = ApiService().getAllEvent();
+    eventListFuture = ApiService().getAllEvent(0, 100);
     eventList = await eventListFuture;
   }
 
@@ -50,6 +48,11 @@ class _HomeScreenState extends State<HomeScreen> {
     enrolledEventList = await enrolledEventFuture;
   }
 
+  Future<void> initEnrolledSociety() async {
+    enrolledSocietyFuture = ApiService().getAllEnrolledSociety();
+    enrolledSocietyList = await enrolledSocietyFuture;
+  }
+
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
@@ -61,6 +64,7 @@ class _HomeScreenState extends State<HomeScreen> {
     initEvent();
     initSociety();
     initEnrolledEvent();
+    initEnrolledSociety();
     super.initState();
   }
 
@@ -73,6 +77,7 @@ class _HomeScreenState extends State<HomeScreen> {
               eventListFuture,
               societyFuture,
               enrolledEventFuture,
+              enrolledSocietyFuture
             ]),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
@@ -81,7 +86,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   CalendarWidget(
                     eventList: eventList,
                   ),
-                  StatusWidget(enrolledEvent: enrolledEventList),
+                  StatusWidget(
+                    enrolledEvent: enrolledEventList,
+                    enrolledSociety: enrolledSocietyList,
+                  ),
                   ProfileScreen(),
                 ];
                 return RefreshIndicator(
@@ -90,7 +98,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     initEvent();
                     initSociety();
                     initEnrolledEvent();
-                    // initTestDate();
+                    initEnrolledSociety();
                     setState(() {});
                   },
                   child: IndexedStack(

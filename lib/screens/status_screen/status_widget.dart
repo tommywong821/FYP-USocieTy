@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:ngok3fyp_frontend_flutter/model/enrolled_event/status_constants.dart';
+import 'package:ngok3fyp_frontend_flutter/model/enrolled_society.dart';
 import '../../model/enrolled_event/enrolled_event.dart';
 import 'package:ngok3fyp_frontend_flutter/model/styles.dart';
 
 class StatusWidget extends StatefulWidget {
   final List<EnrolledEvent> enrolledEvent;
-  const StatusWidget({super.key, required this.enrolledEvent});
+  final List<EnrolledSociety> enrolledSociety;
+  const StatusWidget(
+      {super.key, required this.enrolledEvent, required this.enrolledSociety});
 
   @override
   State<StatusWidget> createState() => _StatusWidgetState();
@@ -46,7 +49,7 @@ class _StatusWidgetState extends State<StatusWidget> {
               )),
           (dropdownvalue == "Event Enrollment Status")
               ? _buildEventStatusUi(widget.enrolledEvent)
-              : _buildSocietyStatusUi(widget.enrolledEvent),
+              : _buildSocietyStatusUi(widget.enrolledSociety),
         ],
       );
     }));
@@ -56,6 +59,7 @@ class _StatusWidgetState extends State<StatusWidget> {
     List<EnrolledEvent> enrolledEvent,
   ) {
     return ListView.builder(
+      physics: AlwaysScrollableScrollPhysics(),
       scrollDirection: Axis.vertical,
       shrinkWrap: true,
       itemCount: enrolledEvent.length,
@@ -106,10 +110,57 @@ class _StatusWidgetState extends State<StatusWidget> {
     );
   }
 
-//TODO with APIs
   Widget _buildSocietyStatusUi(
-    List<dynamic> enrolledEvent,
+    List<EnrolledSociety> enrolledSociety,
   ) {
-    return Text("TODO with APIs");
+    return ListView.builder(
+      physics: AlwaysScrollableScrollPhysics(),
+      scrollDirection: Axis.vertical,
+      shrinkWrap: true,
+      itemCount: enrolledSociety.length,
+      itemBuilder: ((context, index) {
+        return Column(
+          children: [
+            ListTile(
+              dense: true,
+              visualDensity: VisualDensity(horizontal: 0, vertical: 0),
+              contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 0),
+              leading: (enrolledSociety[index].enrolledStatus == "PENDING")
+                  // pending state icon
+                  ? Icon(
+                      Icons.pending_actions_rounded,
+                      size: ICON_SIZE,
+                    )
+                  : (enrolledSociety[index].enrolledStatus == "SUCCESS")
+                      // success state icon
+                      ? Icon(
+                          Icons.check_circle_outline_rounded,
+                          size: ICON_SIZE,
+                          color: Colors.green,
+                        )
+                      // fail state icon
+                      : Icon(Icons.highlight_off_rounded,
+                          size: ICON_SIZE, color: Colors.red),
+              title: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [Text(enrolledSociety[index].societyName)],
+              ),
+              subtitle: Row(
+                children: [
+                  Text(enrolledSociety[index].registerDate),
+                  SizedBox(
+                    width: 10,
+                  ),
+                ],
+              ),
+            ),
+            Divider(
+              thickness: 2,
+              height: 10,
+            ),
+          ],
+        );
+      }),
+    );
   }
 }

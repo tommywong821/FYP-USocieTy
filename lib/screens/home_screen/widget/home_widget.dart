@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ngok3fyp_frontend_flutter/model/society.dart';
@@ -9,7 +7,6 @@ import 'package:ngok3fyp_frontend_flutter/screens/home_screen/widget/event_carou
 import 'package:ngok3fyp_frontend_flutter/screens/home_screen/widget/society_carousel_slider_widget.dart';
 import 'package:ngok3fyp_frontend_flutter/model/styles.dart';
 import 'package:ngok3fyp_frontend_flutter/model/event.dart';
-import 'package:ngok3fyp_frontend_flutter/services/api_service.dart';
 import 'package:ngok3fyp_frontend_flutter/model/screen_arguments.dart';
 
 class HomeWidget extends StatefulWidget {
@@ -50,10 +47,10 @@ class _HomeWidget extends State<HomeWidget> {
                   ),
                 ),
               ),
-              //TODO hero animation for carousel
               //Tab Bar with Carousel slider
               TabBarWidget(
                 eventList: eventList,
+                societyList: societyList,
               ),
               //Incoming Title
               Padding(
@@ -101,11 +98,13 @@ class _HomeWidget extends State<HomeWidget> {
                 ),
               ),
               //Incoming Carousel
-              //TODO: deal with incoming events
               Padding(
                 padding: const EdgeInsets.only(top: 10),
                 child: EventCarouselSliderWidget(
-                  event: eventList,
+                  //make sure display no more than 10
+                  eventList: (eventList.length > 10)
+                      ? eventList.take(10).toList()
+                      : eventList,
                 ),
               ),
               //Society Title
@@ -163,7 +162,10 @@ class _HomeWidget extends State<HomeWidget> {
                 padding: const EdgeInsets.only(top: 10, bottom: 10),
                 child: SocietyCarouselSliderWidget(
                   eventList: eventList,
-                  societyList: societyList,
+                  //make sure display no more than 10
+                  societyList: (societyList.length > 10)
+                      ? societyList.take(10).toList()
+                      : societyList,
                 ),
               ),
             ],

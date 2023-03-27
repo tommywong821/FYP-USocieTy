@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:ngok3fyp_frontend_flutter/model/profile_screen_arguments.dart';
-
-import '../constants.dart';
 import '../services/aad_oauth_service.dart';
 import '../services/storage_service.dart';
 import '../model/styles.dart';
@@ -34,6 +32,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ),
       ),
       body: SingleChildScrollView(
+        physics: AlwaysScrollableScrollPhysics(),
         child: Padding(
           padding: const EdgeInsets.only(top: 10, bottom: 10),
           child: Center(

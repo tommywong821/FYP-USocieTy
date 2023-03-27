@@ -19,7 +19,9 @@ class _EventScreenState extends State<EventScreen> {
   Widget build(BuildContext context) {
     final DateFormat dateFormatter = DateFormat('E , MMM d');
     final DateFormat parseDateFormatter = DateFormat('M/dd/y');
+
     final Event event = ModalRoute.of(context)!.settings.arguments as Event;
+
     String eventImage = event.poster;
     String eventTitle = event.name;
     String eventContent = event.description;
@@ -134,7 +136,7 @@ class _EventScreenState extends State<EventScreen> {
                                         padding:
                                             const EdgeInsets.only(left: 15),
                                         child: Text(
-                                          "10 Upcoming Events",
+                                          "TO BE FIXED Upcoming Events",
                                           style: Styles.eventScreenGreyText,
                                         ),
                                       ),
@@ -207,13 +209,6 @@ class _EventScreenState extends State<EventScreen> {
                                           style: Styles.eventScreenBlackText),
                                     ),
                                     //Adrress
-                                    Padding(
-                                      padding: const EdgeInsets.only(left: 15),
-                                      child: Text(
-                                        "location details...",
-                                        style: Styles.eventScreenGreyText,
-                                      ),
-                                    ),
                                   ],
                                 ),
                               ],

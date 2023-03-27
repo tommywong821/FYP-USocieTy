@@ -6,6 +6,7 @@ import 'package:ngok3fyp_frontend_flutter/constants.dart';
 import 'package:ngok3fyp_frontend_flutter/model/auth/aad_profile.dart';
 import 'package:ngok3fyp_frontend_flutter/model/auth/jwt_token.dart';
 import 'package:ngok3fyp_frontend_flutter/model/enrolled_event/enrolled_event.dart';
+import 'package:ngok3fyp_frontend_flutter/model/enrolled_society.dart';
 import 'package:ngok3fyp_frontend_flutter/model/event.dart';
 import 'package:ngok3fyp_frontend_flutter/model/society.dart';
 import 'package:ngok3fyp_frontend_flutter/model/student.dart';
@@ -101,6 +102,21 @@ class ApiService {
           .toList();
     } else {
       throw Exception('Failed to load enrolled event by itsc:');
+    }
+  }
+
+  Future<List<EnrolledSociety>> getAllEnrolledSociety() async {
+    final uri = Uri.https(backendDomain, '/student/societyStatus',
+        {'itsc': await _storageService.readSecureData(ITSC_KEY)});
+    final response = await _dio.getUri(uri);
+
+    if (response.statusCode == 200) {
+      List<dynamic> enrolledSocietyJsonList = jsonDecode(response.data);
+      return enrolledSocietyJsonList
+          .map((societyJson) => EnrolledSociety.fromJson(societyJson))
+          .toList();
+    } else {
+      throw Exception('Failed to load enrolled society by itsc:');
     }
   }
 
