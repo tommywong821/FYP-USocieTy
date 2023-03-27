@@ -19,7 +19,7 @@ class AuthController(
         @RequestBody ticket: Map<String, String>,
         frontendResponse: HttpServletResponse
     ): StudentDto {
-        return this.authService.itscSSOServiceValidate(ticket, frontendResponse);
+        return this.authService.itscSSOServiceValidate(ticket, frontendResponse)
     }
 
     @Operation(summary = "Testing cookie")
@@ -28,7 +28,7 @@ class AuthController(
         @RequestBody ticket: Map<String, String>,
         frontendResponse: HttpServletResponse
     ): StudentDto {
-        return this.authService.mockItscSSOServiceValidate(ticket, frontendResponse);
+        return this.authService.mockItscSSOServiceValidate(ticket, frontendResponse)
     }
 
     @Operation(summary = "Handle mobile login and sign cookie to flutter secure storage")
@@ -40,6 +40,6 @@ class AuthController(
     @Operation(summary = "Clear cookie of admin page")
     @PostMapping("/logout")
     fun logout(frontendResponse: HttpServletResponse): ResponseEntity<HashMap<String, String>> {
-        return this.authService.logout(frontendResponse);
+        return this.authService.logout(frontendResponse)
     }
 }

@@ -1,4 +1,4 @@
-package ngok3.fyp.backend.authentication.student_role;
+package ngok3.fyp.backend.authentication.student_role
 
 import ngok3.fyp.backend.authentication.role.Role
 import org.springframework.data.jpa.repository.Query

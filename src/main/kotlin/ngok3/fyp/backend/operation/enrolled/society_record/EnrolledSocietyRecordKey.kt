@@ -23,5 +23,5 @@ class EnrolledSocietyRecordKey(
                 && societyUuid == other.societyUuid
     }
 
-    override fun hashCode(): Int = Objects.hash(studentUuid, societyUuid);
+    override fun hashCode(): Int = Objects.hash(studentUuid, societyUuid)
 }

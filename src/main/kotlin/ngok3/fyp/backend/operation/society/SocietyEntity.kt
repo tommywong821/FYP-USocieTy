@@ -5,6 +5,7 @@ import ngok3.fyp.backend.operation.enrolled.society_record.EnrolledSocietyRecord
 import ngok3.fyp.backend.operation.event.EventEntity
 import ngok3.fyp.backend.operation.finance.FinanceEntity
 import ngok3.fyp.backend.util.entity.BaseEntity
+import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.OneToMany
 import javax.persistence.Table
@@ -13,8 +14,8 @@ import javax.persistence.Table
 @Table(name = "society")
 open class SocietyEntity(
     open var name: String = "",
-
-    ) : BaseEntity() {
+    @Column(columnDefinition = "TEXT") open var description: String = "",
+) : BaseEntity() {
 
     @OneToMany(mappedBy = "societyEntity")
     open var enrolledSocietyRecordEntities: MutableSet<EnrolledSocietyRecordEntity> = mutableSetOf()

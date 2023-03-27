@@ -1,6 +1,7 @@
 package ngok3.fyp.backend.operation.society
 
 import io.swagger.v3.oas.annotations.Operation
+import ngok3.fyp.backend.operation.TotalCountDto
 import ngok3.fyp.backend.operation.society.model.AssignSocietyMemberRoleDto
 import ngok3.fyp.backend.operation.society.model.JoinSocietyDto
 import ngok3.fyp.backend.operation.student.StudentDto
@@ -70,5 +71,13 @@ class SocietyController(
             societyName,
             deleteStudentIdList
         )
+    }
+
+    @Operation(summary = "get total number of holding event of society")
+    @GetMapping("/holdingEvent")
+    fun getAllSocieties(
+        @RequestParam("societyName") societyName: String,
+    ): TotalCountDto {
+        return societyService.getTotalNumberOfHoldingEvent(societyName)
     }
 }

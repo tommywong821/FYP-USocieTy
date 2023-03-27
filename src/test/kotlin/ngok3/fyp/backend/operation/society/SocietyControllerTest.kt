@@ -4,6 +4,7 @@ import com.ninjasquad.springmockk.MockkBean
 import io.mockk.every
 import ngok3.fyp.backend.authentication.role.Role
 import ngok3.fyp.backend.controller.authentication.model.MockAuthRepository
+import ngok3.fyp.backend.operation.TotalCountDto
 import ngok3.fyp.backend.operation.student.StudentDto
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -116,6 +117,31 @@ class SocietyControllerTest @Autowired constructor(
             }
         }.andDo { print() }.andExpect {
             status { isAccepted() }
+        }
+    }
+
+    @Test
+    fun `should number of event held by society`() {
+        val totalNumber: TotalCountDto = TotalCountDto(123)
+
+        every {
+            societyService.getTotalNumberOfHoldingEvent(mockAuthRepository.testSocietyName)
+        } returns totalNumber
+
+        mockMvc.get("/society/holdingEvent") {
+            headers {
+                contentType = MediaType.APPLICATION_JSON
+                cookie(Cookie("token", mockAuthRepository.validUserCookieToken))
+            }
+            params = LinkedMultiValueMap<String, String>().apply {
+                add("societyName", mockAuthRepository.testSocietyName)
+            }
+        }.andDo { print() }.andExpect {
+            status { isOk() }
+            content { contentType(MediaType.APPLICATION_JSON) }
+            jsonPath("$.totalNumber") {
+                value(123)
+            }
         }
     }
 }

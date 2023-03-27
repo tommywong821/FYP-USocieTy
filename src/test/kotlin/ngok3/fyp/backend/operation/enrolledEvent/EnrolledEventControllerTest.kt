@@ -3,7 +3,7 @@ package ngok3.fyp.backend.operation.enrolledEvent
 import com.ninjasquad.springmockk.MockkBean
 import io.mockk.every
 import ngok3.fyp.backend.controller.authentication.model.MockAuthRepository
-import ngok3.fyp.backend.operation.PaginationCountDto
+import ngok3.fyp.backend.operation.TotalCountDto
 import ngok3.fyp.backend.operation.enrolled.EnrolledStatus
 import ngok3.fyp.backend.operation.enrolled.event_record.EnrolledEventRecordService
 import ngok3.fyp.backend.operation.enrolled.event_record.PaymentStatus
@@ -131,7 +131,7 @@ class EnrolledEventControllerTest @Autowired constructor(
     fun `should count all enrolled event with event id`() {
         val eventUuid: String = UUID.randomUUID().toString()
 
-        every { enrolledEventService.countStudentEnrolledEventRecord(eventUuid) } returns PaginationCountDto(14)
+        every { enrolledEventService.countStudentEnrolledEventRecord(eventUuid) } returns TotalCountDto(14)
 
         mockMvc.get("/enrolledEventRecord/{eventUuid}/totalNumber", eventUuid) {
         }.andDo { print() }.andExpect {
