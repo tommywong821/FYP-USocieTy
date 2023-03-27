@@ -4,6 +4,7 @@ import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.PagingAndSortingRepository
+import java.time.LocalDateTime
 import java.util.*
 
 interface SocietyRepository : PagingAndSortingRepository<SocietyEntity, UUID> {
@@ -17,4 +18,12 @@ interface SocietyRepository : PagingAndSortingRepository<SocietyEntity, UUID> {
 
     @Query("select s from SocietyEntity s where s.name = ?1")
     fun findByName(name: String): Optional<SocietyEntity>
+
+
+    @Query(
+        """select count(s) from SocietyEntity s inner join s.eventRecords eventRecords
+where s.name = ?1 and eventRecords.applyDeadline >= ?2"""
+    )
+    fun countBySocietyNameAndApplyDeadline(name: String, applyDeadline: LocalDateTime): Long
+
 }

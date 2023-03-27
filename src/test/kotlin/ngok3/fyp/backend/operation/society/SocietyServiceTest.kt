@@ -9,11 +9,13 @@ import ngok3.fyp.backend.authentication.role.RoleEntityRepository
 import ngok3.fyp.backend.authentication.student_role.StudentRoleEntity
 import ngok3.fyp.backend.authentication.student_role.StudentRoleEntityRepository
 import ngok3.fyp.backend.controller.authentication.model.MockAuthRepository
+import ngok3.fyp.backend.operation.TotalCountDto
 import ngok3.fyp.backend.operation.enrolled.EnrolledStatus
 import ngok3.fyp.backend.operation.enrolled.society_record.EnrolledSocietyRecordRepository
 import ngok3.fyp.backend.operation.student.StudentDto
 import ngok3.fyp.backend.operation.student.StudentEntity
 import ngok3.fyp.backend.operation.student.StudentRepository
+import ngok3.fyp.backend.util.JWTUtil
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
@@ -29,13 +31,16 @@ class SocietyServiceTest {
 
     private val roleEntityRepository: RoleEntityRepository = mockk(relaxed = true)
     private val studentRoleEntityRepository: StudentRoleEntityRepository = mockk(relaxed = true)
+    private val jwtUtil: JWTUtil = JWTUtil(studentRoleEntityRepository = studentRoleEntityRepository)
+
 
     private val societyService: SocietyService = SocietyService(
         societyRepository = societyRepository,
         studentRepository = studentRepository,
         enrolledSocietyRecordRepository = enrolledSocietyRecordRepository,
         roleEntityRepository = roleEntityRepository,
-        studentRoleEntityRepository = studentRoleEntityRepository
+        studentRoleEntityRepository = studentRoleEntityRepository,
+        jwtUtil = jwtUtil
     )
 
     @Test
@@ -49,7 +54,10 @@ class SocietyServiceTest {
         val student2: StudentEntity = StudentEntity(itsc = "asdfg", nickname = "nickname 2")
 
         every {
-            studentRepository.getAllStudentByEnrolledInSociety(mockAuthRepository.testSocietyName)
+            studentRepository.findByEnrolledSocietyRecordEntities_StatusNotInAndEnrolledSocietyRecordEntities_SocietyEntity_Name(
+                EnrolledStatus.PENDING,
+                mockAuthRepository.testSocietyName
+            )
         } returns listOf(
             student1,
             student2
@@ -124,5 +132,18 @@ class SocietyServiceTest {
         societyService.removeSocietyMemberRole(mockAuthRepository.testSocietyName, studentIdList)
 
         verify(exactly = 1) { studentRepository.saveAll(mockStudentEntityList) }
+    }
+
+    @Test
+    fun getTotalNumberOfHoldingEvent() {
+        val totalNumber: TotalCountDto = TotalCountDto(123)
+
+        every {
+            societyRepository.countBySocietyNameAndApplyDeadline(mockAuthRepository.testSocietyName, any())
+        } returns 123
+
+        societyService.getTotalNumberOfHoldingEvent(mockAuthRepository.testSocietyName)
+
+        assertEquals(123, totalNumber.totalNumber)
     }
 }

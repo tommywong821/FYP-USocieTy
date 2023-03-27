@@ -1,7 +1,7 @@
 package ngok3.fyp.backend.operation.enrolled.event_record
 
 import io.swagger.v3.oas.annotations.Operation
-import ngok3.fyp.backend.operation.PaginationCountDto
+import ngok3.fyp.backend.operation.TotalCountDto
 import ngok3.fyp.backend.operation.enrolled.event_record.model.EnrolledEventDto
 import ngok3.fyp.backend.operation.enrolled.event_record.model.StudentEnrolledEventRecordDto
 import ngok3.fyp.backend.operation.enrolled.event_record.model.UpdateEnrolledEventRecordDto
@@ -58,7 +58,7 @@ class EnrolledEventRecordController(
     @GetMapping("/{eventId}/totalNumber")
     fun getStudentEnrolledEventRecord(
         @PathVariable eventId: String,
-    ): PaginationCountDto {
+    ): TotalCountDto {
         return enrolledEventService.countStudentEnrolledEventRecord(eventId)
     }
 }

@@ -1,7 +1,7 @@
 package ngok3.fyp.backend.operation.student
 
 import io.swagger.v3.oas.annotations.Operation
-import ngok3.fyp.backend.operation.PaginationCountDto
+import ngok3.fyp.backend.operation.TotalCountDto
 import ngok3.fyp.backend.operation.event.dto.EventDto
 import org.springframework.web.bind.annotation.*
 
@@ -24,7 +24,7 @@ class StudentController(
     @GetMapping("/{studentId}/event/totalNumber")
     fun countAllEventWithSocietyMember(
         @PathVariable studentId: String,
-    ): PaginationCountDto {
+    ): TotalCountDto {
         return studentService.countAllEventWithSocietyMember(studentId)
     }
 

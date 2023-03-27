@@ -7,7 +7,7 @@ import ngok3.fyp.backend.authentication.role.Role
 import ngok3.fyp.backend.authentication.student_role.StudentRoleEntity
 import ngok3.fyp.backend.authentication.student_role.StudentRoleEntityRepository
 import ngok3.fyp.backend.controller.authentication.model.MockAuthRepository
-import ngok3.fyp.backend.operation.PaginationCountDto
+import ngok3.fyp.backend.operation.TotalCountDto
 import ngok3.fyp.backend.operation.enrolled.EnrolledStatus
 import ngok3.fyp.backend.operation.enrolled.event_record.*
 import ngok3.fyp.backend.operation.enrolled.event_record.model.StudentEnrolledEventRecordDto
@@ -184,7 +184,7 @@ class EnrolledEventRecordServiceTest {
 
         every { enrolledEventRecordRepository.countById_EventUuid(eventUuid) } returns 14
 
-        val result: PaginationCountDto = enrolledEventService.countStudentEnrolledEventRecord(eventUuid.toString())
+        val result: TotalCountDto = enrolledEventService.countStudentEnrolledEventRecord(eventUuid.toString())
 
         Assertions.assertEquals(14, result.totalNumber)
     }
