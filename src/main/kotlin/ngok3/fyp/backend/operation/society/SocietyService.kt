@@ -5,6 +5,7 @@ import ngok3.fyp.backend.authentication.role.RoleEntity
 import ngok3.fyp.backend.authentication.role.RoleEntityRepository
 import ngok3.fyp.backend.authentication.student_role.StudentRoleEntity
 import ngok3.fyp.backend.authentication.student_role.StudentRoleEntityRepository
+import ngok3.fyp.backend.operation.TotalCountDto
 import ngok3.fyp.backend.operation.enrolled.EnrolledStatus
 import ngok3.fyp.backend.operation.enrolled.society_record.EnrolledSocietyRecordEntity
 import ngok3.fyp.backend.operation.enrolled.society_record.EnrolledSocietyRecordKey
@@ -16,6 +17,7 @@ import ngok3.fyp.backend.util.JWTUtil
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
+import java.time.LocalDateTime
 import java.util.*
 
 @Service
@@ -119,5 +121,9 @@ class SocietyService(
                 societyEntity
             )
         }
+    }
+
+    fun getTotalNumberOfHoldingEvent(societyName: String): TotalCountDto {
+        return TotalCountDto(societyRepository.countBySocietyNameAndApplyDeadline(societyName, LocalDateTime.now()))
     }
 }
