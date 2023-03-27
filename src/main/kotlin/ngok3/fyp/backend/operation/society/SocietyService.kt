@@ -122,7 +122,7 @@ class SocietyService(
         }
     }
 
-    fun getTotalNumberOfHoldingEvent(societyName: String): SocietyDto {
-        return societyRepository.countBySocietyNameAndApplyDeadline(societyName, LocalDateTime.now())
+    fun getTotalNumberOfHoldingEvent(): List<SocietyDto> {
+        return societyRepository.countBySocietyNameAndApplyDeadline(LocalDateTime.now())
     }
 }

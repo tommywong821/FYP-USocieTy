@@ -144,14 +144,14 @@ class SocietyServiceTest {
         )
 
         every {
-            societyRepository.countBySocietyNameAndApplyDeadline(mockAuthRepository.testSocietyName, any())
-        } returns societyDto
+            societyRepository.countBySocietyNameAndApplyDeadline(any())
+        } returns listOf(societyDto)
 
-        societyService.getTotalNumberOfHoldingEvent(mockAuthRepository.testSocietyName)
+        val result: List<SocietyDto> = societyService.getTotalNumberOfHoldingEvent()
 
-        assertEquals(uuid, societyDto.id)
-        assertEquals(mockAuthRepository.testSocietyName, societyDto.name)
-        assertEquals("description", societyDto.description)
-        assertEquals(10, societyDto.holdingEventNumber)
+        assertEquals(societyDto.id, result[0].id)
+        assertEquals(societyDto.name, result[0].name)
+        assertEquals(societyDto.description, result[0].description)
+        assertEquals(societyDto.holdingEventNumber, result[0].holdingEventNumber)
     }
 }

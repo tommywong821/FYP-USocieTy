@@ -72,11 +72,9 @@ class SocietyController(
         )
     }
 
-    @Operation(summary = "get total number of holding event of society")
+    @Operation(summary = "get all society with total number of holding event ")
     @GetMapping("/holdingEvent")
-    fun getAllSocieties(
-        @RequestParam("societyName") societyName: String,
-    ): SocietyDto {
-        return societyService.getTotalNumberOfHoldingEvent(societyName)
+    fun getAllSocieties(): List<SocietyDto> {
+        return societyService.getTotalNumberOfHoldingEvent()
     }
 }
