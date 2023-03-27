@@ -5,7 +5,6 @@ import ngok3.fyp.backend.authentication.role.RoleEntity
 import ngok3.fyp.backend.authentication.role.RoleEntityRepository
 import ngok3.fyp.backend.authentication.student_role.StudentRoleEntity
 import ngok3.fyp.backend.authentication.student_role.StudentRoleEntityRepository
-import ngok3.fyp.backend.operation.TotalCountDto
 import ngok3.fyp.backend.operation.enrolled.EnrolledStatus
 import ngok3.fyp.backend.operation.enrolled.society_record.EnrolledSocietyRecordEntity
 import ngok3.fyp.backend.operation.enrolled.society_record.EnrolledSocietyRecordKey
@@ -123,7 +122,7 @@ class SocietyService(
         }
     }
 
-    fun getTotalNumberOfHoldingEvent(societyName: String): TotalCountDto {
-        return TotalCountDto(societyRepository.countBySocietyNameAndApplyDeadline(societyName, LocalDateTime.now()))
+    fun getTotalNumberOfHoldingEvent(societyName: String): SocietyDto {
+        return societyRepository.countBySocietyNameAndApplyDeadline(societyName, LocalDateTime.now())
     }
 }

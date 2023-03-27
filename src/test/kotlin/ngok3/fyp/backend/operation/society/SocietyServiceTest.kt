@@ -9,7 +9,6 @@ import ngok3.fyp.backend.authentication.role.RoleEntityRepository
 import ngok3.fyp.backend.authentication.student_role.StudentRoleEntity
 import ngok3.fyp.backend.authentication.student_role.StudentRoleEntityRepository
 import ngok3.fyp.backend.controller.authentication.model.MockAuthRepository
-import ngok3.fyp.backend.operation.TotalCountDto
 import ngok3.fyp.backend.operation.enrolled.EnrolledStatus
 import ngok3.fyp.backend.operation.enrolled.society_record.EnrolledSocietyRecordRepository
 import ngok3.fyp.backend.operation.student.StudentDto
@@ -136,14 +135,23 @@ class SocietyServiceTest {
 
     @Test
     fun getTotalNumberOfHoldingEvent() {
-        val totalNumber: TotalCountDto = TotalCountDto(123)
+        val uuid: String = UUID.randomUUID().toString()
+        val societyDto: SocietyDto = SocietyDto(
+            id = uuid,
+            name = mockAuthRepository.testSocietyName,
+            description = "description",
+            holdingEventNumber = 10
+        )
 
         every {
             societyRepository.countBySocietyNameAndApplyDeadline(mockAuthRepository.testSocietyName, any())
-        } returns 123
+        } returns societyDto
 
         societyService.getTotalNumberOfHoldingEvent(mockAuthRepository.testSocietyName)
 
-        assertEquals(123, totalNumber.totalNumber)
+        assertEquals(uuid, societyDto.id)
+        assertEquals(mockAuthRepository.testSocietyName, societyDto.name)
+        assertEquals("description", societyDto.description)
+        assertEquals(10, societyDto.holdingEventNumber)
     }
 }
