@@ -339,6 +339,7 @@ Widget BottomRegisterButton(BuildContext context, Event event) {
                         context: context,
                         type: QuickAlertType.error,
                         title: "ERROR",
+                        text: "Please contact society for assistance",
                         confirmBtnText: "OK",
                         confirmBtnColor: Styles.primaryColor);
                   }

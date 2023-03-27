@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ngok3fyp_frontend_flutter/screens/home_screen/horizontal_event_card_widget.dart';
+import 'package:ngok3fyp_frontend_flutter/screens/home_screen/widget/horizontal_event_card_widget.dart';
 import 'package:ngok3fyp_frontend_flutter/model/styles.dart';
 import 'package:ngok3fyp_frontend_flutter/model/event.dart';
 

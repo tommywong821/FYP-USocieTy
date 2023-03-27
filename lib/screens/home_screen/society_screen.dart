@@ -4,7 +4,7 @@ import 'package:ngok3fyp_frontend_flutter/model/screen_arguments.dart';
 import 'package:ngok3fyp_frontend_flutter/model/society.dart';
 import 'package:ngok3fyp_frontend_flutter/model/styles.dart';
 import 'package:ngok3fyp_frontend_flutter/services/api_service.dart';
-import 'package:ngok3fyp_frontend_flutter/screens/home_screen/horizontal_event_card_widget.dart';
+import 'package:ngok3fyp_frontend_flutter/screens/home_screen/widget/horizontal_event_card_widget.dart';
 import 'package:quickalert/quickalert.dart';
 
 class SocietyScreen extends StatefulWidget {
@@ -139,7 +139,8 @@ class _SocietyScreenState extends State<SocietyScreen> {
                           context: context,
                           type: QuickAlertType.error,
                           title: "ERROR",
-                          confirmBtnText: "OK",
+                          confirmBtnText:
+                              "Please contact society for assistance",
                           confirmBtnColor: Styles.primaryColor);
                     }
                   },

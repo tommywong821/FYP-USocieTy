@@ -117,26 +117,32 @@ class ApiService {
 
   Future<bool> registerEvent(String eventID) async {
     final url = Uri.https(backendDomain, '/event/join').toString();
-    final response = await _dio.post(url, data: {
-      'itsc': await _storageService.readSecureData(ITSC_KEY),
-      'eventId': eventID
-    });
-    if (response.statusCode == 200)
-      return true;
-    else
+    try {
+      final response = await _dio.post(url, data: {
+        'itsc': await _storageService.readSecureData(ITSC_KEY),
+        'eventId': eventID
+      });
+      if (response.statusCode == 200) return true;
+    } catch (e) {
+      print("/event/join error");
       return false;
+    }
+    return false;
   }
 
   Future<bool> registerSociety(String societyName) async {
     final url = Uri.https(backendDomain, '/society/join').toString();
-    final response = await _dio.post(url, data: {
-      'itsc': await _storageService.readSecureData(ITSC_KEY),
-      'societyName': societyName
-    });
-    if (response.statusCode == 200)
-      return true;
-    else
+    try {
+      final response = await _dio.post(url, data: {
+        'itsc': await _storageService.readSecureData(ITSC_KEY),
+        'societyName': societyName
+      });
+      if (response.statusCode == 200) return true;
+    } catch (e) {
+      print("/society/join error");
       return false;
+    }
+    return false;
   }
 
   Future<List<Society>> getAllSociety(
@@ -146,7 +152,6 @@ class ApiService {
       'pageSize': pageSize == -1 ? '10' : pageSize.toString()
     });
     final response = await _dio.getUri(uri);
-
     if (response.statusCode == 200) {
       List<dynamic> societyJsonList = jsonDecode(response.data);
       return societyJsonList

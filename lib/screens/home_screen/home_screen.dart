@@ -1,7 +1,7 @@
 import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:ngok3fyp_frontend_flutter/model/enrolled_event/enrolled_event.dart';
-import 'package:ngok3fyp_frontend_flutter/screens/home_screen/home_widget.dart';
+import 'package:ngok3fyp_frontend_flutter/screens/home_screen/widget/home_widget.dart';
 import 'package:ngok3fyp_frontend_flutter/screens/profile_screen.dart';
 import 'package:ngok3fyp_frontend_flutter/screens/calendar_screen/calendar_widget.dart';
 import 'package:ngok3fyp_frontend_flutter/model/styles.dart';
@@ -50,24 +50,6 @@ class _HomeScreenState extends State<HomeScreen> {
     enrolledEventList = await enrolledEventFuture;
   }
 
-  // For testing refresh feature
-  // Future<Map<String, dynamic>> testAPI() async {
-  //   Dio _dio = Dio();
-  //   final uri = Uri.https('worldtimeapi.org', '/api/timezone/Asia/Hong_Kong');
-  //   final response = await _dio.getUri(uri);
-
-  //   if (response.statusCode == 200) {
-  //     return response.data;
-  //   } else {
-  //     throw Exception('Failed to get time');
-  //   }
-  // }
-
-  // Future<void> initTestDate() async {
-  //   testDateFuture = testAPI();
-  //   testDate = await testDateFuture;
-  // }
-
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
@@ -79,7 +61,6 @@ class _HomeScreenState extends State<HomeScreen> {
     initEvent();
     initSociety();
     initEnrolledEvent();
-    // initTestDate();
     super.initState();
   }
 

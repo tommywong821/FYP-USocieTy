@@ -84,10 +84,7 @@ class _StatusWidgetState extends State<StatusWidget> {
                           size: ICON_SIZE, color: Colors.red),
               title: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(enrolledEvent[index].category),
-                  Text(enrolledEvent[index].name)
-                ],
+                children: [Text(enrolledEvent[index].name)],
               ),
               subtitle: Row(
                 children: [
@@ -95,7 +92,7 @@ class _StatusWidgetState extends State<StatusWidget> {
                   SizedBox(
                     width: 10,
                   ),
-                  Text(enrolledEvent[index].location),
+                  Text(enrolledEvent[index].paymentStatus),
                 ],
               ),
             ),

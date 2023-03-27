@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:ngok3fyp_frontend_flutter/model/event.dart';
 import 'package:ngok3fyp_frontend_flutter/model/styles.dart';
-import 'package:ngok3fyp_frontend_flutter/screens/home_screen/horizontal_event_card_widget.dart';
+import 'package:ngok3fyp_frontend_flutter/screens/home_screen/widget/horizontal_event_card_widget.dart';
 import 'package:ngok3fyp_frontend_flutter/services/calendar_utils.dart';
 import 'package:table_calendar/table_calendar.dart';
 
