@@ -65,7 +65,7 @@ class SocietyController(
     @DeleteMapping("/member")
     fun removeSocietyMemberRole(
         @RequestParam("societyName") societyName: String,
-        @RequestParam("id") deleteStudentIdList: List<String>
+        @RequestParam("studentId") deleteStudentIdList: List<String>
     ) {
         return societyService.removeSocietyMemberRole(
             societyName,
