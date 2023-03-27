@@ -1,9 +1,11 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Router} from '@angular/router';
+import {NzMessageRef, NzMessageService} from 'ng-zorro-antd/message';
 import {NzTableFilterList, NzTableQueryParams} from 'ng-zorro-antd/table';
 import {BehaviorSubject, zip} from 'rxjs';
 import {Path} from 'src/app/app-routing.module';
 import {ApiService} from 'src/app/services/api.service';
+import {FinanceAction} from '../model/finance';
 import {FinanceTableRequestParam} from '../model/IFinanceTableParam';
 import {FinanceTableRecord} from '../model/IFinanceTableRecord';
 
@@ -34,7 +36,12 @@ export class FinanceTableComponent implements OnInit {
   // block api call when component init
   queryParamsChangeEventCnt = 0;
 
-  constructor(private router: Router, private apiService: ApiService) {
+  messages: Record<FinanceAction, NzMessageRef | null> = {
+    [FinanceAction.Fetch]: null,
+    [FinanceAction.Delete]: null,
+  };
+
+  constructor(private router: Router, private apiService: ApiService, private message: NzMessageService) {
     this.financeTableRequestParam$ = new BehaviorSubject<FinanceTableRequestParam | null>(null);
   }
 
@@ -84,6 +91,8 @@ export class FinanceTableComponent implements OnInit {
         });
     }
 
+    this.messages[FinanceAction.Fetch] = this.message.loading('Fetching finance record...');
+
     this.apiService
       .getFinanceTableData(
         this.societyName,
@@ -102,6 +111,9 @@ export class FinanceTableComponent implements OnInit {
           this.tableData = tableData;
           this.refreshCheckedStatus();
         },
+        complete: () => {
+          this.message.remove(this.messages[FinanceAction.Fetch]!.messageId);
+        },
       });
   }
 
@@ -119,6 +131,7 @@ export class FinanceTableComponent implements OnInit {
   sendRequest(): void {
     this.loading = true;
     const requestData = this.tableData.filter(data => this.setOfCheckedId.has(data.id));
+    this.messages[FinanceAction.Delete] = this.message.loading('Deleting finance record...');
     this.apiService
       .deleteFinanceData(
         this.societyName,
@@ -132,6 +145,9 @@ export class FinanceTableComponent implements OnInit {
           // update parent data
           this.updateFinanceDataEvent.emit();
           this.fetchTableData();
+        },
+        complete: () => {
+          this.message.remove(this.messages[FinanceAction.Delete]!.messageId);
         },
       });
   }
