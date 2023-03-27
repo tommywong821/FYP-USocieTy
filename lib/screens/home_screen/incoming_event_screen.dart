@@ -14,6 +14,7 @@ class IncomingEvnetScreen extends StatefulWidget {
 
 class _IncomingEvnetScreenState extends State<IncomingEvnetScreen> {
   static int page = 0;
+  static bool indicator = true;
 
   //get next page for lazy loading
   Future<List<Event>> getNextpage() async {
@@ -25,6 +26,7 @@ class _IncomingEvnetScreenState extends State<IncomingEvnetScreen> {
   @override
   void dispose() {
     page = 0;
+    indicator = true;
     super.dispose();
   }
 
@@ -59,13 +61,20 @@ class _IncomingEvnetScreenState extends State<IncomingEvnetScreen> {
               child: LazyLoadScrollView(
                 scrollOffset: 10,
                 onEndOfPage: () {
+                  var snackBar = progressIndicator();
+                  if (indicator)
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
                   getNextpage().then((value) {
                     //eventList = combine (eventList + value)
                     eventList = [...eventList, ...value];
+                    if (value.isEmpty) indicator = false;
+                  }).whenComplete(() {
                     setState(() {});
                   });
                 },
                 child: ListView.separated(
+                  scrollDirection: Axis.vertical,
+                  shrinkWrap: true,
                   padding: const EdgeInsets.only(left: 5, right: 5),
                   itemCount: eventCount,
                   separatorBuilder: ((context, index) {
@@ -84,4 +93,20 @@ class _IncomingEvnetScreenState extends State<IncomingEvnetScreen> {
       ),
     ));
   }
+}
+
+SnackBar progressIndicator() {
+  return SnackBar(
+    duration: Duration(seconds: 1),
+    elevation: 0,
+    backgroundColor: Colors.transparent,
+    content: Column(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        CircularProgressIndicator(
+          color: Styles.primaryColor,
+        ),
+      ],
+    ),
+  );
 }

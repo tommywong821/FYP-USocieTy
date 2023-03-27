@@ -15,6 +15,7 @@ class AllSocietyScreen extends StatefulWidget {
 
 class _AllSocietyScreenState extends State<AllSocietyScreen> {
   static int page = 0;
+  static bool indicator = true;
 
   //get next page for lazy loading
   Future<List<Society>> getNextpage() async {
@@ -27,6 +28,7 @@ class _AllSocietyScreenState extends State<AllSocietyScreen> {
   @override
   void dispose() {
     page = 0;
+    indicator = true;
     super.dispose();
   }
 
@@ -58,9 +60,14 @@ class _AllSocietyScreenState extends State<AllSocietyScreen> {
               child: LazyLoadScrollView(
                 scrollOffset: 10,
                 onEndOfPage: () {
+                  var snackBar = progressIndicator();
+                  if (indicator)
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
                   getNextpage().then((value) {
                     //societyList = combine (societyList + value)
                     societyList = [...societyList, ...value];
+                    if (value.isEmpty) indicator = false;
+                  }).whenComplete(() {
                     setState(() {});
                   });
                 },
@@ -84,4 +91,20 @@ class _AllSocietyScreenState extends State<AllSocietyScreen> {
       )),
     );
   }
+}
+
+SnackBar progressIndicator() {
+  return SnackBar(
+    duration: Duration(seconds: 1),
+    elevation: 0,
+    backgroundColor: Colors.transparent,
+    content: Column(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        CircularProgressIndicator(
+          color: Styles.primaryColor,
+        ),
+      ],
+    ),
+  );
 }
