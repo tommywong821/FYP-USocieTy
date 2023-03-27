@@ -112,8 +112,8 @@ class SocietyControllerTest @Autowired constructor(
             }
             params = LinkedMultiValueMap<String, String>().apply {
                 add("societyName", mockAuthRepository.testSocietyName)
-                add("id", "2ac23d21-4cb0-4173-a2fe-de551ec5aa9d")
-                add("id", "38153605-ed2c-42e7-947a-9d1731f4bd44")
+                add("studentId", "2ac23d21-4cb0-4173-a2fe-de551ec5aa9d")
+                add("studentId", "38153605-ed2c-42e7-947a-9d1731f4bd44")
             }
         }.andDo { print() }.andExpect {
             status { isAccepted() }
