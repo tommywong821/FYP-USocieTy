@@ -22,8 +22,8 @@ interface SocietyRepository : PagingAndSortingRepository<SocietyEntity, UUID> {
 
     @Query(
         """select new ngok3.fyp.backend.operation.society.SocietyDto(cast(s.uuid as text), s.name, s.description, count(s)) from SocietyEntity s inner join s.eventRecords eventRecords
-where s.name = ?1 and eventRecords.applyDeadline >= ?2 group by s.uuid"""
+where eventRecords.applyDeadline >= ?1 group by s.uuid"""
     )
-    fun countBySocietyNameAndApplyDeadline(name: String, applyDeadline: LocalDateTime): SocietyDto
+    fun countBySocietyNameAndApplyDeadline(applyDeadline: LocalDateTime): List<SocietyDto>
 
 }

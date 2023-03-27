@@ -131,8 +131,8 @@ class SocietyControllerTest @Autowired constructor(
         )
 
         every {
-            societyService.getTotalNumberOfHoldingEvent(mockAuthRepository.testSocietyName)
-        } returns societyDto
+            societyService.getTotalNumberOfHoldingEvent()
+        } returns listOf(societyDto)
 
         mockMvc.get("/society/holdingEvent") {
             headers {
@@ -145,16 +145,16 @@ class SocietyControllerTest @Autowired constructor(
         }.andDo { print() }.andExpect {
             status { isOk() }
             content { contentType(MediaType.APPLICATION_JSON) }
-            jsonPath("$.id") {
+            jsonPath("$[*].id") {
                 value(uuid)
             }
-            jsonPath("$.name") {
+            jsonPath("$[*].name") {
                 value(mockAuthRepository.testSocietyName)
             }
-            jsonPath("$.description") {
+            jsonPath("$[*].description") {
                 value("description")
             }
-            jsonPath("$.holdingEventNumber") {
+            jsonPath("$[*].holdingEventNumber") {
                 value(10)
             }
         }
