@@ -34,7 +34,7 @@ class FinanceEntityDao(
 
         //custom sorting
         if (!StringUtils.isBlank(sortField)) {
-            sql.append(" ORDER BY :sortField ${if (isAscend) "ASC" else "DESC"}")
+            sql.append(" ORDER BY $sortField ${if (isAscend) "ASC" else "DESC"}")
         } else {
             //default sort by date
             sql.append(" ORDER BY f.date")
@@ -52,9 +52,6 @@ class FinanceEntityDao(
             query.setParameter("category", category)
         }
         //custom sorting
-        if (!StringUtils.isBlank(sortField)) {
-            query.setParameter("sortField", sortField)
-        }
         query.setParameter("pageSize", pageSize)
         query.setParameter("pageIndex", (pageIndex - 1) * pageSize)
 
