@@ -55,7 +55,7 @@ class SocietyService(
         enrolledSocietyRecordEntity.studentEntity = studentEntity
         enrolledSocietyRecordEntity.societyEntity = societyEntity
         enrolledSocietyRecordRepository.save(enrolledSocietyRecordEntity)
-        return true;
+        return true
     }
 
     fun getAllSocietyMember(societyName: String): List<StudentDto> {

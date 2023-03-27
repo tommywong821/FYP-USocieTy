@@ -22,7 +22,7 @@ data class EnrolledEventDto(
         endDate = enrolledEventRecordEntity.eventEntity.endDate.format(
             DateTimeFormatter.ofPattern("yyyy-MM-dd")
         ),
-        category = enrolledEventRecordEntity.eventEntity.category?.category,
+        category = enrolledEventRecordEntity.eventEntity.category.category,
         status = enrolledEventRecordEntity.enrollStatus.status,
         paymentStatus = enrolledEventRecordEntity.paymentStatus.status
     )

@@ -11,7 +11,7 @@ import javax.persistence.Table
 
 @Entity
 @Table(name = "student_role_entity")
-open class StudentRoleEntity() : BaseEntity() {
+open class StudentRoleEntity : BaseEntity() {
     @ManyToOne
     @JoinColumn(name = "student_uuid")
     open var studentEntity: StudentEntity = StudentEntity()

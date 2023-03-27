@@ -1,4 +1,4 @@
-package ngok3.fyp.backend.operation.finance;
+package ngok3.fyp.backend.operation.finance
 
 import ngok3.fyp.backend.operation.finance.model.FinanceChartDto
 import ngok3.fyp.backend.operation.finance.model.FinanceRecordCategoryDto

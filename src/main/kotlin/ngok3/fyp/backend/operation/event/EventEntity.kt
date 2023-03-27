@@ -19,7 +19,7 @@ open class EventEntity(
     open var startDate: LocalDateTime = LocalDateTime.now(ZoneId.of("Asia/Hong_Kong")),
     open var endDate: LocalDateTime = LocalDateTime.now(ZoneId.of("Asia/Hong_Kong")),
     @Enumerated(EnumType.STRING) open var category: EventCategory = EventCategory.OUTDOOR,
-    @Column(columnDefinition = "TEXT") open var description: String = "",//todo change text type
+    @Column(columnDefinition = "TEXT") open var description: String = "",
     open var fee: Double = -1.0,
     @Version open var version: Long = 0
 ) : BaseEntity() {
