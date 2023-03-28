@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:ngok3fyp_frontend_flutter/model/styles.dart';
 import 'package:ngok3fyp_frontend_flutter/model/event.dart';
 import 'package:ngok3fyp_frontend_flutter/services/api_service.dart';
@@ -17,8 +18,9 @@ class EventScreen extends StatefulWidget {
 class _EventScreenState extends State<EventScreen> {
   @override
   Widget build(BuildContext context) {
-    final DateFormat dateFormatter = DateFormat('E , MMM d');
-    final DateFormat parseDateFormatter = DateFormat('M/dd/y');
+    final DateFormat dateFormatter = DateFormat('MMM d');
+    final DateFormat defaultDateFormat = DateFormat("M/d/y H:m");
+    final DateFormat timeFormat = DateFormat("H:mm");
 
     final Event event = ModalRoute.of(context)!.settings.arguments as Event;
 
@@ -26,7 +28,9 @@ class _EventScreenState extends State<EventScreen> {
     String eventTitle = event.name;
     String eventContent = event.description;
     String eventLocation = event.location;
-    String eventDate = event.startDate;
+    String eventStartDate = event.startDate;
+    String eventEndDate = event.endDate;
+    String eventDeadline = event.applyDeadline;
     String eventSociety = event.society;
     String eventFee = event.fee.toString();
     return Scaffold(
@@ -170,19 +174,24 @@ class _EventScreenState extends State<EventScreen> {
                                         left: 15,
                                       ),
                                       child: Text(
-                                          dateFormatter
-                                              .format(DateTime.parse(
-                                                  parseDateFormatter
-                                                      .parse(eventDate)
-                                                      .toString()))
-                                              .toString(),
+                                          dateFormatter.format(defaultDateFormat
+                                                  .parse(eventStartDate)) +
+                                              " - " +
+                                              dateFormatter.format(
+                                                  defaultDateFormat
+                                                      .parse(eventEndDate)),
                                           style: Styles.eventScreenBlackText),
                                     ),
                                     //Event time
                                     Padding(
                                       padding: const EdgeInsets.only(left: 15),
                                       child: Text(
-                                        "14:00 - 20:00 GMT+8",
+                                        timeFormat.format(defaultDateFormat
+                                                .parse(eventStartDate)) +
+                                            " - " +
+                                            timeFormat.format(defaultDateFormat
+                                                .parse(eventEndDate)) +
+                                            " GMT+8",
                                         style: Styles.eventScreenGreyText,
                                       ),
                                     ),
@@ -236,52 +245,56 @@ class _EventScreenState extends State<EventScreen> {
                               ],
                             ),
                           ),
-                          //apply deadline
+
                           Padding(
-                            padding: const EdgeInsets.only(
-                                top: 20, left: 20, bottom: 10),
-                            child: Row(
-                              children: [
-                                Icon(Icons.event_available),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.only(
-                                        left: 15,
-                                      ),
-                                      child: Text("Apply Deadline",
-                                          style: Styles.eventScreenBlackText),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(left: 15),
-                                      child: Text(
-                                        "14:00 - 20:00 GMT+8",
-                                        style: Styles.eventScreenGreyText,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
+                            padding: const EdgeInsets.only(top: 10),
+                            child: Divider(
+                              indent: 20,
+                              endIndent: 20,
+                              thickness: 0.5,
+                              color: Colors.grey.withOpacity(0.5),
                             ),
-                          ),
-                          Divider(
-                            indent: 20,
-                            endIndent: 20,
-                            thickness: 0.5,
-                            color: Colors.grey.withOpacity(0.5),
                           ),
 
                           Padding(
-                            padding: const EdgeInsets.only(top: 20, left: 20),
+                            padding: const EdgeInsets.only(top: 10, left: 20),
                             child: Text("Description",
                                 style: Styles.eventScreenBlackText),
                           ),
                           Padding(
-                            padding: const EdgeInsets.only(
-                                top: 20, left: 20, bottom: 20),
+                            padding: const EdgeInsets.only(top: 20, left: 20),
                             child: Text(eventContent,
                                 style: Styles.eventScreenText),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 10),
+                            child: Divider(
+                              indent: 20,
+                              endIndent: 20,
+                              thickness: 0.5,
+                              color: Colors.grey.withOpacity(0.5),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 20, top: 10),
+                            child: Row(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                    left: 15,
+                                  ),
+                                  child: Text("Apply Deadline",
+                                      style: Styles.eventScreenBlackText),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 15),
+                                  child: Text(
+                                    eventDeadline,
+                                    style: Styles.eventScreenGreyText,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ]),
                   )),

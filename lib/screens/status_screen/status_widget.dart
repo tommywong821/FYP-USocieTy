@@ -66,38 +66,42 @@ class _StatusWidgetState extends State<StatusWidget> {
       itemBuilder: ((context, index) {
         return Column(
           children: [
-            ListTile(
-              dense: true,
-              visualDensity: VisualDensity(horizontal: 0, vertical: 0),
-              contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 0),
-              leading: (enrolledEvent[index].enrolledStatus == PENDING)
-                  // pending state icon
-                  ? Icon(
-                      Icons.pending_actions_rounded,
-                      size: ICON_SIZE,
-                    )
-                  : (enrolledEvent[index].enrolledStatus == SUCCESS)
-                      // success state icon
-                      ? Icon(
-                          Icons.check_circle_outline_rounded,
-                          size: ICON_SIZE,
-                          color: Colors.green,
-                        )
-                      // fail state icon
-                      : Icon(Icons.highlight_off_rounded,
-                          size: ICON_SIZE, color: Colors.red),
-              title: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [Text(enrolledEvent[index].name)],
-              ),
-              subtitle: Row(
-                children: [
-                  Text(enrolledEvent[index].startDate),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  Text(enrolledEvent[index].paymentStatus),
-                ],
+            Padding(
+              padding: const EdgeInsets.only(left: 10),
+              child: ListTile(
+                dense: true,
+                visualDensity: VisualDensity(horizontal: 0, vertical: 0),
+                contentPadding:
+                    EdgeInsets.symmetric(horizontal: 8, vertical: 0),
+                leading: (enrolledEvent[index].enrolledStatus == PENDING)
+                    // pending state icon
+                    ? Icon(
+                        Icons.pending_actions_rounded,
+                        size: ICON_SIZE,
+                      )
+                    : (enrolledEvent[index].enrolledStatus == SUCCESS)
+                        // success state icon
+                        ? Icon(
+                            Icons.check_circle_outline_rounded,
+                            size: ICON_SIZE,
+                            color: Colors.green,
+                          )
+                        // fail state icon
+                        : Icon(Icons.highlight_off_rounded,
+                            size: ICON_SIZE, color: Colors.red),
+                title: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [Text(enrolledEvent[index].name)],
+                ),
+                subtitle: Row(
+                  children: [
+                    Text(enrolledEvent[index].startDate),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Text(enrolledEvent[index].paymentStatus),
+                  ],
+                ),
               ),
             ),
             Divider(
@@ -121,37 +125,41 @@ class _StatusWidgetState extends State<StatusWidget> {
       itemBuilder: ((context, index) {
         return Column(
           children: [
-            ListTile(
-              dense: true,
-              visualDensity: VisualDensity(horizontal: 0, vertical: 0),
-              contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 0),
-              leading: (enrolledSociety[index].enrolledStatus == "PENDING")
-                  // pending state icon
-                  ? Icon(
-                      Icons.pending_actions_rounded,
-                      size: ICON_SIZE,
-                    )
-                  : (enrolledSociety[index].enrolledStatus == "SUCCESS")
-                      // success state icon
-                      ? Icon(
-                          Icons.check_circle_outline_rounded,
-                          size: ICON_SIZE,
-                          color: Colors.green,
-                        )
-                      // fail state icon
-                      : Icon(Icons.highlight_off_rounded,
-                          size: ICON_SIZE, color: Colors.red),
-              title: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [Text(enrolledSociety[index].societyName)],
-              ),
-              subtitle: Row(
-                children: [
-                  Text(enrolledSociety[index].registerDate),
-                  SizedBox(
-                    width: 10,
-                  ),
-                ],
+            Padding(
+              padding: const EdgeInsets.only(left: 10),
+              child: ListTile(
+                dense: true,
+                visualDensity: VisualDensity(horizontal: 0, vertical: 0),
+                contentPadding:
+                    EdgeInsets.symmetric(horizontal: 8, vertical: 0),
+                leading: (enrolledSociety[index].enrolledStatus == "PENDING")
+                    // pending state icon
+                    ? Icon(
+                        Icons.pending_actions_rounded,
+                        size: ICON_SIZE,
+                      )
+                    : (enrolledSociety[index].enrolledStatus == "SUCCESS")
+                        // success state icon
+                        ? Icon(
+                            Icons.check_circle_outline_rounded,
+                            size: ICON_SIZE,
+                            color: Colors.green,
+                          )
+                        // fail state icon
+                        : Icon(Icons.highlight_off_rounded,
+                            size: ICON_SIZE, color: Colors.red),
+                title: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [Text(enrolledSociety[index].societyName)],
+                ),
+                subtitle: Row(
+                  children: [
+                    Text(enrolledSociety[index].registerDate),
+                    SizedBox(
+                      width: 10,
+                    ),
+                  ],
+                ),
               ),
             ),
             Divider(
