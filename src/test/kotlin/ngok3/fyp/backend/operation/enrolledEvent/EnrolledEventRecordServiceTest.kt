@@ -16,6 +16,7 @@ import ngok3.fyp.backend.operation.event.EventEntity
 import ngok3.fyp.backend.operation.event.EventRepository
 import ngok3.fyp.backend.operation.society.SocietyEntity
 import ngok3.fyp.backend.operation.student.StudentEntity
+import ngok3.fyp.backend.util.DateUtil
 import ngok3.fyp.backend.util.JWTUtil
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions
@@ -33,11 +34,13 @@ class EnrolledEventRecordServiceTest {
     private val eventRepository: EventRepository = mockk()
 
     private val jwtUtil: JWTUtil = JWTUtil(studentRoleEntityRepository = studentRoleEntityRepository)
+    private val dateUtil: DateUtil = DateUtil()
 
     private val enrolledEventService: EnrolledEventRecordService = EnrolledEventRecordService(
         enrolledEventRecordRepository = enrolledEventRecordRepository,
         jwtUtil = jwtUtil,
-        eventRepository = eventRepository
+        eventRepository = eventRepository,
+        dateUtil = dateUtil
     )
 
     @Test
