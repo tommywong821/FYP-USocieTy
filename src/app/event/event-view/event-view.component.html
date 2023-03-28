@@ -2,6 +2,19 @@
   <div class="mt-5 space-y-6 pt-4">
     <div class="flex bg-white">
       <h1 class="mr-4 text-xl">Event Details</h1>
+      <button
+        class="ml-auto"
+        nz-button
+        nzType="primary"
+        nzGhost
+        (click)="backToEventPage()"
+      >
+        <span
+          nz-icon
+          nzType="left"
+        ></span>
+        back
+      </button>
     </div>
   </div>
   <div>
@@ -13,7 +26,7 @@
       >
         <nz-descriptions-item nzTitle="Society">{{ event.society }}</nz-descriptions-item>
         <nz-descriptions-item nzTitle="Name">{{ event.name }}</nz-descriptions-item>
-        <nz-descriptions-item nzTitle="Category">{{ event.category }}</nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Category">{{ event.category | lowercase }}</nz-descriptions-item>
         <nz-descriptions-item nzTitle="Location">{{ event.location }}</nz-descriptions-item>
         <nz-descriptions-item nzTitle="Max Participates">{{ event.maxParticipation }}</nz-descriptions-item>
         <nz-descriptions-item nzTitle="Fee">{{ event.fee }}</nz-descriptions-item>
@@ -28,21 +41,36 @@
           {{ event.description }}
         </nz-descriptions-item>
       </nz-descriptions>
-      <button
-        nz-button
-        class="mt-6"
-        nzType="primary"
-        (click)="toggleUpdateEvent()"
-      >
-        Update Event
-      </button>
+      <div class="flex">
+        <button
+          nz-button
+          class="mt-6 ml-auto"
+          nzType="primary"
+          (click)="toggleUpdateEvent()"
+        >
+          Update Event
+        </button>
+      </div>
     </div>
+    <nz-divider></nz-divider>
     <div>
-      <h1 class="mb-4 text-xl">Event Enrollment Record</h1>
+      <div class="mb-2 flex">
+        <h1 class="mb-4 mr-4 text-xl">Event Enrollment Record</h1>
+        <button
+          class="ml-auto"
+          nz-button
+          [disabled]="objectKeys(toBeUpdatedEnrollmentRecords).length <= 0"
+          nzType="primary"
+          (click)="updateEnrollmentRecords()"
+        >
+          Apply Changes
+        </button>
+      </div>
       <nz-table
         #enrollmentTable
+        [nzTotal]="recordTotal"
+        [nzPageSize]="pageSize"
         [nzPageIndex]="pageIndex"
-        [nzTotal]="pageSize"
         (nzPageIndexChange)="changePageIndex()"
         [nzData]="enrollmentRecords"
       >
@@ -58,9 +86,40 @@
         </thead>
         <tbody>
           <tr *ngFor="let enrollmentRecord of enrollmentTable.data">
-            <td>{{ enrollmentRecord.itsc }}</td>
-            <td>{{ enrollmentRecord.paymentStatus }}</td>
-            <td>{{ enrollmentRecord.eventEnrollmentStatus }}</td>
+            <td>
+              <nz-badge
+                *ngIf="toBeUpdatedEnrollmentRecords[enrollmentRecord.itsc]"
+                nzStatus="processing"
+              >
+              </nz-badge>
+              {{ enrollmentRecord.itsc }}
+            </td>
+            <td>
+              <nz-select
+                [nzBorderless]="true"
+                [(ngModel)]="enrollmentRecord.paymentStatus"
+                (ngModelChange)="recordPaymentStatusChanges($event, enrollmentRecord.itsc)"
+              >
+                <nz-option
+                  *ngFor="let paymentStatus of PaymentStatus | keyvalue"
+                  [nzValue]="paymentStatus.value"
+                  [nzLabel]="paymentStatus.key"
+                ></nz-option>
+              </nz-select>
+            </td>
+            <td>
+              <nz-select
+                [nzBorderless]="true"
+                [(ngModel)]="enrollmentRecord.enrolledStatus"
+                (ngModelChange)="recordEnrollmentStatusChanges($event, enrollmentRecord.itsc)"
+              >
+                <nz-option
+                  *ngFor="let eventEnrollmentStatus of EventEnrollmentStatus | keyvalue"
+                  [nzValue]="eventEnrollmentStatus.value"
+                  [nzLabel]="eventEnrollmentStatus.key"
+                ></nz-option>
+              </nz-select>
+            </td>
           </tr>
         </tbody>
       </nz-table>

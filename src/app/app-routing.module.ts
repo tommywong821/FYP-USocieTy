@@ -6,7 +6,6 @@ import {SignInComponent} from './auth/sign-in/sign-in.component';
 import {EventCreateComponent} from './event/event-create/event-create.component';
 import {FinanceCreateComponent} from './finance/finance-create/finance-create.component';
 import {FinanceComponent} from './finance/finance.component';
-import {HomeComponent} from './home/home.component';
 import {AuthGuard} from './services/auth.guard';
 import {MainComponent} from './main/main.component';
 import {EventComponent} from './event/event.component';
@@ -16,7 +15,6 @@ import { SocietyViewComponent } from './society/society-view/society-view.compon
 
 export enum Path {
   Main = 'main',
-  Home = 'home',
   SignIn = 'sign-in',
   Event = 'event',
   CreateEvent = 'create',
@@ -37,10 +35,6 @@ const routes: Routes = [
     path: Path.Main,
     component: MainComponent,
     children: [
-      {
-        path: Path.Home,
-        component: HomeComponent,
-      },
       {
         path: Path.Event,
         children: [

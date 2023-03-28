@@ -41,10 +41,10 @@ export function convertEventToEventDto(event: Event): EventDto {
     name: event.name,
     poster: event.poster,
     maxParticipation: event.maxParticipation,
-    applyDeadline: event.applyDeadline.toISOString(),
+    applyDeadline: event.applyDeadline.toLocaleDateString(),
     location: event.location,
-    startDate: event.startDate.toISOString(),
-    endDate: event.endDate.toISOString(),
+    startDate: event.startDate.toLocaleDateString(),
+    endDate: event.endDate.toLocaleDateString(),
     category: event.category,
     description: event.description,
     fee: event.fee,
@@ -82,4 +82,10 @@ export function getUpdateEventRequest(eventId: string, event: Event, society: st
   };
 
   return request;
+}
+
+export function getPictureNameFromUrl(url: string): string {
+  const index = url.lastIndexOf('/');
+
+  return url.substr(index).replace('/', '');
 }

@@ -15,8 +15,9 @@
   <div>
     <nz-table
       #eventTable
+      [nzTotal]="eventTotal"
       [nzPageIndex]="pageIndex"
-      [nzTotal]="pageSize"
+      [nzPageSize]="pageSize"
       (nzPageIndexChange)="changePageIndex()"
       [nzData]="events"
     >
@@ -37,7 +38,7 @@
         >
           <td (click)="toggleViewEvent(event.id!!)">{{ event.society }}</td>
           <td (click)="toggleViewEvent(event.id!!)">{{ event.name }}</td>
-          <td (click)="toggleViewEvent(event.id!!)">{{ event.category }}</td>
+          <td (click)="toggleViewEvent(event.id!!)">{{ event.category | lowercase }}</td>
           <td (click)="toggleViewEvent(event.id!!)">{{ event.location }}</td>
           <td (click)="toggleViewEvent(event.id!!)">{{ event.maxParticipation }}</td>
           <td (click)="toggleViewEvent(event.id!!)">{{ event.fee }}</td>
@@ -49,6 +50,7 @@
               nz-button
               nzDanger
               nzType="primary"
+              nzGhost
               (click)="toggleDeleteEvent(event.id!!)"
             >
               Remove
@@ -61,6 +63,7 @@
 
   <nz-modal
     [(nzVisible)]="showModal"
+    (nzOnCancel)="cancelEventDeletion()"
     nzTitle="Warning"
     [nzFooter]="modalFooter"
   >

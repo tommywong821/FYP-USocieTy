@@ -1,4 +1,3 @@
-import {UpdateEventRequest} from './../api/event';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {NzTableFilterList} from 'ng-zorro-antd/table';
@@ -8,7 +7,7 @@ import {Request} from '../api/common';
 import {FinanceChartRecord} from '../finance/model/IFinanceChartRecord';
 import {FinanceRecordTotalNumber} from '../finance/model/IFinanceRecordTotalNumber';
 import {FinanceTableRecord} from '../finance/model/IFinanceTableRecord';
-import {Event} from '../model/event';
+import {Event, EventEnrollmentRecord, UpdateEventEnrollmentRecordPayload} from '../model/event';
 
 @Injectable({
   providedIn: 'root',
@@ -139,22 +138,55 @@ export class ApiService {
     return this.restful.get<Event[]>(`${environment.backend_url}/event`, {params: queryParams});
   }
 
-  updateEvent(updateEventRequest: UpdateEventRequest): void {
-    this.restful.put(`${environment.backend_url}/event/${updateEventRequest.urlParams['id']}`, updateEventRequest.body);
+  createEvent(eventDto: Event, poster: File, societyName: string) {
+    const formData: FormData = new FormData();
+
+    const eventJson: Blob = new Blob([JSON.stringify(eventDto)], {type: 'application/json'});
+    formData.append('event', eventJson);
+    formData.append('poster', poster);
+    formData.append('society', societyName);
+
+    return this.restful.post(`${environment.backend_url}/event`, formData, {
+      reportProgress: true,
+      responseType: 'text',
+    });
   }
 
-  deleteEvent(eventId: string): void {
-    this.restful.delete(`${environment.backend_url}/event/${eventId}`);
+  updateEvent(eventDto: Event, societyName: string, poster?: File): Observable<void> {
+    const formData: FormData = new FormData();
+
+    const eventJson: Blob = new Blob([JSON.stringify(eventDto)], {type: 'application/json'});
+    formData.append('event', eventJson);
+    formData.append('society', societyName);
+    if (poster) {
+      formData.append('poster', poster);
+    }
+
+    return this.restful.put<void>(`${environment.backend_url}/event`, formData);
   }
 
-  updateEnrollmentStatus(eventId: string, studentId: string, status: string): void {
-    const body = {
-      eventId,
-      studentId,
-      status,
-    };
+  deleteEvent(eventId: string): Observable<void> {
+    return this.restful.delete<void>(`${environment.backend_url}/event/${eventId}`);
+  }
 
-    this.restful.put(`${environment.backend_url}/enrolledEventRecord`, body);
+  getEventEnrollmentRecord(eventId: string, pageIndex: number, pageSize: number): Observable<EventEnrollmentRecord[]> {
+    const queryParams = new HttpParams().append('pageIndex', pageIndex).append('pageSize', pageSize);
+
+    return this.restful.get<EventEnrollmentRecord[]>(`${environment.backend_url}/enrolledEventRecord/${eventId}`, {
+      params: queryParams,
+    });
+  }
+
+  getEventCount(studentId: string): Observable<number> {
+    return this.restful.get<number>(`${environment.backend_url}/student/${studentId}/event/totalNumber`);
+  }
+
+  getEventEnrollmentRecordCount(eventId: string): Observable<number> {
+    return this.restful.get<number>(`${environment.backend_url}/enrolledEventRecord/${eventId}/totalNumber`);
+  }
+
+  updateEventEnrollmentRecords(eventId: string, records: UpdateEventEnrollmentRecordPayload[]): Observable<void> {
+    return this.restful.put<void>(`${environment.backend_url}/enrolledEventRecord`, records);
   }
 
 

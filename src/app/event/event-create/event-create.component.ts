@@ -1,16 +1,18 @@
-import {AuthService} from 'src/app/services/auth.service';
-import {ApiService} from './../../services/api.service';
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {NzMessageService} from 'ng-zorro-antd/message';
+import {NzMessageRef, NzMessageService} from 'ng-zorro-antd/message';
 import {NzUploadChangeParam} from 'ng-zorro-antd/upload';
+import {filter, Subject, switchMap, tap} from 'rxjs';
+import {Path} from 'src/app/app-routing.module';
 import {EventCategory} from 'src/app/model/event';
-import {convertFiletoBase64, convertFormDataToEvent, getCreateEventRequest} from 'src/util/event.util';
-import {filter, map, Subject, switchMap, tap, zip, takeUntil} from 'rxjs';
+import {AuthService} from 'src/app/services/auth.service';
+import {convertFormDataToEvent} from 'src/util/event.util';
 import {Event} from '../../model/event';
+import {ApiService} from './../../services/api.service';
+import {Router} from '@angular/router';
 
 export enum CreateEventFormFields {
-  EventTitle = 'eventTitle',
+  Name = 'name',
   Location = 'location',
   Society = 'society',
   MaxParticipation = 'maxParticipation',
@@ -30,29 +32,30 @@ export class EventCreateComponent implements OnInit {
   CreateEventFormFields = CreateEventFormFields;
   EventCategory = EventCategory;
 
+  enrolledSocieties: string[] = [];
+
   createEventForm!: FormGroup;
   pictureFile: File | undefined;
 
-  enrolledSocieties: string[] = [];
+  loadingMessage: NzMessageRef | null = null;
+
+  isProcessing = false;
 
   event$ = new Subject<Event>();
 
   destroy$ = new Subject<void>();
 
-  loadingMessage: string | undefined;
-
-  isProcessing = false;
-
   constructor(
     private ApiService: ApiService,
     private formBuilder: FormBuilder,
     private message: NzMessageService,
-    private AuthService: AuthService
+    private AuthService: AuthService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
     this.createEventForm = this.formBuilder.group({
-      eventTitle: ['', [Validators.required]],
+      name: ['', [Validators.required]],
       location: ['', [Validators.required]],
       society: ['', [Validators.required]],
       maxParticipation: ['', [Validators.required]],
@@ -67,18 +70,15 @@ export class EventCreateComponent implements OnInit {
       .pipe(filter(user => !!user))
       .subscribe(user => (this.enrolledSocieties = [...user!.enrolledSocieties]));
 
-    zip([this.event$, this.AuthService.user$])
+    this.event$
       .pipe(
-        takeUntil(this.destroy$),
-        tap(() => (this.isProcessing = true)),
-        filter(([event, user]) => !!user),
-        map(([event, user]) => getCreateEventRequest(event, this.createEventForm.value.society, user!)),
-        switchMap(request => this.ApiService.call(request))
+        switchMap(event => this.ApiService.createEvent(event, this.pictureFile!, this.createEventForm.value.society)),
+        // tap(() => (this.isProcessing = false)),
+        tap(() => this.message.remove(this.loadingMessage?.messageId)),
+        tap(() => this.message.success('Successfully created event', {nzDuration: 2000})),
+        tap(() => this.router.navigate([Path.Main, Path.Event]))
       )
-      .subscribe(res => {
-        this.isProcessing = false;
-        this.message.remove(this.loadingMessage);
-      });
+      .subscribe();
   }
 
   ngOnDestroy(): void {
@@ -97,13 +97,16 @@ export class EventCreateComponent implements OnInit {
       return;
     }
 
-    this.loadingMessage = this.message.loading('Request in progress...', {nzDuration: 0}).messageId;
-    convertFiletoBase64(this.pictureFile)
-      .pipe(map(fileBuffer => convertFormDataToEvent({...this.createEventForm.value, poster: fileBuffer})))
-      .subscribe(event => this.event$.next(event));
+    this.isProcessing = true;
+    this.loadingMessage = this.message.loading('Creating event...');
+    this.event$.next(convertFormDataToEvent({...this.createEventForm.value}));
   }
 
   saveFileBuffer({file}: NzUploadChangeParam): void {
     this.pictureFile = file.originFileObj;
+  }
+
+  backToEventPage(): void {
+    this.router.navigate([Path.Main, Path.Event]);
   }
 }

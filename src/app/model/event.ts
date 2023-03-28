@@ -40,24 +40,39 @@ export interface EventFormData {
 }
 
 export enum EventCategory {
-  OrientationCamp = 'orientation camp',
-  Workshop = 'workshop',
-  VoluntaryWork = 'voluntary work',
-  Other = 'other',
+  Sport = 'SPORT',
+  Outdoor = 'OUTDOOR',
+  Indoor = 'INDOOR',
 }
 
 export enum PaymentStatus {
-  Paid = 'Paid',
-  Unpaid = 'Unpaid',
+  Paid = 'PAID',
+  Unpaid = 'UNPAID',
 }
 
 export enum EventEnrollmentStatus {
-  Pending = 'Pending',
-  Enrolled = 'Enrolled',
+  Pending = 'PENDING',
+  Enrolled = 'SUCCESS',
+  Rejected = 'DECLINE',
 }
 
 export interface EventEnrollmentRecord {
   itsc: string;
+  studentId: string;
   paymentStatus: PaymentStatus;
-  eventEnrollmentStatus: EventEnrollmentStatus;
+  enrolledStatus: EventEnrollmentStatus;
+}
+
+export interface UpdateEventEnrollmentRecordPayload {
+  eventId: string;
+  studentId: string;
+  paymentStatus: PaymentStatus;
+  enrolledStatus: EventEnrollmentStatus;
+}
+
+export enum EventAction {
+  Create = 'CREATE',
+  Update = 'UPDATE',
+  Fetch = 'FETCH',
+  Delete = 'DELETE',
 }

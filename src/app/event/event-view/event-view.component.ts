@@ -1,16 +1,20 @@
+import {EventAction} from './../../model/event';
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {first, Subject, switchMap, tap} from 'rxjs';
+import {NzMessageRef, NzMessageService} from 'ng-zorro-antd/message';
+import {first, map, Subject, switchMap, tap} from 'rxjs';
 import {Path} from 'src/app/app-routing.module';
 import {
-  EventCategory,
   EventEnrollmentRecord,
   EventEnrollmentStatus,
   EventProperty,
   PaymentStatus,
+  UpdateEventEnrollmentRecordPayload,
 } from 'src/app/model/event';
 import {ApiService} from 'src/app/services/api.service';
 import {Event} from '../../model/event';
+
+export type EnrollmentStatus = Partial<EventEnrollmentRecord>;
 
 @Component({
   selector: 'app-event-view',
@@ -18,54 +22,79 @@ import {Event} from '../../model/event';
   styleUrls: ['./event-view.component.scss'],
 })
 export class EventViewComponent implements OnInit {
+  objectKeys = Object.keys;
   EventProperty = EventProperty;
+  EventEnrollmentStatus = EventEnrollmentStatus;
+  PaymentStatus = PaymentStatus;
 
-  enrollmentTableColumn = [{title: 'itsc'}, {title: 'payment status'}, {title: 'enrollment status'}];
+  enrollmentTableColumn = [{title: 'Itsc'}, {title: 'Payment Status'}, {title: 'Enrollment Status'}];
 
   eventId = '';
-  // event?: Event = undefined;
-  event?: Event = {
-    id: '',
-    name: 'Ocamp',
-    poster: '',
-    maxParticipation: 120,
-    applyDeadline: new Date(),
-    location: 'HKUST',
-    startDate: new Date(),
-    endDate: new Date(),
-    category: EventCategory.OrientationCamp,
-    description: 'This is the best Ocamp! hahaha',
-    fee: 100,
-    society: 'HKUSTSU',
-  };
+  event?: Event = undefined;
+  recordTotal = 0;
 
-  enrollmentRecords: EventEnrollmentRecord[] = [
-    {
-      itsc: 'cywongch',
-      paymentStatus: PaymentStatus.Paid,
-      eventEnrollmentStatus: EventEnrollmentStatus.Enrolled,
-    },
-  ];
+  enrollmentRecords: EventEnrollmentRecord[] = [];
   refreshEnrollmentRecords$ = new Subject();
+
+  toBeUpdatedEnrollmentRecords: Record<string, EnrollmentStatus> = {};
+
+  updateEnrollmentRecord$ = new Subject<UpdateEventEnrollmentRecordPayload[]>();
 
   pageIndex = 1;
   pageSize = 15;
 
-  constructor(private router: Router, private ApiService: ApiService, private route: ActivatedRoute) {}
+  messages: Record<EventAction, NzMessageRef | null> = {
+    [EventAction.Create]: null,
+    [EventAction.Update]: null,
+    [EventAction.Fetch]: null,
+    [EventAction.Delete]: null,
+  };
+
+  constructor(
+    private router: Router,
+    private ApiService: ApiService,
+    private route: ActivatedRoute,
+    private message: NzMessageService
+  ) {}
 
   ngOnInit(): void {
     this.route.queryParams
       .pipe(
         first(),
+        tap(() => (this.messages[EventAction.Fetch] = this.message.loading('Fetching event details...'))),
         tap(params => (this.eventId = params['eventId'])),
-        switchMap(params => this.ApiService.getEvent(params['eventId']))
+        switchMap(params => this.ApiService.getEvent(params['eventId'])),
+        tap(event => (this.event = event)),
+        switchMap(event => this.ApiService.getEventEnrollmentRecordCount(event.id!)),
+        tap(recordCount => (this.recordTotal = recordCount)),
+        tap(() => this.message.remove(this.messages[EventAction.Fetch]!.messageId))
       )
-      .subscribe(event => (this.event = event));
+      .subscribe();
 
-    // TODO
-    // this.refreshEnrollmentRecords$
-    //   .pipe(switchMap(() => this.ApiService.(this.pageIndex, this.pageSize)))
-    //   .subscribe(event => (this.events = ([] as Event[]).concat(event)));
+    this.updateEnrollmentRecord$
+      .pipe(
+        tap(() => (this.messages[EventAction.Update] = this.message.loading('Updating event enrollment records...'))),
+        switchMap(records => this.ApiService.updateEventEnrollmentRecords(this.eventId, records)),
+        tap(() => this.message.remove(this.messages[EventAction.Update]!.messageId)),
+        tap(() => this.message.success('Successfully updated event enrollment records'))
+      )
+      .subscribe();
+
+    this.refreshEnrollmentRecords$
+      .pipe(
+        switchMap(() => this.ApiService.getEventEnrollmentRecord(this.eventId, this.pageIndex, this.pageSize)),
+        map(
+          records =>
+            records.map(record => ({
+              ...record,
+              paymentStatus: record.paymentStatus.toUpperCase(),
+              enrolledStatus: record.enrolledStatus.toLocaleUpperCase(),
+            })) as EventEnrollmentRecord[]
+        )
+      )
+      .subscribe(record => (this.enrollmentRecords = ([] as EventEnrollmentRecord[]).concat(record)));
+
+    this.refreshEnrollmentRecords$.next({});
   }
 
   changePageIndex(): void {
@@ -73,10 +102,36 @@ export class EventViewComponent implements OnInit {
   }
 
   toggleUpdateEvent(): void {
-    this.router.navigate([Path.Main, Path.Event, Path.ViewEvent], {queryParams: {eventId: this.eventId}});
+    this.router.navigate([Path.Main, Path.Event, Path.UpdateEvent], {queryParams: {eventId: this.eventId}});
   }
 
-  updateEnrollmentStatusOfStudent(studentId: string, status: string): void {
-    this.ApiService.updateEnrollmentStatus(this.eventId, studentId, status);
+  recordPaymentStatusChanges(paymentStatus: PaymentStatus, itsc: string): void {
+    this.toBeUpdatedEnrollmentRecords[itsc] = this.toBeUpdatedEnrollmentRecords[itsc]
+      ? {...this.toBeUpdatedEnrollmentRecords[itsc], paymentStatus}
+      : {...this.enrollmentRecords.find(record => record.itsc === itsc)!, paymentStatus};
+  }
+
+  recordEnrollmentStatusChanges(enrolledStatus: EventEnrollmentStatus, itsc: string): void {
+    this.toBeUpdatedEnrollmentRecords[itsc] = this.toBeUpdatedEnrollmentRecords[itsc]
+      ? {...this.toBeUpdatedEnrollmentRecords[itsc], enrolledStatus}
+      : {...this.enrollmentRecords.find(record => record.itsc === itsc)!, enrolledStatus};
+  }
+
+  updateEnrollmentRecords(): void {
+    const records = Object.entries(this.toBeUpdatedEnrollmentRecords).map(([key, val]) => ({
+      eventId: this.eventId,
+      studentId: val.studentId!,
+      paymentStatus: val.paymentStatus!,
+      enrolledStatus: val.enrolledStatus!,
+    }));
+    this.updateEnrollmentRecord$.next(records);
+    setTimeout(() => {
+      this.refreshEnrollmentRecords$.next({});
+    }, 2000);
+    this.toBeUpdatedEnrollmentRecords = {};
+  }
+
+  backToEventPage(): void {
+    this.router.navigate([Path.Main, Path.Event]);
   }
 }

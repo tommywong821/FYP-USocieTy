@@ -1,9 +1,15 @@
 import {Component, OnInit} from '@angular/core';
-import {faHome, faPiggyBank, faUsers} from '@fortawesome/free-solid-svg-icons';
+import {IconProp} from '@fortawesome/fontawesome-svg-core';
+import {faHouseUser, faPiggyBank, faUsers} from '@fortawesome/free-solid-svg-icons';
 import {Path} from '../app-routing.module';
-import {SidebarOption} from '../home/home';
 import {User} from '../model/user';
 import {AuthService} from '../services/auth.service';
+
+export interface SidebarOption {
+  name: string;
+  link: string;
+  icon?: IconProp;
+}
 
 @Component({
   selector: 'app-main',
@@ -13,19 +19,14 @@ import {AuthService} from '../services/auth.service';
 export class MainComponent implements OnInit {
   sidebarOptions: SidebarOption[] = [
     {
-      name: 'Home',
-      link: Path.Home,
-      icon: faHome,
+      name: 'Event',
+      link: Path.Event,
+      icon: faUsers,
     },
     {
       name: 'Societies',
       link: Path.Society,
-      icon: faUsers,
-    },
-    {
-      name: 'Event',
-      link: Path.Event,
-      icon: faUsers,
+      icon: faHouseUser,
     },
     {
       name: 'Finance',
