@@ -160,12 +160,12 @@ export class ApiService {
 
 
   //Society
-  getAllSociety(
+  getSocietywithMemberRole(
     pageNum = 0,
     pageSize = 100,
   ): Observable<any> {
     return this.restful.get<any>(
-      `${environment.backend_url}/society?pageNum=${pageNum}&pageSize=${pageSize}`
+      `${environment.backend_url}/society/withMemberRole?pageNum=${pageNum}&pageSize=${pageSize}`
     );
   }
 
@@ -200,9 +200,9 @@ export class ApiService {
     });
   }
 
-  updateEnrolledSocietyRecord(societyName: string|null,studentId: string|null, status: string): void {
+  updateEnrolledSocietyRecord(societyId: string|null,studentId: string|null, status: string): void {
     const body = {
-      societyName,
+      societyId,
       studentId,
       status,
     };

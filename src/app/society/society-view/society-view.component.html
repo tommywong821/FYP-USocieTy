@@ -31,9 +31,11 @@ class="cursor-pointer"
 *ngFor="let data of societyMemberTable.data">
   <td>{{data.itsc}}</td>
   <td>{{data.nickname}}</td>
-  <td>{{data.roles}}</td>
+  <td *ngIf="isSocietyMember(data.roles); else elseBlock ">True</td>
+  <ng-template #elseBlock><td></td></ng-template>
+
   <td>         
-  <button  *ngIf="data.roles=='Society Member' "
+  <button  *ngIf="isSocietyMember(data.roles) "
   nz-button
   nzType="primary"
   class="bg-green-500"

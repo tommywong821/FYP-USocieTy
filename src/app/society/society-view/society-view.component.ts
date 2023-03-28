@@ -12,6 +12,7 @@ export class SocietyViewComponent implements OnInit {
   societyMemberlist: any;
   enrolledSocietiesList:any;
   societyName: string|null="";
+  societyNameList:any;
   ngOnInit(): void {
     this.societyName=this.route.snapshot.queryParamMap.get('societyName');
     console.log("societyName");
@@ -50,5 +51,14 @@ export class SocietyViewComponent implements OnInit {
   approveSocietyRequest(societyId:string|null,studentId:string|null):void{
     this.apiService.updateEnrolledSocietyRecord(societyId,studentId,"SUCCESS");
     console.log("Click the Approve button");
+  }
+  isSocietyMember(roleList:string[]|null):boolean{
+    let temp=this.societyName?.toString();
+    if(roleList?.includes(temp!))
+    {
+    return true;
+    }
+    else 
+    return false
   }
 }
