@@ -6,6 +6,7 @@ import ngok3.fyp.backend.operation.enrolled.event_record.model.StudentEnrolledEv
 import ngok3.fyp.backend.operation.enrolled.event_record.model.UpdateEnrolledEventRecordDto
 import ngok3.fyp.backend.operation.event.EventEntity
 import ngok3.fyp.backend.operation.event.EventRepository
+import ngok3.fyp.backend.util.DateUtil
 import ngok3.fyp.backend.util.JWTUtil
 import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Service
@@ -17,7 +18,8 @@ import java.util.*
 class EnrolledEventRecordService(
     private val enrolledEventRecordRepository: EnrolledEventRecordRepository,
     private val eventRepository: EventRepository,
-    private val jwtUtil: JWTUtil
+    private val jwtUtil: JWTUtil,
+    private val dateUtil: DateUtil
 ) {
     fun updateEnrolledEventRecord(
         jwtToken: String,
@@ -58,7 +60,17 @@ class EnrolledEventRecordService(
         return enrolledEventRecordRepository.findByStudentEntity_ItscAndEventEntity_StartDateGreaterThanEqualOrderByEventEntity_StartDateAsc(
             itsc,
             LocalDateTime.now(ZoneId.of("Asia/Hong_Kong"))
-        ).map { enrolledEventEntity -> EnrolledEventDto(enrolledEventEntity) }
+        ).map { enrolledEventEntity ->
+            EnrolledEventDto(
+                name = enrolledEventEntity.eventEntity.name,
+                location = enrolledEventEntity.eventEntity.location,
+                startDate = dateUtil.convertLocalDateTimeToString(enrolledEventEntity.eventEntity.startDate),
+                endDate = dateUtil.convertLocalDateTimeToString(enrolledEventEntity.eventEntity.endDate),
+                category = enrolledEventEntity.eventEntity.category,
+                enrolledStatus = enrolledEventEntity.enrollStatus,
+                paymentStatus = enrolledEventEntity.paymentStatus
+            )
+        }
     }
 
     fun countEnrolledEvent(itsc: String): Long {

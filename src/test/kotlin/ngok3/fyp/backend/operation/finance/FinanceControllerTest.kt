@@ -717,9 +717,9 @@ class FinanceControllerTest @Autowired constructor(
             jsonPath("$[*].date") {
                 value(financeEntityList.map { financeEntity ->
 
-                        dateUtil.convertLocalDateTimeToString(
-                            financeEntity.date
-                        )
+                    dateUtil.convertLocalDateTimeToString(
+                        financeEntity.date
+                    )
                 })
             }
             jsonPath("$[*].category") {

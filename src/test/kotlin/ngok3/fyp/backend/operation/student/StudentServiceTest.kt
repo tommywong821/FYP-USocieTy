@@ -117,9 +117,9 @@ class StudentServiceTest() {
         // Then
         assertEquals(2, result.size)
         assertEquals("Society A", result[0].societyName)
-        assertEquals(dateUtil.convertLocalDateTimeToStringWithTime(registerDate1), result[0].registerDate)
+        assertEquals(dateUtil.convertLocalDateTimeToString(registerDate1), result[0].registerDate)
         assertEquals("Society B", result[1].societyName)
-        assertEquals(dateUtil.convertLocalDateTimeToStringWithTime(registerDate2), result[1].registerDate)
+        assertEquals(dateUtil.convertLocalDateTimeToString(registerDate2), result[1].registerDate)
         assertEquals(EnrolledStatus.SUCCESS, result[0].enrolledStatus)
         assertEquals(EnrolledStatus.PENDING, result[1].enrolledStatus)
 

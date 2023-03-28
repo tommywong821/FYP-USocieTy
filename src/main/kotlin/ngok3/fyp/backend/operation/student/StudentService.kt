@@ -62,7 +62,7 @@ class StudentService(
         return studentEntity.enrolledSocietyRecordEntities.map { enrolledSocietyRecordEntity: EnrolledSocietyRecordEntity ->
             StudentEnrolledSocietyStatusDto(
                 societyName = enrolledSocietyRecordEntity.societyEntity.name,
-                registerDate = dateUtil.convertLocalDateTimeToStringWithTime(enrolledSocietyRecordEntity.createdAt),
+                registerDate = dateUtil.convertLocalDateTimeToString(enrolledSocietyRecordEntity.createdAt),
                 enrolledStatus = enrolledSocietyRecordEntity.status
             )
         }
