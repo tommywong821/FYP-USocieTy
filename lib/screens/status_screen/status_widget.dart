@@ -70,13 +70,13 @@ class _StatusWidgetState extends State<StatusWidget> {
               dense: true,
               visualDensity: VisualDensity(horizontal: 0, vertical: 0),
               contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 0),
-              leading: (enrolledEvent[index].status == PENDING)
+              leading: (enrolledEvent[index].enrolledStatus == PENDING)
                   // pending state icon
                   ? Icon(
                       Icons.pending_actions_rounded,
                       size: ICON_SIZE,
                     )
-                  : (enrolledEvent[index].status == SUCCESS)
+                  : (enrolledEvent[index].enrolledStatus == SUCCESS)
                       // success state icon
                       ? Icon(
                           Icons.check_circle_outline_rounded,
