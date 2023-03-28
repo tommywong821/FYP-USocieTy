@@ -213,8 +213,8 @@ export class ApiService {
     );
   }
 
-  deleteSocietyMember(societyName:string|null,studentId:string|null): void {
-    this.restful.delete(`${environment.backend_url}/society/member?societyName=${societyName}&id=${studentId}s`).subscribe((res) => {
+  deleteSocietyMember(societyName:string|null,studentId:string[]|null): void {
+    this.restful.delete(`${environment.backend_url}/society/member?societyName=${societyName}&id=${studentId}`).subscribe((res) => {
       console.log(res);
     });
   }

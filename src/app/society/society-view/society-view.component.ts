@@ -37,7 +37,8 @@ export class SocietyViewComponent implements OnInit {
     });
   }
   deleteSocietyMember(studentId:string|null):void{
-    this.apiService.deleteSocietyMember(this.societyName,studentId);
+    let temp=studentId?.toString();
+    this.apiService.deleteSocietyMember(this.societyName,[temp!]);
     console.log("Click the delete member button");
   }
 
