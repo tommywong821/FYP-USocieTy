@@ -102,9 +102,12 @@ class _EventScreenState extends State<EventScreen> {
                           Padding(
                             padding: const EdgeInsets.only(top: 10, left: 20),
                             child: Container(
-                              child: Text(
-                                eventTitle,
-                                style: Styles.eventScreenTitle,
+                              child: Container(
+                                child: Text(
+                                  eventTitle,
+                                  style: Styles.eventScreenTitle,
+                                  maxLines: 2,
+                                ),
                               ),
                               alignment: Alignment.centerLeft,
                             ),

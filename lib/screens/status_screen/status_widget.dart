@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:ngok3fyp_frontend_flutter/model/enrolled_event/status_constants.dart';
 import 'package:ngok3fyp_frontend_flutter/model/enrolled_society.dart';
 import '../../model/enrolled_event/enrolled_event.dart';
 import 'package:ngok3fyp_frontend_flutter/model/styles.dart';
@@ -73,13 +72,13 @@ class _StatusWidgetState extends State<StatusWidget> {
                 visualDensity: VisualDensity(horizontal: 0, vertical: 0),
                 contentPadding:
                     EdgeInsets.symmetric(horizontal: 8, vertical: 0),
-                leading: (enrolledEvent[index].enrolledStatus == PENDING)
+                leading: (enrolledEvent[index].enrolledStatus == "PENDING")
                     // pending state icon
                     ? Icon(
                         Icons.pending_actions_rounded,
                         size: ICON_SIZE,
                       )
-                    : (enrolledEvent[index].enrolledStatus == SUCCESS)
+                    : (enrolledEvent[index].enrolledStatus == "SUCCESS")
                         // success state icon
                         ? Icon(
                             Icons.check_circle_outline_rounded,
