@@ -4,7 +4,6 @@ import io.swagger.v3.oas.annotations.Operation
 import ngok3.fyp.backend.operation.event.dto.EventDto
 import ngok3.fyp.backend.operation.event.dto.JoinEventDto
 import org.springframework.http.HttpStatus
-import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.multipart.MultipartFile
 import java.util.*
@@ -29,7 +28,6 @@ class EventController(
         return eventService.joinEvent(joinEventDto.itsc, joinEventDto.eventId)
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_SOCIETY_MEMBER')")
     @Operation(summary = "create event with detail")
     @PostMapping
     fun createEvent(
