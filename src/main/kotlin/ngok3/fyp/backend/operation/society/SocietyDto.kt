@@ -9,7 +9,7 @@ data class SocietyDto(
     val id: String = "",
     val name: String = "",
     val description: String = "",
-    val holdingEventNumber: Long? = -1
+    val holdingEventNumber: Long? = 0
 ) : Serializable {
     constructor(societyEntity: SocietyEntity) : this(
         id = societyEntity.uuid.toString(), name = societyEntity.name, description = societyEntity.description
