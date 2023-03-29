@@ -18,7 +18,7 @@
        NAME
       </th>
       <th>
-        Administrative rights
+        Administrative Rights
       </th>
       <th>
       ACTION
@@ -38,20 +38,19 @@ class="cursor-pointer"
   <button  *ngIf="isSocietyMember(data.roles)"
   nz-button
   nzType="primary"
-  class="bg-green-500"
+  nzDanger
   (click)="deleteSocietyMember(data.uuid)"
   >
-  Delete Society Member
+  Remove Administrative Rights
 </button>
 
- <button
+ <button 
       nz-button
-      nzDanger
       nzType="primary"
-      *ngIf="data.roles=='' "
+      *ngIf="!isSocietyMember(data.roles)"
       (click)="setAsSocietyMember(data.uuid)"
       >
-      Set as Society Member
+      Asign Administrative Rights
     </button></td>
 </tr>
 </tbody>
