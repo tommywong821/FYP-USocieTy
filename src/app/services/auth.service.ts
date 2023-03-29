@@ -32,7 +32,7 @@ export class AuthService {
   validateUser(queryParams: Params): Observable<User> {
     const request = {
       endpoint: validateUserEndpoint,
-       //endpoint: '/auth/mockServiceValidate',
+      //endpoint: '/auth/mockServiceValidate',
       body: {
         ticket: queryParams['ticket'],
       },

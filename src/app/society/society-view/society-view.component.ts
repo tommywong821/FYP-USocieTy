@@ -53,7 +53,8 @@ export class SocietyViewComponent implements OnInit {
   }
   
   deleteSocietyMember(studentId:string|null):void{
-    this.apiService.deleteSocietyMember(this.societyName,studentId).subscribe((response)=>{
+    let temp=studentId?.toString();
+    this.apiService.deleteSocietyMember(this.societyName,[temp!]).subscribe((response)=>{
     console.log("Click the delete member button");
     setTimeout(() => {
       this.refreshSocietyMember$.next({});
@@ -105,7 +106,7 @@ export class SocietyViewComponent implements OnInit {
 
   approveAllSocietyRequest():void{
     for(let i=0;i<this.enrolledSocietiesList.length;i++){
-    this.apiService.updateEnrolledSocietyRecord(this.enrolledSocietiesList[i].societyId,this.enrolledSocietiesList[i].studentId,"SUCCESS");
+    this.apiService.updateALLEnrolledSocietyRecord(this.enrolledSocietiesList[i].societyId,this.enrolledSocietiesList[i].studentId,"SUCCESS");
   }
     console.log("Click the Approve button");
     setTimeout(() => {
@@ -114,6 +115,9 @@ export class SocietyViewComponent implements OnInit {
     setTimeout(() => {
       this.refreshSocietyMember$.next({});
     }, 2000);
-    this.message.success('Successfully Approve ALL Request')
+    setTimeout(() => {
+      this.message.success('Successfully Approve ALL Request')
+    }, 2000);
+
   }
 }

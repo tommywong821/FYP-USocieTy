@@ -213,8 +213,8 @@ export class ApiService {
     );
   }
 
-  deleteSocietyMember(societyName:string|null,studentId:string|null): Observable<void> {
-    return this.restful.delete<void>(`${environment.backend_url}/society/member?societyName=${societyName}&id=${studentId}`)
+  deleteSocietyMember(societyName:string|null,studentId:string[]|null): Observable<void> {
+    return this.restful.delete<void>(`${environment.backend_url}/society/member?societyName=${societyName}&studentId=${studentId}`)
   }
 
 
@@ -233,5 +233,18 @@ export class ApiService {
       status,
     };
    return this.restful.put<void>(`${environment.backend_url}/enrolledSocietyRecord`, body)
+  }
+
+  updateALLEnrolledSocietyRecord(societyId: string|null,studentId: string|null, status: string): void {
+    const body = {
+      societyId,
+      studentId,
+      status,
+    };
+    this.restful.put(`${environment.backend_url}/enrolledSocietyRecord`, body).subscribe((res) => {
+      console.log(res);
+    },(error)=>{
+      alert(error.message);
+    });
   }
 }
