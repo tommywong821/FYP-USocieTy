@@ -79,20 +79,7 @@ export class EventUpdateComponent implements OnInit {
               ])
           ),
           tap(event => console.log(event)),
-          tap(
-            event =>
-              (this.updateEventForm = this.formBuilder.group({
-                name: [event.name, [Validators.required]],
-                location: [event.location, [Validators.required]],
-                society: [event.society, [Validators.required]],
-                maxParticipation: [event.maxParticipation, [Validators.required]],
-                applyDeadline: [event.applyDeadline, [Validators.required]],
-                date: [[event.startDate, event.endDate], [Validators.required]],
-                category: [event.category, [Validators.required]],
-                description: [event.description, [Validators.required]],
-                fee: [event.fee, [Validators.required]],
-              }))
-          ),
+          tap(event => this.loadDataToUpdateEventForm(event)),
           tap(() => this.message.remove(this.loadingMessage?.messageId)),
           catchError((err: HttpErrorResponse) => of(err)),
           tap(err => console.error(err)),
@@ -123,6 +110,20 @@ export class EventUpdateComponent implements OnInit {
 
   ngOnDestroy(): void {
     this.destroy$.next();
+  }
+
+  loadDataToUpdateEventForm(event: Event): void {
+    this.updateEventForm = this.formBuilder.group({
+      name: [event.name, [Validators.required]],
+      location: [event.location, [Validators.required]],
+      society: [event.society, [Validators.required]],
+      maxParticipation: [event.maxParticipation, [Validators.required]],
+      applyDeadline: [event.applyDeadline, [Validators.required]],
+      date: [[event.startDate, event.endDate], [Validators.required]],
+      category: [event.category, [Validators.required]],
+      description: [event.description, [Validators.required]],
+      fee: [event.fee, [Validators.required]],
+    });
   }
 
   updateEvent(): void {
