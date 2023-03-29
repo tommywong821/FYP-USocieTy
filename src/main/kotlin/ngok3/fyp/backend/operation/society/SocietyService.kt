@@ -13,6 +13,7 @@ import ngok3.fyp.backend.operation.student.StudentDto
 import ngok3.fyp.backend.operation.student.StudentEntity
 import ngok3.fyp.backend.operation.student.StudentRepository
 import ngok3.fyp.backend.util.JWTUtil
+import org.springframework.dao.DuplicateKeyException
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
@@ -48,8 +49,14 @@ class SocietyService(
             Exception("Society with id:$societyName is not found")
         }
 
+        val enrolledSocietyRecordKey: EnrolledSocietyRecordKey =
+            EnrolledSocietyRecordKey(studentEntity.uuid, societyEntity.uuid)
+        if (enrolledSocietyRecordRepository.findById(enrolledSocietyRecordKey).isPresent) {
+            throw DuplicateKeyException("Student: $itsc is already join society: $societyName")
+        }
+
         val enrolledSocietyRecordEntity = EnrolledSocietyRecordEntity(
-            id = EnrolledSocietyRecordKey(studentEntity.uuid, societyEntity.uuid), status = EnrolledStatus.PENDING
+            id = enrolledSocietyRecordKey, status = EnrolledStatus.PENDING
         )
         enrolledSocietyRecordEntity.studentEntity = studentEntity
         enrolledSocietyRecordEntity.societyEntity = societyEntity
