@@ -99,14 +99,12 @@ class SocietyService(
     }
 
     fun removeSocietyMemberRole(societyName: String, studentIdList: List<String>) {
-        val studentEntityList: Iterable<StudentEntity> =
-            studentRepository.findByIdInAndEnrolledSocietyNameAndEnrollStatus(studentIdList.map { studentIdString ->
-                UUID.fromString(studentIdString)
-            }.toMutableList(), societyName, EnrolledStatus.SUCCESS)
+        val studentRoleEntityList: List<StudentRoleEntity> =
+            studentRoleEntityRepository.findByStudentEntity_UuidInAndSocietyEntity_Name(studentIdList.map { s: String ->
+                UUID.fromString(s)
+            }.toMutableList(), societyName)
 
-        studentEntityList.forEach { studentEntity -> studentEntity.studentRoleEntities.removeIf { studentRoleEntity -> Role.ROLE_SOCIETY_MEMBER == studentRoleEntity.roleEntity.role } }
-
-        studentRepository.saveAll(studentEntityList)
+        studentRoleEntityRepository.deleteAll(studentRoleEntityList)
     }
 
     fun getAllSocietiesWithSocietyMemberRole(jwtToken: String, pageNum: Int, pageSize: Int): List<SocietyDto> {

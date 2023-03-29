@@ -29,4 +29,11 @@ where s.studentEntity.itsc = ?1 and s.roleEntity.role = ?2 and eventRecords.uuid
         eventUuid: UUID
     ): Optional<StudentRoleEntity>
 
+
+    @Query("select s from StudentRoleEntity s where s.studentEntity.uuid in ?1 and s.societyEntity.name = ?2")
+    fun findByStudentEntity_UuidInAndSocietyEntity_Name(
+        uuids: MutableCollection<UUID>,
+        name: String
+    ): List<StudentRoleEntity>
+
 }
