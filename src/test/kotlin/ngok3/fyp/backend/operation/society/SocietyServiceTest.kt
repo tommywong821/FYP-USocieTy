@@ -113,24 +113,23 @@ class SocietyServiceTest {
             "38153605-ed2c-42e7-947a-9d1731f4bd44"
         )
 
-        val mockStudentEntityList: List<StudentEntity> = listOf(
-            StudentEntity("qwert", "nickname 1"),
-            StudentEntity("asdfg", "nickname 2"),
+        val mockStudentRoleEntityList: List<StudentRoleEntity> = listOf(
+            StudentRoleEntity()
         )
 
         every {
-            studentRepository.findByIdInAndEnrolledSocietyNameAndEnrollStatus(studentIdList.map { studentIdString ->
+            studentRoleEntityRepository.findByStudentEntity_UuidInAndSocietyEntity_Name(studentIdList.map { studentIdString ->
                 UUID.fromString(
                     studentIdString
                 )
-            }.toMutableList(), mockAuthRepository.testSocietyName, EnrolledStatus.SUCCESS)
-        } returns mockStudentEntityList
+            }.toMutableList(), mockAuthRepository.testSocietyName)
+        } returns mockStudentRoleEntityList
 
-        every { studentRepository.saveAll(mockStudentEntityList) } returns mockStudentEntityList
+        every { studentRoleEntityRepository.deleteAll(mockStudentRoleEntityList) } returns Unit
 
         societyService.removeSocietyMemberRole(mockAuthRepository.testSocietyName, studentIdList)
 
-        verify(exactly = 1) { studentRepository.saveAll(mockStudentEntityList) }
+        verify(exactly = 1) { studentRoleEntityRepository.deleteAll(mockStudentRoleEntityList) }
     }
 
     @Test
