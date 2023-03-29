@@ -123,6 +123,7 @@ export class EventUpdateComponent implements OnInit {
       description: [event.description, [Validators.required]],
       fee: [event.fee, [Validators.required]],
     });
+    console.log(this.updateEventForm);
   }
 
   updateEvent(): void {
