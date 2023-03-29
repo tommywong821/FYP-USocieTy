@@ -95,7 +95,8 @@ export class EventComponent implements OnInit {
     this.refreshEvents$
       .pipe(
         tap(() => (this.messages[EventAction.Fetch] = this.message.loading('Fetching events...'))),
-        switchMap(() => this.ApiService.getEvents(this.pageIndex, this.pageSize)),
+        switchMap(() => this.AuthService.user$),
+        switchMap(user => this.ApiService.getEvents(user!.uuid, this.pageIndex, this.pageSize)),
         tap(() => this.message.remove(this.messages[EventAction.Fetch]!.messageId)),
         tap(event => (this.events = ([] as Event[]).concat(event))),
         catchError((err: HttpErrorResponse) => of(err)),
