@@ -4,7 +4,7 @@ spring:
     username: ${JDBC_DATABASE_USERNAME}
     password: ${JDBC_DATABASE_PASSWORD}
     hikari:
-      maximum-pool-size: 3
+      maximum-pool-size: ${JDBC_DATABASE_POOL}
   jpa:
     generate-ddl: true
 
