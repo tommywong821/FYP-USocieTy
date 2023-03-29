@@ -1,5 +1,7 @@
 package ngok3.fyp.backend.operation.event
 
+import ngok3.fyp.backend.operation.attendance.AttendanceEntity
+import ngok3.fyp.backend.operation.attendance.model.StudentAttendanceDto
 import ngok3.fyp.backend.operation.enrolled.EnrolledStatus
 import ngok3.fyp.backend.operation.enrolled.event_record.EnrolledEventRecordEntity
 import ngok3.fyp.backend.operation.enrolled.event_record.EnrolledEventRecordKey
@@ -187,5 +189,26 @@ class EventService(
             .map { eventEntity: EventEntity ->
                 EventDto().createFromEntity(eventEntity, s3BucketDomain)
             }
+    }
+
+    fun getAttAttendanceOfEvent(
+        jwtToken: String,
+        eventId: String,
+        pageNum: Int,
+        pageSize: Int
+    ): List<StudentAttendanceDto> {
+        val eventEntity: EventEntity = eventRepository.findById(UUID.fromString(eventId)).orElseThrow {
+            Exception("Event: $eventId is not exist")
+        }
+
+        jwtUtil.verifyUserMemberRoleOfSociety(jwtToken, eventEntity.societyEntity.name)
+
+        return eventEntity.attendanceEntities.map { attendanceEntity: AttendanceEntity ->
+            StudentAttendanceDto(
+                studentItsc = attendanceEntity.studentEntity?.itsc,
+                studentName = attendanceEntity.studentEntity?.nickname,
+                attendanceCreatedAt = dateUtil.convertLocalDateTimeToStringWithTime(attendanceEntity.createdAt)
+            )
+        }
     }
 }

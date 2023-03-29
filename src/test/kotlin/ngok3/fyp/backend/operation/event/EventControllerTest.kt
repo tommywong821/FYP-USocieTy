@@ -3,6 +3,7 @@ package ngok3.fyp.backend.operation.event
 import com.ninjasquad.springmockk.MockkBean
 import io.mockk.every
 import ngok3.fyp.backend.controller.authentication.model.MockAuthRepository
+import ngok3.fyp.backend.operation.attendance.model.StudentAttendanceDto
 import ngok3.fyp.backend.operation.event.dto.EventDto
 import ngok3.fyp.backend.operation.student.MockStudentRepository
 import ngok3.fyp.backend.util.DateUtil
@@ -18,6 +19,7 @@ import org.springframework.test.web.servlet.delete
 import org.springframework.test.web.servlet.get
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
+import java.time.LocalDateTime
 import java.util.*
 import javax.servlet.http.Cookie
 
@@ -252,6 +254,53 @@ class EventControllerTest @Autowired constructor(
             }
             jsonPath("$.society") {
                 value(eventDto.society)
+            }
+        }
+    }
+
+    @Test
+    fun `should get all attendance of event with event id`() {
+        val uuid: String = UUID.randomUUID().toString()
+        val attendanceDtoList: List<StudentAttendanceDto> = listOf(
+            StudentAttendanceDto(
+                studentName = "123",
+                studentItsc = "itsc1",
+                attendanceCreatedAt = dateUtil.convertLocalDateTimeToStringWithTime(LocalDateTime.now())
+            ),
+            StudentAttendanceDto(
+                studentName = "234",
+                studentItsc = "itsc2",
+                attendanceCreatedAt = dateUtil.convertLocalDateTimeToStringWithTime(LocalDateTime.now().plusDays(1))
+            ),
+
+            )
+
+        every {
+            eventService.getAttAttendanceOfEvent(
+                mockAuthRepository.validUserCookieToken,
+                uuid,
+                0,
+                10
+            )
+        } returns attendanceDtoList
+
+        mockMvc.get("/event/{eventId}/attendance", uuid) {
+            headers {
+                contentType = MediaType.APPLICATION_JSON
+                cookie(Cookie("token", mockAuthRepository.validUserCookieToken))
+            }
+            pathInfo
+        }.andDo { print() }.andExpect {
+            status { isOk() }
+            content { contentType(MediaType.APPLICATION_JSON) }
+            jsonPath("$[*].studentItsc") {
+                value(attendanceDtoList.map { studentAttendanceDto: StudentAttendanceDto -> studentAttendanceDto.studentItsc })
+            }
+            jsonPath("$[*].studentName") {
+                value(attendanceDtoList.map { studentAttendanceDto: StudentAttendanceDto -> studentAttendanceDto.studentName })
+            }
+            jsonPath("$[*].attendanceCreatedAt") {
+                value(attendanceDtoList.map { studentAttendanceDto: StudentAttendanceDto -> studentAttendanceDto.attendanceCreatedAt })
             }
         }
     }
