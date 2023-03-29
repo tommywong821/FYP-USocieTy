@@ -7,6 +7,8 @@ import ngok3.fyp.backend.authentication.role.Role
 import ngok3.fyp.backend.authentication.student_role.StudentRoleEntity
 import ngok3.fyp.backend.authentication.student_role.StudentRoleEntityRepository
 import ngok3.fyp.backend.controller.authentication.model.MockAuthRepository
+import ngok3.fyp.backend.operation.attendance.AttendanceEntity
+import ngok3.fyp.backend.operation.attendance.model.StudentAttendanceDto
 import ngok3.fyp.backend.operation.enrolled.event_record.EnrolledEventRecordRepository
 import ngok3.fyp.backend.operation.enrolled.society_record.EnrolledSocietyRecordRepository
 import ngok3.fyp.backend.operation.event.dto.EventDto
@@ -14,6 +16,7 @@ import ngok3.fyp.backend.operation.s3.S3BulkResponseEntity
 import ngok3.fyp.backend.operation.s3.S3Service
 import ngok3.fyp.backend.operation.society.SocietyEntity
 import ngok3.fyp.backend.operation.society.SocietyRepository
+import ngok3.fyp.backend.operation.student.StudentEntity
 import ngok3.fyp.backend.operation.student.StudentRepository
 import ngok3.fyp.backend.util.DateUtil
 import ngok3.fyp.backend.util.JWTUtil
@@ -204,5 +207,59 @@ class EventServiceTest {
         assertEquals(mockEventEntity.name, eventDto.name)
         assertEquals(mockEventEntity.societyEntity.name, eventDto.society)
         assertEquals(mockEventEntity.poster, eventDto.poster)
+    }
+
+    @Test
+    fun getAttAttendanceOfEvent() {
+        val uuid: String = UUID.randomUUID().toString()
+
+        val attendanceDtoList: List<StudentAttendanceDto> = listOf(
+            StudentAttendanceDto(
+                studentName = "123",
+                studentItsc = "itsc1",
+                attendanceCreatedAt = dateUtil.convertLocalDateTimeToStringWithTime(LocalDateTime.now())
+            ),
+            StudentAttendanceDto(
+                studentName = "234",
+                studentItsc = "itsc2",
+                attendanceCreatedAt = dateUtil.convertLocalDateTimeToStringWithTime(LocalDateTime.now().plusDays(1))
+            ),
+
+            )
+
+        every {
+            studentRoleEntityRepository.findByStudentItscAndSocietyNameAndRole(
+                mockAuthRepository.validUserItsc,
+                mockAuthRepository.testSocietyName,
+                Role.ROLE_SOCIETY_MEMBER
+            )
+        } returns Optional.of(StudentRoleEntity())
+
+        val currentDate: LocalDateTime = LocalDateTime.now()
+
+        val societyEntity: SocietyEntity = SocietyEntity()
+        societyEntity.name = mockAuthRepository.testSocietyName
+
+        val studentEntity: StudentEntity = StudentEntity()
+        studentEntity.itsc = "itsc"
+        studentEntity.nickname = "nickname"
+
+        val attendanceEntity: AttendanceEntity = AttendanceEntity()
+        attendanceEntity.studentEntity = studentEntity
+        attendanceEntity.createdAt = currentDate
+
+        val eventEntity: EventEntity = EventEntity()
+        eventEntity.attendanceEntities.add(attendanceEntity)
+        eventEntity.societyEntity = societyEntity
+
+        every { eventRepository.findById(UUID.fromString(uuid)) } returns Optional.of(eventEntity)
+
+        val result: List<StudentAttendanceDto> =
+            eventService.getAttAttendanceOfEvent(mockAuthRepository.validUserCookieToken, uuid, 0, 10)
+
+        assertEquals("itsc", result[0].studentItsc)
+        assertEquals("nickname", result[0].studentName)
+        assertEquals(dateUtil.convertLocalDateTimeToStringWithTime(currentDate), result[0].attendanceCreatedAt)
+
     }
 }

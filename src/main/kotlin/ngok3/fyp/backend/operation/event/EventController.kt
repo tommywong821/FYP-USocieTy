@@ -1,6 +1,7 @@
 package ngok3.fyp.backend.operation.event
 
 import io.swagger.v3.oas.annotations.Operation
+import ngok3.fyp.backend.operation.attendance.model.StudentAttendanceDto
 import ngok3.fyp.backend.operation.event.dto.EventDto
 import ngok3.fyp.backend.operation.event.dto.JoinEventDto
 import org.springframework.http.HttpStatus
@@ -79,5 +80,16 @@ class EventController(
         @RequestParam("pageSize", required = false, defaultValue = "10") pageSize: Int
     ): List<EventDto> {
         return eventService.getEventWithSocietyName(jwtToken, societyName, pageNum, pageSize)
+    }
+
+    @Operation(summary = "get event with society name")
+    @GetMapping("/{eventId}/attendance")
+    fun getAttAttendanceOfEvent(
+        @CookieValue("token") jwtToken: String,
+        @PathVariable eventId: String,
+        @RequestParam("pageNum", required = false, defaultValue = "0") pageNum: Int,
+        @RequestParam("pageSize", required = false, defaultValue = "10") pageSize: Int
+    ): List<StudentAttendanceDto> {
+        return eventService.getAttAttendanceOfEvent(jwtToken, eventId, pageNum, pageSize)
     }
 }
