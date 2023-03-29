@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ApiService } from 'src/app/services/api.service';
+import {filter, ReplaySubject, Subject, switchMap, tap} from 'rxjs';
 
 @Component({
   selector: 'app-society-view',
@@ -8,34 +9,39 @@ import { ApiService } from 'src/app/services/api.service';
   styleUrls: ['./society-view.component.scss']
 })
 export class SocietyViewComponent implements OnInit {
+  
   constructor(private apiService: ApiService,private route: ActivatedRoute) { }
   societyMemberlist: any;
   enrolledSocietiesList:any;
   societyName: string|null="";
-  societyNameList:any;
+
+
+  refreshSocietyMember$ = new Subject();
+  refreshEnrolledSocietyMember$ = new Subject();
+  
   ngOnInit(): void {
     this.societyName=this.route.snapshot.queryParamMap.get('societyName');
-    console.log("societyName");
-    console.log(this.societyName);
-    this.getSocietyMember();
-    this.getenrolledSocietyMember();
+
+    this.refreshSocietyMember$.pipe(
+      switchMap(() => this.apiService.getAllSocietyMember(this.societyName)),
+    ).subscribe((response)=>{
+      this.societyMemberlist=response;
+      console.log("Society Member List:");
+      console.log(this.societyMemberlist); 
+      });
+
+      this.refreshEnrolledSocietyMember$.pipe(
+        switchMap(() => this.apiService.getenrolledSocietyRecord(this.societyName)),
+      ).subscribe((response)=>{
+        this.enrolledSocietiesList=response;
+        console.log("enrolledSocietiesList:");
+        console.log(this.enrolledSocietiesList); 
+        });
+
+    this.refreshSocietyMember$.next({});
+    this.refreshEnrolledSocietyMember$.next({});
   }
   
-  getSocietyMember():void{
-    this.apiService.getAllSocietyMember(this.societyName).subscribe((response)=>{
-    this.societyMemberlist=response;
-    console.log("Society Member List:");
-    console.log(this.societyMemberlist); 
-    });
-  }
-
-  getenrolledSocietyMember():void{
-    this.apiService.getenrolledSocietyRecord(this.societyName).subscribe((response)=>{
-    this.enrolledSocietiesList=response;
-    console.log("enrolledSocietiesList:");
-    console.log(this.enrolledSocietiesList); 
-    });
-  }
   deleteSocietyMember(studentId:string|null):void{
     let temp=studentId?.toString();
     this.apiService.deleteSocietyMember(this.societyName,[temp!]);
@@ -52,6 +58,12 @@ export class SocietyViewComponent implements OnInit {
   approveSocietyRequest(societyId:string|null,studentId:string|null):void{
     this.apiService.updateEnrolledSocietyRecord(societyId,studentId,"SUCCESS");
     console.log("Click the Approve button");
+    setTimeout(() => {
+      this.refreshEnrolledSocietyMember$.next({});
+    }, 500);
+    setTimeout(() => {
+      this.refreshSocietyMember$.next({});
+    }, 500);
   }
   isSocietyMember(roleList:string[]|null):boolean{
     let temp=this.societyName?.toString();
@@ -61,5 +73,17 @@ export class SocietyViewComponent implements OnInit {
     }
     else 
     return false
+  }
+  approveAllSocietyRequest():void{
+    for(let i=0;i<this.enrolledSocietiesList.length;i++){
+    this.apiService.updateEnrolledSocietyRecord(this.enrolledSocietiesList[i].societyId,this.enrolledSocietiesList[i].studentId,"SUCCESS");
+  }
+    console.log("Click the Approve button");
+    setTimeout(() => {
+      this.refreshEnrolledSocietyMember$.next({});
+    }, 2000);
+    setTimeout(() => {
+      this.refreshSocietyMember$.next({});
+    }, 2000);
   }
 }
