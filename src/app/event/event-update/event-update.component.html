@@ -2,6 +2,7 @@
   <div class="m-5">
     <form
       nz-form
+      *ngIf="updateEventForm"
       [formGroup]="updateEventForm"
       (ngSubmit)="updateEvent()"
     >
@@ -34,7 +35,7 @@
                 nz-input
                 required
                 type="text"
-                [formControlName]="UpdateEventFormFields.Name"
+                [formControlName]="'name'"
               />
             </nz-form-control>
           </div>
@@ -53,7 +54,7 @@
                 nz-input
                 required
                 type="text"
-                [formControlName]="UpdateEventFormFields.Location"
+                [formControlName]="'location'"
               />
             </nz-form-control>
           </div>
