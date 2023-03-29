@@ -12,9 +12,6 @@ open class AttendanceEntity {
     @EmbeddedId
     open var attendanceKey: AttendanceKey? = null
 
-    @Column(name = "is_show")
-    open var isShow: Boolean? = null
-
     open var updatedAt: LocalDateTime? = null
     open var createdAt: LocalDateTime? = null
 
