@@ -74,14 +74,13 @@ export class EventCreateComponent implements OnInit {
         switchMap(event => this.ApiService.createEvent(event, this.pictureFile!, this.createEventForm.value.society)),
         tap(() => this.message.remove(this.loadingMessage?.messageId)),
         tap(() => this.message.success('Successfully created event', {nzDuration: 2000})),
-        tap(() => this.router.navigate([Path.Main, Path.Event])),
-        catchError((err: HttpErrorResponse) => of(err)),
-        tap(err => console.error(err)),
-        tap(() => {
-          this.message.error('Unable to create events', {nzDuration: 2000});
-        })
+        tap(() => this.router.navigate([Path.Main, Path.Event]))
       )
-      .subscribe();
+      .subscribe({
+        error: err => {
+          this.message.error('Unable to create events', {nzDuration: 2000});
+        },
+      });
   }
 
   ngOnDestroy(): void {

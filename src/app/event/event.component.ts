@@ -98,15 +98,14 @@ export class EventComponent implements OnInit {
         switchMap(() => this.AuthService.user$),
         switchMap(user => this.ApiService.getEvents(user!.uuid, this.pageIndex, this.pageSize)),
         tap(() => this.message.remove(this.messages[EventAction.Fetch]!.messageId)),
-        tap(event => (this.events = ([] as Event[]).concat(event))),
-        catchError((err: HttpErrorResponse) => of(err)),
-        tap(err => console.error(err)),
-        tap(() => {
-          this.message.remove(this.messages[EventAction.Fetch]?.messageId);
-          this.message.error('Unable to fetch events', {nzDuration: 2000});
-        })
+        tap(event => (this.events = ([] as Event[]).concat(event)))
       )
-      .subscribe();
+      .subscribe({
+        error: err => {
+          this.message.error('Unable to fetch events', {nzDuration: 2000});
+          this.message.remove(this.messages[EventAction.Fetch]?.messageId);
+        },
+      });
 
     this.deleteEvent$
       .pipe(

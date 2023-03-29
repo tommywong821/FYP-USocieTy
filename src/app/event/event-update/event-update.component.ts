@@ -80,14 +80,13 @@ export class EventUpdateComponent implements OnInit {
           ),
           tap(event => console.log(event)),
           tap(event => this.loadDataToUpdateEventForm(event)),
-          tap(() => this.message.remove(this.loadingMessage?.messageId)),
-          catchError((err: HttpErrorResponse) => of(err)),
-          tap(err => console.error(err)),
-          tap(() => {
-            this.message.error('Unable to fetch event details', {nzDuration: 2000});
-          })
+          tap(() => this.message.remove(this.loadingMessage?.messageId))
         )
-        .subscribe();
+        .subscribe({
+          error: err => {
+            this.message.error('Unable to fetch event details', {nzDuration: 2000});
+          },
+        });
 
       this.AuthService.user$.pipe(filter(user => !!user)).subscribe(user => (this.roles = [...user!.roles]));
 

@@ -68,15 +68,14 @@ export class EventViewComponent implements OnInit {
         tap(event => (this.event = event)),
         switchMap(event => this.ApiService.getEventEnrollmentRecordCount(event.id!)),
         tap(recordCount => (this.recordTotal = recordCount)),
-        tap(() => this.message.remove(this.messages[EventAction.Fetch]!.messageId)),
-        catchError((err: HttpErrorResponse) => of(err)),
-        tap(err => console.error(err)),
-        tap(() => {
+        tap(() => this.message.remove(this.messages[EventAction.Fetch]!.messageId))
+      )
+      .subscribe({
+        error: err => {
           this.message.remove(this.messages[EventAction.Fetch]?.messageId);
           this.message.error('Unable to fetch event enrollment records', {nzDuration: 2000});
-        })
-      )
-      .subscribe();
+        },
+      });
 
     this.updateEnrollmentRecord$
       .pipe(
@@ -84,15 +83,14 @@ export class EventViewComponent implements OnInit {
         switchMap(records => this.ApiService.updateEventEnrollmentRecords(this.eventId, records)),
         tap(() => this.message.remove(this.messages[EventAction.Update]!.messageId)),
         tap(() => this.message.success('Successfully updated event enrollment records')),
-        tap(() => this.refreshEnrollmentRecords$.next({})),
-        catchError((err: HttpErrorResponse) => of(err)),
-        tap(err => console.error(err)),
-        tap(() => {
+        tap(() => this.refreshEnrollmentRecords$.next({}))
+      )
+      .subscribe({
+        error: err => {
           this.message.remove(this.messages[EventAction.Fetch]?.messageId);
           this.message.error('Unable to update event enrollment records', {nzDuration: 2000});
-        })
-      )
-      .subscribe();
+        },
+      });
 
     this.refreshEnrollmentRecords$
       .pipe(
