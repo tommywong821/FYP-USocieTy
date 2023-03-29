@@ -31,6 +31,7 @@ jobs:
         echo "spring.datasource.url=jdbc:h2:mem:test;DB_CLOSE_DELAY=-1" >> application.properties
         echo "spring.datasource.username=test" >> application.properties
         echo "spring.datasource.password=Test1234" >> application.properties
+        echo "spring.datasource.hikari.maximum-pool-size=10" >> application.properties
         echo "heroku.frontend.url=heroku.frontend.url" >> application.properties
         echo "cors.originPatterns=cors.originPatterns" >> application.properties
         echo "cookie.lifetime=7" >> application.properties
