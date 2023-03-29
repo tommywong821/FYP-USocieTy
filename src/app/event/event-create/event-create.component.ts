@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {NzMessageRef, NzMessageService} from 'ng-zorro-antd/message';
 import {NzUploadChangeParam} from 'ng-zorro-antd/upload';
-import {filter, Subject, switchMap, tap} from 'rxjs';
+import {catchError, filter, of, Subject, switchMap, tap} from 'rxjs';
 import {Path} from 'src/app/app-routing.module';
 import {EventCategory} from 'src/app/model/event';
 import {AuthService} from 'src/app/services/auth.service';
@@ -10,6 +10,7 @@ import {convertFormDataToEvent} from 'src/util/event.util';
 import {Event} from '../../model/event';
 import {ApiService} from './../../services/api.service';
 import {Router} from '@angular/router';
+import {HttpErrorResponse} from '@angular/common/http';
 
 export enum CreateEventFormFields {
   Name = 'name',
@@ -71,10 +72,14 @@ export class EventCreateComponent implements OnInit {
     this.event$
       .pipe(
         switchMap(event => this.ApiService.createEvent(event, this.pictureFile!, this.createEventForm.value.society)),
-        // tap(() => (this.isProcessing = false)),
         tap(() => this.message.remove(this.loadingMessage?.messageId)),
         tap(() => this.message.success('Successfully created event', {nzDuration: 2000})),
-        tap(() => this.router.navigate([Path.Main, Path.Event]))
+        tap(() => this.router.navigate([Path.Main, Path.Event])),
+        catchError((err: HttpErrorResponse) => of(err)),
+        tap(err => console.error(err)),
+        tap(() => {
+          this.message.error('Unable to create events', {nzDuration: 2000});
+        })
       )
       .subscribe();
   }

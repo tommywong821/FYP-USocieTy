@@ -4,12 +4,13 @@ import {Component, OnInit} from '@angular/core';
 import {FormGroup, FormBuilder, Validators} from '@angular/forms';
 import {NzMessageRef, NzMessageService} from 'ng-zorro-antd/message';
 import {NzUploadChangeParam, NzUploadFile} from 'ng-zorro-antd/upload';
-import {Subject, filter, tap, switchMap, first} from 'rxjs';
+import {Subject, filter, tap, switchMap, first, catchError, of} from 'rxjs';
 import {EventCategory} from 'src/app/model/event';
 import {convertFormDataToEvent, getPictureNameFromUrl} from 'src/util/event.util';
 import {Event} from '../../model/event';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Path} from 'src/app/app-routing.module';
+import {HttpErrorResponse} from '@angular/common/http';
 
 export enum UpdateEventFormFields {
   Name = 'name',
@@ -78,22 +79,28 @@ export class EventUpdateComponent implements OnInit {
               ])
           ),
           tap(event => console.log(event)),
-          tap(() => this.message.remove(this.loadingMessage?.messageId))
+          tap(
+            event =>
+              (this.updateEventForm = this.formBuilder.group({
+                name: [event.name, [Validators.required]],
+                location: [event.location, [Validators.required]],
+                society: [event.society, [Validators.required]],
+                maxParticipation: [event.maxParticipation, [Validators.required]],
+                applyDeadline: [event.applyDeadline, [Validators.required]],
+                date: [[event.startDate, event.endDate], [Validators.required]],
+                category: [event.category, [Validators.required]],
+                description: [event.description, [Validators.required]],
+                fee: [event.fee, [Validators.required]],
+              }))
+          ),
+          tap(() => this.message.remove(this.loadingMessage?.messageId)),
+          catchError((err: HttpErrorResponse) => of(err)),
+          tap(err => console.error(err)),
+          tap(() => {
+            this.message.error('Unable to fetch event details', {nzDuration: 2000});
+          })
         )
-        .subscribe(
-          event =>
-            (this.updateEventForm = this.formBuilder.group({
-              name: [event.name, [Validators.required]],
-              location: [event.location, [Validators.required]],
-              society: [event.society, [Validators.required]],
-              maxParticipation: [event.maxParticipation, [Validators.required]],
-              applyDeadline: [event.applyDeadline, [Validators.required]],
-              date: [[event.startDate, event.endDate], [Validators.required]],
-              category: [event.category, [Validators.required]],
-              description: [event.description, [Validators.required]],
-              fee: [event.fee, [Validators.required]],
-            }))
-        );
+        .subscribe();
 
       this.AuthService.user$.pipe(filter(user => !!user)).subscribe(user => (this.roles = [...user!.roles]));
 
@@ -101,10 +108,14 @@ export class EventUpdateComponent implements OnInit {
         .pipe(
           tap(() => (this.loadingMessage = this.message.loading('Updating event...'))),
           switchMap(event => this.ApiService.updateEvent(event, this.updateEventForm.value.society, this.pictureFile)),
-          // tap(() => (this.isProcessing = false)),
           tap(() => this.message.remove(this.loadingMessage?.messageId)),
           tap(() => this.message.success('Successfully created event', {nzDuration: 2000})),
-          tap(() => this.backToEventViewPage())
+          tap(() => this.backToEventViewPage()),
+          catchError((err: HttpErrorResponse) => of(err)),
+          tap(err => console.error(err)),
+          tap(() => {
+            this.message.error('Unable to update event details', {nzDuration: 2000});
+          })
         )
         .subscribe();
     }

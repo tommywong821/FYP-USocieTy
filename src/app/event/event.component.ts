@@ -1,12 +1,13 @@
 import {EventAction, EventProperty} from './../model/event';
 import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
-import {filter, ReplaySubject, Subject, switchMap, tap} from 'rxjs';
+import {catchError, filter, of, ReplaySubject, Subject, switchMap, tap} from 'rxjs';
 import {AuthService} from 'src/app/services/auth.service';
 import {Path} from '../app-routing.module';
 import {ApiService} from '../services/api.service';
 import {Event} from '../model/event';
 import {NzMessageRef, NzMessageService} from 'ng-zorro-antd/message';
+import {HttpErrorResponse} from '@angular/common/http';
 
 export const EventTableColumn = [
   {
@@ -95,9 +96,16 @@ export class EventComponent implements OnInit {
       .pipe(
         tap(() => (this.messages[EventAction.Fetch] = this.message.loading('Fetching events...'))),
         switchMap(() => this.ApiService.getEvents(this.pageIndex, this.pageSize)),
-        tap(() => this.message.remove(this.messages[EventAction.Fetch]!.messageId))
+        tap(() => this.message.remove(this.messages[EventAction.Fetch]!.messageId)),
+        tap(event => (this.events = ([] as Event[]).concat(event))),
+        catchError((err: HttpErrorResponse) => of(err)),
+        tap(err => console.error(err)),
+        tap(() => {
+          this.message.remove(this.messages[EventAction.Fetch]?.messageId);
+          this.message.error('Unable to fetch events', {nzDuration: 2000});
+        })
       )
-      .subscribe(event => (this.events = ([] as Event[]).concat(event)));
+      .subscribe();
 
     this.deleteEvent$
       .pipe(

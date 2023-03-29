@@ -2,7 +2,7 @@ import {EventAction} from './../../model/event';
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {NzMessageRef, NzMessageService} from 'ng-zorro-antd/message';
-import {first, map, Subject, switchMap, tap} from 'rxjs';
+import {catchError, first, map, of, Subject, switchMap, tap} from 'rxjs';
 import {Path} from 'src/app/app-routing.module';
 import {
   EventEnrollmentRecord,
@@ -13,6 +13,7 @@ import {
 } from 'src/app/model/event';
 import {ApiService} from 'src/app/services/api.service';
 import {Event} from '../../model/event';
+import {HttpErrorResponse} from '@angular/common/http';
 
 export type EnrollmentStatus = Partial<EventEnrollmentRecord>;
 
@@ -67,7 +68,13 @@ export class EventViewComponent implements OnInit {
         tap(event => (this.event = event)),
         switchMap(event => this.ApiService.getEventEnrollmentRecordCount(event.id!)),
         tap(recordCount => (this.recordTotal = recordCount)),
-        tap(() => this.message.remove(this.messages[EventAction.Fetch]!.messageId))
+        tap(() => this.message.remove(this.messages[EventAction.Fetch]!.messageId)),
+        catchError((err: HttpErrorResponse) => of(err)),
+        tap(err => console.error(err)),
+        tap(() => {
+          this.message.remove(this.messages[EventAction.Fetch]?.messageId);
+          this.message.error('Unable to fetch event enrollment records', {nzDuration: 2000});
+        })
       )
       .subscribe();
 
@@ -76,7 +83,13 @@ export class EventViewComponent implements OnInit {
         tap(() => (this.messages[EventAction.Update] = this.message.loading('Updating event enrollment records...'))),
         switchMap(records => this.ApiService.updateEventEnrollmentRecords(this.eventId, records)),
         tap(() => this.message.remove(this.messages[EventAction.Update]!.messageId)),
-        tap(() => this.message.success('Successfully updated event enrollment records'))
+        tap(() => this.message.success('Successfully updated event enrollment records')),
+        catchError((err: HttpErrorResponse) => of(err)),
+        tap(err => console.error(err)),
+        tap(() => {
+          this.message.remove(this.messages[EventAction.Fetch]?.messageId);
+          this.message.error('Unable to update event enrollment records', {nzDuration: 2000});
+        })
       )
       .subscribe();
 
