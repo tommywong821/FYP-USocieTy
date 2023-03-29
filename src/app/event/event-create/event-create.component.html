@@ -202,9 +202,9 @@
             <label class="mb-2 block text-sm font-medium text-gray-700">Cover Picture</label>
             <div>
               <nz-upload
-                [nzAction]="''"
+                [(nzFileList)]="fileList"
                 nzType="drag"
-                [nzLimit]="1"
+                [nzMultiple]="false"
                 (nzChange)="saveFileBuffer($event)"
               >
                 <p class="ant-upload-drag-icon">

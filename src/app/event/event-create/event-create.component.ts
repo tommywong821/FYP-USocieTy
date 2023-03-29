@@ -1,8 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {NzMessageRef, NzMessageService} from 'ng-zorro-antd/message';
-import {NzUploadChangeParam} from 'ng-zorro-antd/upload';
-import {catchError, filter, of, Subject, switchMap, tap} from 'rxjs';
+import {NzUploadChangeParam, NzUploadFile} from 'ng-zorro-antd/upload';
+import {filter, Subject, switchMap, tap} from 'rxjs';
 import {Path} from 'src/app/app-routing.module';
 import {EventCategory} from 'src/app/model/event';
 import {AuthService} from 'src/app/services/auth.service';
@@ -10,7 +10,6 @@ import {convertFormDataToEvent} from 'src/util/event.util';
 import {Event} from '../../model/event';
 import {ApiService} from './../../services/api.service';
 import {Router} from '@angular/router';
-import {HttpErrorResponse} from '@angular/common/http';
 
 export enum CreateEventFormFields {
   Name = 'name',
@@ -37,6 +36,7 @@ export class EventCreateComponent implements OnInit {
 
   createEventForm!: FormGroup;
   pictureFile: File | undefined;
+  fileList: NzUploadFile[] = [];
 
   loadingMessage: NzMessageRef | null = null;
 
@@ -105,6 +105,10 @@ export class EventCreateComponent implements OnInit {
   }
 
   saveFileBuffer({file}: NzUploadChangeParam): void {
+    if (this.fileList.length > 1) {
+      this.fileList = [this.fileList[1]];
+    }
+    this.fileList[0] = {...this.fileList[0], status: 'done'};
     this.pictureFile = file.originFileObj;
   }
 
