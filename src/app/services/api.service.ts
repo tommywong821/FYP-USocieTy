@@ -189,59 +189,56 @@ export class ApiService {
     return this.restful.put<void>(`${environment.backend_url}/enrolledEventRecord`, records);
   }
 
-
-
   //Society
-  getAllSociety(
-    pageNum = 0,
-    pageSize = 100,
-  ): Observable<any> {
+  getSocietywithMemberRole(pageNum = 0, pageSize = 100): Observable<any> {
     return this.restful.get<any>(
-      `${environment.backend_url}/society?pageNum=${pageNum}&pageSize=${pageSize}`
+      `${environment.backend_url}/society/withMemberRole?pageNum=${pageNum}&pageSize=${pageSize}`
     );
   }
 
-  
-  getAllSocietyMember(societyName:string|null): Observable<any> {
-    return this.restful.get<any>(
-      `${environment.backend_url}/society/member?societyName=${societyName}`
+  getAllSocietyMember(societyName: string | null): Observable<any> {
+    return this.restful.get<any>(`${environment.backend_url}/society/member?societyName=${societyName}`);
+  }
+  getenrolledSocietyRecord(societyName: string | null): Observable<any> {
+    return this.restful.get<any>(`${environment.backend_url}/enrolledSocietyRecord?societyName=${societyName}`);
+  }
+
+  deleteSocietyMember(societyName: string | null, studentId: string[] | null): Observable<void> {
+    return this.restful.delete<void>(
+      `${environment.backend_url}/society/member?societyName=${societyName}&studentId=${studentId}`
     );
   }
-  getenrolledSocietyRecord(societyName:string|null): Observable<any> {
-    return this.restful.get<any>(
-      `${environment.backend_url}/enrolledSocietyRecord?societyName=${societyName}`
-    );
-  }
 
-  deleteSocietyMember(societyName:string|null,studentId:string|null): void {
-    this.restful.delete(`${environment.backend_url}/society/member?societyName=${societyName}&id=${studentId}s`).subscribe((res) => {
-      console.log(res);
-    });
-  }
-
-
-  setAsSocietyMember(societyName: string|null,studentIdList: string[]|null): void {
+  setAsSocietyMember(societyName: string | null, studentIdList: string[] | null): Observable<void> {
     const body = {
       societyName,
       studentIdList,
     };
-    this.restful.post(`${environment.backend_url}/society/member`,body).subscribe((res) => {
-      console.log(res);
-    },(error)=>{
-      alert("Error");
-    });
+    return this.restful.post<void>(`${environment.backend_url}/society/member`, body);
   }
 
-  updateEnrolledSocietyRecord(societyId: string|null,studentId: string|null, status: string): void {
+  updateEnrolledSocietyRecord(societyId: string | null, studentId: string | null, status: string): Observable<void> {
     const body = {
       societyId,
       studentId,
       status,
     };
-    this.restful.put(`${environment.backend_url}/enrolledSocietyRecord`, body).subscribe((res) => {
-      console.log(res);
-    },(error)=>{
-      alert(error.message);
-    });
+    return this.restful.put<void>(`${environment.backend_url}/enrolledSocietyRecord`, body);
+  }
+
+  updateALLEnrolledSocietyRecord(societyId: string | null, studentId: string | null, status: string): void {
+    const body = {
+      societyId,
+      studentId,
+      status,
+    };
+    this.restful.put(`${environment.backend_url}/enrolledSocietyRecord`, body).subscribe(
+      res => {
+        console.log(res);
+      },
+      error => {
+        alert(error.message);
+      }
+    );
   }
 }

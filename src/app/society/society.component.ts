@@ -15,7 +15,7 @@ export class SocietyComponent implements OnInit {
     this.getSociety();
   }
   getSociety():void{
-    this.apiService.getAllSociety().subscribe((response)=>{
+    this.apiService.getSocietywithMemberRole().subscribe((response)=>{
     this.societyList=response;
     console.log("Society List:");
     console.log(this.societyList);

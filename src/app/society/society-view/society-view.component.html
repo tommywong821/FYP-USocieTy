@@ -18,7 +18,7 @@
        NAME
       </th>
       <th>
-       ROLES
+        Administrative Rights
       </th>
       <th>
       ACTION
@@ -31,25 +31,26 @@ class="cursor-pointer"
 *ngFor="let data of societyMemberTable.data">
   <td>{{data.itsc}}</td>
   <td>{{data.nickname}}</td>
-  <td>{{data.roles}}</td>
+  <td *ngIf="isSocietyMember(data.roles); else elseBlock ">True</td>
+  <ng-template #elseBlock><td></td></ng-template>
+
   <td>         
-  <button  *ngIf="data.roles=='Society Member' "
+  <button  *ngIf="isSocietyMember(data.roles)"
   nz-button
   nzType="primary"
-  class="bg-green-500"
+  nzDanger
   (click)="deleteSocietyMember(data.uuid)"
   >
-  Delete Society Member
+  Remove Administrative Rights
 </button>
 
- <button
+ <button 
       nz-button
-      nzDanger
       nzType="primary"
-      *ngIf="data.roles=='' "
+      *ngIf="!isSocietyMember(data.roles)"
       (click)="setAsSocietyMember(data.uuid)"
       >
-      Set as Society Member
+      Asign Administrative Rights
     </button></td>
 </tr>
 </tbody>
@@ -63,6 +64,13 @@ class="cursor-pointer"
   <div class="flex bg-white">
     <h1 class="text-xl">Enroll Society Request</h1>
   </div>
+    <button  
+  nz-button
+  nzType="primary"
+  (click)="approveAllSocietyRequest()"
+  >
+  Approve ALL Request
+</button>
 </div>
 <div>
 <nz-table 
