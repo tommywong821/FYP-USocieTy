@@ -84,6 +84,7 @@ export class EventViewComponent implements OnInit {
         switchMap(records => this.ApiService.updateEventEnrollmentRecords(this.eventId, records)),
         tap(() => this.message.remove(this.messages[EventAction.Update]!.messageId)),
         tap(() => this.message.success('Successfully updated event enrollment records')),
+        tap(() => this.refreshEnrollmentRecords$.next({})),
         catchError((err: HttpErrorResponse) => of(err)),
         tap(err => console.error(err)),
         tap(() => {
@@ -138,9 +139,6 @@ export class EventViewComponent implements OnInit {
       enrolledStatus: val.enrolledStatus!,
     }));
     this.updateEnrollmentRecord$.next(records);
-    setTimeout(() => {
-      this.refreshEnrollmentRecords$.next({});
-    }, 2000);
     this.toBeUpdatedEnrollmentRecords = {};
   }
 

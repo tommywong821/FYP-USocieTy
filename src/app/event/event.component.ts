@@ -113,7 +113,8 @@ export class EventComponent implements OnInit {
         tap(() => (this.messages![EventAction.Delete] = this.message.loading('Deleting event...'))),
         switchMap(eventId => this.ApiService.deleteEvent(eventId)),
         tap(() => this.message.remove(this.messages[EventAction.Delete]!.messageId)),
-        tap(() => this.message.success('Successfully deleted event'))
+        tap(() => this.message.success('Successfully deleted event')),
+        tap(() => this.refreshEvents$.next({}))
       )
       .subscribe();
 
@@ -140,9 +141,6 @@ export class EventComponent implements OnInit {
   confirmEventDeletion(): void {
     this.showModal = false;
     this.deleteEvent$.next({});
-    setTimeout(() => {
-      this.refreshEvents$.next({});
-    }, 2000);
   }
 
   cancelEventDeletion(): void {
