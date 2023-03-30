@@ -7,7 +7,9 @@ import ngok3.fyp.backend.authentication.role.Role
 import ngok3.fyp.backend.authentication.student_role.StudentRoleEntity
 import ngok3.fyp.backend.authentication.student_role.StudentRoleEntityRepository
 import ngok3.fyp.backend.controller.authentication.model.MockAuthRepository
+import ngok3.fyp.backend.operation.TotalCountDto
 import ngok3.fyp.backend.operation.attendance.AttendanceEntity
+import ngok3.fyp.backend.operation.attendance.AttendanceEntityRepository
 import ngok3.fyp.backend.operation.attendance.model.StudentAttendanceDto
 import ngok3.fyp.backend.operation.enrolled.event_record.EnrolledEventRecordRepository
 import ngok3.fyp.backend.operation.enrolled.society_record.EnrolledSocietyRecordRepository
@@ -23,6 +25,7 @@ import ngok3.fyp.backend.util.JWTUtil
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertIterableEquals
 import org.junit.jupiter.api.Test
+import org.springframework.data.domain.PageRequest
 import org.springframework.mock.web.MockMultipartFile
 import java.io.InputStream
 import java.time.LocalDateTime
@@ -34,12 +37,14 @@ class EventServiceTest {
     private val mockEventRepository: MockEventRepository = MockEventRepository()
     private val mockAuthRepository: MockAuthRepository = MockAuthRepository()
 
-    private val eventRepository: EventRepository = mockk()
+    private val eventRepository: EventEntityRepository = mockk()
     private val studentRepository: StudentRepository = mockk()
     private val societyRecordRepository: SocietyRepository = mockk()
     private val enrolledEventRecordRepository: EnrolledEventRecordRepository = mockk()
     private val enrolledSocietyRecordRepository: EnrolledSocietyRecordRepository = mockk()
     private val studentRoleEntityRepository: StudentRoleEntityRepository = mockk()
+    private val attendanceEntityRepository: AttendanceEntityRepository = mockk()
+
     private val jwtUtil: JWTUtil = JWTUtil(studentRoleEntityRepository = studentRoleEntityRepository)
     private val dateUtil: DateUtil = DateUtil()
     private val s3Service: S3Service = mockk()
@@ -51,7 +56,8 @@ class EventServiceTest {
             enrolledEventRecordRepository,
             jwtUtil,
             dateUtil,
-            s3Service
+            s3Service,
+            attendanceEntityRepository
         )
 
     @Test
@@ -211,8 +217,6 @@ class EventServiceTest {
 
     @Test
     fun getAttAttendanceOfEvent() {
-        val uuid: String = UUID.randomUUID().toString()
-
         val attendanceDtoList: List<StudentAttendanceDto> = listOf(
             StudentAttendanceDto(
                 studentName = "123",
@@ -252,14 +256,54 @@ class EventServiceTest {
         eventEntity.attendanceEntities.add(attendanceEntity)
         eventEntity.societyEntity = societyEntity
 
-        every { eventRepository.findById(UUID.fromString(uuid)) } returns Optional.of(eventEntity)
+        every { eventRepository.findById(eventEntity.uuid) } returns Optional.of(eventEntity)
+
+        every {
+            attendanceEntityRepository.findByAttendanceKey_EventUuid(
+                eventEntity.uuid,
+                PageRequest.of(0, 10)
+            )
+        } returns listOf(attendanceEntity)
 
         val result: List<StudentAttendanceDto> =
-            eventService.getAttAttendanceOfEvent(mockAuthRepository.validUserCookieToken, uuid, 0, 10)
+            eventService.getAllAttendanceOfEvent(
+                mockAuthRepository.validUserCookieToken,
+                eventEntity.uuid.toString(),
+                0,
+                10
+            )
 
         assertEquals("itsc", result[0].studentItsc)
         assertEquals("nickname", result[0].studentName)
         assertEquals(dateUtil.convertLocalDateTimeToStringWithTime(currentDate), result[0].attendanceCreatedAt)
 
+    }
+
+    @Test
+    fun getTotalNumberOfAllAttendanceOfEvent() {
+        val societyEntity: SocietyEntity = SocietyEntity()
+        societyEntity.name = mockAuthRepository.testSocietyName
+
+        val eventEntity: EventEntity = EventEntity()
+        eventEntity.societyEntity = societyEntity
+
+        every { eventRepository.findById(eventEntity.uuid) } returns Optional.of(eventEntity)
+
+        every {
+            studentRoleEntityRepository.findByStudentItscAndSocietyNameAndRole(
+                mockAuthRepository.validUserItsc,
+                mockAuthRepository.testSocietyName,
+                Role.ROLE_SOCIETY_MEMBER
+            )
+        } returns Optional.of(StudentRoleEntity())
+
+        every { attendanceEntityRepository.countByAttendanceKey_EventUuid(eventUuid = eventEntity.uuid) } returns 13
+
+        val result: TotalCountDto = eventService.getTotalNumberOfAllAttendanceOfEvent(
+            mockAuthRepository.validUserCookieToken,
+            eventEntity.uuid.toString()
+        )
+
+        assertEquals(13, result.totalNumber)
     }
 }

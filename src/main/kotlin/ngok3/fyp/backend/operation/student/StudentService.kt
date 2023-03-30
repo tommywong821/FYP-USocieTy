@@ -4,7 +4,7 @@ import ngok3.fyp.backend.authentication.student_role.StudentRoleEntity
 import ngok3.fyp.backend.operation.TotalCountDto
 import ngok3.fyp.backend.operation.enrolled.society_record.EnrolledSocietyRecordEntity
 import ngok3.fyp.backend.operation.event.EventEntity
-import ngok3.fyp.backend.operation.event.EventRepository
+import ngok3.fyp.backend.operation.event.EventEntityRepository
 import ngok3.fyp.backend.operation.event.dto.EventDto
 import ngok3.fyp.backend.util.DateUtil
 import ngok3.fyp.backend.util.JWTUtil
@@ -16,7 +16,7 @@ import java.util.*
 @Service
 class StudentService(
     private val studentRepository: StudentRepository,
-    private val jwtUtil: JWTUtil, private val eventRepository: EventRepository,
+    private val jwtUtil: JWTUtil, private val eventRepository: EventEntityRepository,
     private val dateUtil: DateUtil
 ) {
     @Value("\${aws.bucket.domain}")

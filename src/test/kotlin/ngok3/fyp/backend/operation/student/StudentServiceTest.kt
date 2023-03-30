@@ -6,7 +6,7 @@ import ngok3.fyp.backend.authentication.student_role.StudentRoleEntity
 import ngok3.fyp.backend.authentication.student_role.StudentRoleEntityRepository
 import ngok3.fyp.backend.operation.enrolled.EnrolledStatus
 import ngok3.fyp.backend.operation.enrolled.society_record.EnrolledSocietyRecordEntity
-import ngok3.fyp.backend.operation.event.EventRepository
+import ngok3.fyp.backend.operation.event.EventEntityRepository
 import ngok3.fyp.backend.operation.society.SocietyEntity
 import ngok3.fyp.backend.util.DateUtil
 import ngok3.fyp.backend.util.JWTUtil
@@ -18,7 +18,7 @@ import java.util.*
 class StudentServiceTest() {
     private val mockStudentRepository: MockStudentRepository = MockStudentRepository()
     private val studentRepository: StudentRepository = mockk()
-    private val eventRepository: EventRepository = mockk()
+    private val eventRepository: EventEntityRepository = mockk()
     private val studentRoleEntityRepository: StudentRoleEntityRepository = mockk()
 
     private val jwtUtil: JWTUtil = JWTUtil(studentRoleEntityRepository = studentRoleEntityRepository)
