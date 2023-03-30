@@ -27,6 +27,7 @@ import {EventViewComponent} from './event/event-view/event-view.component';
 import {SocietyComponent} from './society/society.component';
 import {SocietyViewComponent} from './society/society-view/society-view.component';
 import {EventEnrollmentRecordTableComponent} from './event/event-view/event-enrollment-record-table/event-enrollment-record-table.component';
+import { EventAttendanceRecordTableComponent } from './event/event-view/event-attendance-record-table/event-attendance-record-table.component';
 
 registerLocaleData(en);
 
@@ -47,6 +48,7 @@ registerLocaleData(en);
     SocietyComponent,
     SocietyViewComponent,
     EventEnrollmentRecordTableComponent,
+    EventAttendanceRecordTableComponent,
   ],
   imports: [
     BrowserModule,

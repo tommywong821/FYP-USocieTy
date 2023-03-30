@@ -1,0 +1,37 @@
+<div>
+  <div class="mb-2">
+    <h1 class="mb-4 mr-4 text-xl">Event Attendance Record</h1>
+  </div>
+  <nz-table
+    #attendanceTable
+    [nzTotal]="recordTotal"
+    [nzPageSize]="pageSize"
+    [nzPageIndex]="pageIndex"
+    (nzPageIndexChange)="changePageIndex()"
+    [nzData]="attendanceRecords"
+  >
+    <thead>
+      <tr>
+        <th
+          *ngFor="let column of attendanceTableColumn"
+          [nzColumnKey]="column.title"
+        >
+          {{ column.title }}
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let attendanceRecord of attendanceTable.data">
+        <td>
+          {{ attendanceRecord.studentItsc }}
+        </td>
+        <td>
+          {{ attendanceRecord.studentName }}
+        </td>
+        <td>
+          {{ attendanceRecord.attendanceCreatedAt }}
+        </td>
+      </tr>
+    </tbody>
+  </nz-table>
+</div>

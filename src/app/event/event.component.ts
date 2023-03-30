@@ -1,13 +1,12 @@
 import {EventAction, EventProperty} from './../model/event';
 import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
-import {catchError, filter, of, ReplaySubject, Subject, switchMap, tap} from 'rxjs';
+import {filter, ReplaySubject, Subject, switchMap, tap} from 'rxjs';
 import {AuthService} from 'src/app/services/auth.service';
 import {Path} from '../app-routing.module';
 import {ApiService} from '../services/api.service';
 import {Event} from '../model/event';
 import {NzMessageRef, NzMessageService} from 'ng-zorro-antd/message';
-import {HttpErrorResponse} from '@angular/common/http';
 
 export const EventTableColumn = [
   {

@@ -189,8 +189,16 @@ export class ApiService {
     return this.restful.put<void>(`${environment.backend_url}/enrolledEventRecord`, records);
   }
 
-  getEventAttendance(eventId: string): Observable<EventAttendance> {
-    return this.restful.get<EventAttendance>(`${environment.backend_url}/event/${eventId}/attendance`);
+  getEventAttendanceRecords(eventId: string, pageIndex: number, pageSize: number): Observable<EventAttendance> {
+    const queryParams = new HttpParams().append('pageIndex', pageIndex).append('pageSize', pageSize);
+
+    return this.restful.get<EventAttendance>(`${environment.backend_url}/event/${eventId}/attendance`, {
+      params: queryParams,
+    });
+  }
+
+  getEventAttendanceRecordCount(eventId: string): Observable<number> {
+    return this.restful.get<number>(`${environment.backend_url}/event/${eventId}/attendance/totalNumber`);
   }
 
   //Society
