@@ -32,7 +32,7 @@ class StudentService(
 
 
         val enrolledSocietyList: List<String> =
-            studentEntity.studentRoleEntities.map { studentRoleEntity: StudentRoleEntity -> studentRoleEntity.societyEntity.name }
+            studentEntity.enrolledSocietyRecordEntities.map { enrolledSocietyRecordEntity: EnrolledSocietyRecordEntity -> enrolledSocietyRecordEntity.societyEntity.name }
 
         return StudentDto(studentEntity, enrolledSocietyList)
     }
