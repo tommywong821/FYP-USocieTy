@@ -26,6 +26,13 @@ class _AllSocietyScreenState extends State<AllSocietyScreen> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    page = 0;
+    indicator = true;
+  }
+
+  @override
   void dispose() {
     page = 0;
     indicator = true;

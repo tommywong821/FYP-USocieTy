@@ -67,9 +67,11 @@ class _SocietyScreenState extends State<SocietyScreen> {
             ),
             Container(
               alignment: Alignment.center,
-              child: Text(society.getName(),
-                  style: Styles.societyCarouselSliderTitle,
-                  overflow: TextOverflow.ellipsis),
+              child: Text(
+                society.getName(),
+                textAlign: TextAlign.center,
+                style: Styles.societyCarouselSliderTitle,
+              ),
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
@@ -94,7 +96,6 @@ class _SocietyScreenState extends State<SocietyScreen> {
                   return const SizedBox(height: 1);
                 }),
                 itemBuilder: ((context, index) {
-                  //TODO: mapping correct events to this society
                   return HorizontalEventCardWidget(
                     event: holdedEvent[index],
                   );
@@ -149,7 +150,7 @@ class _SocietyScreenState extends State<SocietyScreen> {
                           type: QuickAlertType.error,
                           title: "ERROR",
                           confirmBtnText:
-                              "Please contact society for assistance",
+                              "Please contact society \n        for assistance",
                           confirmBtnColor: Styles.primaryColor);
                     }
                   },

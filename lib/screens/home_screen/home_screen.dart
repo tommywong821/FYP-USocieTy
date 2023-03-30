@@ -1,4 +1,4 @@
-import 'package:badges/badges.dart';
+import 'package:ngok3fyp_frontend_flutter/model/profile_screen_arguments.dart';
 import 'package:flutter/material.dart';
 import 'package:ngok3fyp_frontend_flutter/model/enrolled_event/enrolled_event.dart';
 import 'package:ngok3fyp_frontend_flutter/model/enrolled_society.dart';
@@ -30,6 +30,7 @@ class _HomeScreenState extends State<HomeScreen> {
   late List<EnrolledEvent> enrolledEventList;
   late Future<List<EnrolledSociety>> enrolledSocietyFuture;
   late List<EnrolledSociety> enrolledSocietyList;
+  List<String> enrolledSuccessSociety = [];
 
   int _selectedIndex = 0;
 
@@ -51,6 +52,16 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> initEnrolledSociety() async {
     enrolledSocietyFuture = ApiService().getAllEnrolledSociety();
     enrolledSocietyList = await enrolledSocietyFuture;
+  }
+
+  List<String> getEnrolledSuccessSociety(
+      List<EnrolledSociety> enrolledSocietyList) {
+    List<String> enrolledSuccessSociety = [];
+    for (EnrolledSociety society in enrolledSocietyList) {
+      if (society.enrolledStatus == "SUCCESS")
+        enrolledSuccessSociety.add(society.societyName);
+    }
+    return enrolledSuccessSociety;
   }
 
   void _onItemTapped(int index) {
@@ -81,6 +92,8 @@ class _HomeScreenState extends State<HomeScreen> {
             ]),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
+                enrolledSuccessSociety =
+                    getEnrolledSuccessSociety(enrolledSocietyList);
                 List<Widget> _pages = <Widget>[
                   HomeWidget(eventList: eventList, societyList: societyList),
                   CalendarWidget(
@@ -90,7 +103,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     enrolledEvent: enrolledEventList,
                     enrolledSociety: enrolledSocietyList,
                   ),
-                  ProfileScreen(),
+                  ProfileScreen(
+                    enrolledSociety: enrolledSuccessSociety,
+                  ),
                 ];
                 return RefreshIndicator(
                   color: Styles.primaryColor,
@@ -99,6 +114,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     initSociety();
                     initEnrolledEvent();
                     initEnrolledSociety();
+                    enrolledSuccessSociety =
+                        getEnrolledSuccessSociety(enrolledSocietyList);
                     setState(() {});
                   },
                   child: IndexedStack(

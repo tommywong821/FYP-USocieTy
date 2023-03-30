@@ -138,7 +138,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
 
     // fetch user profile from backend
     // get itsc from AAD
-    final String itsc = aadProfile.itsc;
+    String itsc = aadProfile.itsc;
     final Student student = await ApiService().getStudentProfile(itsc);
     await _storageService.writeSecureData(ITSC_KEY, itsc);
 
@@ -147,6 +147,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
       fullname = aadProfile.name;
       nickname = student.nickname;
       email = student.mail;
+      itsc = aadProfile.itsc;
       enrolledSocieties = student.enrolledSocieties;
     });
 

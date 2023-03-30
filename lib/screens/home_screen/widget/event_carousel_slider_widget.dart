@@ -131,9 +131,8 @@ Widget regularCarousel(List<Event> event) {
 }
 
 Widget reducedCarousel(List<Event> event) {
-  final DateFormat dateFormatter = DateFormat('E , MMM d · ');
-  final DateFormat parseDateFormatter = DateFormat('M/dd/y');
-  final time = '13:30 - 15:00';
+  final DateFormat dateFormatter = DateFormat('E , MMM d · H:mm');
+  final DateFormat defaultDateFormat = DateFormat("M/d/y H:m");
   return Column(
     children: [
       CarouselSlider(
@@ -180,13 +179,8 @@ Widget reducedCarousel(List<Event> event) {
                             padding: const EdgeInsets.only(top: 10, left: 10),
                             child: Container(
                               child: Text(
-                                dateFormatter
-                                        .format(DateTime.parse(
-                                            parseDateFormatter
-                                                .parse(i.startDate)
-                                                .toString()))
-                                        .toString() +
-                                    time,
+                                dateFormatter.format(
+                                    defaultDateFormat.parse(i.startDate)),
                                 style: Styles.carouselSliderDate,
                               ),
                               alignment: Alignment.centerLeft,

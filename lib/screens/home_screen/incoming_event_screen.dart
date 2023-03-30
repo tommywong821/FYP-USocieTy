@@ -24,6 +24,13 @@ class _IncomingEvnetScreenState extends State<IncomingEvnetScreen> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    page = 0;
+    indicator = true;
+  }
+
+  @override
   void dispose() {
     page = 0;
     indicator = true;

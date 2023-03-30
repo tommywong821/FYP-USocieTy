@@ -126,28 +126,24 @@ class _EventScreenState extends State<EventScreen> {
                                     ),
                                     backgroundColor: Styles.primaryColor,
                                   ),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      //Society name
-                                      Padding(
-                                        padding: const EdgeInsets.only(
-                                          left: 15,
+                                  Flexible(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        //Society name
+                                        Padding(
+                                          padding: const EdgeInsets.only(
+                                            left: 15,
+                                          ),
+                                          child: Text(
+                                            eventSociety,
+                                            style: Styles.eventScreenBlackText,
+                                          ),
                                         ),
-                                        child: Text(eventSociety,
-                                            style: Styles.eventScreenBlackText),
-                                      ),
-                                      //Society events count
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(left: 15),
-                                        child: Text(
-                                          "TO BE FIXED Upcoming Events",
-                                          style: Styles.eventScreenGreyText,
-                                        ),
-                                      ),
-                                    ],
+                                        //Society events count
+                                      ],
+                                    ),
                                   )
                                 ],
                               ),
@@ -284,7 +280,7 @@ class _EventScreenState extends State<EventScreen> {
                               children: [
                                 Padding(
                                   padding: const EdgeInsets.only(
-                                    left: 15,
+                                    left: 20,
                                   ),
                                   child: Text("Apply Deadline",
                                       style: Styles.eventScreenBlackText),

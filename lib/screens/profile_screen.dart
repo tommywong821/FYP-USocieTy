@@ -5,9 +5,9 @@ import '../services/storage_service.dart';
 import '../model/styles.dart';
 
 class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({
-    Key? key,
-  }) : super(key: key);
+  final List<String> enrolledSociety;
+  const ProfileScreen({Key? key, required this.enrolledSociety})
+      : super(key: key);
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
@@ -139,7 +139,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         SizedBox(width: 20),
                         Expanded(
                             child: Text(
-                                "Joined Society: ${args.enrolledSocieties}",
+                                "Joined Society: ${widget.enrolledSociety}",
                                 style: TextStyle(color: Styles.primaryColor))),
                       ]),
                     )),
