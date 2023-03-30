@@ -1,4 +1,3 @@
-import 'package:ngok3fyp_frontend_flutter/model/profile_screen_arguments.dart';
 import 'package:flutter/material.dart';
 import 'package:ngok3fyp_frontend_flutter/model/enrolled_event/enrolled_event.dart';
 import 'package:ngok3fyp_frontend_flutter/model/enrolled_society.dart';

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:ngok3fyp_frontend_flutter/model/society.dart';
 import 'package:ngok3fyp_frontend_flutter/model/styles.dart';
 import 'package:ngok3fyp_frontend_flutter/model/event.dart';
 import 'package:intl/intl.dart';
@@ -26,9 +25,18 @@ class _EventCarouselSliderWidgetState extends State<EventCarouselSliderWidget> {
   }
 }
 
+DateTime getLocalTime(String date) {
+  final DateFormat defaultDateFormat = DateFormat("M/d/y H:m");
+  //-8 due to default date is in HK time zone
+  DateTime utcTime = defaultDateFormat.parse(date).add(Duration(hours: -8));
+  //utc time add local time offset to local time
+  DateTime localTime =
+      utcTime.add(Duration(hours: DateTime.now().timeZoneOffset.inHours));
+  return localTime;
+}
+
 Widget regularCarousel(List<Event> event) {
   final DateFormat dateFormatter = DateFormat('E , MMM d · H:mm');
-  final DateFormat defaultDateFormat = DateFormat("M/d/y H:m");
   return Column(
     children: [
       CarouselSlider(
@@ -67,8 +75,7 @@ Widget regularCarousel(List<Event> event) {
                             padding: const EdgeInsets.only(left: 15),
                             child: Container(
                               child: Text(
-                                dateFormatter.format(
-                                    defaultDateFormat.parse(i.startDate)),
+                                dateFormatter.format(getLocalTime(i.startDate)),
                                 style: Styles.carouselSliderDate,
                               ),
                               alignment: Alignment.centerLeft,
@@ -132,7 +139,6 @@ Widget regularCarousel(List<Event> event) {
 
 Widget reducedCarousel(List<Event> event) {
   final DateFormat dateFormatter = DateFormat('E , MMM d · H:mm');
-  final DateFormat defaultDateFormat = DateFormat("M/d/y H:m");
   return Column(
     children: [
       CarouselSlider(
@@ -179,8 +185,7 @@ Widget reducedCarousel(List<Event> event) {
                             padding: const EdgeInsets.only(top: 10, left: 10),
                             child: Container(
                               child: Text(
-                                dateFormatter.format(
-                                    defaultDateFormat.parse(i.startDate)),
+                                dateFormatter.format(getLocalTime(i.startDate)),
                                 style: Styles.carouselSliderDate,
                               ),
                               alignment: Alignment.centerLeft,
