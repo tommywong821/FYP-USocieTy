@@ -143,6 +143,10 @@ export class EventUpdateComponent implements OnInit {
   }
 
   saveFileBuffer({file}: NzUploadChangeParam): void {
+    if (this.fileList.length > 1) {
+      this.fileList = this.fileList.slice(-1);
+    }
+    this.fileList[0] = {...this.fileList[0], status: 'done'};
     this.pictureFile = file.originFileObj;
   }
 
