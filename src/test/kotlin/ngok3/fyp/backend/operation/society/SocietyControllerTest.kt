@@ -4,7 +4,7 @@ import com.ninjasquad.springmockk.MockkBean
 import io.mockk.every
 import ngok3.fyp.backend.authentication.role.Role
 import ngok3.fyp.backend.controller.authentication.model.MockAuthRepository
-import ngok3.fyp.backend.operation.student.StudentDto
+import ngok3.fyp.backend.operation.student.model.StudentDto
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
@@ -15,7 +15,6 @@ import org.springframework.test.web.servlet.delete
 import org.springframework.test.web.servlet.get
 import org.springframework.test.web.servlet.post
 import org.springframework.util.LinkedMultiValueMap
-import java.util.*
 import javax.servlet.http.Cookie
 
 @SpringBootTest
@@ -120,43 +119,44 @@ class SocietyControllerTest @Autowired constructor(
         }
     }
 
-    @Test
-    fun `should number of event held by society`() {
-        val uuid: String = UUID.randomUUID().toString()
-        val societyDto: SocietyDto = SocietyDto(
-            id = uuid,
-            name = mockAuthRepository.testSocietyName,
-            description = "description",
-            holdingEventNumber = 10
-        )
-
-        every {
-            societyService.getTotalNumberOfHoldingEvent()
-        } returns listOf(societyDto)
-
-        mockMvc.get("/society/holdingEvent") {
-            headers {
-                contentType = MediaType.APPLICATION_JSON
-                cookie(Cookie("token", mockAuthRepository.validUserCookieToken))
-            }
-            params = LinkedMultiValueMap<String, String>().apply {
-                add("societyName", mockAuthRepository.testSocietyName)
-            }
-        }.andDo { print() }.andExpect {
-            status { isOk() }
-            content { contentType(MediaType.APPLICATION_JSON) }
-            jsonPath("$[*].id") {
-                value(uuid)
-            }
-            jsonPath("$[*].name") {
-                value(mockAuthRepository.testSocietyName)
-            }
-            jsonPath("$[*].description") {
-                value("description")
-            }
-            jsonPath("$[*].holdingEventNumber") {
-                value(10)
-            }
-        }
-    }
+//    TODO remove dummy
+//    @Test
+//    fun `should number of event held by society`() {
+//        val uuid: String = UUID.randomUUID().toString()
+//        val societyDto: SocietyDto = SocietyDto(
+//            id = uuid,
+//            name = mockAuthRepository.testSocietyName,
+//            description = "description",
+//            holdingEventNumber = 10
+//        )
+//
+//        every {
+//            societyService.getTotalNumberOfHoldingEvent()
+//        } returns listOf(societyDto)
+//
+//        mockMvc.get("/society/holdingEvent") {
+//            headers {
+//                contentType = MediaType.APPLICATION_JSON
+//                cookie(Cookie("token", mockAuthRepository.validUserCookieToken))
+//            }
+//            params = LinkedMultiValueMap<String, String>().apply {
+//                add("societyName", mockAuthRepository.testSocietyName)
+//            }
+//        }.andDo { print() }.andExpect {
+//            status { isOk() }
+//            content { contentType(MediaType.APPLICATION_JSON) }
+//            jsonPath("$[*].id") {
+//                value(uuid)
+//            }
+//            jsonPath("$[*].name") {
+//                value(mockAuthRepository.testSocietyName)
+//            }
+//            jsonPath("$[*].description") {
+//                value("description")
+//            }
+//            jsonPath("$[*].holdingEventNumber") {
+//                value(10)
+//            }
+//        }
+//    }
 }

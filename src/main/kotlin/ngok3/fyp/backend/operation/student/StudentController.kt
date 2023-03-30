@@ -3,6 +3,8 @@ package ngok3.fyp.backend.operation.student
 import io.swagger.v3.oas.annotations.Operation
 import ngok3.fyp.backend.operation.TotalCountDto
 import ngok3.fyp.backend.operation.event.dto.EventDto
+import ngok3.fyp.backend.operation.student.model.StudentDto
+import ngok3.fyp.backend.operation.student.model.StudentEnrolledSocietyStatusDto
 import org.springframework.web.bind.annotation.*
 
 @RestController

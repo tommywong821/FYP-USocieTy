@@ -16,7 +16,7 @@ import java.util.*
 
 @Service
 class EnrolledEventRecordService(
-    private val enrolledEventRecordRepository: EnrolledEventRecordRepository,
+    private val enrolledEventRecordRepository: EnrolledEventRecordEntityRepository,
     private val eventRepository: EventEntityRepository,
     private val jwtUtil: JWTUtil,
     private val dateUtil: DateUtil

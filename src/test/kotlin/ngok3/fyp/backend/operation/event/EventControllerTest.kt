@@ -5,6 +5,7 @@ import io.mockk.every
 import ngok3.fyp.backend.controller.authentication.model.MockAuthRepository
 import ngok3.fyp.backend.operation.TotalCountDto
 import ngok3.fyp.backend.operation.attendance.model.StudentAttendanceDto
+import ngok3.fyp.backend.operation.event.dto.EventCategory
 import ngok3.fyp.backend.operation.event.dto.EventDto
 import ngok3.fyp.backend.operation.student.MockStudentRepository
 import ngok3.fyp.backend.util.DateUtil

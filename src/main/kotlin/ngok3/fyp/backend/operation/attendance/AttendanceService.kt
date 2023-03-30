@@ -3,12 +3,12 @@ package ngok3.fyp.backend.operation.attendance
 import ngok3.fyp.backend.authentication.student_role.StudentRoleEntityRepository
 import ngok3.fyp.backend.operation.attendance.model.StudentAttendanceDto
 import ngok3.fyp.backend.operation.enrolled.EnrolledStatus
+import ngok3.fyp.backend.operation.enrolled.event_record.EnrolledEventRecordEntityRepository
 import ngok3.fyp.backend.operation.enrolled.event_record.EnrolledEventRecordKey
-import ngok3.fyp.backend.operation.enrolled.event_record.EnrolledEventRecordRepository
 import ngok3.fyp.backend.operation.event.EventEntity
 import ngok3.fyp.backend.operation.event.EventEntityRepository
 import ngok3.fyp.backend.operation.student.StudentEntity
-import ngok3.fyp.backend.operation.student.StudentRepository
+import ngok3.fyp.backend.operation.student.StudentEntityRepository
 import ngok3.fyp.backend.util.DateUtil
 import org.springframework.dao.DuplicateKeyException
 import org.springframework.stereotype.Service
@@ -16,8 +16,8 @@ import java.util.*
 
 @Service
 class AttendanceService(
-    private val enrolledEventRecordRepository: EnrolledEventRecordRepository,
-    private val studentRepository: StudentRepository,
+    private val enrolledEventRecordRepository: EnrolledEventRecordEntityRepository,
+    private val studentRepository: StudentEntityRepository,
     private val eventRepository: EventEntityRepository,
     private val attendanceRepository: AttendanceEntityRepository,
     private val studentRoleEntityRepository: StudentRoleEntityRepository,

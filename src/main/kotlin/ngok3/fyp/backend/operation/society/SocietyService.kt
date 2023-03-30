@@ -7,24 +7,24 @@ import ngok3.fyp.backend.authentication.student_role.StudentRoleEntity
 import ngok3.fyp.backend.authentication.student_role.StudentRoleEntityRepository
 import ngok3.fyp.backend.operation.enrolled.EnrolledStatus
 import ngok3.fyp.backend.operation.enrolled.society_record.EnrolledSocietyRecordEntity
+import ngok3.fyp.backend.operation.enrolled.society_record.EnrolledSocietyRecordEntityRepository
 import ngok3.fyp.backend.operation.enrolled.society_record.EnrolledSocietyRecordKey
-import ngok3.fyp.backend.operation.enrolled.society_record.EnrolledSocietyRecordRepository
-import ngok3.fyp.backend.operation.student.StudentDto
+import ngok3.fyp.backend.operation.society.model.SocietyDto
 import ngok3.fyp.backend.operation.student.StudentEntity
-import ngok3.fyp.backend.operation.student.StudentRepository
+import ngok3.fyp.backend.operation.student.StudentEntityRepository
+import ngok3.fyp.backend.operation.student.model.StudentDto
 import ngok3.fyp.backend.util.JWTUtil
 import org.springframework.dao.DuplicateKeyException
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
-import java.time.LocalDateTime
 import java.util.*
 
 @Service
 class SocietyService(
-    private val societyRepository: SocietyRepository,
-    private val studentRepository: StudentRepository,
-    private val enrolledSocietyRecordRepository: EnrolledSocietyRecordRepository,
+    private val societyRepository: SocietyEntityRepository,
+    private val studentRepository: StudentEntityRepository,
+    private val enrolledSocietyRecordRepository: EnrolledSocietyRecordEntityRepository,
     private val roleEntityRepository: RoleEntityRepository,
     private val studentRoleEntityRepository: StudentRoleEntityRepository,
     private val jwtUtil: JWTUtil
@@ -127,7 +127,8 @@ class SocietyService(
         }
     }
 
-    fun getTotalNumberOfHoldingEvent(): List<SocietyDto> {
-        return societyRepository.countBySocietyNameAndApplyDeadline(LocalDateTime.now())
-    }
+//    TODO dummy remove
+//    fun getTotalNumberOfHoldingEvent(): List<SocietyDto> {
+//        return societyRepository.findHoldingEventNumberOfSociety(LocalDateTime.now())
+//    }
 }

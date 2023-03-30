@@ -6,6 +6,8 @@ import ngok3.fyp.backend.operation.enrolled.society_record.EnrolledSocietyRecord
 import ngok3.fyp.backend.operation.event.EventEntity
 import ngok3.fyp.backend.operation.event.EventEntityRepository
 import ngok3.fyp.backend.operation.event.dto.EventDto
+import ngok3.fyp.backend.operation.student.model.StudentDto
+import ngok3.fyp.backend.operation.student.model.StudentEnrolledSocietyStatusDto
 import ngok3.fyp.backend.util.DateUtil
 import ngok3.fyp.backend.util.JWTUtil
 import org.springframework.beans.factory.annotation.Value
@@ -15,7 +17,7 @@ import java.util.*
 
 @Service
 class StudentService(
-    private val studentRepository: StudentRepository,
+    private val studentRepository: StudentEntityRepository,
     private val jwtUtil: JWTUtil, private val eventRepository: EventEntityRepository,
     private val dateUtil: DateUtil
 ) {

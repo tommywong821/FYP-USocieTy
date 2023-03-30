@@ -6,16 +6,16 @@ import ngok3.fyp.backend.operation.attendance.AttendanceEntityRepository
 import ngok3.fyp.backend.operation.attendance.model.StudentAttendanceDto
 import ngok3.fyp.backend.operation.enrolled.EnrolledStatus
 import ngok3.fyp.backend.operation.enrolled.event_record.EnrolledEventRecordEntity
+import ngok3.fyp.backend.operation.enrolled.event_record.EnrolledEventRecordEntityRepository
 import ngok3.fyp.backend.operation.enrolled.event_record.EnrolledEventRecordKey
-import ngok3.fyp.backend.operation.enrolled.event_record.EnrolledEventRecordRepository
 import ngok3.fyp.backend.operation.enrolled.event_record.PaymentStatus
 import ngok3.fyp.backend.operation.event.dto.EventDto
 import ngok3.fyp.backend.operation.s3.S3BulkResponseEntity
 import ngok3.fyp.backend.operation.s3.S3Service
 import ngok3.fyp.backend.operation.society.SocietyEntity
-import ngok3.fyp.backend.operation.society.SocietyRepository
+import ngok3.fyp.backend.operation.society.SocietyEntityRepository
 import ngok3.fyp.backend.operation.student.StudentEntity
-import ngok3.fyp.backend.operation.student.StudentRepository
+import ngok3.fyp.backend.operation.student.StudentEntityRepository
 import ngok3.fyp.backend.util.DateUtil
 import ngok3.fyp.backend.util.JWTUtil
 import ngok3.fyp.backend.util.exception.model.FlutterException
@@ -33,10 +33,10 @@ import javax.persistence.OptimisticLockException
 
 @Service
 class EventService(
-    private val eventRepository: EventEntityRepository,
-    private val studentRepository: StudentRepository,
-    private val societyRepository: SocietyRepository,
-    private val enrolledEventRecordRepository: EnrolledEventRecordRepository,
+    private val eventEntityRepository: EventEntityRepository,
+    private val studentRepository: StudentEntityRepository,
+    private val societyRepository: SocietyEntityRepository,
+    private val enrolledEventRecordRepository: EnrolledEventRecordEntityRepository,
     private val jwtUtil: JWTUtil,
     private val dateUtil: DateUtil,
     private val s3Service: S3Service, private val attendanceEntityRepository: AttendanceEntityRepository,
@@ -49,13 +49,30 @@ class EventService(
         val firstPageNumWithPageSizeElement: Pageable = PageRequest.of(pageNum, pageSize)
 
         //get all event
-        val allEvent: List<EventEntity> = eventRepository.findByApplyDeadlineGreaterThanEqualOrderByApplyDeadlineAsc(
-            LocalDateTime.now(ZoneId.of("Asia/Hong_Kong")), firstPageNumWithPageSizeElement
-        ).content
+        val allEvent: List<EventEntity> =
+            eventEntityRepository.findByApplyDeadlineGreaterThanEqualOrderByApplyDeadlineAsc(
+                LocalDateTime.now(ZoneId.of("Asia/Hong_Kong")), firstPageNumWithPageSizeElement
+            ).content
 
-        return allEvent.map { event ->
+//        find event holding event
+        val holdingEventNumberMap: Map<String, Long?> =
+            societyRepository.findHoldingEventNumberOfSociety(LocalDateTime.now())
+                .associateBy({ it.name }, { it.holdingEventNumber })
+
+        val eventDtoList: List<EventDto> = allEvent.map { event ->
             EventDto().createFromEntity(event, s3BucketDomain)
         }
+
+//        combine event dto and its holding event number
+        eventDtoList.forEach { eventDto: EventDto ->
+            run {
+                if (holdingEventNumberMap.containsKey(eventDto.society)) {
+                    eventDto.societyHoldingEventNumber = holdingEventNumberMap[eventDto.society]
+                }
+            }
+        }
+
+        return eventDtoList
     }
 
     fun joinEvent(itsc: String, eventId: String): Boolean {
@@ -63,7 +80,7 @@ class EventService(
             DuplicateKeyException("student with itsc:$itsc is not found")
         }
 
-        val eventEntity: EventEntity = eventRepository.findById(UUID.fromString(eventId)).orElseThrow {
+        val eventEntity: EventEntity = eventEntityRepository.findById(UUID.fromString(eventId)).orElseThrow {
             DuplicateKeyException("Event with id:$eventId is not found")
         }
 
@@ -112,7 +129,7 @@ class EventService(
         eventDto.poster = s3BulkResponseEntity[0].fileKey
         val saveEventEntity: EventEntity = eventDto.toEntity()
         saveEventEntity.societyEntity = societyEntityOpt.get()
-        eventRepository.save(saveEventEntity)
+        eventEntityRepository.save(saveEventEntity)
 
         return eventDto
     }
@@ -121,18 +138,18 @@ class EventService(
         try {
             jwtUtil.verifyUserMemberRoleOfSociety(
                 jwtToken,
-                eventRepository.findById(UUID.fromString(eventId)).get().societyEntity.name
+                eventEntityRepository.findById(UUID.fromString(eventId)).get().societyEntity.name
             )
         } catch (e: NoSuchElementException) {
             throw Exception("Event with id: $eventId is not exist")
         }
 
-        eventRepository.deleteById(UUID.fromString(eventId))
+        eventEntityRepository.deleteById(UUID.fromString(eventId))
     }
 
     fun updateEvent(jwtToken: String, eventId: String, updateEvent: EventDto, uploadFile: MultipartFile) {
 
-        val eventEntityOpt: Optional<EventEntity> = eventRepository.findById(UUID.fromString(eventId))
+        val eventEntityOpt: Optional<EventEntity> = eventEntityRepository.findById(UUID.fromString(eventId))
 
         if (eventEntityOpt.isEmpty) {
             throw Exception("Event with id: $eventId is not exist")
@@ -171,11 +188,11 @@ class EventService(
         eventEntity.fee = updateEvent.fee
         eventEntity.poster = s3BulkResponseEntity[0].fileKey
 
-        eventRepository.save(eventEntity)
+        eventEntityRepository.save(eventEntity)
     }
 
     fun getEventWithUuid(jwtToken: String, eventUuid: String): EventDto {
-        val eventEntity: EventEntity = eventRepository.findById(UUID.fromString(eventUuid)).orElseThrow {
+        val eventEntity: EventEntity = eventEntityRepository.findById(UUID.fromString(eventUuid)).orElseThrow {
             Exception("event: $eventUuid does not exist")
         }
 
@@ -187,7 +204,7 @@ class EventService(
     fun getEventWithSocietyName(jwtToken: String, societyName: String, pageNum: Int, pageSize: Int): List<EventDto> {
         jwtUtil.verifyUserMemberRoleOfSociety(jwtToken, societyName)
 
-        return eventRepository.findAllBySocietyName(societyName, PageRequest.of(pageNum, pageSize))
+        return eventEntityRepository.findAllBySocietyName(societyName, PageRequest.of(pageNum, pageSize))
             .map { eventEntity: EventEntity ->
                 EventDto().createFromEntity(eventEntity, s3BucketDomain)
             }
@@ -199,7 +216,7 @@ class EventService(
         pageNum: Int,
         pageSize: Int
     ): List<StudentAttendanceDto> {
-        val eventEntity: EventEntity = eventRepository.findById(UUID.fromString(eventId)).orElseThrow {
+        val eventEntity: EventEntity = eventEntityRepository.findById(UUID.fromString(eventId)).orElseThrow {
             Exception("Event: $eventId is not exist")
         }
 
@@ -218,7 +235,7 @@ class EventService(
     }
 
     fun getTotalNumberOfAllAttendanceOfEvent(jwtToken: String, eventUuid: String): TotalCountDto {
-        val eventEntity: EventEntity = eventRepository.findById(UUID.fromString(eventUuid)).orElseThrow {
+        val eventEntity: EventEntity = eventEntityRepository.findById(UUID.fromString(eventUuid)).orElseThrow {
             Exception("Event: $eventUuid is not exist")
         }
 

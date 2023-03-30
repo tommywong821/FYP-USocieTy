@@ -8,7 +8,12 @@ import ngok3.fyp.backend.authentication.student_role.StudentRoleEntity
 import ngok3.fyp.backend.authentication.student_role.StudentRoleEntityRepository
 import ngok3.fyp.backend.controller.authentication.model.MockAuthRepository
 import ngok3.fyp.backend.operation.enrolled.EnrolledStatus
-import ngok3.fyp.backend.operation.enrolled.society_record.*
+import ngok3.fyp.backend.operation.enrolled.society_record.EnrolledSocietyRecordEntity
+import ngok3.fyp.backend.operation.enrolled.society_record.EnrolledSocietyRecordEntityRepository
+import ngok3.fyp.backend.operation.enrolled.society_record.EnrolledSocietyRecordKey
+import ngok3.fyp.backend.operation.enrolled.society_record.EnrolledSocietyRecordService
+import ngok3.fyp.backend.operation.enrolled.society_record.model.StudentEnrolledSocietyRecordDto
+import ngok3.fyp.backend.operation.enrolled.society_record.model.UpdateEnrolledSocietyRecordDto
 import ngok3.fyp.backend.operation.student.StudentEntity
 import ngok3.fyp.backend.util.JWTUtil
 import org.junit.jupiter.api.Test
@@ -18,7 +23,7 @@ import java.util.*
 @SpringBootTest
 class EnrolledSocietyRecordServiceTest {
     private val mockAuthRepository: MockAuthRepository = MockAuthRepository()
-    private val enrolledSocietyRecordRepository: EnrolledSocietyRecordRepository = mockk()
+    private val enrolledSocietyRecordRepository: EnrolledSocietyRecordEntityRepository = mockk()
     private val studentRoleEntityRepository: StudentRoleEntityRepository = mockk()
 
     private val jwtUtil: JWTUtil = JWTUtil(studentRoleEntityRepository = studentRoleEntityRepository)

@@ -1,13 +1,15 @@
 package ngok3.fyp.backend.operation.enrolled.society_record
 
 import ngok3.fyp.backend.operation.enrolled.EnrolledStatus
+import ngok3.fyp.backend.operation.enrolled.society_record.model.StudentEnrolledSocietyRecordDto
+import ngok3.fyp.backend.operation.enrolled.society_record.model.UpdateEnrolledSocietyRecordDto
 import ngok3.fyp.backend.util.JWTUtil
 import org.springframework.stereotype.Service
 import java.util.*
 
 @Service
 class EnrolledSocietyRecordService(
-    private val enrolledSocietyRepository: EnrolledSocietyRecordRepository,
+    private val enrolledSocietyRepository: EnrolledSocietyRecordEntityRepository,
     private val jwtUtil: JWTUtil
 ) {
     fun updateEnrolledSocietyRecord(jwtToken: String, updateEnrolledSocietyRecordDto: UpdateEnrolledSocietyRecordDto) {

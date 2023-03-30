@@ -5,8 +5,8 @@ import io.mockk.every
 import ngok3.fyp.backend.controller.authentication.model.MockAuthRepository
 import ngok3.fyp.backend.operation.enrolled.EnrolledStatus
 import ngok3.fyp.backend.operation.enrolled.society_record.EnrolledSocietyRecordService
-import ngok3.fyp.backend.operation.enrolled.society_record.StudentEnrolledSocietyRecordDto
-import ngok3.fyp.backend.operation.enrolled.society_record.UpdateEnrolledSocietyRecordDto
+import ngok3.fyp.backend.operation.enrolled.society_record.model.StudentEnrolledSocietyRecordDto
+import ngok3.fyp.backend.operation.enrolled.society_record.model.UpdateEnrolledSocietyRecordDto
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc

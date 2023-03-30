@@ -3,7 +3,7 @@ package ngok3.fyp.backend.authentication
 import io.swagger.v3.oas.annotations.Operation
 import ngok3.fyp.backend.authentication.model.AADProfile
 import ngok3.fyp.backend.authentication.model.UserToken
-import ngok3.fyp.backend.operation.student.StudentDto
+import ngok3.fyp.backend.operation.student.model.StudentDto
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import javax.servlet.http.HttpServletResponse

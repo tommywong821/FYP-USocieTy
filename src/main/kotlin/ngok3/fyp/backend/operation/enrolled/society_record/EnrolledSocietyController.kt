@@ -1,6 +1,8 @@
 package ngok3.fyp.backend.operation.enrolled.society_record
 
 import io.swagger.v3.oas.annotations.Operation
+import ngok3.fyp.backend.operation.enrolled.society_record.model.StudentEnrolledSocietyRecordDto
+import ngok3.fyp.backend.operation.enrolled.society_record.model.UpdateEnrolledSocietyRecordDto
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 

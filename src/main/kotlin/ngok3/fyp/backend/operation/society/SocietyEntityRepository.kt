@@ -1,5 +1,6 @@
 package ngok3.fyp.backend.operation.society
 
+import ngok3.fyp.backend.operation.society.model.SocietyDto
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.jpa.repository.Query
@@ -7,7 +8,7 @@ import org.springframework.data.repository.PagingAndSortingRepository
 import java.time.LocalDateTime
 import java.util.*
 
-interface SocietyRepository : PagingAndSortingRepository<SocietyEntity, UUID> {
+interface SocietyEntityRepository : PagingAndSortingRepository<SocietyEntity, UUID> {
 
     fun findByOrderByNameAsc(pageable: Pageable): Page<SocietyEntity>
 
@@ -21,9 +22,9 @@ interface SocietyRepository : PagingAndSortingRepository<SocietyEntity, UUID> {
 
 
     @Query(
-        """select new ngok3.fyp.backend.operation.society.SocietyDto(cast(s.uuid as text), s.name, s.description, count(s)) from SocietyEntity s inner join s.eventRecords eventRecords
+        """select new ngok3.fyp.backend.operation.society.model.SocietyDto(cast(s.uuid as text), s.name, s.description, count(s)) from SocietyEntity s inner join s.eventRecords eventRecords
 where eventRecords.applyDeadline >= ?1 group by s.uuid"""
     )
-    fun countBySocietyNameAndApplyDeadline(applyDeadline: LocalDateTime): List<SocietyDto>
+    fun findHoldingEventNumberOfSociety(applyDeadline: LocalDateTime): List<SocietyDto>
 
 }

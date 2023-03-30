@@ -2,9 +2,9 @@ package ngok3.fyp.backend.operation.finance
 
 import ngok3.fyp.backend.operation.finance.model.*
 import ngok3.fyp.backend.operation.society.SocietyEntity
-import ngok3.fyp.backend.operation.society.SocietyRepository
+import ngok3.fyp.backend.operation.society.SocietyEntityRepository
 import ngok3.fyp.backend.operation.student.StudentEntity
-import ngok3.fyp.backend.operation.student.StudentRepository
+import ngok3.fyp.backend.operation.student.StudentEntityRepository
 import ngok3.fyp.backend.util.DateUtil
 import ngok3.fyp.backend.util.JWTUtil
 import org.apache.commons.lang3.StringUtils
@@ -15,8 +15,8 @@ import java.util.*
 class FinanceService(
     private val financeEntityRepository: FinanceEntityRepository,
     private val financeEntityDao: FinanceEntityDao,
-    private val studentRepository: StudentRepository,
-    private val societyRepository: SocietyRepository,
+    private val studentRepository: StudentEntityRepository,
+    private val societyRepository: SocietyEntityRepository,
     private val dateUtil: DateUtil,
     private val jwtUtil: JWTUtil,
 ) {
