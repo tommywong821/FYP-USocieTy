@@ -1,8 +1,9 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {NzMessageRef, NzMessageService} from 'ng-zorro-antd/message';
 import {Subject, switchMap, tap} from 'rxjs';
 import {EventAction, EventAttendance} from 'src/app/model/event';
 import {ApiService} from 'src/app/services/api.service';
+import {RecordTable} from '../event-view.component';
 
 @Component({
   selector: 'app-event-attendance-record-table',
@@ -11,6 +12,7 @@ import {ApiService} from 'src/app/services/api.service';
 })
 export class EventAttendanceRecordTableComponent implements OnInit {
   @Input() eventId!: string;
+  @Output() switchTable = new EventEmitter<RecordTable>();
 
   attendanceTableColumn = [{title: 'Itsc'}, {title: 'Name'}, {title: 'Attended At'}];
 
@@ -54,5 +56,9 @@ export class EventAttendanceRecordTableComponent implements OnInit {
 
   changePageIndex(): void {
     this.refreshAttendanceRecords$.next({});
+  }
+
+  toggleSwitchingToEnrollmentTable() {
+    this.switchTable.emit(RecordTable.Enrollment);
   }
 }

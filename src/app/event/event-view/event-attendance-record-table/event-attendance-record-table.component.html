@@ -1,6 +1,15 @@
 <div>
   <div class="mb-2">
     <h1 class="mb-4 mr-4 text-xl">Event Attendance Record</h1>
+    <button
+      nz-button
+      nzType="primary"
+      nzShape="circle"
+      nzGhost
+      (click)="toggleSwitchingToEnrollmentTable()"
+    >
+      E
+    </button>
   </div>
   <nz-table
     #attendanceTable

@@ -30,13 +30,9 @@
         <nz-descriptions-item nzTitle="Location">{{ event.location }}</nz-descriptions-item>
         <nz-descriptions-item nzTitle="Max Participates">{{ event.maxParticipation }}</nz-descriptions-item>
         <nz-descriptions-item nzTitle="Fee">{{ event.fee }}</nz-descriptions-item>
-        <nz-descriptions-item nzTitle="Application Deadline"
-          >{{ event.applyDeadline | date : 'dd/MM/yyyy hh:mm' }}
-        </nz-descriptions-item>
-        <nz-descriptions-item nzTitle="Start Date"
-          >{{ event.startDate | date : 'dd/MM/yyyy hh:mm' }}
-        </nz-descriptions-item>
-        <nz-descriptions-item nzTitle="End Date">{{ event.endDate | date : 'dd/MM/yyyy hh:mm' }}</nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Application Deadline">{{ event.applyDeadline }} </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Start Date">{{ event.startDate }} </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="End Date">{{ event.endDate }}</nz-descriptions-item>
         <nz-descriptions-item nzTitle="Description">
           {{ event.description }}
         </nz-descriptions-item>
@@ -53,9 +49,21 @@
       </div>
     </div>
     <nz-divider></nz-divider>
-    <app-event-enrollment-record-table
+    <ng-container
       *ngIf="eventId !== ''"
-      [eventId]="eventId"
-    ></app-event-enrollment-record-table>
+      [ngSwitch="recordTable"
+      ]
+    >
+      <app-event-enrollment-record-table
+        *ngSwitchCase="RecordTable.Enrollment"
+        [eventId]="eventId"
+        (switchTable)="switchRecordTable($event)"
+      ></app-event-enrollment-record-table>
+      <app-event-attendance-record-table
+        *ngSwitchCase="RecordTable.Attendance"
+        [eventId]="eventId"
+        (switchTable)="switchRecordTable($event)"
+      ></app-event-attendance-record-table>
+    </ng-container>
   </div>
 </div>

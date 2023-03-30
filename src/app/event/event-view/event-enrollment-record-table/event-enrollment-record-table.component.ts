@@ -1,4 +1,5 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {RecordTable} from './../event-view.component';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {NzMessageRef, NzMessageService} from 'ng-zorro-antd/message';
 import {Subject, tap, switchMap, map} from 'rxjs';
 import {
@@ -19,6 +20,7 @@ import {ApiService} from 'src/app/services/api.service';
 })
 export class EventEnrollmentRecordTableComponent implements OnInit {
   @Input() eventId!: string;
+  @Output() switchTable = new EventEmitter<RecordTable>();
 
   objectKeys = Object.keys;
   EventProperty = EventProperty;
@@ -114,5 +116,9 @@ export class EventEnrollmentRecordTableComponent implements OnInit {
     }));
     this.updateEnrollmentRecord$.next(records);
     this.toBeUpdatedEnrollmentRecords = {};
+  }
+
+  toggleSwitchingToAttendanceTable() {
+    this.switchTable.emit(RecordTable.Attendance);
   }
 }

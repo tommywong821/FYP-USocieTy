@@ -9,6 +9,10 @@ import {ApiService} from 'src/app/services/api.service';
 import {Event} from '../../model/event';
 
 export type EnrollmentStatus = Partial<EventEnrollmentRecord>;
+export enum RecordTable {
+  Enrollment = 'ENROLLMENT',
+  Attendance = 'ATTENDANCE',
+}
 
 @Component({
   selector: 'app-event-view',
@@ -16,8 +20,10 @@ export type EnrollmentStatus = Partial<EventEnrollmentRecord>;
   styleUrls: ['./event-view.component.scss'],
 })
 export class EventViewComponent implements OnInit {
+  RecordTable = RecordTable;
   eventId = '';
   event?: Event = undefined;
+  recordTable: RecordTable = RecordTable.Enrollment;
 
   messages: Record<EventAction, NzMessageRef | null> = {
     [EventAction.Create]: null,
@@ -57,5 +63,9 @@ export class EventViewComponent implements OnInit {
 
   backToEventPage(): void {
     this.router.navigate([Path.Main, Path.Event]);
+  }
+
+  switchRecordTable(recordTable: RecordTable): void {
+    this.recordTable = recordTable;
   }
 }

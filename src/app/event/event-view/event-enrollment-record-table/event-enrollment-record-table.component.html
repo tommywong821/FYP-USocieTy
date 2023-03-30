@@ -1,6 +1,17 @@
 <div>
   <div class="mb-2 flex">
-    <h1 class="mb-4 mr-4 text-xl">Event Enrollment Record</h1>
+    <div>
+      <h1 class="mb-4 text-xl">Event Enrollment Record</h1>
+      <button
+        nz-button
+        nzType="primary"
+        nzShape="circle"
+        nzGhost
+        (click)="toggleSwitchingToAttendanceTable()"
+      >
+        A
+      </button>
+    </div>
     <button
       class="ml-auto"
       nz-button
