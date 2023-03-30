@@ -1,5 +1,6 @@
-package ngok3.fyp.backend.operation.society
+package ngok3.fyp.backend.operation.society.model
 
+import ngok3.fyp.backend.operation.society.SocietyEntity
 import java.io.Serializable
 
 /**

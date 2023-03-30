@@ -3,7 +3,8 @@ package ngok3.fyp.backend.operation.society
 import io.swagger.v3.oas.annotations.Operation
 import ngok3.fyp.backend.operation.society.model.AssignSocietyMemberRoleDto
 import ngok3.fyp.backend.operation.society.model.JoinSocietyDto
-import ngok3.fyp.backend.operation.student.StudentDto
+import ngok3.fyp.backend.operation.society.model.SocietyDto
+import ngok3.fyp.backend.operation.student.model.StudentDto
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 
@@ -72,9 +73,10 @@ class SocietyController(
         )
     }
 
-    @Operation(summary = "get all society with total number of holding event ")
-    @GetMapping("/holdingEvent")
-    fun getAllSocieties(): List<SocietyDto> {
-        return societyService.getTotalNumberOfHoldingEvent()
-    }
+//    TODO dummy remove
+//    @Operation(summary = "get all society with total number of holding event ")
+//    @GetMapping("/holdingEvent")
+//    fun getAllSocieties(): List<SocietyDto> {
+//        return societyService.getTotalNumberOfHoldingEvent()
+//    }
 }

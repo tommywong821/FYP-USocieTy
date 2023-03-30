@@ -5,6 +5,8 @@ import io.mockk.every
 import ngok3.fyp.backend.controller.authentication.model.MockAuthRepository
 import ngok3.fyp.backend.operation.TotalCountDto
 import ngok3.fyp.backend.operation.enrolled.EnrolledStatus
+import ngok3.fyp.backend.operation.student.model.StudentDto
+import ngok3.fyp.backend.operation.student.model.StudentEnrolledSocietyStatusDto
 import ngok3.fyp.backend.util.DateUtil
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test

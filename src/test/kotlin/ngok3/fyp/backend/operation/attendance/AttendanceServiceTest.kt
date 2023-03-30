@@ -9,12 +9,12 @@ import ngok3.fyp.backend.authentication.student_role.StudentRoleEntityRepository
 import ngok3.fyp.backend.operation.attendance.model.StudentAttendanceDto
 import ngok3.fyp.backend.operation.enrolled.EnrolledStatus
 import ngok3.fyp.backend.operation.enrolled.event_record.EnrolledEventRecordEntity
+import ngok3.fyp.backend.operation.enrolled.event_record.EnrolledEventRecordEntityRepository
 import ngok3.fyp.backend.operation.enrolled.event_record.EnrolledEventRecordKey
-import ngok3.fyp.backend.operation.enrolled.event_record.EnrolledEventRecordRepository
 import ngok3.fyp.backend.operation.event.EventEntity
 import ngok3.fyp.backend.operation.event.EventEntityRepository
 import ngok3.fyp.backend.operation.student.StudentEntity
-import ngok3.fyp.backend.operation.student.StudentRepository
+import ngok3.fyp.backend.operation.student.StudentEntityRepository
 import ngok3.fyp.backend.util.DateUtil
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
@@ -25,8 +25,8 @@ import java.util.*
 @SpringBootTest
 class AttendanceServiceTest {
 
-    private val enrolledEventRecordRepository: EnrolledEventRecordRepository = mockk(relaxed = true)
-    private val studentRepository: StudentRepository = mockk(relaxed = true)
+    private val enrolledEventRecordRepository: EnrolledEventRecordEntityRepository = mockk(relaxed = true)
+    private val studentRepository: StudentEntityRepository = mockk(relaxed = true)
     private val eventRepository: EventEntityRepository = mockk(relaxed = true)
     private val attendanceRepository: AttendanceEntityRepository = mockk(relaxed = true)
     private val studentRoleEntityRepository: StudentRoleEntityRepository = mockk(relaxed = true)

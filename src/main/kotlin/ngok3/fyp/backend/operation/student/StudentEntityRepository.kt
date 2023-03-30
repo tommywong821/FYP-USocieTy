@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository
 import java.util.*
 
 @Repository
-interface StudentRepository : CrudRepository<StudentEntity, UUID> {
+interface StudentEntityRepository : CrudRepository<StudentEntity, UUID> {
     fun findByItsc(itsc: String): Optional<StudentEntity>
 
 

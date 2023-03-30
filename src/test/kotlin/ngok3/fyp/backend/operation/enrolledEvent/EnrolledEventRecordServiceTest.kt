@@ -29,7 +29,7 @@ import java.util.*
 @SpringBootTest
 class EnrolledEventRecordServiceTest {
     private val mockAuthRepository: MockAuthRepository = MockAuthRepository()
-    private val enrolledEventRecordRepository: EnrolledEventRecordRepository = mockk()
+    private val enrolledEventRecordRepository: EnrolledEventRecordEntityRepository = mockk()
     private val studentRoleEntityRepository: StudentRoleEntityRepository = mockk()
     private val eventRepository: EventEntityRepository = mockk()
 

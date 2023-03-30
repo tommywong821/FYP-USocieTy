@@ -11,15 +11,17 @@ import ngok3.fyp.backend.operation.TotalCountDto
 import ngok3.fyp.backend.operation.attendance.AttendanceEntity
 import ngok3.fyp.backend.operation.attendance.AttendanceEntityRepository
 import ngok3.fyp.backend.operation.attendance.model.StudentAttendanceDto
-import ngok3.fyp.backend.operation.enrolled.event_record.EnrolledEventRecordRepository
-import ngok3.fyp.backend.operation.enrolled.society_record.EnrolledSocietyRecordRepository
+import ngok3.fyp.backend.operation.enrolled.event_record.EnrolledEventRecordEntityRepository
+import ngok3.fyp.backend.operation.enrolled.society_record.EnrolledSocietyRecordEntityRepository
+import ngok3.fyp.backend.operation.event.dto.EventCategory
 import ngok3.fyp.backend.operation.event.dto.EventDto
 import ngok3.fyp.backend.operation.s3.S3BulkResponseEntity
 import ngok3.fyp.backend.operation.s3.S3Service
 import ngok3.fyp.backend.operation.society.SocietyEntity
-import ngok3.fyp.backend.operation.society.SocietyRepository
+import ngok3.fyp.backend.operation.society.SocietyEntityRepository
+import ngok3.fyp.backend.operation.society.model.SocietyDto
 import ngok3.fyp.backend.operation.student.StudentEntity
-import ngok3.fyp.backend.operation.student.StudentRepository
+import ngok3.fyp.backend.operation.student.StudentEntityRepository
 import ngok3.fyp.backend.util.DateUtil
 import ngok3.fyp.backend.util.JWTUtil
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -38,10 +40,10 @@ class EventServiceTest {
     private val mockAuthRepository: MockAuthRepository = MockAuthRepository()
 
     private val eventRepository: EventEntityRepository = mockk()
-    private val studentRepository: StudentRepository = mockk()
-    private val societyRecordRepository: SocietyRepository = mockk()
-    private val enrolledEventRecordRepository: EnrolledEventRecordRepository = mockk()
-    private val enrolledSocietyRecordRepository: EnrolledSocietyRecordRepository = mockk()
+    private val studentRepository: StudentEntityRepository = mockk()
+    private val societyRepository: SocietyEntityRepository = mockk()
+    private val enrolledEventRecordRepository: EnrolledEventRecordEntityRepository = mockk()
+    private val enrolledSocietyRecordRepository: EnrolledSocietyRecordEntityRepository = mockk()
     private val studentRoleEntityRepository: StudentRoleEntityRepository = mockk()
     private val attendanceEntityRepository: AttendanceEntityRepository = mockk()
 
@@ -52,7 +54,7 @@ class EventServiceTest {
         EventService(
             eventRepository,
             studentRepository,
-            societyRecordRepository,
+            societyRepository,
             enrolledEventRecordRepository,
             jwtUtil,
             dateUtil,
@@ -68,6 +70,13 @@ class EventServiceTest {
                 mockEventRepository.testPageableWithoutSid
             )
         } returns mockEventRepository.withoutSidTestEventPage
+
+        every { societyRepository.findHoldingEventNumberOfSociety(any()) } returns listOf(
+            SocietyDto(
+                name = "test society",
+                holdingEventNumber = 123
+            )
+        )
 
         val allEvent: List<EventDto> = eventService.getAllEvent(
             mockEventRepository.testPageNumWithoutSid,

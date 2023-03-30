@@ -1,5 +1,6 @@
-package ngok3.fyp.backend.operation.student
+package ngok3.fyp.backend.operation.student.model
 
+import ngok3.fyp.backend.operation.student.StudentEntity
 import java.io.Serializable
 
 /**

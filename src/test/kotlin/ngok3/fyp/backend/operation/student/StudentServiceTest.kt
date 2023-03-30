@@ -8,6 +8,7 @@ import ngok3.fyp.backend.operation.enrolled.EnrolledStatus
 import ngok3.fyp.backend.operation.enrolled.society_record.EnrolledSocietyRecordEntity
 import ngok3.fyp.backend.operation.event.EventEntityRepository
 import ngok3.fyp.backend.operation.society.SocietyEntity
+import ngok3.fyp.backend.operation.student.model.StudentDto
 import ngok3.fyp.backend.util.DateUtil
 import ngok3.fyp.backend.util.JWTUtil
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -17,7 +18,7 @@ import java.util.*
 
 class StudentServiceTest() {
     private val mockStudentRepository: MockStudentRepository = MockStudentRepository()
-    private val studentRepository: StudentRepository = mockk()
+    private val studentRepository: StudentEntityRepository = mockk()
     private val eventRepository: EventEntityRepository = mockk()
     private val studentRoleEntityRepository: StudentRoleEntityRepository = mockk()
 

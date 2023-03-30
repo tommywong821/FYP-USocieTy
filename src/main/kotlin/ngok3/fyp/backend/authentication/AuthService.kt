@@ -5,9 +5,9 @@ import com.fasterxml.jackson.module.kotlin.readValue
 import ngok3.fyp.backend.authentication.model.*
 import ngok3.fyp.backend.authentication.role.RoleEntityRepository
 import ngok3.fyp.backend.authentication.student_role.StudentRoleEntity
-import ngok3.fyp.backend.operation.student.StudentDto
 import ngok3.fyp.backend.operation.student.StudentEntity
-import ngok3.fyp.backend.operation.student.StudentRepository
+import ngok3.fyp.backend.operation.student.StudentEntityRepository
+import ngok3.fyp.backend.operation.student.model.StudentDto
 import ngok3.fyp.backend.util.JWTUtil
 import ngok3.fyp.backend.util.exception.model.CASException
 import ngok3.fyp.backend.util.webclient.OkHttpClientFactory
@@ -27,7 +27,7 @@ import javax.servlet.http.HttpServletResponse
 @Service
 class AuthService(
     private val webClient: OkHttpClient = OkHttpClientFactory().webClient,
-    private val studentRepository: StudentRepository,
+    private val studentRepository: StudentEntityRepository,
     private val roleEntityRepository: RoleEntityRepository,
     private val jwtUtil: JWTUtil
 ) {

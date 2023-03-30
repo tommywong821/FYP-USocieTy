@@ -9,9 +9,9 @@ import ngok3.fyp.backend.authentication.student_role.StudentRoleEntityRepository
 import ngok3.fyp.backend.controller.authentication.model.MockAuthRepository
 import ngok3.fyp.backend.operation.finance.model.*
 import ngok3.fyp.backend.operation.society.SocietyEntity
-import ngok3.fyp.backend.operation.society.SocietyRepository
+import ngok3.fyp.backend.operation.society.SocietyEntityRepository
 import ngok3.fyp.backend.operation.student.StudentEntity
-import ngok3.fyp.backend.operation.student.StudentRepository
+import ngok3.fyp.backend.operation.student.StudentEntityRepository
 import ngok3.fyp.backend.util.DateUtil
 import ngok3.fyp.backend.util.JWTUtil
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -28,8 +28,8 @@ class FinanceServiceTest(
 ) {
     private val financeEntityRepository: FinanceEntityRepository = mockk(relaxed = true)
     private val financeEntityDao: FinanceEntityDao = mockk(relaxed = true)
-    private val studentRepository: StudentRepository = mockk(relaxed = true)
-    private val societyRepository: SocietyRepository = mockk(relaxed = true)
+    private val studentRepository: StudentEntityRepository = mockk(relaxed = true)
+    private val societyRepository: SocietyEntityRepository = mockk(relaxed = true)
     private val studentRoleEntityRepository: StudentRoleEntityRepository = mockk()
     private val jwtUtil: JWTUtil = JWTUtil(studentRoleEntityRepository = studentRoleEntityRepository)
     private val financeService: FinanceService =
