@@ -11,21 +11,22 @@ class Event {
   final String description;
   final num fee;
   final String society;
+  final int societyHoldingEventNumber;
 
-  const Event({
-    required this.id,
-    required this.name,
-    required this.poster,
-    required this.maxParticipation,
-    required this.applyDeadline,
-    required this.location,
-    required this.startDate,
-    required this.endDate,
-    required this.category,
-    required this.description,
-    required this.fee,
-    required this.society,
-  });
+  const Event(
+      {required this.id,
+      required this.name,
+      required this.poster,
+      required this.maxParticipation,
+      required this.applyDeadline,
+      required this.location,
+      required this.startDate,
+      required this.endDate,
+      required this.category,
+      required this.description,
+      required this.fee,
+      required this.society,
+      required this.societyHoldingEventNumber});
 
   factory Event.fromJson(Map<String, dynamic> json) {
     return Event(
@@ -40,7 +41,8 @@ class Event {
         category: json['category'],
         description: json['description'],
         fee: json['fee'],
-        society: json['society']);
+        society: json['society'],
+        societyHoldingEventNumber: json['societyHoldingEventNumber']);
   }
 
   @override

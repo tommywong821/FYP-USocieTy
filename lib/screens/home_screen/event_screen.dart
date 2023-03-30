@@ -34,7 +34,6 @@ class _EventScreenState extends State<EventScreen> {
   @override
   Widget build(BuildContext context) {
     final DateFormat dateFormatter = DateFormat('MMM d');
-    final DateFormat defaultDateFormat = DateFormat("M/d/y H:m");
     final DateFormat timeFormat = DateFormat("H:mm");
 
     final Event event = ModalRoute.of(context)!.settings.arguments as Event;
@@ -47,6 +46,8 @@ class _EventScreenState extends State<EventScreen> {
     String eventEndDate = event.endDate;
     String eventDeadline = event.applyDeadline;
     String eventSociety = event.society;
+    String eventSocietyHoldingEventNumber =
+        event.societyHoldingEventNumber.toString();
     String eventFee = event.fee.toString();
     return Scaffold(
         bottomNavigationBar: BottomRegisterButton(context, event),
@@ -154,6 +155,15 @@ class _EventScreenState extends State<EventScreen> {
                                           child: Text(
                                             eventSociety,
                                             style: Styles.eventScreenBlackText,
+                                          ),
+                                        ),
+                                        //Society events count
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(left: 15),
+                                          child: Text(
+                                            "$eventSocietyHoldingEventNumber Upcoming Events",
+                                            style: Styles.eventScreenGreyText,
                                           ),
                                         ),
                                         //Society events count

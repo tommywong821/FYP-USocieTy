@@ -52,10 +52,10 @@ class _HorizontalEventCardWidgetState extends State<HorizontalEventCardWidget> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.only(top: 25),
+                    padding: const EdgeInsets.only(top: 25, left: 10),
                     child: Container(
                       width: MediaQuery.of(context).size.width -
-                          (cardImageWidth + 20),
+                          (cardImageWidth + 30),
                       alignment: Alignment.centerLeft,
                       child: Row(
                         children: <Widget>[
@@ -72,7 +72,7 @@ class _HorizontalEventCardWidgetState extends State<HorizontalEventCardWidget> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(top: 15),
+                    padding: const EdgeInsets.only(top: 15, left: 10),
                     child: Container(
                       child: Text(dateFormatter
                           .format(DateTime.parse(parseDateFormatter
