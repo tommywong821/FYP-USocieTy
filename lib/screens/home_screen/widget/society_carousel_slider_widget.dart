@@ -3,7 +3,6 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:ngok3fyp_frontend_flutter/model/event.dart';
 import 'package:ngok3fyp_frontend_flutter/model/styles.dart';
 import 'package:ngok3fyp_frontend_flutter/model/society.dart';
-import 'package:intl/intl.dart';
 import 'package:ngok3fyp_frontend_flutter/model/screen_arguments.dart';
 
 class SocietyCarouselSliderWidget extends StatefulWidget {
@@ -73,9 +72,11 @@ class _SocietyCarouselSliderWidgetState
                             Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Text(
-                                "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer eu.",
-                                textAlign: TextAlign.center,
+                                i.description,
                                 style: Styles.societyCarouselSliderDesc,
+                                textAlign: TextAlign.center,
+                                maxLines: 3,
+                                overflow: TextOverflow.ellipsis,
                               ),
                             )
                           ],

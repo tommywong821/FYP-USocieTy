@@ -12,19 +12,20 @@ class Event {
   final num fee;
   final String society;
 
-  const Event(
-      {required this.id,
-      required this.name,
-      required this.poster,
-      required this.maxParticipation,
-      required this.applyDeadline,
-      required this.location,
-      required this.startDate,
-      required this.endDate,
-      required this.category,
-      required this.description,
-      required this.fee,
-      required this.society});
+  const Event({
+    required this.id,
+    required this.name,
+    required this.poster,
+    required this.maxParticipation,
+    required this.applyDeadline,
+    required this.location,
+    required this.startDate,
+    required this.endDate,
+    required this.category,
+    required this.description,
+    required this.fee,
+    required this.society,
+  });
 
   factory Event.fromJson(Map<String, dynamic> json) {
     return Event(

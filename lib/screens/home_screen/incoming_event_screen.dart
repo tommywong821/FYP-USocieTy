@@ -1,27 +1,25 @@
 import 'package:flutter/material.dart';
-import 'package:ngok3fyp_frontend_flutter/model/society.dart';
+import 'package:ngok3fyp_frontend_flutter/screens/home_screen/widget/horizontal_event_card_widget.dart';
 import 'package:ngok3fyp_frontend_flutter/model/styles.dart';
-import 'package:ngok3fyp_frontend_flutter/screens/home_screen/widget/horizontal_society_card_widget.dart';
-import 'package:ngok3fyp_frontend_flutter/model/screen_arguments.dart';
+import 'package:ngok3fyp_frontend_flutter/model/event.dart';
 import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
 import 'package:ngok3fyp_frontend_flutter/services/api_service.dart';
 
-class AllSocietyScreen extends StatefulWidget {
-  const AllSocietyScreen({super.key});
+class IncomingEvnetScreen extends StatefulWidget {
+  const IncomingEvnetScreen({Key? key}) : super(key: key);
 
   @override
-  State<AllSocietyScreen> createState() => _AllSocietyScreenState();
+  _IncomingEvnetScreenState createState() => _IncomingEvnetScreenState();
 }
 
-class _AllSocietyScreenState extends State<AllSocietyScreen> {
+class _IncomingEvnetScreenState extends State<IncomingEvnetScreen> {
   static int page = 0;
   static bool indicator = true;
 
   //get next page for lazy loading
-  Future<List<Society>> getNextpage() async {
+  Future<List<Event>> getNextpage() async {
     page++;
-    Future<List<Society>> eventListFuture =
-        ApiService().getAllSociety(page, 10);
+    Future<List<Event>> eventListFuture = ApiService().getAllEvent(page, 10);
     return eventListFuture;
   }
 
@@ -41,12 +39,15 @@ class _AllSocietyScreenState extends State<AllSocietyScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final ScreenArguments screenArguments =
-        ModalRoute.of(context)!.settings.arguments as ScreenArguments;
-    List<Society> societyList = screenArguments.societyList;
+    List<Event> eventList =
+        ModalRoute.of(context)!.settings.arguments as List<Event>;
+    //take 10 only for lazy loading
+    eventList =
+        (eventList.length > 10) ? eventList.take(10).toList() : eventList;
+    int eventCount = eventList.length;
     return Scaffold(
-      body: SafeArea(
-          child: Column(
+        body: SafeArea(
+      child: Column(
         children: [
           Row(
             children: [
@@ -56,7 +57,7 @@ class _AllSocietyScreenState extends State<AllSocietyScreen> {
                 color: Colors.black,
               ),
               Text(
-                "All Societies",
+                "Incoming Events",
                 style: Styles.incEventTitle,
               )
             ],
@@ -71,32 +72,33 @@ class _AllSocietyScreenState extends State<AllSocietyScreen> {
                   if (indicator)
                     ScaffoldMessenger.of(context).showSnackBar(snackBar);
                   getNextpage().then((value) {
-                    //societyList = combine (societyList + value)
-                    societyList = [...societyList, ...value];
+                    //eventList = combine (eventList + value)
+                    eventList = [...eventList, ...value];
                     if (value.isEmpty) indicator = false;
                   }).whenComplete(() {
                     setState(() {});
                   });
                 },
                 child: ListView.separated(
+                  scrollDirection: Axis.vertical,
+                  shrinkWrap: true,
                   padding: const EdgeInsets.only(left: 5, right: 5),
-                  itemCount: societyList.length,
+                  itemCount: eventCount,
                   separatorBuilder: ((context, index) {
                     return const SizedBox(height: 1);
                   }),
                   itemBuilder: ((context, index) {
-                    return HorizontalSocietyCardWidget(
-                      society: societyList[index],
-                      eventList: screenArguments.enrolledEventList,
+                    return HorizontalEventCardWidget(
+                      event: eventList[index],
                     );
                   }),
                 ),
               ),
             );
-          }),
+          })
         ],
-      )),
-    );
+      ),
+    ));
   }
 }
 

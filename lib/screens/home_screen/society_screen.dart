@@ -4,13 +4,22 @@ import 'package:ngok3fyp_frontend_flutter/model/screen_arguments.dart';
 import 'package:ngok3fyp_frontend_flutter/model/society.dart';
 import 'package:ngok3fyp_frontend_flutter/model/styles.dart';
 import 'package:ngok3fyp_frontend_flutter/services/api_service.dart';
-import 'package:ngok3fyp_frontend_flutter/screens/home_screen/horizontal_event_card_widget.dart';
+import 'package:ngok3fyp_frontend_flutter/screens/home_screen/widget/horizontal_event_card_widget.dart';
+import 'package:quickalert/quickalert.dart';
 
 class SocietyScreen extends StatefulWidget {
   const SocietyScreen({Key? key}) : super(key: key);
 
   @override
   _SocietyScreenState createState() => _SocietyScreenState();
+}
+
+List<Event> findEventHoldBySociety(Society society, List<Event> eventList) {
+  List<Event> holdedEvent = [];
+  for (Event event in eventList) {
+    if (event.society == society.name) holdedEvent.add(event);
+  }
+  return holdedEvent;
 }
 
 class _SocietyScreenState extends State<SocietyScreen> {
@@ -21,6 +30,7 @@ class _SocietyScreenState extends State<SocietyScreen> {
     final List<Society> societyList = screenArguments.societyList;
     final Society society = societyList[0];
     final List<Event> eventList = screenArguments.enrolledEventList;
+    List<Event> holdedEvent = findEventHoldBySociety(society, eventList);
     return Scaffold(
         bottomNavigationBar: BottomRegisterButton(context, society.name),
         body: Column(
@@ -57,14 +67,16 @@ class _SocietyScreenState extends State<SocietyScreen> {
             ),
             Container(
               alignment: Alignment.center,
-              child: Text(society.getName(),
-                  style: Styles.societyCarouselSliderTitle,
-                  overflow: TextOverflow.ellipsis),
+              child: Text(
+                society.getName(),
+                textAlign: TextAlign.center,
+                style: Styles.societyCarouselSliderTitle,
+              ),
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(
-                "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer eu. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer eu.",
+                society.description,
                 textAlign: TextAlign.center,
                 style: Styles.societyCarouselSliderDesc,
                 maxLines: 3,
@@ -79,14 +91,13 @@ class _SocietyScreenState extends State<SocietyScreen> {
             Expanded(
               child: ListView.separated(
                 padding: const EdgeInsets.only(left: 5, right: 5),
-                itemCount: eventList.length,
+                itemCount: holdedEvent.length,
                 separatorBuilder: ((context, index) {
                   return const SizedBox(height: 1);
                 }),
                 itemBuilder: ((context, index) {
-                  //TODO: mapping correct events to this society
                   return HorizontalEventCardWidget(
-                    event: eventList[index],
+                    event: holdedEvent[index],
                   );
                 }),
               ),
@@ -107,51 +118,42 @@ class _SocietyScreenState extends State<SocietyScreen> {
                 child: ElevatedButton(
               child: Text("Register"),
               onPressed: () {
-                showDialog(
+                QuickAlert.show(
                   context: context,
-                  builder: (context) => AlertDialog(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(15))),
-                    title: Text(
-                      'Do you want to join $societyName?',
-                      style: Styles.HCardTitle,
-                    ),
-                    actionsAlignment: MainAxisAlignment.spaceEvenly,
-                    actions: [
-                      //TODO success/fail dialog
-                      ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15),
-                            ),
-                            backgroundColor:
-                                Styles.primaryColor, // Background color
-                          ),
-                          onPressed: () async {
-                            bool response =
-                                await ApiService().registerSociety(societyName);
-                            if (response) {
-                              print("success");
-                            } else {
-                              print("fail");
-                            }
-                            Navigator.pop(context);
-                          },
-                          child: Text('    Yes    ')),
-                      ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15),
-                            ),
-                            backgroundColor:
-                                Styles.primaryColor, // Background color
-                          ),
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          child: Text('    No    '))
-                    ],
-                  ),
+                  type: QuickAlertType.confirm,
+                  title: "Do you want to register for " + societyName + "?",
+                  confirmBtnColor: Styles.primaryColor,
+                  confirmBtnText: "Yes",
+                  cancelBtnText: "No",
+                  onConfirmBtnTap: () async {
+                    Navigator.pop(context);
+                    QuickAlert.show(
+                        context: context,
+                        type: QuickAlertType.loading,
+                        text: "",
+                        title: "Loading");
+                    bool response =
+                        await ApiService().registerSociety(societyName);
+                    if (response) {
+                      Navigator.pop(context);
+                      QuickAlert.show(
+                          context: context,
+                          type: QuickAlertType.success,
+                          title: "SUCCESS",
+                          text: "Please wait for the approval",
+                          confirmBtnText: "OK",
+                          confirmBtnColor: Styles.primaryColor);
+                    } else {
+                      Navigator.pop(context);
+                      QuickAlert.show(
+                          context: context,
+                          type: QuickAlertType.error,
+                          title: "ERROR",
+                          confirmBtnText:
+                              "Please contact society \n        for assistance",
+                          confirmBtnColor: Styles.primaryColor);
+                    }
+                  },
                 );
               },
               style: ElevatedButton.styleFrom(

@@ -4,16 +4,17 @@ class EnrolledEvent {
   final String startDate;
   final String endDate;
   final String category;
-  final String status;
+  final String enrolledStatus;
+  final String paymentStatus;
 
-  const EnrolledEvent({
-    required this.name,
-    required this.location,
-    required this.startDate,
-    required this.endDate,
-    required this.category,
-    required this.status,
-  });
+  const EnrolledEvent(
+      {required this.name,
+      required this.location,
+      required this.startDate,
+      required this.endDate,
+      required this.category,
+      required this.enrolledStatus,
+      required this.paymentStatus});
 
   factory EnrolledEvent.fromJson(Map<String, dynamic> json) {
     return EnrolledEvent(
@@ -22,12 +23,13 @@ class EnrolledEvent {
       startDate: json['startDate'],
       endDate: json['endDate'],
       category: json['category'],
-      status: json['status'],
+      enrolledStatus: json['enrolledStatus'],
+      paymentStatus: json['paymentStatus'],
     );
   }
 
   @override
   String toString() {
-    return "(name: $name, location: $location, startDate: $startDate, endDate: $endDate, category: $category, status: $status)";
+    return "(name: $name, location: $location, startDate: $startDate, endDate: $endDate, category: $category, status: $enrolledStatus, paymentStatus: $paymentStatus)";
   }
 }
