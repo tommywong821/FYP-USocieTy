@@ -51,8 +51,7 @@
     <nz-divider></nz-divider>
     <ng-container
       *ngIf="eventId !== ''"
-      [ngSwitch="recordTable"
-      ]
+      [ngSwitch]="recordTable"
     >
       <app-event-enrollment-record-table
         *ngSwitchCase="RecordTable.Enrollment"

@@ -125,7 +125,8 @@ export class EventComponent implements OnInit {
   }
 
   toggleCreateEvent(): void {
-    this.router.navigate([Path.Main, Path.Event, Path.CreateEvent]);
+    // this.router.navigate([Path.Main, Path.Event, Path.CreateEvent]);
+    this.router.navigate([Path.Main, Path.Event, Path.ViewEvent]);
   }
 
   toggleViewEvent(eventId: string): void {
