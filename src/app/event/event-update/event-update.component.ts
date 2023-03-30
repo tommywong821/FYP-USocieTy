@@ -96,14 +96,13 @@ export class EventUpdateComponent implements OnInit {
           switchMap(event => this.ApiService.updateEvent(event, this.updateEventForm.value.society, this.pictureFile)),
           tap(() => this.message.remove(this.loadingMessage?.messageId)),
           tap(() => this.message.success('Successfully created event', {nzDuration: 2000})),
-          tap(() => this.backToEventViewPage()),
-          catchError((err: HttpErrorResponse) => of(err)),
-          tap(err => console.error(err)),
-          tap(() => {
-            this.message.error('Unable to update event details', {nzDuration: 2000});
-          })
+          tap(() => this.backToEventViewPage())
         )
-        .subscribe();
+        .subscribe({
+          error: err => {
+            this.message.error('Unable to update event details', {nzDuration: 2000});
+          },
+        });
     }
   }
 
