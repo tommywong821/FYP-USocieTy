@@ -46,4 +46,8 @@ export class MainComponent implements OnInit {
       },
     });
   }
+
+  signOut(): void {
+    this.authService.signOut();
+  }
 }
