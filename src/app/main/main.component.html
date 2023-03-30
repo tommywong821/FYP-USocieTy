@@ -22,10 +22,10 @@
         *ngIf="user"
         class="flex"
       >
-        <span class="ml-4">{{ user?.nickname }}</span>
+        <span class="ml-4 mr-2">{{ user?.nickname }}</span>
         <span
           nz-icon
-          class="ml-auto cursor-pointer"
+          class="cursor-pointer"
           (click)="signOut()"
           nzType="logout"
         ></span>
