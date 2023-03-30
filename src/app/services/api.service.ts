@@ -7,7 +7,7 @@ import {Request} from '../api/common';
 import {FinanceChartRecord} from '../finance/model/IFinanceChartRecord';
 import {FinanceRecordTotalNumber} from '../finance/model/IFinanceRecordTotalNumber';
 import {FinanceTableRecord} from '../finance/model/IFinanceTableRecord';
-import {Event, EventEnrollmentRecord, UpdateEventEnrollmentRecordPayload} from '../model/event';
+import {Event, EventAttendance, EventEnrollmentRecord, UpdateEventEnrollmentRecordPayload} from '../model/event';
 
 @Injectable({
   providedIn: 'root',
@@ -187,6 +187,10 @@ export class ApiService {
 
   updateEventEnrollmentRecords(eventId: string, records: UpdateEventEnrollmentRecordPayload[]): Observable<void> {
     return this.restful.put<void>(`${environment.backend_url}/enrolledEventRecord`, records);
+  }
+
+  getEventAttendance(eventId: string): Observable<EventAttendance> {
+    return this.restful.get<EventAttendance>(`${environment.backend_url}/event/${eventId}/attendance`);
   }
 
   //Society

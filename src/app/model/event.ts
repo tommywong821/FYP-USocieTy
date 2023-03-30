@@ -76,3 +76,9 @@ export enum EventAction {
   Fetch = 'FETCH',
   Delete = 'DELETE',
 }
+
+export interface EventAttendance {
+  studentItsc: string;
+  studentName: string;
+  attendanceCreatedAt: Date;
+}

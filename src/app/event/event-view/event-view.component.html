@@ -53,76 +53,9 @@
       </div>
     </div>
     <nz-divider></nz-divider>
-    <div>
-      <div class="mb-2 flex">
-        <h1 class="mb-4 mr-4 text-xl">Event Enrollment Record</h1>
-        <button
-          class="ml-auto"
-          nz-button
-          [disabled]="objectKeys(toBeUpdatedEnrollmentRecords).length <= 0"
-          nzType="primary"
-          (click)="updateEnrollmentRecords()"
-        >
-          Apply Changes
-        </button>
-      </div>
-      <nz-table
-        #enrollmentTable
-        [nzTotal]="recordTotal"
-        [nzPageSize]="pageSize"
-        [nzPageIndex]="pageIndex"
-        (nzPageIndexChange)="changePageIndex()"
-        [nzData]="enrollmentRecords"
-      >
-        <thead>
-          <tr>
-            <th
-              *ngFor="let column of enrollmentTableColumn"
-              [nzColumnKey]="column.title"
-            >
-              {{ column.title }}
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let enrollmentRecord of enrollmentTable.data">
-            <td>
-              <nz-badge
-                *ngIf="toBeUpdatedEnrollmentRecords[enrollmentRecord.itsc]"
-                nzStatus="processing"
-              >
-              </nz-badge>
-              {{ enrollmentRecord.itsc }}
-            </td>
-            <td>
-              <nz-select
-                [nzBorderless]="true"
-                [(ngModel)]="enrollmentRecord.paymentStatus"
-                (ngModelChange)="recordPaymentStatusChanges($event, enrollmentRecord.itsc)"
-              >
-                <nz-option
-                  *ngFor="let paymentStatus of PaymentStatus | keyvalue"
-                  [nzValue]="paymentStatus.value"
-                  [nzLabel]="paymentStatus.key"
-                ></nz-option>
-              </nz-select>
-            </td>
-            <td>
-              <nz-select
-                [nzBorderless]="true"
-                [(ngModel)]="enrollmentRecord.enrolledStatus"
-                (ngModelChange)="recordEnrollmentStatusChanges($event, enrollmentRecord.itsc)"
-              >
-                <nz-option
-                  *ngFor="let eventEnrollmentStatus of EventEnrollmentStatus | keyvalue"
-                  [nzValue]="eventEnrollmentStatus.value"
-                  [nzLabel]="eventEnrollmentStatus.key"
-                ></nz-option>
-              </nz-select>
-            </td>
-          </tr>
-        </tbody>
-      </nz-table>
-    </div>
+    <app-event-enrollment-record-table
+      *ngIf="eventId !== ''"
+      [eventId]="eventId"
+    ></app-event-enrollment-record-table>
   </div>
 </div>
