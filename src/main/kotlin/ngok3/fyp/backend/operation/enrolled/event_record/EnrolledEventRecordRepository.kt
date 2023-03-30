@@ -35,7 +35,7 @@ where e.studentEntity.itsc = ?1 and e.eventEntity.startDate >= ?2"""
     fun findByIdAndStatus(id: EnrolledEventRecordKey, status: EnrolledStatus): Optional<EnrolledEventRecordEntity>
 
 
-    @Query("select e from EnrolledEventRecordEntity e where e.id.eventUuid = ?1")
+    @Query("select e from EnrolledEventRecordEntity e where e.id.eventUuid = ?1 order by e.createdAt")
     fun findAllEnrolledRecordStudentByEventIdWithPaging(
         eventUuid: UUID,
         pageable: Pageable

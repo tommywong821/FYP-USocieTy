@@ -5,7 +5,7 @@ import ngok3.fyp.backend.operation.enrolled.event_record.model.EnrolledEventDto
 import ngok3.fyp.backend.operation.enrolled.event_record.model.StudentEnrolledEventRecordDto
 import ngok3.fyp.backend.operation.enrolled.event_record.model.UpdateEnrolledEventRecordDto
 import ngok3.fyp.backend.operation.event.EventEntity
-import ngok3.fyp.backend.operation.event.EventRepository
+import ngok3.fyp.backend.operation.event.EventEntityRepository
 import ngok3.fyp.backend.util.DateUtil
 import ngok3.fyp.backend.util.JWTUtil
 import org.springframework.data.domain.PageRequest
@@ -17,7 +17,7 @@ import java.util.*
 @Service
 class EnrolledEventRecordService(
     private val enrolledEventRecordRepository: EnrolledEventRecordRepository,
-    private val eventRepository: EventRepository,
+    private val eventRepository: EventEntityRepository,
     private val jwtUtil: JWTUtil,
     private val dateUtil: DateUtil
 ) {

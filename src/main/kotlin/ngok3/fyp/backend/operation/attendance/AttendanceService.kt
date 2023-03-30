@@ -6,7 +6,7 @@ import ngok3.fyp.backend.operation.enrolled.EnrolledStatus
 import ngok3.fyp.backend.operation.enrolled.event_record.EnrolledEventRecordKey
 import ngok3.fyp.backend.operation.enrolled.event_record.EnrolledEventRecordRepository
 import ngok3.fyp.backend.operation.event.EventEntity
-import ngok3.fyp.backend.operation.event.EventRepository
+import ngok3.fyp.backend.operation.event.EventEntityRepository
 import ngok3.fyp.backend.operation.student.StudentEntity
 import ngok3.fyp.backend.operation.student.StudentRepository
 import ngok3.fyp.backend.util.DateUtil
@@ -18,8 +18,8 @@ import java.util.*
 class AttendanceService(
     private val enrolledEventRecordRepository: EnrolledEventRecordRepository,
     private val studentRepository: StudentRepository,
-    private val eventRepository: EventRepository,
-    private val attendanceRepository: AttendanceRepository,
+    private val eventRepository: EventEntityRepository,
+    private val attendanceRepository: AttendanceEntityRepository,
     private val studentRoleEntityRepository: StudentRoleEntityRepository,
     private val dateUtil: DateUtil
 ) {

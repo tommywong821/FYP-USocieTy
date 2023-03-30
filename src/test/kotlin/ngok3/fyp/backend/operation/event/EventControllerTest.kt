@@ -3,6 +3,7 @@ package ngok3.fyp.backend.operation.event
 import com.ninjasquad.springmockk.MockkBean
 import io.mockk.every
 import ngok3.fyp.backend.controller.authentication.model.MockAuthRepository
+import ngok3.fyp.backend.operation.TotalCountDto
 import ngok3.fyp.backend.operation.attendance.model.StudentAttendanceDto
 import ngok3.fyp.backend.operation.event.dto.EventDto
 import ngok3.fyp.backend.operation.student.MockStudentRepository
@@ -276,7 +277,7 @@ class EventControllerTest @Autowired constructor(
             )
 
         every {
-            eventService.getAttAttendanceOfEvent(
+            eventService.getAllAttendanceOfEvent(
                 mockAuthRepository.validUserCookieToken,
                 uuid,
                 0,
@@ -301,6 +302,33 @@ class EventControllerTest @Autowired constructor(
             }
             jsonPath("$[*].attendanceCreatedAt") {
                 value(attendanceDtoList.map { studentAttendanceDto: StudentAttendanceDto -> studentAttendanceDto.attendanceCreatedAt })
+            }
+        }
+    }
+
+    @Test
+    fun `should get total page number of all attendance of event with event id`() {
+        val uuid: String = UUID.randomUUID().toString()
+        val totalNumber: TotalCountDto = TotalCountDto(13)
+
+        every {
+            eventService.getTotalNumberOfAllAttendanceOfEvent(
+                mockAuthRepository.validUserCookieToken,
+                uuid
+            )
+        } returns totalNumber
+
+        mockMvc.get("/event/{eventId}/attendance/totalNumber", uuid) {
+            headers {
+                contentType = MediaType.APPLICATION_JSON
+                cookie(Cookie("token", mockAuthRepository.validUserCookieToken))
+            }
+            pathInfo
+        }.andDo { print() }.andExpect {
+            status { isOk() }
+            content { contentType(MediaType.APPLICATION_JSON) }
+            jsonPath("$.totalNumber") {
+                value(13)
             }
         }
     }

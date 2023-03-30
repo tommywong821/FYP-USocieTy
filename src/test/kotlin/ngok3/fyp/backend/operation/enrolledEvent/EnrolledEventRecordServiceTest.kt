@@ -13,7 +13,7 @@ import ngok3.fyp.backend.operation.enrolled.event_record.*
 import ngok3.fyp.backend.operation.enrolled.event_record.model.StudentEnrolledEventRecordDto
 import ngok3.fyp.backend.operation.enrolled.event_record.model.UpdateEnrolledEventRecordDto
 import ngok3.fyp.backend.operation.event.EventEntity
-import ngok3.fyp.backend.operation.event.EventRepository
+import ngok3.fyp.backend.operation.event.EventEntityRepository
 import ngok3.fyp.backend.operation.society.SocietyEntity
 import ngok3.fyp.backend.operation.student.StudentEntity
 import ngok3.fyp.backend.util.DateUtil
@@ -31,7 +31,7 @@ class EnrolledEventRecordServiceTest {
     private val mockAuthRepository: MockAuthRepository = MockAuthRepository()
     private val enrolledEventRecordRepository: EnrolledEventRecordRepository = mockk()
     private val studentRoleEntityRepository: StudentRoleEntityRepository = mockk()
-    private val eventRepository: EventRepository = mockk()
+    private val eventRepository: EventEntityRepository = mockk()
 
     private val jwtUtil: JWTUtil = JWTUtil(studentRoleEntityRepository = studentRoleEntityRepository)
     private val dateUtil: DateUtil = DateUtil()

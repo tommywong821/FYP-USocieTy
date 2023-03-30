@@ -9,7 +9,7 @@ import java.time.LocalDateTime
 import java.util.*
 
 @Repository
-interface EventRepository : PagingAndSortingRepository<EventEntity, UUID> {
+interface EventEntityRepository : PagingAndSortingRepository<EventEntity, UUID> {
 
     fun findByName(name: String): Optional<EventEntity>
 
@@ -21,7 +21,7 @@ interface EventRepository : PagingAndSortingRepository<EventEntity, UUID> {
     ): Page<EventEntity>
 
 
-    @Query("select e from EventEntity e where e.societyEntity.name = ?1")
+    @Query("select e from EventEntity e where e.societyEntity.name = ?1 order by e.name")
     fun findAllBySocietyName(name: String, pageable: Pageable): List<EventEntity>
 
 

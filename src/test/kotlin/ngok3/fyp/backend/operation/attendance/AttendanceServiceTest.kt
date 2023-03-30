@@ -12,7 +12,7 @@ import ngok3.fyp.backend.operation.enrolled.event_record.EnrolledEventRecordEnti
 import ngok3.fyp.backend.operation.enrolled.event_record.EnrolledEventRecordKey
 import ngok3.fyp.backend.operation.enrolled.event_record.EnrolledEventRecordRepository
 import ngok3.fyp.backend.operation.event.EventEntity
-import ngok3.fyp.backend.operation.event.EventRepository
+import ngok3.fyp.backend.operation.event.EventEntityRepository
 import ngok3.fyp.backend.operation.student.StudentEntity
 import ngok3.fyp.backend.operation.student.StudentRepository
 import ngok3.fyp.backend.util.DateUtil
@@ -27,8 +27,8 @@ class AttendanceServiceTest {
 
     private val enrolledEventRecordRepository: EnrolledEventRecordRepository = mockk(relaxed = true)
     private val studentRepository: StudentRepository = mockk(relaxed = true)
-    private val eventRepository: EventRepository = mockk(relaxed = true)
-    private val attendanceRepository: AttendanceRepository = mockk(relaxed = true)
+    private val eventRepository: EventEntityRepository = mockk(relaxed = true)
+    private val attendanceRepository: AttendanceEntityRepository = mockk(relaxed = true)
     private val studentRoleEntityRepository: StudentRoleEntityRepository = mockk(relaxed = true)
 
     private val dateUtil: DateUtil = DateUtil()

@@ -1,6 +1,8 @@
 package ngok3.fyp.backend.operation.event
 
+import ngok3.fyp.backend.operation.TotalCountDto
 import ngok3.fyp.backend.operation.attendance.AttendanceEntity
+import ngok3.fyp.backend.operation.attendance.AttendanceEntityRepository
 import ngok3.fyp.backend.operation.attendance.model.StudentAttendanceDto
 import ngok3.fyp.backend.operation.enrolled.EnrolledStatus
 import ngok3.fyp.backend.operation.enrolled.event_record.EnrolledEventRecordEntity
@@ -31,13 +33,13 @@ import javax.persistence.OptimisticLockException
 
 @Service
 class EventService(
-    private val eventRepository: EventRepository,
+    private val eventRepository: EventEntityRepository,
     private val studentRepository: StudentRepository,
     private val societyRepository: SocietyRepository,
     private val enrolledEventRecordRepository: EnrolledEventRecordRepository,
     private val jwtUtil: JWTUtil,
     private val dateUtil: DateUtil,
-    private val s3Service: S3Service,
+    private val s3Service: S3Service, private val attendanceEntityRepository: AttendanceEntityRepository,
 ) {
 
     @Value("\${aws.bucket.domain}")
@@ -191,7 +193,7 @@ class EventService(
             }
     }
 
-    fun getAttAttendanceOfEvent(
+    fun getAllAttendanceOfEvent(
         jwtToken: String,
         eventId: String,
         pageNum: Int,
@@ -203,12 +205,25 @@ class EventService(
 
         jwtUtil.verifyUserMemberRoleOfSociety(jwtToken, eventEntity.societyEntity.name)
 
-        return eventEntity.attendanceEntities.map { attendanceEntity: AttendanceEntity ->
+        return attendanceEntityRepository.findByAttendanceKey_EventUuid(
+            eventEntity.uuid,
+            PageRequest.of(pageNum, pageSize)
+        ).map { attendanceEntity: AttendanceEntity ->
             StudentAttendanceDto(
                 studentItsc = attendanceEntity.studentEntity?.itsc,
                 studentName = attendanceEntity.studentEntity?.nickname,
                 attendanceCreatedAt = dateUtil.convertLocalDateTimeToStringWithTime(attendanceEntity.createdAt)
             )
         }
+    }
+
+    fun getTotalNumberOfAllAttendanceOfEvent(jwtToken: String, eventUuid: String): TotalCountDto {
+        val eventEntity: EventEntity = eventRepository.findById(UUID.fromString(eventUuid)).orElseThrow {
+            Exception("Event: $eventUuid is not exist")
+        }
+
+        jwtUtil.verifyUserMemberRoleOfSociety(jwtToken, eventEntity.societyEntity.name)
+
+        return TotalCountDto(attendanceEntityRepository.countByAttendanceKey_EventUuid(eventUuid = eventEntity.uuid))
     }
 }
