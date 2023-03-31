@@ -12,24 +12,40 @@ class EnrolledSocietyRecordService(
     private val enrolledSocietyRepository: EnrolledSocietyRecordEntityRepository,
     private val jwtUtil: JWTUtil
 ) {
-    fun updateEnrolledSocietyRecord(jwtToken: String, updateEnrolledSocietyRecordDto: UpdateEnrolledSocietyRecordDto) {
-        val enrolledSocietyRecordEntity: EnrolledSocietyRecordEntity = enrolledSocietyRepository.findById(
-            EnrolledSocietyRecordKey(
-                UUID.fromString(updateEnrolledSocietyRecordDto.studentId),
-                UUID.fromString(updateEnrolledSocietyRecordDto.societyId)
-            )
-        ).orElseThrow {
-            Exception("Enrolled Event Record with student id: ${updateEnrolledSocietyRecordDto.studentId} and society id: ${updateEnrolledSocietyRecordDto.societyId} is not found")
-        }
+    fun updateEnrolledSocietyRecord(
+        jwtToken: String,
+        updateEnrolledSocietyRecordDtoList: List<UpdateEnrolledSocietyRecordDto>
+    ) {
+        val enrolledSocietyRecordEntityMap = enrolledSocietyRepository.findAllById(
+            updateEnrolledSocietyRecordDtoList.map { updateEnrolledSocietyRecordDto: UpdateEnrolledSocietyRecordDto ->
+                EnrolledSocietyRecordKey(
+                    UUID.fromString(updateEnrolledSocietyRecordDto.studentId),
+                    UUID.fromString(updateEnrolledSocietyRecordDto.societyId)
+                )
+            }
+        ).toList().associateBy({ it.id }, { it }).toMutableMap()
 
+        if (enrolledSocietyRecordEntityMap.isEmpty()) {
+            throw Exception("updateEnrolledSocietyRecordDtoList is not exist")
+        }
         jwtUtil.verifyUserMemberRoleOfSociety(
             jwtToken = jwtToken,
-            enrolledSocietyRecordEntity.societyEntity.name
+            enrolledSocietyRecordEntityMap.values.first().societyEntity.name
         )
 
-        enrolledSocietyRecordEntity.status = updateEnrolledSocietyRecordDto.status
+        updateEnrolledSocietyRecordDtoList.forEach { updateEnrolledSocietyRecordDto: UpdateEnrolledSocietyRecordDto ->
+            run {
+                val key: EnrolledSocietyRecordKey = EnrolledSocietyRecordKey(
+                    studentUuid = UUID.fromString(updateEnrolledSocietyRecordDto.studentId),
+                    societyUuid = UUID.fromString(updateEnrolledSocietyRecordDto.societyId)
+                )
+                if (enrolledSocietyRecordEntityMap.containsKey(key)) {
+                    enrolledSocietyRecordEntityMap[key]?.status = updateEnrolledSocietyRecordDto.status
+                }
+            }
+        }
 
-        enrolledSocietyRepository.save(enrolledSocietyRecordEntity)
+        enrolledSocietyRepository.saveAll(enrolledSocietyRecordEntityMap.values.toList())
     }
 
     fun getEnrolledSocietyRecord(jwtToken: String, societyName: String): List<StudentEnrolledSocietyRecordDto> {
