@@ -25,19 +25,21 @@ class StudentController(
     @Operation(summary = "Count all event by student id with society member")
     @GetMapping("/{studentId}/event/totalNumber")
     fun countAllEventWithSocietyMember(
+        @CookieValue("token") jwtToken: String,
         @PathVariable studentId: String,
     ): TotalCountDto {
-        return studentService.countAllEventWithSocietyMember(studentId)
+        return studentService.countAllEventWithSocietyMember(jwtToken, studentId)
     }
 
     @Operation(summary = "Get all event by student with society member")
     @GetMapping("/{studentId}/event")
     fun getAllEventWithSocietyMember(
+        @CookieValue("token") jwtToken: String,
         @PathVariable studentId: String,
         @RequestParam("pageNum", required = false, defaultValue = "0") pageNum: Int,
         @RequestParam("pageSize", required = false, defaultValue = "10") pageSize: Int
     ): List<EventDto> {
-        return studentService.getAllEventWithSocietyMember(studentId, pageNum, pageSize)
+        return studentService.getAllEventWithSocietyMember(jwtToken, studentId, pageNum, pageSize)
     }
 
     @Operation(summary = "Get all event by student with society member")

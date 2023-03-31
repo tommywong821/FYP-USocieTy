@@ -106,11 +106,13 @@ class EnrolledEventRecordService(
         }
     }
 
-    fun countStudentEnrolledEventRecord(eventUuid: String): TotalCountDto {
+    fun countStudentEnrolledEventRecord(jwtToken: String, eventUuid: String): TotalCountDto {
         val eventUuidObj: UUID = UUID.fromString(eventUuid)
-        eventRepository.findById(eventUuidObj).orElseThrow {
+        val eventEntity: EventEntity = eventRepository.findById(eventUuidObj).orElseThrow {
             Exception("Event with id: $eventUuid is not found")
         }
+
+        jwtUtil.verifyUserMemberRoleOfSociety(jwtToken = jwtToken, societyName = eventEntity.societyEntity.name)
 
         return TotalCountDto(enrolledEventRecordRepository.countById_EventUuid(eventUuidObj))
     }
