@@ -17,7 +17,7 @@ class EnrolledSocietyController(
     @PutMapping
     fun updateEnrolledSocietyRecord(
         @CookieValue("token") jwtToken: String,
-        @RequestBody updateEnrolledSocietyRecordDto: UpdateEnrolledSocietyRecordDto
+        @RequestBody updateEnrolledSocietyRecordDto: List<UpdateEnrolledSocietyRecordDto>
     ) {
         return enrolledSocietyService.updateEnrolledSocietyRecord(jwtToken, updateEnrolledSocietyRecordDto)
     }

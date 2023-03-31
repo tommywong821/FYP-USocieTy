@@ -34,6 +34,9 @@ class EnrolledEventRecordService(
             }
         ).toList().associateBy({ it.id }, { it }).toMutableMap()
 
+        if (enrolledEventRecordEntityMap.isEmpty()) {
+            throw Exception("updateEnrolledSocietyRecordDtoList is not exist")
+        }
 
         jwtUtil.verifyUserMemberRoleOfSociety(
             jwtToken = jwtToken,
