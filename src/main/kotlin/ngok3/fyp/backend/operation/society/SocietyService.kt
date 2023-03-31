@@ -22,7 +22,7 @@ import java.util.*
 
 @Service
 class SocietyService(
-    private val societyRepository: SocietyEntityRepository,
+    private val societyEntityRepository: SocietyEntityRepository,
     private val studentRepository: StudentEntityRepository,
     private val enrolledSocietyRecordRepository: EnrolledSocietyRecordEntityRepository,
     private val roleEntityRepository: RoleEntityRepository,
@@ -32,7 +32,7 @@ class SocietyService(
     fun getAllSocieties(pageNum: Int, pageSize: Int): List<SocietyDto> {
         val firstPageNumWithPageSizeElement: Pageable = PageRequest.of(pageNum, pageSize)
 
-        return societyRepository.findByOrderByNameAsc(firstPageNumWithPageSizeElement).content.map { societyEntity ->
+        return societyEntityRepository.findByOrderByNameAsc(firstPageNumWithPageSizeElement).content.map { societyEntity ->
             SocietyDto(
                 societyEntity
             )
@@ -45,7 +45,7 @@ class SocietyService(
         }
 
 
-        val societyEntity: SocietyEntity = societyRepository.findByName(societyName).orElseThrow {
+        val societyEntity: SocietyEntity = societyEntityRepository.findByName(societyName).orElseThrow {
             Exception("Society with id:$societyName is not found")
         }
 
@@ -89,7 +89,7 @@ class SocietyService(
                 UUID.fromString(studentIdString)
             }.toMutableList(), societyName, EnrolledStatus.SUCCESS)
 
-        val societyEntity: SocietyEntity = societyRepository.findByName(societyName).orElseThrow {
+        val societyEntity: SocietyEntity = societyEntityRepository.findByName(societyName).orElseThrow {
             Exception("Society: $societyName does not exist")
         }
 
@@ -120,11 +120,27 @@ class SocietyService(
             .replace("[", "") // remove the opening square bracket
             .replace("]", "") // remove the closing square bracket
             .split(", ").toMutableList()
-        return societyRepository.findByNameIn(societyNameList, PageRequest.of(pageNum, pageSize)).map { societyEntity ->
-            SocietyDto(
-                societyEntity
-            )
+        return societyEntityRepository.findByNameIn(societyNameList, PageRequest.of(pageNum, pageSize))
+            .map { societyEntity ->
+                SocietyDto(
+                    societyEntity
+                )
+            }
+    }
+
+    fun removeFromSociety(jwtToken: String, societyName: String, studentIdList: List<String>) {
+        jwtUtil.verifyUserMemberRoleOfSociety(jwtToken = jwtToken, societyName = societyName)
+
+        val societyEntity: SocietyEntity = societyEntityRepository.findByName(societyName).orElseThrow {
+            Exception("society: $societyName is not exist")
         }
+
+        enrolledSocietyRecordRepository.deleteAllById(studentIdList.map { studentId ->
+            EnrolledSocietyRecordKey(
+                societyUuid = societyEntity.uuid,
+                studentUuid = UUID.fromString(studentId)
+            )
+        })
     }
 
 //    TODO dummy remove

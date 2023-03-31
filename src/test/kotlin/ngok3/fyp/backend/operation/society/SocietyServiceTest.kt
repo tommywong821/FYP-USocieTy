@@ -11,6 +11,7 @@ import ngok3.fyp.backend.authentication.student_role.StudentRoleEntityRepository
 import ngok3.fyp.backend.controller.authentication.model.MockAuthRepository
 import ngok3.fyp.backend.operation.enrolled.EnrolledStatus
 import ngok3.fyp.backend.operation.enrolled.society_record.EnrolledSocietyRecordEntityRepository
+import ngok3.fyp.backend.operation.enrolled.society_record.EnrolledSocietyRecordKey
 import ngok3.fyp.backend.operation.student.StudentEntity
 import ngok3.fyp.backend.operation.student.StudentEntityRepository
 import ngok3.fyp.backend.operation.student.model.StudentDto
@@ -34,7 +35,7 @@ class SocietyServiceTest {
 
 
     private val societyService: SocietyService = SocietyService(
-        societyRepository = societyRepository,
+        societyEntityRepository = societyRepository,
         studentRepository = studentRepository,
         enrolledSocietyRecordRepository = enrolledSocietyRecordRepository,
         roleEntityRepository = roleEntityRepository,
@@ -154,4 +155,48 @@ class SocietyServiceTest {
 //        assertEquals(societyDto.description, result[0].description)
 //        assertEquals(societyDto.holdingEventNumber, result[0].holdingEventNumber)
 //    }
+@Test
+fun removeFromSociety() {
+    val studentIdList: List<String> = listOf<String>(
+        "2ac23d21-4cb0-4173-a2fe-de551ec5aa9d",
+        "38153605-ed2c-42e7-947a-9d1731f4bd44"
+    )
+
+    val societyEntity: SocietyEntity = SocietyEntity(name = mockAuthRepository.testSocietyName)
+
+    every {
+        studentRoleEntityRepository.findByStudentItscAndSocietyNameAndRole(
+            mockAuthRepository.validUserItsc,
+            mockAuthRepository.testSocietyName,
+            Role.ROLE_SOCIETY_MEMBER
+        )
+    } returns Optional.of(StudentRoleEntity())
+
+    every { societyRepository.findByName(mockAuthRepository.testSocietyName) } returns Optional.of(societyEntity)
+
+    every {
+        enrolledSocietyRecordRepository.deleteAllById(studentIdList.map { studentId ->
+            EnrolledSocietyRecordKey(
+                societyUuid = societyEntity.uuid,
+                studentUuid = UUID.fromString(studentId)
+            )
+        })
+    } returns Unit
+
+    societyService.removeFromSociety(
+        mockAuthRepository.validUserCookieToken,
+        mockAuthRepository.testSocietyName,
+        studentIdList
+    )
+
+    verify(exactly = 1) {
+        enrolledSocietyRecordRepository.deleteAllById(studentIdList.map { studentId ->
+            EnrolledSocietyRecordKey(
+                societyUuid = societyEntity.uuid,
+                studentUuid = UUID.fromString(studentId)
+            )
+        })
+    }
+}
+
 }

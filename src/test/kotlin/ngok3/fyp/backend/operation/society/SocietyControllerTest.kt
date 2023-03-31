@@ -119,6 +119,37 @@ class SocietyControllerTest @Autowired constructor(
         }
     }
 
+    @Test
+    fun `should remove student from society`() {
+
+        val studentIdList: List<String> = listOf<String>(
+            "2ac23d21-4cb0-4173-a2fe-de551ec5aa9d",
+            "38153605-ed2c-42e7-947a-9d1731f4bd44"
+        )
+
+        every {
+            societyService.removeFromSociety(
+                mockAuthRepository.validUserCookieToken,
+                mockAuthRepository.testSocietyName,
+                studentIdList
+            )
+        } returns Unit
+
+        mockMvc.delete("/society/remove") {
+            headers {
+                contentType = MediaType.APPLICATION_JSON
+                cookie(Cookie("token", mockAuthRepository.validUserCookieToken))
+            }
+            params = LinkedMultiValueMap<String, String>().apply {
+                add("societyName", mockAuthRepository.testSocietyName)
+                add("studentId", "2ac23d21-4cb0-4173-a2fe-de551ec5aa9d")
+                add("studentId", "38153605-ed2c-42e7-947a-9d1731f4bd44")
+            }
+        }.andDo { print() }.andExpect {
+            status { isAccepted() }
+        }
+    }
+
 //    TODO remove dummy
 //    @Test
 //    fun `should number of event held by society`() {

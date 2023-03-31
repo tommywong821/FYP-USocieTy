@@ -40,6 +40,17 @@ class SocietyController(
         return societyService.joinSociety(joinSocietyDto.itsc, joinSocietyDto.societyName)
     }
 
+    @Operation(summary = "remove student from society")
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    @DeleteMapping("/remove")
+    fun removeFromSociety(
+        @CookieValue("token") jwtToken: String,
+        @RequestParam("societyName") societyName: String,
+        @RequestParam("studentId") deleteStudentIdList: List<String>
+    ) {
+        return societyService.removeFromSociety(jwtToken, societyName, deleteStudentIdList)
+    }
+
     @Operation(summary = "get all student enrolled in society but not society member")
     @GetMapping("/member")
     fun getAllSocietyMember(
