@@ -35,6 +35,7 @@ class StudentService(
 
         val enrolledSocietyList: List<String> =
             studentEntity.enrolledSocietyRecordEntities.map { enrolledSocietyRecordEntity: EnrolledSocietyRecordEntity -> enrolledSocietyRecordEntity.societyEntity.name }
+                .sorted()
 
         return StudentDto(studentEntity, enrolledSocietyList)
     }
