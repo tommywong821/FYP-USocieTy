@@ -125,7 +125,7 @@ export class EventUpdateComponent implements OnInit {
   }
 
   updateEvent(): void {
-    if (!this.updateEventForm.valid || !this.pictureFile) {
+    if (!this.updateEventForm.valid) {
       this.message.error('Field(s) are missing');
       Object.values(this.updateEventForm.controls).forEach(control => {
         if (control.invalid) {
