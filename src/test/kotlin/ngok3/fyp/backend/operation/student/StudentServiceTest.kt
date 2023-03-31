@@ -2,8 +2,10 @@ package ngok3.fyp.backend.operation.student
 
 import io.mockk.every
 import io.mockk.mockk
+import ngok3.fyp.backend.authentication.role.Role
 import ngok3.fyp.backend.authentication.student_role.StudentRoleEntity
 import ngok3.fyp.backend.authentication.student_role.StudentRoleEntityRepository
+import ngok3.fyp.backend.controller.authentication.model.MockAuthRepository
 import ngok3.fyp.backend.operation.enrolled.EnrolledStatus
 import ngok3.fyp.backend.operation.enrolled.society_record.EnrolledSocietyRecordEntity
 import ngok3.fyp.backend.operation.event.EventEntityRepository
@@ -17,6 +19,7 @@ import java.time.LocalDateTime
 import java.util.*
 
 class StudentServiceTest() {
+    private val mockAuthRepository: MockAuthRepository = MockAuthRepository()
     private val mockStudentRepository: MockStudentRepository = MockStudentRepository()
     private val studentRepository: StudentEntityRepository = mockk()
     private val eventRepository: EventEntityRepository = mockk()
@@ -136,11 +139,22 @@ class StudentServiceTest() {
             studentRoleEntity
         )
 
+        every {
+            studentRoleEntityRepository.findByStudentItscAndSocietyNameAndRole(
+                mockAuthRepository.validUserItsc,
+                societyEntity.name,
+                Role.ROLE_SOCIETY_MEMBER
+            )
+        } returns Optional.of(StudentRoleEntity())
+
         every { studentRepository.findById(any()) } returns Optional.of(studentEntity)
 
         every { eventRepository.countBySocietyNameList(any()) } returns 23
 
-        val result = studentService.countAllEventWithSocietyMember(UUID.randomUUID().toString())
+        val result = studentService.countAllEventWithSocietyMember(
+            mockAuthRepository.validUserCookieToken,
+            UUID.randomUUID().toString()
+        )
 
         assertEquals(23, result.totalNumber)
     }

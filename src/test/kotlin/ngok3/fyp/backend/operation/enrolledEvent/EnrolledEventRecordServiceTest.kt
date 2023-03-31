@@ -183,11 +183,22 @@ class EnrolledEventRecordServiceTest {
     fun `should count all event with event id`() {
         val eventUuid: UUID = UUID.randomUUID()
 
+        every {
+            studentRoleEntityRepository.findByStudentItscAndSocietyNameAndRole(
+                mockAuthRepository.validUserItsc,
+                "",
+                Role.ROLE_SOCIETY_MEMBER
+            )
+        } returns Optional.of(StudentRoleEntity())
+
         every { eventRepository.findById(eventUuid) } returns Optional.of(EventEntity())
 
         every { enrolledEventRecordRepository.countById_EventUuid(eventUuid) } returns 14
 
-        val result: TotalCountDto = enrolledEventService.countStudentEnrolledEventRecord(eventUuid.toString())
+        val result: TotalCountDto = enrolledEventService.countStudentEnrolledEventRecord(
+            mockAuthRepository.validUserCookieToken,
+            eventUuid.toString()
+        )
 
         Assertions.assertEquals(14, result.totalNumber)
     }

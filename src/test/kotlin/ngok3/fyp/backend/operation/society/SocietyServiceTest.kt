@@ -63,7 +63,10 @@ class SocietyServiceTest {
             student2
         )
 
-        val allMembers: List<StudentDto> = societyService.getAllSocietyMember(mockAuthRepository.testSocietyName)
+        val allMembers: List<StudentDto> = societyService.getAllSocietyMember(
+            mockAuthRepository.validUserCookieToken,
+            mockAuthRepository.testSocietyName
+        )
 
         assertEquals("qwerty", allMembers[0].itsc)
         assertEquals("nickname 1", allMembers[0].nickname)
@@ -103,7 +106,11 @@ class SocietyServiceTest {
         } returns mockStudentEntityList
 
 
-        societyService.assignSocietyMemberRole(mockAuthRepository.testSocietyName, studentIdList)
+        societyService.assignSocietyMemberRole(
+            mockAuthRepository.validUserCookieToken,
+            mockAuthRepository.testSocietyName,
+            studentIdList
+        )
 
     }
 
@@ -128,7 +135,11 @@ class SocietyServiceTest {
 
         every { studentRoleEntityRepository.deleteAll(mockStudentRoleEntityList) } returns Unit
 
-        societyService.removeSocietyMemberRole(mockAuthRepository.testSocietyName, studentIdList)
+        societyService.removeSocietyMemberRole(
+            mockAuthRepository.validUserCookieToken,
+            mockAuthRepository.testSocietyName,
+            studentIdList
+        )
 
         verify(exactly = 1) { studentRoleEntityRepository.deleteAll(mockStudentRoleEntityList) }
     }
