@@ -22,13 +22,12 @@
         *ngIf="user"
         class="flex"
       >
-        <span class="ml-4">{{ user?.nickname }}</span>
-        <span
-          nz-icon
-          class="ml-auto cursor-pointer"
+        <span class="ml-4 mr-2">{{ user?.nickname }}</span>
+        <fa-icon
+          class="cursor-pointer"
+          [icon]="['fas', 'door-open']"
           (click)="signOut()"
-          nzType="logout"
-        ></span>
+        ></fa-icon>
       </div>
     </div>
   </div>

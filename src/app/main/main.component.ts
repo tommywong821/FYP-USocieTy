@@ -1,4 +1,5 @@
 import {Component, OnInit} from '@angular/core';
+import {Router} from '@angular/router';
 import {IconProp} from '@fortawesome/fontawesome-svg-core';
 import {faHouseUser, faPiggyBank, faUsers} from '@fortawesome/free-solid-svg-icons';
 import {Path} from '../app-routing.module';
@@ -37,7 +38,7 @@ export class MainComponent implements OnInit {
 
   user: User | null = null;
 
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService, private router: Router) {}
 
   ngOnInit(): void {
     this.authService.user$.subscribe({
@@ -49,5 +50,6 @@ export class MainComponent implements OnInit {
 
   signOut(): void {
     this.authService.signOut();
+    this.router.navigate([Path.SignIn]);
   }
 }
