@@ -131,11 +131,21 @@ class EnrolledEventControllerTest @Autowired constructor(
     fun `should count all enrolled event with event id`() {
         val eventUuid: String = UUID.randomUUID().toString()
 
-        every { enrolledEventService.countStudentEnrolledEventRecord(eventUuid) } returns TotalCountDto(14)
+        every {
+            enrolledEventService.countStudentEnrolledEventRecord(
+                mockAuthRepository.validUserCookieToken,
+                eventUuid
+            )
+        } returns TotalCountDto(14)
 
         mockMvc.get("/enrolledEventRecord/{eventUuid}/totalNumber", eventUuid) {
+            headers {
+                contentType = MediaType.APPLICATION_JSON
+                cookie(Cookie("token", mockAuthRepository.validUserCookieToken))
+            }
         }.andDo { print() }.andExpect {
-            status { isOk() }
+
+        status { isOk() }
             content { contentType(MediaType.APPLICATION_JSON) }
             jsonPath("$.totalNumber") {
                 value(14)

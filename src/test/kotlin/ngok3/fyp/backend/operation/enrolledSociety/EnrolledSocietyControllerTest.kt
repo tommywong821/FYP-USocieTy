@@ -37,10 +37,12 @@ class EnrolledSocietyControllerTest @Autowired constructor(
         every {
             enrolledSocietyService.updateEnrolledSocietyRecord(
                 mockAuthRepository.validUserCookieToken,
-                UpdateEnrolledSocietyRecordDto(
-                    societyId = societyUUID.toString(),
-                    studentId = studentUUID.toString(),
-                    status = EnrolledStatus.SUCCESS
+                listOf(
+                    UpdateEnrolledSocietyRecordDto(
+                        societyId = societyUUID.toString(),
+                        studentId = studentUUID.toString(),
+                        status = EnrolledStatus.SUCCESS
+                    )
                 )
             )
         } returns Unit
@@ -51,7 +53,7 @@ class EnrolledSocietyControllerTest @Autowired constructor(
                 cookie(Cookie("token", mockAuthRepository.validUserCookieToken))
             }
 
-            content = "{\"societyId\":\"$societyUUID\",\"studentId\":\"$studentUUID\",\"status\":\"SUCCESS\"}"
+            content = "[{\"societyId\":\"$societyUUID\",\"studentId\":\"$studentUUID\",\"status\":\"SUCCESS\"}]"
         }.andDo { print() }.andExpect { status { isOk() } }
     }
 

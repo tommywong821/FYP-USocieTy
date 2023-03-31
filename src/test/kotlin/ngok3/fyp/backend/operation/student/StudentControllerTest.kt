@@ -18,6 +18,7 @@ import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.get
 import java.time.LocalDateTime
 import java.util.*
+import javax.servlet.http.Cookie
 
 @SpringBootTest
 @AutoConfigureMockMvc(addFilters = false)
@@ -160,9 +161,19 @@ class StudentControllerTest @Autowired constructor(
 
     @Test
     fun `should return total number of enrolled event by student id`() {
-        every { studentService.countAllEventWithSocietyMember("qwert") } returns TotalCountDto(23)
+        every {
+            studentService.countAllEventWithSocietyMember(
+                mockAuthRepository.validUserCookieToken,
+                "qwert"
+            )
+        } returns TotalCountDto(23)
 
-        mockMvc.get("/student/{studentId}/event/totalNumber", "qwert")
+        mockMvc.get("/student/{studentId}/event/totalNumber", "qwert") {
+            headers {
+                contentType = MediaType.APPLICATION_JSON
+                cookie(Cookie("token", mockAuthRepository.validUserCookieToken))
+            }
+        }
             .andDo { print() }
             .andExpect {
                 status { isOk() }

@@ -43,13 +43,23 @@ class EnrolledSocietyRecordServiceTest {
         mockEnrolledSocietyRecordEntity.societyEntity.name = mockAuthRepository.testSocietyName
 
         every {
-            enrolledSocietyRecordRepository.findById(
-                EnrolledSocietyRecordKey(
-                    studentUuid = studentUUID,
-                    societyUuid = societyUUID,
+            studentRoleEntityRepository.findByStudentItscAndSocietyNameAndRole(
+                mockAuthRepository.validUserItsc,
+                mockAuthRepository.testSocietyName,
+                Role.ROLE_SOCIETY_MEMBER
+            )
+        } returns Optional.of(StudentRoleEntity())
+
+        every {
+            enrolledSocietyRecordRepository.findAllById(
+                listOf(
+                    EnrolledSocietyRecordKey(
+                        studentUuid = studentUUID,
+                        societyUuid = societyUUID,
+                    )
                 )
             )
-        } returns Optional.of(mockEnrolledSocietyRecordEntity)
+        } returns listOf(mockEnrolledSocietyRecordEntity)
 
         every {
             studentRoleEntityRepository.findByStudentItscAndSocietyNameAndRole(
@@ -60,15 +70,17 @@ class EnrolledSocietyRecordServiceTest {
         } returns Optional.of(StudentRoleEntity())
 
         every {
-            enrolledSocietyRecordRepository.save(mockEnrolledSocietyRecordEntity)
-        } returns mockEnrolledSocietyRecordEntity
+            enrolledSocietyRecordRepository.saveAll(listOf(mockEnrolledSocietyRecordEntity))
+        } returns listOf(mockEnrolledSocietyRecordEntity)
 
         enrolledSocietyService.updateEnrolledSocietyRecord(
             mockAuthRepository.validUserCookieToken,
-            UpdateEnrolledSocietyRecordDto(
-                societyId = societyUUID.toString(),
-                studentId = studentUUID.toString(),
-                status = EnrolledStatus.SUCCESS
+            listOf(
+                UpdateEnrolledSocietyRecordDto(
+                    societyId = societyUUID.toString(),
+                    studentId = studentUUID.toString(),
+                    status = EnrolledStatus.SUCCESS
+                )
             )
         )
 
@@ -80,15 +92,17 @@ class EnrolledSocietyRecordServiceTest {
             )
         }
         verify(exactly = 1) {
-            enrolledSocietyRecordRepository.findById(
-                EnrolledSocietyRecordKey(
-                    studentUuid = studentUUID,
-                    societyUuid = societyUUID,
+            enrolledSocietyRecordRepository.findAllById(
+                listOf(
+                    EnrolledSocietyRecordKey(
+                        studentUuid = studentUUID,
+                        societyUuid = societyUUID,
+                    )
                 )
             )
         }
         verify(exactly = 1) {
-            enrolledSocietyRecordRepository.save(mockEnrolledSocietyRecordEntity)
+            enrolledSocietyRecordRepository.saveAll(listOf(mockEnrolledSocietyRecordEntity))
         }
     }
 

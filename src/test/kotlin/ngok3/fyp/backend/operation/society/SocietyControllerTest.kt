@@ -36,7 +36,10 @@ class SocietyControllerTest @Autowired constructor(
         )
 
         every {
-            societyService.getAllSocietyMember(mockAuthRepository.testSocietyName)
+            societyService.getAllSocietyMember(
+                mockAuthRepository.validUserCookieToken,
+                mockAuthRepository.testSocietyName
+            )
         } returns memberOfSociety
 
         mockMvc.get("/society/member") {
@@ -77,7 +80,11 @@ class SocietyControllerTest @Autowired constructor(
         )
 
         every {
-            societyService.assignSocietyMemberRole(mockAuthRepository.testSocietyName, studentIdList)
+            societyService.assignSocietyMemberRole(
+                mockAuthRepository.validUserCookieToken,
+                mockAuthRepository.testSocietyName,
+                studentIdList
+            )
         } returns Unit
 
         mockMvc.post("/society/member") {
@@ -101,7 +108,11 @@ class SocietyControllerTest @Autowired constructor(
         )
 
         every {
-            societyService.removeSocietyMemberRole(mockAuthRepository.testSocietyName, studentIdList)
+            societyService.removeSocietyMemberRole(
+                mockAuthRepository.validUserCookieToken,
+                mockAuthRepository.testSocietyName,
+                studentIdList
+            )
         } returns Unit
 
         mockMvc.delete("/society/member") {
