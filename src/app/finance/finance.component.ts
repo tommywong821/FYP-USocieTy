@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, ElementRef, HostListener, OnInit, Renderer2, ViewChild} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {BehaviorSubject, filter, zip} from 'rxjs';
 import {ApiService} from '../services/api.service';
@@ -28,7 +28,15 @@ export class FinanceComponent implements OnInit {
   toDate: string = '';
   financeTableRequestParam$: BehaviorSubject<FinanceTableRequestParam | null>;
 
-  constructor(private authService: AuthService, private apiService: ApiService, private fb: FormBuilder) {
+  @ViewChild('flexContainer') containerRef!: ElementRef;
+  ratio: number = 2.5;
+
+  constructor(
+    private renderer: Renderer2,
+    private authService: AuthService,
+    private apiService: ApiService,
+    private fb: FormBuilder
+  ) {
     this.currentDate = new Date();
     this.form = this.fb.group({
       societyName: ['', [Validators.required]],
@@ -84,5 +92,30 @@ export class FinanceComponent implements OnInit {
       this.pieChartData = pieChartData;
       this.barChartData = barChartData;
     });
+  }
+
+  @HostListener('window:resize')
+  onWindowResize() {
+    const container = this.containerRef.nativeElement;
+
+    // Get the actual width of the container
+    const containerWidth = container.offsetWidth;
+
+    // Get the total width of the flex items
+    const itemsWidth = Array.from(container.children).reduce((totalWidth, item) => {
+      //@ts-ignore
+      return totalWidth + item.clientWidth;
+    }, 0);
+
+    // Compare the container width to the items width to detect wrapping
+
+    if (containerWidth > 1536) {
+      this.ratio = 2.5;
+      //@ts-ignore
+    } else if (itemsWidth > containerWidth) {
+      console.log('Flex items wrapped!');
+      this.ratio = 1;
+      // Do something when wrapping occurs
+    }
   }
 }

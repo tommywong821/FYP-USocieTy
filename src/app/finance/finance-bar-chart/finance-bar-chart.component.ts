@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit} from '@angular/core';
+import {Component, ElementRef, EventEmitter, Input, OnInit} from '@angular/core';
 import {FinanceChartRecord} from '../model/IFinanceChartRecord';
 
 @Component({
@@ -8,6 +8,7 @@ import {FinanceChartRecord} from '../model/IFinanceChartRecord';
 })
 export class FinanceBarChartComponent implements OnInit {
   @Input() barChartData: FinanceChartRecord[] = [];
+  @Input() ratio!: number;
 
   view: [number, number];
 
@@ -22,8 +23,7 @@ export class FinanceBarChartComponent implements OnInit {
   }
 
   // view is the variable used to change the chart size (Ex: view = [width, height])
-
   onResize(event: any) {
-    this.view = [event.target.innerWidth / 2.5, 400];
+    this.view = [event.target.innerWidth / this.ratio, 400];
   }
 }
