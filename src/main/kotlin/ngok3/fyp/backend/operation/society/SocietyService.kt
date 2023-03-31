@@ -64,7 +64,9 @@ class SocietyService(
         return true
     }
 
-    fun getAllSocietyMember(societyName: String): List<StudentDto> {
+    fun getAllSocietyMember(jwtToken: String, societyName: String): List<StudentDto> {
+        jwtUtil.verifyUserMemberRoleOfSociety(jwtToken, societyName)
+
         val allStudentList =
             studentRepository.findByEnrolledSocietyRecordEntities_StatusNotInAndEnrolledSocietyRecordEntities_SocietyEntity_Name(
                 EnrolledStatus.PENDING,
@@ -79,7 +81,8 @@ class SocietyService(
         }
     }
 
-    fun assignSocietyMemberRole(societyName: String, studentIdList: List<String>) {
+    fun assignSocietyMemberRole(jwtToken: String, societyName: String, studentIdList: List<String>) {
+        jwtUtil.verifyUserMemberRoleOfSociety(jwtToken, societyName)
         val roleEntity: RoleEntity = roleEntityRepository.findByRole(Role.ROLE_SOCIETY_MEMBER).orElseThrow {
             Exception("Role: ${Role.ROLE_SOCIETY_MEMBER} does not exist")
         }
@@ -105,7 +108,8 @@ class SocietyService(
         studentRoleEntityRepository.saveAll(studentRoleEntityList)
     }
 
-    fun removeSocietyMemberRole(societyName: String, studentIdList: List<String>) {
+    fun removeSocietyMemberRole(jwtToken: String, societyName: String, studentIdList: List<String>) {
+        jwtUtil.verifyUserMemberRoleOfSociety(jwtToken, societyName)
         val studentRoleEntityList: List<StudentRoleEntity> =
             studentRoleEntityRepository.findByStudentEntity_UuidInAndSocietyEntity_Name(studentIdList.map { s: String ->
                 UUID.fromString(s)

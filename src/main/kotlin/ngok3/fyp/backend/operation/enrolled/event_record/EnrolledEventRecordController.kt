@@ -57,8 +57,9 @@ class EnrolledEventRecordController(
     @Operation(summary = "count all enrolled event with event id")
     @GetMapping("/{eventId}/totalNumber")
     fun getStudentEnrolledEventRecord(
+        @CookieValue("token") jwtToken: String,
         @PathVariable eventId: String,
     ): TotalCountDto {
-        return enrolledEventService.countStudentEnrolledEventRecord(eventId)
+        return enrolledEventService.countStudentEnrolledEventRecord(jwtToken, eventId)
     }
 }

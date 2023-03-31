@@ -40,7 +40,7 @@ class StudentService(
         return StudentDto(studentEntity, enrolledSocietyList)
     }
 
-    fun getAllEventWithSocietyMember(studentId: String, pageNum: Int, pageSize: Int): List<EventDto> {
+    fun getAllEventWithSocietyMember(jwtToken: String, studentId: String, pageNum: Int, pageSize: Int): List<EventDto> {
         val student: StudentEntity = studentRepository.findById(UUID.fromString(studentId)).orElseThrow {
             Exception("student with id: $studentId is not found")
         }
@@ -48,6 +48,8 @@ class StudentService(
         val societyNameList: MutableList<String> =
             student.studentRoleEntities.map { studentRoleEntity: StudentRoleEntity -> studentRoleEntity.societyEntity.name }
                 .toMutableList()
+
+        societyNameList.forEach { societyName -> jwtUtil.verifyUserMemberRoleOfSociety(jwtToken, societyName) }
 
         return eventRepository.findAllBySocietyNameListOrderByApplyDeadlineDesc(
             societyNameList,
@@ -71,7 +73,7 @@ class StudentService(
         }
     }
 
-    fun countAllEventWithSocietyMember(studentId: String): TotalCountDto {
+    fun countAllEventWithSocietyMember(jwtToken: String, studentId: String): TotalCountDto {
         val student: StudentEntity = studentRepository.findById(UUID.fromString(studentId)).orElseThrow {
             Exception("student with id: $studentId is not found")
         }
@@ -79,6 +81,8 @@ class StudentService(
         val societyNameList: MutableList<String> =
             student.studentRoleEntities.map { studentRoleEntity: StudentRoleEntity -> studentRoleEntity.societyEntity.name }
                 .toMutableList()
+
+        societyNameList.forEach { societyName -> jwtUtil.verifyUserMemberRoleOfSociety(jwtToken, societyName) }
 
         return TotalCountDto(eventRepository.countBySocietyNameList(societyNameList))
     }

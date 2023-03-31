@@ -54,18 +54,21 @@ class SocietyController(
     @Operation(summary = "get all student enrolled in society but not society member")
     @GetMapping("/member")
     fun getAllSocietyMember(
+        @CookieValue("token") jwtToken: String,
         @RequestParam("societyName", required = true) societyName: String,
     ): List<StudentDto> {
-        return societyService.getAllSocietyMember(societyName)
+        return societyService.getAllSocietyMember(jwtToken, societyName)
     }
 
     @Operation(summary = "assign society member role to student")
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/member")
     fun assignSocietyMemberRole(
+        @CookieValue("token") jwtToken: String,
         @RequestBody assignSocietyMemberRoleDto: AssignSocietyMemberRoleDto,
     ) {
         return societyService.assignSocietyMemberRole(
+            jwtToken,
             assignSocietyMemberRoleDto.societyName,
             assignSocietyMemberRoleDto.studentIdList
         )
@@ -75,10 +78,12 @@ class SocietyController(
     @ResponseStatus(HttpStatus.ACCEPTED)
     @DeleteMapping("/member")
     fun removeSocietyMemberRole(
+        @CookieValue("token") jwtToken: String,
         @RequestParam("societyName") societyName: String,
         @RequestParam("studentId") deleteStudentIdList: List<String>
     ) {
         return societyService.removeSocietyMemberRole(
+            jwtToken,
             societyName,
             deleteStudentIdList
         )
