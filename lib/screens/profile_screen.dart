@@ -11,9 +11,11 @@ import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
 class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({
-    Key? key,
-  }) : super(key: key);
+  final List<String> enrolledSociety;
+  const ProfileScreen({Key? key, required this.enrolledSociety})
+      : super(key: key);
+
+
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
 }
@@ -85,6 +87,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           style: Styles.carouselTitle,
         ),
       ),
+
       body: SafeArea(
         child: Center(
           child: Column(
@@ -273,6 +276,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
               ])
         ],
+
       ),
     );
   }

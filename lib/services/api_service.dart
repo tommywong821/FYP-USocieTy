@@ -1,11 +1,11 @@
 import 'dart:convert';
-import 'dart:ffi';
 
 import 'package:dio/dio.dart';
 import 'package:ngok3fyp_frontend_flutter/constants.dart';
 import 'package:ngok3fyp_frontend_flutter/model/auth/aad_profile.dart';
 import 'package:ngok3fyp_frontend_flutter/model/auth/jwt_token.dart';
 import 'package:ngok3fyp_frontend_flutter/model/enrolled_event/enrolled_event.dart';
+import 'package:ngok3fyp_frontend_flutter/model/enrolled_society.dart';
 import 'package:ngok3fyp_frontend_flutter/model/event.dart';
 import 'package:ngok3fyp_frontend_flutter/model/society.dart';
 import 'package:ngok3fyp_frontend_flutter/model/student.dart';
@@ -104,6 +104,21 @@ class ApiService {
     }
   }
 
+  Future<List<EnrolledSociety>> getAllEnrolledSociety() async {
+    final uri = Uri.https(backendDomain, '/student/societyStatus',
+        {'itsc': await _storageService.readSecureData(ITSC_KEY)});
+    final response = await _dio.getUri(uri);
+
+    if (response.statusCode == 200) {
+      List<dynamic> enrolledSocietyJsonList = jsonDecode(response.data);
+      return enrolledSocietyJsonList
+          .map((societyJson) => EnrolledSociety.fromJson(societyJson))
+          .toList();
+    } else {
+      throw Exception('Failed to load enrolled society by itsc:');
+    }
+  }
+
   Future<JWTToken> signCookieFromBackend(AADProfile aadProfile) async {
     final uri = Uri.https(backendDomain, '/auth/mobileLogin');
     final response = await _dio.postUri(uri, data: jsonEncode(aadProfile));
@@ -116,17 +131,33 @@ class ApiService {
   }
 
   Future<bool> registerEvent(String eventID) async {
-    final uri = Uri.https(backendDomain, '/event', {
-      'itsc': await _storageService.readSecureData(ITSC_KEY),
-      'eventId': eventID
-    });
-    final response = await _dio.postUri(
-      uri,
-    );
-    if (response.statusCode == 200)
-      return true;
-    else
+    final url = Uri.https(backendDomain, '/event/join').toString();
+    try {
+      final response = await _dio.post(url, data: {
+        'itsc': await _storageService.readSecureData(ITSC_KEY),
+        'eventId': eventID
+      });
+      if (response.statusCode == 200) return true;
+    } catch (e) {
+      print("/event/join error");
       return false;
+    }
+    return false;
+  }
+
+  Future<bool> registerSociety(String societyName) async {
+    final url = Uri.https(backendDomain, '/society/join').toString();
+    try {
+      final response = await _dio.post(url, data: {
+        'itsc': await _storageService.readSecureData(ITSC_KEY),
+        'societyName': societyName
+      });
+      if (response.statusCode == 200) return true;
+    } catch (e) {
+      print("/society/join error");
+      return false;
+    }
+    return false;
   }
 
   Future<List<Society>> getAllSociety(
@@ -136,7 +167,6 @@ class ApiService {
       'pageSize': pageSize == -1 ? '10' : pageSize.toString()
     });
     final response = await _dio.getUri(uri);
-
     if (response.statusCode == 200) {
       List<dynamic> societyJsonList = jsonDecode(response.data);
       return societyJsonList

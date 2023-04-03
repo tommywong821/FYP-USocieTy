@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ngok3fyp_frontend_flutter/model/styles.dart';
 
 class LoginWidget extends StatelessWidget {
   final loginAction;
@@ -16,11 +17,16 @@ class LoginWidget extends StatelessWidget {
           'Read for your next adventure ?',
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
         ),
-        ElevatedButton(
-          onPressed: () {
-            loginAction();
-          },
-          child: const Text('Login via your itsc account'),
+        Padding(
+          padding: const EdgeInsets.only(top: 10),
+          child: ElevatedButton(
+            style:
+                ElevatedButton.styleFrom(backgroundColor: Styles.primaryColor),
+            onPressed: () {
+              loginAction();
+            },
+            child: const Text('Login via your itsc account'),
+          ),
         ),
         Text(loginError)
       ],

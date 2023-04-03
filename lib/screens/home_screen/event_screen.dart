@@ -1,8 +1,9 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ngok3fyp_frontend_flutter/model/styles.dart';
 import 'package:ngok3fyp_frontend_flutter/model/event.dart';
 import 'package:ngok3fyp_frontend_flutter/services/api_service.dart';
+import 'package:intl/intl.dart';
+import 'package:quickalert/quickalert.dart';
 
 class EventScreen extends StatefulWidget {
   const EventScreen({
@@ -14,15 +15,39 @@ class EventScreen extends StatefulWidget {
 }
 
 class _EventScreenState extends State<EventScreen> {
+  DateTime getLocalTime(String date) {
+    final DateFormat defaultDateFormat = DateFormat("M/d/y H:m");
+    //-8 due to default date is in HK time zone
+    DateTime utcTime = defaultDateFormat.parse(date).add(Duration(hours: -8));
+    //utc time add local time offset to local time
+    DateTime localTime =
+        utcTime.add(Duration(hours: DateTime.now().timeZoneOffset.inHours));
+    return localTime;
+  }
+
+  String getGMT() {
+    String offset = DateTime.now().timeZoneOffset.inHours.toString();
+    //return GMT-i or GMT+i, i is offset
+    return (offset.startsWith("-")) ? " GMT" + offset : " GMT+" + offset;
+  }
+
   @override
   Widget build(BuildContext context) {
+    final DateFormat dateFormatter = DateFormat('MMM d');
+    final DateFormat timeFormat = DateFormat("H:mm");
+
     final Event event = ModalRoute.of(context)!.settings.arguments as Event;
+
     String eventImage = event.poster;
     String eventTitle = event.name;
     String eventContent = event.description;
     String eventLocation = event.location;
-    String eventDate = event.startDate;
+    String eventStartDate = event.startDate;
+    String eventEndDate = event.endDate;
+    String eventDeadline = event.applyDeadline;
     String eventSociety = event.society;
+    String eventSocietyHoldingEventNumber =
+        event.societyHoldingEventNumber.toString();
     String eventFee = event.fee.toString();
     return Scaffold(
         bottomNavigationBar: BottomRegisterButton(context, event),
@@ -93,9 +118,12 @@ class _EventScreenState extends State<EventScreen> {
                           Padding(
                             padding: const EdgeInsets.only(top: 10, left: 20),
                             child: Container(
-                              child: Text(
-                                eventTitle,
-                                style: Styles.eventScreenTitle,
+                              child: Container(
+                                child: Text(
+                                  eventTitle,
+                                  style: Styles.eventScreenTitle,
+                                  maxLines: 2,
+                                ),
                               ),
                               alignment: Alignment.centerLeft,
                             ),
@@ -114,28 +142,33 @@ class _EventScreenState extends State<EventScreen> {
                                     ),
                                     backgroundColor: Styles.primaryColor,
                                   ),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      //Society name
-                                      Padding(
-                                        padding: const EdgeInsets.only(
-                                          left: 15,
+                                  Flexible(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        //Society name
+                                        Padding(
+                                          padding: const EdgeInsets.only(
+                                            left: 15,
+                                          ),
+                                          child: Text(
+                                            eventSociety,
+                                            style: Styles.eventScreenBlackText,
+                                          ),
                                         ),
-                                        child: Text(eventSociety,
-                                            style: Styles.eventScreenBlackText),
-                                      ),
-                                      //Society events count
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(left: 15),
-                                        child: Text(
-                                          "10 Upcoming Events",
-                                          style: Styles.eventScreenGreyText,
+                                        //Society events count
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(left: 15),
+                                          child: Text(
+                                            "$eventSocietyHoldingEventNumber Upcoming Events",
+                                            style: Styles.eventScreenGreyText,
+                                          ),
                                         ),
-                                      ),
-                                    ],
+                                        //Society events count
+                                      ],
+                                    ),
                                   )
                                 ],
                               ),
@@ -150,7 +183,7 @@ class _EventScreenState extends State<EventScreen> {
                               color: Colors.grey.withOpacity(0.5),
                             ),
                           ),
-                          //Date & time
+                          //event start date
                           Padding(
                             padding: const EdgeInsets.only(left: 20),
                             child: Row(
@@ -159,21 +192,60 @@ class _EventScreenState extends State<EventScreen> {
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
+                                    Padding(
+                                      padding: const EdgeInsets.only(left: 15),
+                                      child: Text(
+                                        "From date",
+                                        style: Styles.eventScreenGreyText,
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                        left: 15,
+                                      ),
+                                      child: Text(
+                                          dateFormatter.format(getLocalTime(
+                                                  eventStartDate)) +
+                                              ", " +
+                                              timeFormat.format(getLocalTime(
+                                                  eventStartDate)) +
+                                              getGMT(),
+                                          style: Styles.eventScreenBlackText),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                          //event end date
+                          Padding(
+                            padding: const EdgeInsets.only(left: 20, top: 20),
+                            child: Row(
+                              children: [
+                                Icon(Icons.calendar_month),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.only(left: 15),
+                                      child: Text(
+                                        "To date",
+                                        style: Styles.eventScreenGreyText,
+                                      ),
+                                    ),
                                     //Event date
                                     Padding(
                                       padding: const EdgeInsets.only(
                                         left: 15,
                                       ),
-                                      child: Text("Mon, Nov 28",
-                                          style: Styles.eventScreenBlackText),
-                                    ),
-                                    //Event time
-                                    Padding(
-                                      padding: const EdgeInsets.only(left: 15),
                                       child: Text(
-                                        "14:00 - 20:00 GMT+8",
-                                        style: Styles.eventScreenGreyText,
-                                      ),
+                                          dateFormatter.format(
+                                                  getLocalTime(eventEndDate)) +
+                                              ", " +
+                                              timeFormat.format(
+                                                  getLocalTime(eventEndDate)) +
+                                              getGMT(),
+                                          style: Styles.eventScreenBlackText),
                                     ),
                                   ],
                                 ),
@@ -198,13 +270,6 @@ class _EventScreenState extends State<EventScreen> {
                                           style: Styles.eventScreenBlackText),
                                     ),
                                     //Adrress
-                                    Padding(
-                                      padding: const EdgeInsets.only(left: 15),
-                                      child: Text(
-                                        "location details...",
-                                        style: Styles.eventScreenGreyText,
-                                      ),
-                                    ),
                                   ],
                                 ),
                               ],
@@ -232,8 +297,54 @@ class _EventScreenState extends State<EventScreen> {
                               ],
                             ),
                           ),
+
                           Padding(
-                            padding: const EdgeInsets.only(top: 20, left: 20),
+                            padding: const EdgeInsets.only(left: 20, top: 20),
+                            child: Row(
+                              children: [
+                                Icon(Icons.event_busy),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.only(left: 15),
+                                      child: Text(
+                                        "Apply deadline",
+                                        style: Styles.eventScreenGreyText,
+                                      ),
+                                    ),
+                                    //Event date
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                        left: 15,
+                                      ),
+                                      child: Text(
+                                          dateFormatter.format(
+                                                  getLocalTime(eventDeadline)) +
+                                              ", " +
+                                              timeFormat.format(
+                                                  getLocalTime(eventDeadline)) +
+                                              getGMT(),
+                                          style: Styles.eventScreenBlackText),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+
+                          Padding(
+                            padding: const EdgeInsets.only(top: 10),
+                            child: Divider(
+                              indent: 20,
+                              endIndent: 20,
+                              thickness: 0.5,
+                              color: Colors.grey.withOpacity(0.5),
+                            ),
+                          ),
+
+                          Padding(
+                            padding: const EdgeInsets.only(top: 10, left: 20),
                             child: Text("Description",
                                 style: Styles.eventScreenBlackText),
                           ),
@@ -252,6 +363,7 @@ class _EventScreenState extends State<EventScreen> {
 }
 
 Widget BottomRegisterButton(BuildContext context, Event event) {
+  String eventName = event.name;
   Color hkustColor = Color.fromARGB(255, 0, 51, 102);
   return Material(
       color: Colors.white,
@@ -263,31 +375,41 @@ Widget BottomRegisterButton(BuildContext context, Event event) {
               child: ElevatedButton(
             child: Text("Register"),
             onPressed: () {
-              showDialog(
+              QuickAlert.show(
                 context: context,
-                builder: (context) => AlertDialog(
-                  title: Text('Are you sure?'),
-                  content: Text('***'),
-                  actions: [
-                    ElevatedButton(
-                        onPressed: () async {
-                          bool response =
-                              await ApiService().registerEvent(event.id);
-                          if (response) {
-                            print("success");
-                          } else {
-                            print("fail");
-                          }
-                          Navigator.pop(context);
-                        },
-                        child: Text('Yes')),
-                    ElevatedButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        child: Text('No'))
-                  ],
-                ),
+                type: QuickAlertType.confirm,
+                title: "Do you want to register for " + eventName + "?",
+                confirmBtnColor: Styles.primaryColor,
+                confirmBtnText: "Yes",
+                cancelBtnText: "No",
+                onConfirmBtnTap: () async {
+                  Navigator.pop(context);
+                  QuickAlert.show(
+                      context: context,
+                      type: QuickAlertType.loading,
+                      text: "",
+                      title: "Loading");
+                  bool response = await ApiService().registerEvent(event.id);
+                  if (response) {
+                    Navigator.pop(context);
+                    QuickAlert.show(
+                        context: context,
+                        type: QuickAlertType.success,
+                        title: "SUCCESS",
+                        text: "Please wait for the approval",
+                        confirmBtnText: "OK",
+                        confirmBtnColor: Styles.primaryColor);
+                  } else {
+                    Navigator.pop(context);
+                    QuickAlert.show(
+                        context: context,
+                        type: QuickAlertType.error,
+                        title: "ERROR",
+                        text: "Please contact society for assistance",
+                        confirmBtnText: "OK",
+                        confirmBtnColor: Styles.primaryColor);
+                  }
+                },
               );
             },
             style: ElevatedButton.styleFrom(

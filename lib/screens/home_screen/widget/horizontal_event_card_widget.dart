@@ -1,26 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:ngok3fyp_frontend_flutter/model/data.dart';
 import 'package:ngok3fyp_frontend_flutter/model/event.dart';
 import 'package:ngok3fyp_frontend_flutter/model/styles.dart';
+import 'package:intl/intl.dart';
 
-class HorizontalCardWidget extends StatefulWidget {
-  final int eventID;
-  final Event? eventObj;
-  const HorizontalCardWidget({Key? key, required this.eventID, this.eventObj})
+class HorizontalEventCardWidget extends StatefulWidget {
+  final Event event;
+  const HorizontalEventCardWidget({Key? key, required this.event})
       : super(key: key);
 
   @override
-  _HorizontalCardWidgetState createState() => _HorizontalCardWidgetState();
+  _HorizontalEventCardWidgetState createState() =>
+      _HorizontalEventCardWidgetState();
 }
 
-class _HorizontalCardWidgetState extends State<HorizontalCardWidget> {
+class _HorizontalEventCardWidgetState extends State<HorizontalEventCardWidget> {
   @override
   Widget build(BuildContext context) {
     double cardImageWidth = MediaQuery.of(context).size.width / 2.5;
-    int eventID = widget.eventID;
-    Event? eventObj = widget.eventObj ?? null;
-    // print("eventID: $eventID");
-    // print("eventObj: $eventObj");
+    final DateFormat dateFormatter = DateFormat('E , MMM d ');
+    final DateFormat parseDateFormatter = DateFormat('M/dd/y');
 
     return Container(
       width: MediaQuery.of(context).size.width - 50,
@@ -44,9 +42,7 @@ class _HorizontalCardWidgetState extends State<HorizontalCardWidget> {
                     ),
                     child: ClipRRect(
                       child: Image.network(
-                        eventObj != null
-                            ? eventObj.poster
-                            : data[eventID]["image"],
+                        widget.event.poster,
                         fit: BoxFit.fitWidth,
                       ),
                       borderRadius: BorderRadius.circular(20),
@@ -56,35 +52,33 @@ class _HorizontalCardWidgetState extends State<HorizontalCardWidget> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.only(top: 25),
+                    padding: const EdgeInsets.only(top: 25, left: 10),
                     child: Container(
                       width: MediaQuery.of(context).size.width -
-                          (cardImageWidth + 20),
+                          (cardImageWidth + 30),
                       alignment: Alignment.centerLeft,
                       child: Row(
                         children: <Widget>[
                           Flexible(
                             child: Text(
-                              eventObj != null
-                                  ? eventObj.name
-                                  : data[eventID]["title"],
+                              widget.event.name,
                               style: Styles.HCardTitle,
                               overflow: TextOverflow.ellipsis,
                               maxLines: 1,
                             ),
                           ),
-                          Spacer(),
-                          Text(eventObj != null
-                              ? eventObj.category
-                              : "null category")
                         ],
                       ),
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(top: 15),
+                    padding: const EdgeInsets.only(top: 15, left: 10),
                     child: Container(
-                      child: Text("date"),
+                      child: Text(dateFormatter
+                          .format(DateTime.parse(parseDateFormatter
+                              .parse(widget.event.startDate)
+                              .toString()))
+                          .toString()),
                       alignment: Alignment.centerLeft,
                     ),
                   ),
@@ -100,9 +94,7 @@ class _HorizontalCardWidgetState extends State<HorizontalCardWidget> {
                           padding: const EdgeInsets.only(left: 5),
                           child: Container(
                             child: Text(
-                              eventObj != null
-                                  ? eventObj.location
-                                  : "HKUST Art Hall",
+                              widget.event.location,
                               style: Styles.HCardLocation,
                             ),
                             alignment: Alignment.centerLeft,
@@ -121,11 +113,7 @@ class _HorizontalCardWidgetState extends State<HorizontalCardWidget> {
           elevation: 0,
         ),
         onTap: () {
-          // Navigator.pushNamed(
-          //   context,
-          //   '/****',
-          //   arguments: eventID
-          // );
+          Navigator.pushNamed(context, '/event', arguments: widget.event);
         },
       ),
     );
