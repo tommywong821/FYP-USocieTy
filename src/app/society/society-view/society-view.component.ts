@@ -58,9 +58,8 @@ export class SocietyViewComponent implements OnInit {
     let temp=studentId?.toString();
     this.apiService.removeAdministrativeRights(this.societyName,[temp!]).subscribe((response)=>{
     console.log("Click the delete member button");
-    setTimeout(() => {
-      this.refreshSocietyMember$.next({});
-    }, 500);
+
+    this.refreshSocietyMember$.next({});
     this.message.success('Successfully Remove Administrative Rights')
     },(error)=>{
     this.message.create('error', `Remove Administrative Rights Failed`);
@@ -86,9 +85,8 @@ export class SocietyViewComponent implements OnInit {
     this.apiService.assignAdministrativeRights(this.societyName,[temp!]).subscribe((response)=>{
     console.log("Click the Set As Society Member button");
     console.log(studentId);
-    setTimeout(() => {
-      this.refreshSocietyMember$.next({});
-    }, 1000);
+
+    this.refreshSocietyMember$.next({});
     this.message.success('Successfully Asign Administrative Rights')
   },(error)=>{
     this.message.create('error', `Asign Administrative Rights Failed`);
@@ -103,12 +101,9 @@ export class SocietyViewComponent implements OnInit {
     }];
     this.apiService.updateEnrolledSocietyRecord(body).subscribe((response)=>{
     console.log("Click the Approve button");
-    setTimeout(() => {
-      this.refreshEnrolledSocietyMember$.next({});
-    }, 500);
-    setTimeout(() => {
-      this.refreshSocietyMember$.next({});
-    }, 500);
+
+    this.refreshEnrolledSocietyMember$.next({});
+    this.refreshSocietyMember$.next({});
     this.message.success('Successfully Approve Request')
   },(error)=>{
     this.message.create('error', `Approve Request Failed`);
@@ -137,12 +132,8 @@ export class SocietyViewComponent implements OnInit {
   }
   this.apiService.updateEnrolledSocietyRecord(body).subscribe((response)=>{
     console.log("Click the Approve button");
-    setTimeout(() => {
-      this.refreshEnrolledSocietyMember$.next({});
-    }, 500);
-    setTimeout(() => {
-      this.refreshSocietyMember$.next({});
-    }, 500);
+    this.refreshEnrolledSocietyMember$.next({});
+    this.refreshSocietyMember$.next({});
     this.message.success('Successfully Approve ALL Request')
   },(error)=>{
     this.message.create('error', `Approve ALL Request Failed`);
