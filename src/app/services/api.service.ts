@@ -213,38 +213,25 @@ export class ApiService {
     );
   }
 
-  deleteSocietyMember(societyName:string|null,studentId:string[]|null): Observable<void> {
+  removeAdministrativeRights(societyName:string|null,studentId:string[]|null): Observable<void> {
     return this.restful.delete<void>(`${environment.backend_url}/society/member?societyName=${societyName}&studentId=${studentId}`)
   }
 
+  removeStudentFromSociety(societyName: string|null,studentId: string[]|null): Observable<void> {
+    return this.restful.delete<void>(`${environment.backend_url}/society/remove?societyName=${societyName}&studentId=${studentId}`)
+  }
 
-  setAsSocietyMember(societyName: string|null,studentIdList: string[]|null): Observable<void>{
+  assignAdministrativeRights(societyName: string|null,studentIdList: string[]|null): Observable<void>{
     const body = {
       societyName,
       studentIdList,
     };
     return this.restful.post<void>(`${environment.backend_url}/society/member`,body)
   }
+  updateEnrolledSocietyRecord(body:any):Observable<void>  {
+    return this.restful.put<void>(`${environment.backend_url}/enrolledSocietyRecord`,body)
+   }
 
-  updateEnrolledSocietyRecord(societyId: string|null,studentId: string|null, status: string):Observable<void>  {
-    const body = {
-      societyId,
-      studentId,
-      status,
-    };
-   return this.restful.put<void>(`${environment.backend_url}/enrolledSocietyRecord`, body)
-  }
 
-  updateALLEnrolledSocietyRecord(societyId: string|null,studentId: string|null, status: string): void {
-    const body = {
-      societyId,
-      studentId,
-      status,
-    };
-    this.restful.put(`${environment.backend_url}/enrolledSocietyRecord`, body).subscribe((res) => {
-      console.log(res);
-    },(error)=>{
-      alert(error.message);
-    });
-  }
+
 }
