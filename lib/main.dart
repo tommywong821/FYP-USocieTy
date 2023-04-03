@@ -4,13 +4,22 @@ import 'package:ngok3fyp_frontend_flutter/screens/home_screen/event_screen.dart'
 import 'package:ngok3fyp_frontend_flutter/screens/profile_screen.dart';
 import 'package:ngok3fyp_frontend_flutter/screens/welcome_screen/welcome_screen.dart';
 import 'package:ngok3fyp_frontend_flutter/screens/home_screen/home_screen.dart';
+
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
+
 import 'package:ngok3fyp_frontend_flutter/screens/home_screen/incoming_event_screen.dart';
 import 'package:ngok3fyp_frontend_flutter/screens/home_screen/society_screen.dart';
 import 'package:ngok3fyp_frontend_flutter/screens/home_screen/all_society_screen.dart';
 
 // void main() => runApp(MyApp());
+
 void main() async {
   await dotenv.load(fileName: '.env');
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
 
