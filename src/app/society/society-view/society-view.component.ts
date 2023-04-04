@@ -3,7 +3,9 @@ import { ActivatedRoute } from '@angular/router';
 import { ApiService } from 'src/app/services/api.service';
 import {filter, ReplaySubject, Subject, switchMap, tap} from 'rxjs';
 import {NzMessageRef, NzMessageService} from 'ng-zorro-antd/message';
+import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 import { EventAction } from 'src/app/model/event';
+
 @Component({
   selector: 'app-society-view',
   templateUrl: './society-view.component.html',
@@ -54,40 +56,54 @@ export class SocietyViewComponent implements OnInit {
   
   deleteSocietyMember(studentId:string|null):void{
     let temp=studentId?.toString();
-    this.apiService.deleteSocietyMember(this.societyName,[temp!]).subscribe((response)=>{
+    this.apiService.removeAdministrativeRights(this.societyName,[temp!]).subscribe((response)=>{
     console.log("Click the delete member button");
-    setTimeout(() => {
-      this.refreshSocietyMember$.next({});
-    }, 500);
+
+    this.refreshSocietyMember$.next({});
     this.message.success('Successfully Remove Administrative Rights')
     },(error)=>{
     this.message.create('error', `Remove Administrative Rights Failed`);
     });
-  }
+  } 
+
+  deleteStudent(studentId:string|null):void{
+    let temp=studentId?.toString();
+    this.apiService.removeStudentFromSociety(this.societyName,[temp!]).subscribe((response)=>{
+    console.log("Click the delete sudent button");
+    setTimeout(() => {
+      this.refreshSocietyMember$.next({});
+    }, 500);
+    this.message.success('Successfully Remove Student from Society')
+    },(error)=>{
+    this.message.create('error', `Remove Student from Society`);
+    });
+  } 
+
 
   setAsSocietyMember(studentId:string|null,):void{
     let temp=studentId?.toString();
-    this.apiService.setAsSocietyMember(this.societyName,[temp!]).subscribe((response)=>{
+    this.apiService.assignAdministrativeRights(this.societyName,[temp!]).subscribe((response)=>{
     console.log("Click the Set As Society Member button");
     console.log(studentId);
-    setTimeout(() => {
-      this.refreshSocietyMember$.next({});
-    }, 1000);
+
+    this.refreshSocietyMember$.next({});
     this.message.success('Successfully Asign Administrative Rights')
   },(error)=>{
     this.message.create('error', `Asign Administrative Rights Failed`);
   });
   }
 
-  approveSocietyRequest(societyId:string|null,studentId:string|null):void{
-    this.apiService.updateEnrolledSocietyRecord(societyId,studentId,"SUCCESS").subscribe((response)=>{
+  approveSocietyRequest(societyId:string|null,studentId:string|null,status:string|null):void{
+    const body = [{
+      societyId,
+      studentId,
+      status
+    }];
+    this.apiService.updateEnrolledSocietyRecord(body).subscribe((response)=>{
     console.log("Click the Approve button");
-    setTimeout(() => {
-      this.refreshEnrolledSocietyMember$.next({});
-    }, 500);
-    setTimeout(() => {
-      this.refreshSocietyMember$.next({});
-    }, 500);
+
+    this.refreshEnrolledSocietyMember$.next({});
+    this.refreshSocietyMember$.next({});
     this.message.success('Successfully Approve Request')
   },(error)=>{
     this.message.create('error', `Approve Request Failed`);
@@ -105,19 +121,23 @@ export class SocietyViewComponent implements OnInit {
   }
 
   approveAllSocietyRequest():void{
+    let body=[];
     for(let i=0;i<this.enrolledSocietiesList.length;i++){
-    this.apiService.updateALLEnrolledSocietyRecord(this.enrolledSocietiesList[i].societyId,this.enrolledSocietiesList[i].studentId,"SUCCESS");
+      const temp={
+        societyId:this.enrolledSocietiesList[i].societyId,
+        studentId:this.enrolledSocietiesList[i].studentId,
+        status:"SUCCESS",
+      }
+      body.push(temp);
   }
+  this.apiService.updateEnrolledSocietyRecord(body).subscribe((response)=>{
     console.log("Click the Approve button");
-    setTimeout(() => {
-      this.refreshEnrolledSocietyMember$.next({});
-    }, 2000);
-    setTimeout(() => {
-      this.refreshSocietyMember$.next({});
-    }, 2000);
-    setTimeout(() => {
-      this.message.success('Successfully Approve ALL Request')
-    }, 2000);
-
+    this.refreshEnrolledSocietyMember$.next({});
+    this.refreshSocietyMember$.next({});
+    this.message.success('Successfully Approve ALL Request')
+  },(error)=>{
+    this.message.create('error', `Approve ALL Request Failed`);
+  });
   }
+
 }
