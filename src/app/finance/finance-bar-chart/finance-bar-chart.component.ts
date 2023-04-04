@@ -13,7 +13,7 @@ export class FinanceBarChartComponent implements OnInit {
   view: [number, number];
 
   constructor() {
-    this.view = [innerWidth / 2.5, 400];
+    this.view = [innerWidth / this.ratio, 400];
   }
 
   ngOnInit(): void {}

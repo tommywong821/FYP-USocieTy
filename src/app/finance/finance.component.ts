@@ -31,12 +31,7 @@ export class FinanceComponent implements OnInit {
   @ViewChild('flexContainer') containerRef!: ElementRef;
   ratio: number = 2.5;
 
-  constructor(
-    private renderer: Renderer2,
-    private authService: AuthService,
-    private apiService: ApiService,
-    private fb: FormBuilder
-  ) {
+  constructor(private authService: AuthService, private apiService: ApiService, private fb: FormBuilder) {
     this.currentDate = new Date();
     this.form = this.fb.group({
       societyName: ['', [Validators.required]],
@@ -50,6 +45,10 @@ export class FinanceComponent implements OnInit {
     this.defaultDate = [this.getFirstDayOfYear(this.currentDate), this.getLastDayOfYear(this.currentDate)];
 
     this.authService.user$.pipe(filter(user => !!user)).subscribe(user => (this.enrolledSocieties = [...user!.roles]));
+  }
+
+  ngAfterViewInit(): void {
+    this.checkFlexWrap();
   }
 
   getFirstDayOfYear(date: Date): Date {
@@ -96,6 +95,10 @@ export class FinanceComponent implements OnInit {
 
   @HostListener('window:resize')
   onWindowResize() {
+    this.checkFlexWrap();
+  }
+
+  private checkFlexWrap() {
     const container = this.containerRef.nativeElement;
 
     // Get the actual width of the container
@@ -108,7 +111,6 @@ export class FinanceComponent implements OnInit {
     }, 0);
 
     // Compare the container width to the items width to detect wrapping
-
     if (containerWidth > 1536) {
       this.ratio = 2.5;
       //@ts-ignore
