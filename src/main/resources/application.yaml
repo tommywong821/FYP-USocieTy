@@ -5,6 +5,8 @@ spring:
     password: ${JDBC_DATABASE_PASSWORD}
     hikari:
       maximum-pool-size: ${JDBC_DATABASE_POOL}
+  jackson:
+    time-zone: Asia/Hong_Kong
   jpa:
     generate-ddl: true
 
