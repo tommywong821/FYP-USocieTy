@@ -1,5 +1,6 @@
 package ngok3.fyp.backend.operation.attendance
 
+import com.google.gson.Gson
 import io.swagger.v3.oas.annotations.Operation
 import ngok3.fyp.backend.operation.attendance.model.AttendanceDto
 import ngok3.fyp.backend.operation.attendance.model.StudentAttendanceDto
@@ -17,10 +18,12 @@ class AttendanceController(
     @Operation(summary = "create attendance of student in event ")
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    fun createAttendance(@RequestBody attendanceDto: AttendanceDto) {
-//    fun createAttendance(@RequestBody encryptedAttendanceData: EncryptedAttendanceData) {
-//        val decryptedData = rsaUtil.decryptMessage(encryptedAttendanceData.data)
-//        val attendanceDto: AttendanceDto = Gson().fromJson(decryptedData, AttendanceDto::class.java)
+    fun createAttendance(@RequestBody encryptedAttendanceData: String) {
+        val decryptedData = rsaUtil.decryptMessage(
+            encryptedAttendanceData.replace("\"", "").replace("\\", "")
+        )
+        val attendanceDto: AttendanceDto = Gson().fromJson(decryptedData, AttendanceDto::class.java)
+
         attendanceService.createAttendance(
             studentId = attendanceDto.studentId,
             eventId = attendanceDto.eventId,
@@ -38,9 +41,11 @@ class AttendanceController(
     @Operation(summary = "delete attendance with student id and event Id")
     @DeleteMapping
     fun deleteAttendance(
-        @RequestParam("studentUuid") studentUuid: String,
-        @RequestParam("eventUuid") eventUuid: String
+        @RequestParam("studentUuid") encryptedStudentUuid: String,
+        @RequestParam("eventUuid") encryptedEventUuid: String
     ): ResponseEntity<Void> {
+        val studentUuid: String = rsaUtil.decryptMessage(encryptedStudentUuid)
+        val eventUuid: String = rsaUtil.decryptMessage(encryptedEventUuid)
         return if (attendanceService.deleteAttendance(studentUuid, eventUuid)) {
             ResponseEntity.accepted().build()
         } else {
