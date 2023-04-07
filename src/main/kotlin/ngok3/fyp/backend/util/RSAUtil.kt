@@ -27,10 +27,10 @@ class RSAUtil {
             ClassPathResource("rsa_private_key.pem").inputStream
         ).use {
             it.readText()
-                .replace("-----BEGIN PRIVATE KEY-----", "")
+                .replace("-----BEGIN RSA PRIVATE KEY-----", "")
                 .replace("\n", "")
                 .replace("\r", "")
-                .replace("-----END PRIVATE KEY-----", "")
+                .replace("-----END RSA PRIVATE KEY-----", "")
         }
         val encoded = Base64.getDecoder().decode(keyText)
         return KeyFactory.getInstance("RSA")
