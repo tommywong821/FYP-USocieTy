@@ -24,13 +24,13 @@ class RSAUtil {
 
     private fun loadPrivateKey(): PrivateKey {
         val keyText = InputStreamReader(
-            ClassPathResource("rsa_private_key.pem").inputStream
+            ClassPathResource("rsa_public_key.pem").inputStream
         ).use {
             it.readText()
-                .replace("-----BEGIN RSA PRIVATE KEY-----", "")
+                .replace("-----BEGIN RSA PUBLIC KEY-----", "")
                 .replace("\n", "")
                 .replace("\r", "")
-                .replace("-----END RSA PRIVATE KEY-----", "")
+                .replace("-----END RSA PUBLIC KEY-----", "")
         }
         val encoded = Base64.getDecoder().decode(keyText)
         return KeyFactory.getInstance("RSA")
