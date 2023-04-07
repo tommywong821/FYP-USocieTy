@@ -32,7 +32,7 @@ export class AuthService {
   validateUser(queryParams: Params): Observable<User> {
     const request = {
       endpoint: validateUserEndpoint,
-      //endpoint: '/auth/mockServiceValidate',
+      // endpoint: '/auth/mockServiceValidate',
       body: {
         ticket: queryParams['ticket'],
       },
@@ -49,7 +49,15 @@ export class AuthService {
     if (!this._user$.value) {
       const fromLocalStorage = localStorage.getItem(environment.user_key);
       if (fromLocalStorage) {
-        const user = JSON.parse(fromLocalStorage);
+        const user: User = JSON.parse(fromLocalStorage);
+        const formattedDate = new Date().toLocaleString('en-US', {timeZone: 'Asia/Hong_Kong'});
+        const currentDateObj = new Date(formattedDate);
+        currentDateObj.setDate(currentDateObj.getDate());
+        if (new Date(user.expireDate) < currentDateObj) {
+          // token expire
+          localStorage.removeItem(environment.user_key);
+          return null;
+        }
         this._user$.next(user);
       }
     }

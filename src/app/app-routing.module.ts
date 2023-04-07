@@ -10,8 +10,8 @@ import {AuthGuard} from './services/auth.guard';
 import {MainComponent} from './main/main.component';
 import {EventComponent} from './event/event.component';
 import {EventViewComponent} from './event/event-view/event-view.component';
-import { SocietyComponent } from './society/society.component';
-import { SocietyViewComponent } from './society/society-view/society-view.component';
+import {SocietyComponent} from './society/society.component';
+import {SocietyViewComponent} from './society/society-view/society-view.component';
 
 export enum Path {
   Main = 'main',
@@ -22,7 +22,7 @@ export enum Path {
   ViewEvent = 'view',
   Finance = 'finance',
   CreateFinance = 'create',
-  Society="society",
+  Society = 'society',
 }
 
 const routes: Routes = [
@@ -34,6 +34,7 @@ const routes: Routes = [
   {
     path: Path.Main,
     component: MainComponent,
+    canActivate: [AuthGuard],
     children: [
       {
         path: Path.Event,
