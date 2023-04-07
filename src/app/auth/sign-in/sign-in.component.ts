@@ -1,7 +1,7 @@
 import {Path} from './../../app-routing.module';
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {filter, Subject, switchMap, takeUntil, tap} from 'rxjs';
+import {filter, fromEvent, Subject, switchMap, takeUntil, tap} from 'rxjs';
 import {User} from 'src/app/model/user';
 import {AuthService} from 'src/app/services/auth.service';
 import {environment} from 'src/environments/environment';
@@ -15,8 +15,6 @@ export class SignInComponent implements OnInit {
   constructor(private authService: AuthService, private route: ActivatedRoute, private router: Router) {}
 
   destroy$ = new Subject<void>();
-
-  loading$ = new Subject<void>();
 
   ngOnInit(): void {
     this.route.queryParams

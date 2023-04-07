@@ -1,7 +1,7 @@
 import {EventAction, EventProperty} from './../model/event';
 import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
-import {delay, filter, ReplaySubject, Subject, switchMap, takeUntil, tap} from 'rxjs';
+import {filter, fromEvent, ReplaySubject, Subject, switchMap, takeUntil, tap} from 'rxjs';
 import {AuthService} from 'src/app/services/auth.service';
 import {Path} from '../app-routing.module';
 import {ApiService} from '../services/api.service';
@@ -84,6 +84,14 @@ export class EventComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    fromEvent<KeyboardEvent>(document, 'keydown')
+      .pipe(
+        filter(event => event.code === 'F5'),
+        tap(event => event.preventDefault()),
+        tap(() => this.router.navigateByUrl(this.router.url))
+      )
+      .subscribe();
+
     this.AuthService.user$
       .pipe(
         filter(user => !!user),
@@ -122,9 +130,7 @@ export class EventComponent implements OnInit {
       )
       .subscribe();
 
-    setTimeout(() => {
-      this.refreshEvents$.next();
-    }, 500);
+    this.refreshEvents$.next();
   }
 
   ngOnDestroy(): void {
