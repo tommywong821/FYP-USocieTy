@@ -15,7 +15,6 @@ class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key, required this.enrolledSociety})
       : super(key: key);
 
-
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
 }
@@ -68,7 +67,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _loadImage();
   }
@@ -87,152 +85,157 @@ class _ProfileScreenState extends State<ProfileScreen> {
           style: Styles.carouselTitle,
         ),
       ),
-
-      body: SafeArea(
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              SizedBox(
-                height: 115,
-                width: 115,
-                child: Stack(
-                  fit: StackFit.expand,
-                  clipBehavior: Clip.none,
-                  children: [
-                    InkWell(
-                      onTap: () {
-                        showModalBottomSheet(
-                          context: context,
-                          builder: ((builder) => bottomSheet()),
-                        );
-                      },
-                      child: profilePicLink == ""
-                          ? CircleAvatar(
-                              backgroundImage:
-                                  AssetImage("assets/images/avatar.png"),
-                            )
-                          : CircleAvatar(
-                              backgroundImage: NetworkImage(profilePicLink),
-                            ),
-                    ),
-                    Positioned(
-                      right: -16,
-                      bottom: 0,
-                      child: SizedBox(
-                        height: 46,
-                        width: 46,
+      body: SingleChildScrollView(
+        physics: AlwaysScrollableScrollPhysics(),
+        child: Padding(
+          padding: const EdgeInsets.only(top: 10, bottom: 10),
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                SizedBox(
+                  height: 115,
+                  width: 115,
+                  child: Stack(
+                    fit: StackFit.expand,
+                    clipBehavior: Clip.none,
+                    children: [
+                      InkWell(
+                        onTap: () {
+                          showModalBottomSheet(
+                            context: context,
+                            builder: ((builder) => bottomSheet()),
+                          );
+                        },
+                        child: profilePicLink == ""
+                            ? CircleAvatar(
+                                backgroundImage:
+                                    AssetImage("assets/images/avatar.png"),
+                              )
+                            : CircleAvatar(
+                                backgroundImage: NetworkImage(profilePicLink),
+                              ),
                       ),
-                    )
-                  ],
+                      Positioned(
+                        right: -16,
+                        bottom: 0,
+                        child: SizedBox(
+                          height: 46,
+                          width: 46,
+                        ),
+                      )
+                    ],
+                  ),
                 ),
-              ),
-              Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                  child: TextButton(
-                    style: TextButton.styleFrom(
-                      side: BorderSide(color: Styles.primaryColor),
-                      padding: EdgeInsets.all(15),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20)),
-                      backgroundColor: Colors.white,
-                    ),
-                    onPressed: () {},
-                    child: Row(children: [
-                      Icon(Icons.person_outlined, color: Styles.primaryColor),
-                      SizedBox(width: 20),
-                      Expanded(
-                          child: Text("Name: ${args.fullname}",
-                              style: TextStyle(color: Styles.primaryColor))),
-                    ]),
-                  )),
-              Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                  child: TextButton(
-                    style: TextButton.styleFrom(
-                      side: BorderSide(color: Styles.primaryColor),
-                      padding: EdgeInsets.all(15),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20)),
-                      backgroundColor: Colors.white,
-                    ),
-                    onPressed: () {},
-                    child: Row(children: [
-                      Icon(
-                        Icons.email_outlined,
-                        color: Styles.primaryColor,
+                Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                    child: TextButton(
+                      style: TextButton.styleFrom(
+                        side: BorderSide(color: Styles.primaryColor),
+                        padding: EdgeInsets.all(15),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20)),
+                        backgroundColor: Colors.white,
                       ),
-                      SizedBox(width: 20),
-                      Expanded(
-                          child: Text("Nickname: ${args.nickname}",
-                              style: TextStyle(color: Styles.primaryColor))),
-                    ]),
-                  )),
-              Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                  child: TextButton(
-                    style: TextButton.styleFrom(
-                      side: BorderSide(color: Styles.primaryColor),
-                      padding: EdgeInsets.all(15),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20)),
-                      backgroundColor: Colors.white,
-                    ),
-                    onPressed: () {},
-                    child: Row(children: [
-                      Icon(
-                        Icons.email_outlined,
-                        color: Styles.primaryColor,
+                      onPressed: () {},
+                      child: Row(children: [
+                        Icon(Icons.person_outlined, color: Styles.primaryColor),
+                        SizedBox(width: 20),
+                        Expanded(
+                            child: Text("Name: ${args.fullname}",
+                                style: TextStyle(color: Styles.primaryColor))),
+                      ]),
+                    )),
+                Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                    child: TextButton(
+                      style: TextButton.styleFrom(
+                        side: BorderSide(color: Styles.primaryColor),
+                        padding: EdgeInsets.all(15),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20)),
+                        backgroundColor: Colors.white,
                       ),
-                      SizedBox(width: 20),
-                      Expanded(
-                          child: Text("ITSC account: ${args.email}",
-                              style: TextStyle(color: Styles.primaryColor))),
-                    ]),
-                  )),
-              Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                  child: TextButton(
-                    style: TextButton.styleFrom(
-                      side: BorderSide(color: Styles.primaryColor),
-                      padding: EdgeInsets.all(15),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20)),
-                      backgroundColor: Colors.white,
-                    ),
-                    onPressed: () {},
-                    child: Row(children: [
-                      Icon(Icons.people_outline, color: Styles.primaryColor),
-                      SizedBox(width: 20),
-                      Expanded(
-                          child: Text("Joined Society: ${args.enrolledSocieties}",
-                              style: TextStyle(color: Styles.primaryColor))),
-                    ]),
-                  )),
-              Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 140, vertical: 10),
-                  child: TextButton(
-                    style: TextButton.styleFrom(
-                      side: BorderSide(color: Styles.primaryColor),
-                      padding: EdgeInsets.all(10),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(35)),
-                      backgroundColor: Colors.white,
-                    ),
-                    //notice
-                    onPressed: () {
-                      logout();
-                    },
-                    child: Row(children: [
-                      Icon(Icons.exit_to_app_outlined,
-                          color: Styles.primaryColor),
-                      SizedBox(width: 15),
-                      Expanded(
-                          child: Text("LOG OUT",
-                              style: TextStyle(color: Colors.black))),
-                    ]),
-                  )),
-            ],
+                      onPressed: () {},
+                      child: Row(children: [
+                        Icon(
+                          Icons.email_outlined,
+                          color: Styles.primaryColor,
+                        ),
+                        SizedBox(width: 20),
+                        Expanded(
+                            child: Text("Nickname: ${args.nickname}",
+                                style: TextStyle(color: Styles.primaryColor))),
+                      ]),
+                    )),
+                Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                    child: TextButton(
+                      style: TextButton.styleFrom(
+                        side: BorderSide(color: Styles.primaryColor),
+                        padding: EdgeInsets.all(15),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20)),
+                        backgroundColor: Colors.white,
+                      ),
+                      onPressed: () {},
+                      child: Row(children: [
+                        Icon(
+                          Icons.email_outlined,
+                          color: Styles.primaryColor,
+                        ),
+                        SizedBox(width: 20),
+                        Expanded(
+                            child: Text("ITSC account: ${args.email}",
+                                style: TextStyle(color: Styles.primaryColor))),
+                      ]),
+                    )),
+                Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                    child: TextButton(
+                      style: TextButton.styleFrom(
+                        side: BorderSide(color: Styles.primaryColor),
+                        padding: EdgeInsets.all(15),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20)),
+                        backgroundColor: Colors.white,
+                      ),
+                      onPressed: () {},
+                      child: Row(children: [
+                        Icon(Icons.people_outline, color: Styles.primaryColor),
+                        SizedBox(width: 20),
+                        Expanded(
+                            child: Text(
+                                "Joined Society: ${args.enrolledSocieties}",
+                                style: TextStyle(color: Styles.primaryColor))),
+                      ]),
+                    )),
+                Padding(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 140, vertical: 10),
+                    child: TextButton(
+                      style: TextButton.styleFrom(
+                        side: BorderSide(color: Styles.primaryColor),
+                        padding: EdgeInsets.all(10),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(35)),
+                        backgroundColor: Colors.white,
+                      ),
+                      //notice
+                      onPressed: () {
+                        logout();
+                      },
+                      child: Row(children: [
+                        Icon(Icons.exit_to_app_outlined,
+                            color: Styles.primaryColor),
+                        SizedBox(width: 15),
+                        Expanded(
+                            child: Text("LOG OUT",
+                                style: TextStyle(color: Colors.black))),
+                      ]),
+                    )),
+              ],
+            ),
           ),
         ),
       ),
@@ -276,7 +279,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
               ])
         ],
-
       ),
     );
   }
