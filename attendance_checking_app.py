@@ -69,6 +69,8 @@ class ControlFrame(CTkFrame):
         self.insertBtn.pack(pady=(0,30))
         self.deleteBtn = CTkButton(master=self, text="Delete Record", command=self.deleteBtn_event, state="disabled", height=30)
         self.deleteBtn.pack(pady=(0,40))
+        #for mac user, please change above line to 
+        #self.deleteBtn.pack(pady=(0,0))
 
     def comboBox_event(self, choice):
         global comboBoxChoice
@@ -217,18 +219,20 @@ def encryptData(msg):
     encrypt_text = base64.b64encode(cipher.encrypt(bytes(msg.encode("utf8"))))
     return encrypt_text.decode('utf-8')
 
+
+def decryptData(msg):
+    private_key = getKey('rsa_private_key.pem')
+    cipher = PKCS1_cipher.new(private_key)
+    back_text = cipher.decrypt(base64.b64decode(msg), 0)
+    return back_text.decode('utf-8')
+
 def postAttendance(studentID, itsc):
     url = "https://ngok3fyp-backend.herokuapp.com/attendance"
     header = {'Content-Type': 'application/json'}
     currentDate = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")[:-3] + "Z"
     innerJson = '{"eventId": "' +str(getEventID(str.strip(comboBoxChoice)))+ '", "studentId": "' +str(studentID)+ '", "userItsc": "' +str(itsc)+ '", "currentTime": "'+currentDate+'"}'
-    jsonStr = innerJson
-
-    #encrypt part
-    #jsonStr = encryptData(json.dumps(innerJson))
-
-    jsonData = {'data': jsonStr}
-    response = requests.post(url, data=jsonStr, headers=header)
+    jsonStr = encryptData(innerJson)
+    response = requests.post(url, json=json.dumps(jsonStr), headers=header)
     print("Status Code: ", response.status_code)
     getAllAttendance()
     return response.status_code
@@ -247,7 +251,9 @@ def getEventID(eventName):
 def deleteAttendance(studentID, eventID):
     url = "https://ngok3fyp-backend.herokuapp.com/attendance"
     getAllAttendance()
-    response = requests.delete(url, params= {"studentUuid":studentID , "eventUuid": eventID})
+    encryptStudentID = encryptData(studentID)
+    encryptEventID = encryptData(eventID)
+    response = requests.delete(url, params= {"studentUuid":encryptStudentID , "eventUuid": encryptEventID})
     print("Status Code: ", response.status_code)
     return response.status_code
 
