@@ -147,7 +147,7 @@ class EventService(
         eventEntityRepository.deleteById(UUID.fromString(eventId))
     }
 
-    fun updateEvent(jwtToken: String, eventId: String, updateEvent: EventDto, uploadFile: MultipartFile) {
+    fun updateEvent(jwtToken: String, eventId: String, updateEvent: EventDto, uploadFile: MultipartFile?) {
 
         val eventEntityOpt: Optional<EventEntity> = eventEntityRepository.findById(UUID.fromString(eventId))
 
@@ -167,14 +167,17 @@ class EventService(
         )
 
         //update event entity
-        val s3BulkResponseEntity: List<S3BulkResponseEntity> =
-            s3Service.uploadFiles(
-                "${eventEntity.societyEntity.name}/event/",
-                arrayOf(uploadFile),
-                eventEntity.version + 1
-            )
-        if (s3BulkResponseEntity.isEmpty() || !s3BulkResponseEntity[0].successful) {
-            throw Exception("Upload File to AWS S3 failed")
+        if (uploadFile != null) {
+            val s3BulkResponseEntity: List<S3BulkResponseEntity> =
+                s3Service.uploadFiles(
+                    "${eventEntity.societyEntity.name}/event/",
+                    arrayOf(uploadFile),
+                    eventEntity.version + 1
+                )
+            if (s3BulkResponseEntity.isEmpty() || !s3BulkResponseEntity[0].successful) {
+                throw Exception("Upload File to AWS S3 failed")
+            }
+            eventEntity.poster = s3BulkResponseEntity[0].fileKey
         }
         //map aws s3 file name to database
         eventEntity.name = updateEvent.name
@@ -186,7 +189,6 @@ class EventService(
         eventEntity.category = updateEvent.category
         eventEntity.description = updateEvent.description
         eventEntity.fee = updateEvent.fee
-        eventEntity.poster = s3BulkResponseEntity[0].fileKey
 
         eventEntityRepository.save(eventEntity)
     }
