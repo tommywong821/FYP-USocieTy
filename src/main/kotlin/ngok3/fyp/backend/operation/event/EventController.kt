@@ -56,7 +56,7 @@ class EventController(
     @PutMapping("/{eventId}")
     fun updateEvent(
         @CookieValue("token") jwtToken: String,
-        @RequestPart("poster") uploadFile: MultipartFile,
+        @RequestPart("poster", required = false) uploadFile: MultipartFile,
         @RequestPart("event") eventDto: EventDto,
         @PathVariable eventId: String,
     ) {
