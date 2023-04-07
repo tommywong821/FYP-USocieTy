@@ -2,12 +2,51 @@ import 'package:flutter/material.dart';
 import 'package:ngok3fyp_frontend_flutter/model/profile_screen_arguments.dart';
 import 'package:intl/intl.dart';
 import 'package:ngok3fyp_frontend_flutter/model/styles.dart';
+import '../../../constants.dart';
+import '../../../services/aad_oauth_service.dart';
+import '../../../services/api_service.dart';
+import '../../../services/storage_service.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
-class AppBarWidget extends StatelessWidget {
+class AppBarWidget extends StatefulWidget {
   const AppBarWidget({Key? key}) : super(key: key);
 
   @override
+  State<AppBarWidget> createState() => _AppBarWidgetState();
+}
+
+class _AppBarWidgetState extends State<AppBarWidget> {
+  final AadOAuthService _aadOAuthService = AadOAuthService();
+  final StorageService _storageService = StorageService();
+  String profilePicLink = "";
+  String imageName = "";
+  Future _loadImage() async {
+    try {
+      final storedRefreshToken =
+          await _storageService.readSecureData(ACCESS_TOKEN_KEY);
+      final profile =
+          await ApiService().getUserDetails(storedRefreshToken.toString());
+      String tempImageName = profile.itsc;
+      setState(() {
+        imageName = tempImageName;
+      });
+      var ref = FirebaseStorage.instance.ref().child('profileImage/$imageName');
+      String url = (await ref.getDownloadURL()).toString();
+      setState(() {
+        profilePicLink = url;
+      });
+    } on Exception catch (e) {
+      print(e);
+    }
+  }
+    @override
+  void initState() {
+    super.initState();
+    _loadImage();
+  }
+  @override
   Widget build(BuildContext context) {
+
     var args =
         ModalRoute.of(context)!.settings.arguments as ProfileScreenArguments;
     var now = new DateTime.now().toLocal();
@@ -35,17 +74,16 @@ class AppBarWidget extends StatelessWidget {
                     Text("Hi! " + args.fullname, style: Styles.appBarName),
                   ],
                 )),
-                Padding(
-                    padding: EdgeInsets.only(right: 15),
-                    child: Container(
-                      height: 50,
-                      width: 50,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          image: DecorationImage(
-                              fit: BoxFit.cover,
-                              image: AssetImage("assets/images/avatar.png"))),
-                    )),
+                    InkWell(
+                      child: profilePicLink == ""
+                          ? CircleAvatar(
+                              backgroundImage:
+                                  AssetImage("assets/images/avatar.png"),
+                            )
+                          : CircleAvatar(
+                              backgroundImage: NetworkImage(profilePicLink),
+                            ),
+                    ),
               ],
             ),
           ),
