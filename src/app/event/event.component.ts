@@ -74,7 +74,7 @@ export class EventComponent implements OnInit {
     [EventAction.Delete]: null,
   };
 
-  destroy$ = new Subject<void>();
+  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(
     private router: Router,
@@ -90,7 +90,7 @@ export class EventComponent implements OnInit {
         tap(user => (this.enrolledSocieties = [...user!.enrolledSocieties])),
         switchMap(user => this.ApiService.getEventCount(user!.uuid)),
         tap(eventTotal => (this.eventTotal = eventTotal)),
-        takeUntil(this.destroy$)
+        takeUntil(this.destroyed$)
       )
       .subscribe();
 
@@ -101,7 +101,7 @@ export class EventComponent implements OnInit {
         switchMap(user => this.ApiService.getEvents(user!.uuid, this.pageIndex, this.pageSize)),
         tap(() => this.message.remove(this.messages[EventAction.Fetch]!.messageId)),
         tap(event => (this.events = ([] as Event[]).concat(event))),
-        takeUntil(this.destroy$)
+        takeUntil(this.destroyed$)
       )
       .subscribe({
         error: err => {
@@ -118,7 +118,7 @@ export class EventComponent implements OnInit {
         tap(() => this.message.remove(this.messages[EventAction.Delete]!.messageId)),
         tap(() => this.message.success('Successfully deleted event')),
         tap(() => this.refreshEvents$.next({})),
-        takeUntil(this.destroy$)
+        takeUntil(this.destroyed$)
       )
       .subscribe();
 
@@ -126,7 +126,8 @@ export class EventComponent implements OnInit {
   }
 
   ngOnDestroy(): void {
-    this.destroy$.next();
+    this.destroy$.next(true);
+    this.destroy$.complete();
   }
 
   changePageIndex(): void {
