@@ -8,8 +8,8 @@ import java.time.format.DateTimeFormatter
 
 @Component
 class DateUtil {
-    val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("M/d/yyyy")
-    val formatterWithHour: DateTimeFormatter = DateTimeFormatter.ofPattern("M/d/yyyy HH:mm")
+    val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("d/M/yyyy")
+    val formatterWithHour: DateTimeFormatter = DateTimeFormatter.ofPattern("d/M/yyyy HH:mm")
     val formatterWithTimeStamp: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSX")
     val currentLocalDateTime: LocalDateTime = LocalDateTime.now(ZoneId.of("Asia/Hong_Kong"))
     fun convertLocalDateTimeToString(localDateTime: LocalDateTime?): String {
