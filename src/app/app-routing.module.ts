@@ -12,6 +12,7 @@ import {EventComponent} from './event/event.component';
 import {EventViewComponent} from './event/event-view/event-view.component';
 import {SocietyComponent} from './society/society.component';
 import {SocietyViewComponent} from './society/society-view/society-view.component';
+import {MainGuard} from './services/main.guard';
 
 export enum Path {
   Main = 'main',
@@ -34,7 +35,7 @@ const routes: Routes = [
   {
     path: Path.Main,
     component: MainComponent,
-    canActivate: [AuthGuard],
+    canActivate: [MainGuard],
     children: [
       {
         path: Path.Event,
