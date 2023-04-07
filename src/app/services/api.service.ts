@@ -162,7 +162,7 @@ export class ApiService {
       formData.append('poster', poster);
     }
 
-    return this.restful.put<void>(`${environment.backend_url}/event`, formData);
+    return this.restful.put<void>(`${environment.backend_url}/event/${eventDto.id}`, formData);
   }
 
   deleteEvent(eventId: string): Observable<void> {
