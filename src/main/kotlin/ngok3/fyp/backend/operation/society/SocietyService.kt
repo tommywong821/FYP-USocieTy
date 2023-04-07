@@ -145,6 +145,8 @@ class SocietyService(
                 studentUuid = UUID.fromString(studentId)
             )
         })
+
+        removeSocietyMemberRole(jwtToken, societyName, studentIdList)
     }
 
 //    TODO dummy remove
