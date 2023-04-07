@@ -1,7 +1,7 @@
 import {EventAction, EventProperty} from './../model/event';
 import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
-import {filter, finalize, ReplaySubject, Subject, switchMap, takeUntil, tap} from 'rxjs';
+import {delay, filter, ReplaySubject, Subject, switchMap, takeUntil, tap} from 'rxjs';
 import {AuthService} from 'src/app/services/auth.service';
 import {Path} from '../app-routing.module';
 import {ApiService} from '../services/api.service';
@@ -53,7 +53,7 @@ export class EventComponent implements OnInit {
 
   events: Event[] = [];
   eventTotal = 0;
-  refreshEvents$ = new Subject();
+  refreshEvents$ = new Subject<void>();
 
   enrolledSocieties: string[] = [];
 
@@ -96,6 +96,7 @@ export class EventComponent implements OnInit {
 
     this.refreshEvents$
       .pipe(
+        delay(200),
         tap(() => (this.messages[EventAction.Fetch] = this.message.loading('Fetching events...'))),
         switchMap(() => this.AuthService.user$),
         switchMap(user => this.ApiService.getEvents(user!.uuid, this.pageIndex, this.pageSize)),
@@ -117,12 +118,12 @@ export class EventComponent implements OnInit {
         switchMap(eventId => this.ApiService.deleteEvent(eventId)),
         tap(() => this.message.remove(this.messages[EventAction.Delete]!.messageId)),
         tap(() => this.message.success('Successfully deleted event')),
-        tap(() => this.refreshEvents$.next({})),
+        tap(() => this.refreshEvents$.next()),
         takeUntil(this.destroyed$)
       )
       .subscribe();
 
-    this.refreshEvents$.next({});
+    this.refreshEvents$.next();
   }
 
   ngOnDestroy(): void {
@@ -131,7 +132,7 @@ export class EventComponent implements OnInit {
   }
 
   changePageIndex(): void {
-    this.refreshEvents$.next({});
+    this.refreshEvents$.next();
   }
 
   toggleCreateEvent(): void {
