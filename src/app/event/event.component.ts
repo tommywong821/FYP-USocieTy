@@ -126,8 +126,8 @@ export class EventComponent implements OnInit {
   }
 
   ngOnDestroy(): void {
-    this.destroy$.next(true);
-    this.destroy$.complete();
+    this.destroyed$.next(true);
+    this.destroyed$.complete();
   }
 
   changePageIndex(): void {
