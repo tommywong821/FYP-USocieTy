@@ -96,7 +96,6 @@ export class EventComponent implements OnInit {
 
     this.refreshEvents$
       .pipe(
-        delay(200),
         tap(() => (this.messages[EventAction.Fetch] = this.message.loading('Fetching events...'))),
         switchMap(() => this.AuthService.user$),
         switchMap(user => this.ApiService.getEvents(user!.uuid, this.pageIndex, this.pageSize)),
@@ -123,7 +122,9 @@ export class EventComponent implements OnInit {
       )
       .subscribe();
 
-    this.refreshEvents$.next();
+    setTimeout(() => {
+      this.refreshEvents$.next();
+    }, 500);
   }
 
   ngOnDestroy(): void {
