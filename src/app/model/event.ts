@@ -11,7 +11,7 @@ export interface Event {
   description: string;
   fee: number;
   society?: string;
-  societyHoldingEventNumber?: number;
+  version?: number;
 }
 
 export enum EventProperty {

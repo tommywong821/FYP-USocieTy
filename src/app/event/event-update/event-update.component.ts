@@ -47,7 +47,7 @@ export class EventUpdateComponent implements OnInit {
   loadingMessage: NzMessageRef | null = null;
 
   isProcessing = false;
-  societyHoldingEventNumber?: number;
+  version?: number;
 
   constructor(
     private ApiService: ApiService,
@@ -79,7 +79,7 @@ export class EventUpdateComponent implements OnInit {
               ])
           ),
           tap(event => console.log(event)),
-          tap(event => (this.societyHoldingEventNumber = event.societyHoldingEventNumber)),
+          tap(event => (this.version = event.version)),
           tap(event => this.loadDataToUpdateEventForm(event)),
           tap(() => this.message.remove(this.loadingMessage?.messageId))
         )
@@ -96,7 +96,7 @@ export class EventUpdateComponent implements OnInit {
           tap(() => (this.loadingMessage = this.message.loading('Updating event...'))),
           switchMap(event =>
             this.ApiService.updateEvent(
-              {...event, societyHoldingEventNumber: this.societyHoldingEventNumber},
+              {...event, version: this.version},
               this.updateEventForm.value.society,
               this.pictureFile
             )
