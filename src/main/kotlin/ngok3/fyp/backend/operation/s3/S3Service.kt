@@ -22,7 +22,7 @@ class S3Service(
     }
 
     fun uploadFiles(bucketFolderName: String, files: Array<MultipartFile>): List<S3BulkResponseEntity> {
-        return this.uploadFiles(bucketFolderName, files, 0)
+        return this.uploadFiles(bucketFolderName, files, 1)
     }
 
     fun uploadFiles(bucketFolderName: String, files: Array<MultipartFile>, version: Long): List<S3BulkResponseEntity> {
