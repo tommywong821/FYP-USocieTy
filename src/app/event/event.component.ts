@@ -1,7 +1,7 @@
 import {EventAction, EventProperty} from './../model/event';
 import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
-import {filter, ReplaySubject, Subject, switchMap, tap} from 'rxjs';
+import {filter, finalize, ReplaySubject, Subject, switchMap, takeUntil, tap} from 'rxjs';
 import {AuthService} from 'src/app/services/auth.service';
 import {Path} from '../app-routing.module';
 import {ApiService} from '../services/api.service';
@@ -74,6 +74,8 @@ export class EventComponent implements OnInit {
     [EventAction.Delete]: null,
   };
 
+  destroy$ = new Subject<void>();
+
   constructor(
     private router: Router,
     private ApiService: ApiService,
@@ -87,7 +89,8 @@ export class EventComponent implements OnInit {
         filter(user => !!user),
         tap(user => (this.enrolledSocieties = [...user!.enrolledSocieties])),
         switchMap(user => this.ApiService.getEventCount(user!.uuid)),
-        tap(eventTotal => (this.eventTotal = eventTotal))
+        tap(eventTotal => (this.eventTotal = eventTotal)),
+        takeUntil(this.destroy$)
       )
       .subscribe();
 
@@ -97,7 +100,8 @@ export class EventComponent implements OnInit {
         switchMap(() => this.AuthService.user$),
         switchMap(user => this.ApiService.getEvents(user!.uuid, this.pageIndex, this.pageSize)),
         tap(() => this.message.remove(this.messages[EventAction.Fetch]!.messageId)),
-        tap(event => (this.events = ([] as Event[]).concat(event)))
+        tap(event => (this.events = ([] as Event[]).concat(event))),
+        takeUntil(this.destroy$)
       )
       .subscribe({
         error: err => {
@@ -113,11 +117,16 @@ export class EventComponent implements OnInit {
         switchMap(eventId => this.ApiService.deleteEvent(eventId)),
         tap(() => this.message.remove(this.messages[EventAction.Delete]!.messageId)),
         tap(() => this.message.success('Successfully deleted event')),
-        tap(() => this.refreshEvents$.next({}))
+        tap(() => this.refreshEvents$.next({})),
+        takeUntil(this.destroy$)
       )
       .subscribe();
 
     this.refreshEvents$.next({});
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
   }
 
   changePageIndex(): void {
