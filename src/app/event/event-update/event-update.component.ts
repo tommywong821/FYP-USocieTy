@@ -5,7 +5,7 @@ import {FormGroup, FormBuilder, Validators} from '@angular/forms';
 import {NzMessageRef, NzMessageService} from 'ng-zorro-antd/message';
 import {NzUploadChangeParam, NzUploadFile} from 'ng-zorro-antd/upload';
 import {Subject, filter, tap, switchMap, first} from 'rxjs';
-import {EventCategory, EventFormData} from 'src/app/model/event';
+import {EventCategory} from 'src/app/model/event';
 import {convertFormDataToEvent, getPictureNameFromUrl} from 'src/util/event.util';
 import {Event} from '../../model/event';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -47,6 +47,7 @@ export class EventUpdateComponent implements OnInit {
   loadingMessage: NzMessageRef | null = null;
 
   isProcessing = false;
+  societyHoldingEventNumber?: number;
 
   constructor(
     private ApiService: ApiService,
@@ -78,6 +79,7 @@ export class EventUpdateComponent implements OnInit {
               ])
           ),
           tap(event => console.log(event)),
+          tap(event => (this.societyHoldingEventNumber = event.societyHoldingEventNumber)),
           tap(event => this.loadDataToUpdateEventForm(event)),
           tap(() => this.message.remove(this.loadingMessage?.messageId))
         )
@@ -92,7 +94,13 @@ export class EventUpdateComponent implements OnInit {
       this.event$
         .pipe(
           tap(() => (this.loadingMessage = this.message.loading('Updating event...'))),
-          switchMap(event => this.ApiService.updateEvent(event, this.updateEventForm.value.society, this.pictureFile)),
+          switchMap(event =>
+            this.ApiService.updateEvent(
+              {...event, societyHoldingEventNumber: this.societyHoldingEventNumber},
+              this.updateEventForm.value.society,
+              this.pictureFile
+            )
+          ),
           tap(() => this.message.remove(this.loadingMessage?.messageId)),
           tap(() => this.message.success('Successfully created event', {nzDuration: 2000})),
           tap(() => this.backToEventViewPage())
