@@ -11,8 +11,9 @@ import {
 import {Event, EventFormData} from 'src/app/model/event';
 import {User} from 'src/app/model/user';
 
-export function convertFormDataToEvent(formData: EventFormData): Event {
+export function convertFormDataToEvent(eventId: string, formData: EventFormData): Event {
   const event: Event = {
+    id: eventId,
     name: formData.name,
     poster: formData.poster,
     maxParticipation: formData.maxParticipation,
