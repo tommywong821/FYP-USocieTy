@@ -60,7 +60,7 @@ export class EventComponent implements OnInit {
   pageIndex = 1;
   pageSize = 15;
 
-  deleteEvent$ = new Subject();
+  deleteEvent$ = new Subject<void>();
   deleteEventId$ = new ReplaySubject<string>();
 
   showModal = false;
@@ -84,13 +84,10 @@ export class EventComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    fromEvent<KeyboardEvent>(document, 'keydown')
-      .pipe(
-        filter(event => event.code === 'F5'),
-        tap(event => event.preventDefault()),
-        tap(() => this.router.navigateByUrl(this.router.url))
-      )
-      .subscribe();
+    const cachedEvent = localStorage.getItem('events');
+    if (cachedEvent) {
+      this.events = JSON.parse(cachedEvent);
+    }
 
     this.AuthService.user$
       .pipe(
@@ -109,6 +106,7 @@ export class EventComponent implements OnInit {
         switchMap(user => this.ApiService.getEvents(user!.uuid, this.pageIndex, this.pageSize)),
         tap(() => this.message.remove(this.messages[EventAction.Fetch]!.messageId)),
         tap(event => (this.events = ([] as Event[]).concat(event))),
+        tap(event => localStorage.setItem('events', JSON.stringify(event))),
         takeUntil(this.destroyed$)
       )
       .subscribe({
@@ -157,7 +155,7 @@ export class EventComponent implements OnInit {
 
   confirmEventDeletion(): void {
     this.showModal = false;
-    this.deleteEvent$.next({});
+    this.deleteEvent$.next();
   }
 
   cancelEventDeletion(): void {
