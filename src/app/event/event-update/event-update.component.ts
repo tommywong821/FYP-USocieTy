@@ -5,7 +5,7 @@ import {FormGroup, FormBuilder, Validators} from '@angular/forms';
 import {NzMessageRef, NzMessageService} from 'ng-zorro-antd/message';
 import {NzUploadChangeParam, NzUploadFile} from 'ng-zorro-antd/upload';
 import {Subject, filter, tap, switchMap, first} from 'rxjs';
-import {EventCategory} from 'src/app/model/event';
+import {EventCategory, EventFormData} from 'src/app/model/event';
 import {convertFormDataToEvent, getPictureNameFromUrl} from 'src/util/event.util';
 import {Event} from '../../model/event';
 import {ActivatedRoute, Router} from '@angular/router';

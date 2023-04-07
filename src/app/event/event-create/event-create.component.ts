@@ -101,7 +101,7 @@ export class EventCreateComponent implements OnInit {
 
     this.isProcessing = true;
     this.loadingMessage = this.message.loading('Creating event...');
-    this.event$.next(convertFormDataToEvent({...this.createEventForm.value}));
+    this.event$.next(convertFormDataToEvent('', {...this.createEventForm.value}));
   }
 
   saveFileBuffer({file}: NzUploadChangeParam): void {
