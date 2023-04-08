@@ -46,10 +46,7 @@ class AttendanceControllerTest @Autowired constructor(
                 contentType = MediaType.APPLICATION_JSON
             }
             content =
-                "{\"eventId\":\"6c8180b4-0681-4d88-950f-c8f16859f9d6\",\"studentId\":\"cead8c1e-7cbe-44c6-8fc1-dabe57c80168\",\"userItsc\":\"itsc\",\"currentTime\":\"2023-03-24T15:33:23.123Z\"}"
-//            TODO enable encryption
-//            content =
-//                "{\"data\":\"dc3XrBxZHE0urCUzKlehtgXvLwl93WIgb+udouUxs2uxT56+ptMptD9I3VNxL3fTXGvyIXDlU6zVZcRuaMfV/6OBuCIylFigdChzngIg7WuEQ0kgtvP4aG/6eqyEz8eOdW/4czE+kxwYKq1yhC3y9PPwwY6fyhr0PZmV5jftXN4=\"}"
+                "YonFwpXCcymehFJgXy/KLlMvPBi3m2g1dYwry0R1KUmz6sFJcRJrtj3LPKhf5xUgfwkvDw0Z63lGX+VRbQF9SiJCHt7lZVDKeyTVypXAP/OMjaFkDVqaX9l1OnKgzcqzAq1w939UykkqSetKZqBrFDWfHwAQGAzJbJL0HIT8Sj/o7jMXUCIU3l6xRsgyuWQPurWpqGHoJhxiSOQdsrRUQnpfmsB4XSd84vd7Bk8pwcZmdCpFubIGwm6BMV66m9S+A49mOEyK/KWcpCsrH1ELa2G0X9u9lsdGYdqcWM29pWNROjN3KyptN5VvQeODF9xSuLw2h1xOWblbQUgIy2W62w=="
         }.andDo { print() }.andExpect { status { isCreated() } }
     }
 
@@ -105,8 +102,8 @@ class AttendanceControllerTest @Autowired constructor(
 
     @Test
     fun `should delete attendance`() {
-        val mockStudentUuid: String = UUID.randomUUID().toString()
-        val mockEventUuid: String = UUID.randomUUID().toString()
+        val mockStudentUuid: String = "f4d097c3-7e28-464e-8f44-205380d4ae60"
+        val mockEventUuid: String = "faded982-91d2-42f0-a745-5cbee94b67cf"
 
         every {
             attendanceService.deleteAttendance(mockStudentUuid, mockEventUuid)
@@ -117,8 +114,14 @@ class AttendanceControllerTest @Autowired constructor(
                 contentType = MediaType.APPLICATION_JSON
             }
             params = LinkedMultiValueMap<String, String>().apply {
-                add("studentUuid", mockStudentUuid)
-                add("eventUuid", mockEventUuid)
+                add(
+                    "studentUuid",
+                    "VhCVAcOfRIivipOT3syiRJy1budLt7WPX3TxUyDQIC5hGV/d356CpAQ7ASeIT2L+yErB6ptaiAxsalxvmGsfho/2SOy0GUQIPqY0DpdGbhGkSIoSVTxvpO4u93e8EPKgbiLHCleM9yWJXLYAZZbiqxzaBK+0e02aLmhnHUzYwjobd++RgybmwoA3cUOYFtSrIjI8udXtWFsGWTZLtOv0RdUdLeTMAYh89hp6UIkKJvXepEE7qcg6Cn4xCBLCab0FruEvBxZh/rdhw96u+qu03xvfLqQPAYoDghYM4kks8fGM+p1mvVanxmRqYVpNKWgOWqSeWsVN+VplbHkf5gzL3w=="
+                )
+                add(
+                    "eventUuid",
+                    "FmOBeBsKjSc4f/cwDGQ7QXZ3NNXGIkxg4rAh6gJoeo4K81KuPyRXAaIGTGsfX8ND31y0ws0Y1klP065Coaac0/mG/X6tz4UdOEAxeUSfFxTylL/OkBUZ+ZppwswprrnJsZq0AvcfV+YfyNHeUg8ooAw2xlEVNKB/pqthyT8t0H71JgK76TddqparqTT912fDFeEaQYp+HmpXkmqMjbaMtP3jnHKtwEPsTJz7tRpksg99p3jI4kPznp+TMv6BRVjjjfuyzZZVh7uw0IC2OI61pcB95FpgRtKOCIKsSWrkPtkh+5RTyCz6pum+n3gutpmvtmBLPdWQkTmcyUaza437kg=="
+                )
             }
         }.andDo { print() }.andExpect {
             status { isAccepted() }
@@ -127,8 +130,8 @@ class AttendanceControllerTest @Autowired constructor(
 
     @Test
     fun `should not delete attendance`() {
-        val mockStudentUuid: String = UUID.randomUUID().toString()
-        val mockEventUuid: String = UUID.randomUUID().toString()
+        val mockStudentUuid: String = "f4d097c3-7e28-464e-8f44-205380d4ae60"
+        val mockEventUuid: String = "faded982-91d2-42f0-a745-5cbee94b67cf"
 
         every {
             attendanceService.deleteAttendance(mockStudentUuid, mockEventUuid)
@@ -139,8 +142,14 @@ class AttendanceControllerTest @Autowired constructor(
                 contentType = MediaType.APPLICATION_JSON
             }
             params = LinkedMultiValueMap<String, String>().apply {
-                add("studentUuid", mockStudentUuid)
-                add("eventUuid", mockEventUuid)
+                add(
+                    "studentUuid",
+                    "VhCVAcOfRIivipOT3syiRJy1budLt7WPX3TxUyDQIC5hGV/d356CpAQ7ASeIT2L+yErB6ptaiAxsalxvmGsfho/2SOy0GUQIPqY0DpdGbhGkSIoSVTxvpO4u93e8EPKgbiLHCleM9yWJXLYAZZbiqxzaBK+0e02aLmhnHUzYwjobd++RgybmwoA3cUOYFtSrIjI8udXtWFsGWTZLtOv0RdUdLeTMAYh89hp6UIkKJvXepEE7qcg6Cn4xCBLCab0FruEvBxZh/rdhw96u+qu03xvfLqQPAYoDghYM4kks8fGM+p1mvVanxmRqYVpNKWgOWqSeWsVN+VplbHkf5gzL3w=="
+                )
+                add(
+                    "eventUuid",
+                    "FmOBeBsKjSc4f/cwDGQ7QXZ3NNXGIkxg4rAh6gJoeo4K81KuPyRXAaIGTGsfX8ND31y0ws0Y1klP065Coaac0/mG/X6tz4UdOEAxeUSfFxTylL/OkBUZ+ZppwswprrnJsZq0AvcfV+YfyNHeUg8ooAw2xlEVNKB/pqthyT8t0H71JgK76TddqparqTT912fDFeEaQYp+HmpXkmqMjbaMtP3jnHKtwEPsTJz7tRpksg99p3jI4kPznp+TMv6BRVjjjfuyzZZVh7uw0IC2OI61pcB95FpgRtKOCIKsSWrkPtkh+5RTyCz6pum+n3gutpmvtmBLPdWQkTmcyUaza437kg=="
+                )
             }
         }.andDo { print() }.andExpect {
             status { isNotFound() }
