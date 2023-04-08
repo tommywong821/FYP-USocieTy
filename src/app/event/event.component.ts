@@ -1,19 +1,7 @@
 import {EventAction, EventProperty} from './../model/event';
-import {Component, OnInit} from '@angular/core';
+import {Component, HostListener, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {
-  BehaviorSubject,
-  filter,
-  first,
-  forkJoin,
-  fromEvent,
-  ReplaySubject,
-  Subject,
-  switchMap,
-  takeUntil,
-  tap,
-  zip,
-} from 'rxjs';
+import {BehaviorSubject, filter, first, forkJoin, ReplaySubject, Subject, switchMap, takeUntil, tap} from 'rxjs';
 import {AuthService} from 'src/app/services/auth.service';
 import {Path} from '../app-routing.module';
 import {ApiService} from '../services/api.service';
@@ -122,12 +110,14 @@ export class EventComponent implements OnInit {
             queryParams: {page: pageIndex},
             queryParamsHandling: 'merge',
           });
-        })
+        }),
+        takeUntil(this.destroyed$)
       )
       .subscribe();
 
     this.refreshEvents$
       .pipe(
+        tap(() => console.log('refresh event triggered')),
         tap(() => (this.messages[EventAction.Fetch] = this.message.loading('Fetching events...'))),
         switchMap(() => forkJoin([this.AuthService.user$, this.pageIndex$])),
         switchMap(([user, pageIndex]) => this.ApiService.getEvents(user!.uuid, pageIndex, this.pageSize)),
@@ -156,6 +146,10 @@ export class EventComponent implements OnInit {
       .subscribe();
 
     this.refreshEvents$.next();
+  }
+
+  @HostListener('window:beforeunload', ['$event']) onunload($event: any) {
+    this.destroyed$.next();
   }
 
   ngOnDestroy(): void {
