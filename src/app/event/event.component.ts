@@ -1,7 +1,18 @@
 import {EventAction, EventProperty} from './../model/event';
 import {Component, OnInit} from '@angular/core';
-import {Router} from '@angular/router';
-import {filter, fromEvent, ReplaySubject, Subject, switchMap, takeUntil, tap} from 'rxjs';
+import {ActivatedRoute, Router} from '@angular/router';
+import {
+  BehaviorSubject,
+  filter,
+  forkJoin,
+  fromEvent,
+  ReplaySubject,
+  Subject,
+  switchMap,
+  takeUntil,
+  tap,
+  zip,
+} from 'rxjs';
 import {AuthService} from 'src/app/services/auth.service';
 import {Path} from '../app-routing.module';
 import {ApiService} from '../services/api.service';
@@ -57,15 +68,13 @@ export class EventComponent implements OnInit {
 
   enrolledSocieties: string[] = [];
 
-  pageIndex = 1;
+  pageIndex$ = new BehaviorSubject<number>(1);
   pageSize = 15;
 
   deleteEvent$ = new Subject<void>();
   deleteEventId$ = new ReplaySubject<string>();
 
   showModal = false;
-
-  loadingMessage: NzMessageRef | null = null;
 
   messages: Record<EventAction, NzMessageRef | null> = {
     [EventAction.Create]: null,
@@ -74,9 +83,10 @@ export class EventComponent implements OnInit {
     [EventAction.Delete]: null,
   };
 
-  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+  private destroyed$ = new Subject<void>();
 
   constructor(
+    private route: ActivatedRoute,
     private router: Router,
     private ApiService: ApiService,
     private message: NzMessageService,
@@ -84,11 +94,6 @@ export class EventComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    const cachedEvent = localStorage.getItem('events');
-    if (cachedEvent) {
-      this.events = JSON.parse(cachedEvent);
-    }
-
     this.AuthService.user$
       .pipe(
         filter(user => !!user),
@@ -99,11 +104,23 @@ export class EventComponent implements OnInit {
       )
       .subscribe();
 
+    this.pageIndex$
+      .pipe(
+        tap(pageIndex => {
+          this.router.navigate([], {
+            relativeTo: this.route,
+            queryParams: {page: pageIndex},
+            queryParamsHandling: 'merge',
+          });
+        })
+      )
+      .subscribe();
+
     this.refreshEvents$
       .pipe(
         tap(() => (this.messages[EventAction.Fetch] = this.message.loading('Fetching events...'))),
-        switchMap(() => this.AuthService.user$),
-        switchMap(user => this.ApiService.getEvents(user!.uuid, this.pageIndex, this.pageSize)),
+        switchMap(() => forkJoin([this.AuthService.user$, this.pageIndex$])),
+        switchMap(([user, pageIndex]) => this.ApiService.getEvents(user!.uuid, pageIndex, this.pageSize)),
         tap(() => this.message.remove(this.messages[EventAction.Fetch]!.messageId)),
         tap(event => (this.events = ([] as Event[]).concat(event))),
         tap(event => localStorage.setItem('events', JSON.stringify(event))),
@@ -132,8 +149,7 @@ export class EventComponent implements OnInit {
   }
 
   ngOnDestroy(): void {
-    this.destroyed$.next(true);
-    this.destroyed$.complete();
+    this.destroyed$.next();
   }
 
   changePageIndex(): void {
