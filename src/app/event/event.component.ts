@@ -4,6 +4,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {
   BehaviorSubject,
   filter,
+  first,
   forkJoin,
   fromEvent,
   ReplaySubject,
@@ -100,6 +101,15 @@ export class EventComponent implements OnInit {
         tap(user => (this.enrolledSocieties = [...user!.enrolledSocieties])),
         switchMap(user => this.ApiService.getEventCount(user!.uuid)),
         tap(eventTotal => (this.eventTotal = eventTotal)),
+        takeUntil(this.destroyed$)
+      )
+      .subscribe();
+
+    this.route.queryParams
+      .pipe(
+        first(),
+        filter(params => params['page']),
+        tap(params => this.pageIndex$.next(params['page'])),
         takeUntil(this.destroyed$)
       )
       .subscribe();
