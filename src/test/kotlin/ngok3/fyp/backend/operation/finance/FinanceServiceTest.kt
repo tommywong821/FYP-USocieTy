@@ -79,13 +79,13 @@ class FinanceServiceTest(
 
         assertEquals(financeTableData[0].amount, 1.0)
         assertEquals(financeTableData[0].description, "description 1")
-        assertEquals(financeTableData[0].date, dateUtil.convertLocalDateTimeToString(dateUtil.currentLocalDateTime))
+        assertEquals(financeTableData[0].date, dateUtil.convertLocalDateTimeToStringJS(dateUtil.currentLocalDateTime))
 
         assertEquals(financeTableData[1].amount, 2.2)
         assertEquals(financeTableData[1].description, "description 2")
         assertEquals(
             financeTableData[1].date,
-            dateUtil.convertLocalDateTimeToString(dateUtil.currentLocalDateTime.plusDays(1))
+            dateUtil.convertLocalDateTimeToStringJS(dateUtil.currentLocalDateTime.plusDays(1))
         )
     }
 
@@ -129,13 +129,13 @@ class FinanceServiceTest(
 
         assertEquals(financeTableData[0].amount, 1.0)
         assertEquals(financeTableData[0].description, "description 1")
-        assertEquals(financeTableData[0].date, dateUtil.convertLocalDateTimeToString(dateUtil.currentLocalDateTime))
+        assertEquals(financeTableData[0].date, dateUtil.convertLocalDateTimeToStringJS(dateUtil.currentLocalDateTime))
 
         assertEquals(financeTableData[1].amount, 2.2)
         assertEquals(financeTableData[1].description, "description 2")
         assertEquals(
             financeTableData[1].date,
-            dateUtil.convertLocalDateTimeToString(dateUtil.currentLocalDateTime.plusDays(1))
+            dateUtil.convertLocalDateTimeToStringJS(dateUtil.currentLocalDateTime.plusDays(1))
         )
     }
 
@@ -179,13 +179,13 @@ class FinanceServiceTest(
 
         assertEquals(financeTableData[0].amount, 1.0)
         assertEquals(financeTableData[0].description, "description 1")
-        assertEquals(financeTableData[0].date, dateUtil.convertLocalDateTimeToString(dateUtil.currentLocalDateTime))
+        assertEquals(financeTableData[0].date, dateUtil.convertLocalDateTimeToStringJS(dateUtil.currentLocalDateTime))
 
         assertEquals(financeTableData[1].amount, 2.2)
         assertEquals(financeTableData[1].description, "description 2")
         assertEquals(
             financeTableData[1].date,
-            dateUtil.convertLocalDateTimeToString(dateUtil.currentLocalDateTime.plusDays(1))
+            dateUtil.convertLocalDateTimeToStringJS(dateUtil.currentLocalDateTime.plusDays(1))
         )
     }
 
@@ -229,13 +229,13 @@ class FinanceServiceTest(
 
         assertEquals(financeTableData[0].amount, 1.0)
         assertEquals(financeTableData[0].description, "description 1")
-        assertEquals(financeTableData[0].date, dateUtil.convertLocalDateTimeToString(dateUtil.currentLocalDateTime))
+        assertEquals(financeTableData[0].date, dateUtil.convertLocalDateTimeToStringJS(dateUtil.currentLocalDateTime))
 
         assertEquals(financeTableData[1].amount, 2.2)
         assertEquals(financeTableData[1].description, "description 2")
         assertEquals(
             financeTableData[1].date,
-            dateUtil.convertLocalDateTimeToString(dateUtil.currentLocalDateTime.plusDays(1))
+            dateUtil.convertLocalDateTimeToStringJS(dateUtil.currentLocalDateTime.plusDays(1))
         )
     }
 
