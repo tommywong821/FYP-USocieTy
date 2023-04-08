@@ -49,7 +49,7 @@ class FinanceService(
         return financeEntityTableList?.map { financeEntity ->
             FinanceTableDto(
                 financeEntity.uuid.toString(),
-                dateUtil.convertLocalDateTimeToString(financeEntity.date),
+                dateUtil.convertLocalDateTimeToStringJS(financeEntity.date),
                 financeEntity.amount,
                 financeEntity.description,
                 financeEntity.category,
@@ -139,7 +139,7 @@ class FinanceService(
         return financeEntityRepository.saveAll(financeEntityList).map { financeEntity ->
             FinanceTableDto(
                 financeEntity.uuid.toString(),
-                dateUtil.convertLocalDateTimeToString(financeEntity.date),
+                dateUtil.convertLocalDateTimeToStringJS(financeEntity.date),
                 financeEntity.amount,
                 financeEntity.description,
                 financeEntity.studentEntity.nickname
