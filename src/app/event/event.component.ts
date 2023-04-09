@@ -60,6 +60,15 @@ export class EventComponent implements OnInit {
   pageIndex$ = new BehaviorSubject<number>(1);
   pageSize = 15;
 
+  get pageIndex(): number {
+    return this.pageIndex$.value;
+  }
+
+  set pageIndex(update: number) {
+    this.pageIndex$.next(update);
+    this.refreshEvents$.next();
+  }
+
   deleteEvent$ = new Subject<void>();
   deleteEventId$ = new ReplaySubject<string>();
 
@@ -154,10 +163,6 @@ export class EventComponent implements OnInit {
 
   ngOnDestroy(): void {
     this.destroyed$.next();
-  }
-
-  changePageIndex(): void {
-    this.refreshEvents$.next();
   }
 
   toggleCreateEvent(): void {
