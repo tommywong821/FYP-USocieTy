@@ -157,10 +157,6 @@ export class EventComponent implements OnInit {
     this.refreshEvents$.next();
   }
 
-  @HostListener('window:beforeunload', ['$event']) onunload($event: any) {
-    window.location.reload();
-  }
-
   ngOnDestroy(): void {
     this.destroyed$.next();
   }
