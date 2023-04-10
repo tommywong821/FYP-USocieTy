@@ -6,6 +6,7 @@ from PIL import Image
 from smartcard.System import readers
 import base64
 from Crypto.Cipher import PKCS1_v1_5 as PKCS1_cipher
+from Crypto.Cipher import PKCS1_OAEP
 from Crypto.PublicKey import RSA
 from datetime import datetime
 import json
@@ -91,11 +92,22 @@ class ControlFrame(CTkFrame):
         inputDialog = CTkInputDialog(text="Please type Student UID:", title="Insert Record")
         centerWindow(inputDialog)
         inputStr = inputDialog.get_input()
-        if(inputStr == ""):
+        if(inputStr == "" or inputStr == None):
             return
         if(postAttendance(inputStr, getITSC(inputStr)) == 201): #HTTP 201 == create
             currentDate = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")[:-3]
             app.listFrame.insertRecord(inputStr, getITSC(inputStr) , currentDate)
+
+    #Since the CTkInputDialog library is bugged
+    #Please directly modify the library
+    # self._cancel_button = CTkButton(master=self,
+    #                                     width=100,
+    #                                     border_width=0,
+    #                                     fg_color=self._button_fg_color,
+    #                                     hover_color=self._button_hover_color,
+    #                                     text_color=self._button_text_color,
+    #                                     text='Cancel',
+    #                                     command=self._cancel_event) <------
     
 
     def initListFrame(self):
@@ -156,8 +168,9 @@ class App(CTk):
     def __init__(self):
         super().__init__()
         self.geometry("1000x500")
-        self.title("Attendance-chekcing System")
+        self.title("USocieTy Attendance-checking System")
         self.resizable(False, False)     
+        self.iconbitmap("app_icon.ico")
         left_pane = PanedWindow(self, orient="vertical",sashpad=5)
         left_pane.pack(side="left", anchor="n",padx=(30,0), pady=18, ipadx=50)
         self.rfidFrame = RFIDFrame(self)
@@ -213,18 +226,13 @@ def getKey(key_file):
         key = RSA.importKey(data)
     return key
 
+
 def encryptData(msg):
-    public_key = getKey('rsa_public_key.pem')
-    cipher = PKCS1_cipher.new(public_key)
+    private_key = getKey('rsa_private_key.pem')
+    cipher = PKCS1_cipher.new(private_key)
     encrypt_text = base64.b64encode(cipher.encrypt(bytes(msg.encode("utf8"))))
     return encrypt_text.decode('utf-8')
 
-
-def decryptData(msg):
-    private_key = getKey('rsa_private_key.pem')
-    cipher = PKCS1_cipher.new(private_key)
-    back_text = cipher.decrypt(base64.b64decode(msg), 0)
-    return back_text.decode('utf-8')
 
 def postAttendance(studentID, itsc):
     url = "https://ngok3fyp-backend.herokuapp.com/attendance"
