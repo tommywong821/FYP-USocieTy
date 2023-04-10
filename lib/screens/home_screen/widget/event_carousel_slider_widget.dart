@@ -26,7 +26,7 @@ class _EventCarouselSliderWidgetState extends State<EventCarouselSliderWidget> {
 }
 
 DateTime getLocalTime(String date) {
-  final DateFormat defaultDateFormat = DateFormat("M/d/y H:m");
+  final DateFormat defaultDateFormat = DateFormat("dd/M/y H:m");
   //-8 due to default date is in HK time zone
   DateTime utcTime = defaultDateFormat.parse(date).add(Duration(hours: -8));
   //utc time add local time offset to local time
