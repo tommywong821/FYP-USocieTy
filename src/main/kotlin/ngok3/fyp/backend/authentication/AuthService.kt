@@ -81,7 +81,7 @@ class AuthService(
         // create role list string
         val roleList: List<String> =
             studentEntity.studentRoleEntities.map { studentRoleEntity: StudentRoleEntity -> studentRoleEntity.societyEntity.name }
-        return StudentDto(studentEntity, enrolledSocietyList, roleList)
+        return StudentDto(studentEntity, enrolledSocietyList, roleList, lifetime.toLong())
     }
 
     fun createNewStudentEntityInDB(authenticationSuccess: AuthenticationSuccess): StudentEntity {
@@ -126,7 +126,7 @@ class AuthService(
         mockResponse.authenticationFailure = AuthenticationFailure(null, null)
         mockResponse.authenticationSuccess =
             AuthenticationSuccess("tkwongax", CasAttributes("tkwongax@connect.ust.hk", "WONG, Tsz Kit"))
-        return StudentDto(studentEntity, enrolledSocietyList, roleList)
+        return StudentDto(studentEntity, enrolledSocietyList, roleList, lifetime.toLong())
     }
 
     fun validateMobileLogin(aadProfile: AADProfile): UserToken {

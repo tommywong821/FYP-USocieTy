@@ -24,13 +24,18 @@ data class StudentDto(
         enrolledSocieties = enrolledSocietyList
     )
 
-    constructor(studentEntity: StudentEntity, enrolledSocietyList: List<String>, roles: List<String>) : this(
+    constructor(
+        studentEntity: StudentEntity,
+        enrolledSocietyList: List<String>,
+        roles: List<String>,
+        lifeTime: Long
+    ) : this(
         uuid = studentEntity.uuid.toString(),
         itsc = studentEntity.itsc,
         nickname = studentEntity.nickname,
         mail = studentEntity.mail,
         enrolledSocieties = enrolledSocietyList,
         roles = roles,
-        expireDate = LocalDateTime.now().plusDays(1)
+        expireDate = LocalDateTime.now().plusDays(lifeTime)
     )
 }
