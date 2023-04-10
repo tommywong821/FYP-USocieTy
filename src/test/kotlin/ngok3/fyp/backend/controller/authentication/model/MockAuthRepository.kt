@@ -10,7 +10,7 @@ class MockAuthRepository {
          "exp": 2432977350
      }*/
     val validUserCookieToken: String =
-        "eyJhbGciOiJIUzI1NiJ9.eyJpdHNjIjoidmFsaWQgaXRzYyIsIm5hbWUiOiJ2YWxpZCB0ZXN0ZXIiLCJtYWlsIjoidmFsaWRJdHNjQGNvbm5lY3QudXN0LmhrIiwicm9sZSI6IiIsImV4cCI6MjQzMjk3NzM1MH0.kbUz6xtY0n1WEEZEb5WTzWp206Lp6Ze_3Vt9rAcz9J4"
+        "eyJhbGciOiJIUzI1NiJ9.eyJpdHNjIjoidmFsaWQgaXRzYyIsIm5hbWUiOiJ2YWxpZCB0ZXN0ZXIiLCJtYWlsIjoidmFsaWRJdHNjQGNvbm5lY3QudXN0LmhrIiwicm9sZSI6W10sImV4cCI6MTY4MTcxMTIxMn0.QbzJebOXhMXGiPfM3dkEQHG-mcDMXrQ2b5OVywgKv2k"
     val validUserItsc: String = "valid itsc"
     val validUserNickname: String = "valid tester"
     val validUserMail: String = "validItsc@connect.ust.hk"
@@ -23,7 +23,7 @@ class MockAuthRepository {
             "exp": 2432977478
         }*/
     val invalidUserCookieToken: String =
-        "eyJhbGciOiJIUzI1NiJ9.eyJpdHNjIjoiaW52YWxpZCBpdHNjIiwibmFtZSI6ImludmFsaWQgdGVzdGVyIiwibWFpbCI6ImludmFsaWRJdHNjQGNvbm5lY3QudXN0LmhrIiwicm9sZSI6IiIsImV4cCI6MjQzMjk3NzQ3OH0.JIYWuoFz5PWu8OlswBYWGi-uJ5u8u8v4UpxofhNNdVs"
+        "eyJhbGciOiJIUzI1NiJ9.eyJpdHNjIjoiaW52YWxpZCBpdHNjIiwibmFtZSI6ImludmFsaWQgdGVzdGVyIiwibWFpbCI6ImludmFsaWRJdHNjQGNvbm5lY3QudXN0LmhrIiwicm9sZSI6W10sImV4cCI6MTY4MTcxMTE0OX0.xZwtCQFNSqh2EC2SwYYeqrOOU9AYh689e1ya0cFTgLU"
     val invalidUserItsc: String = "invalid itsc"
 
     val testSocietyName: String = "test society"
