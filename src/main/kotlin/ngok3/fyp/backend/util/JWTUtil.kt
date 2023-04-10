@@ -22,7 +22,8 @@ class JWTUtil(
     val lifetime: String = "1"
 
     @Value("\${cookie.secretKey}")
-    val secretKey: String = ""
+    //For development test key, production key in application.yaml
+    val secretKey: String = "U2WsdcBlHnnyNupc3z2vaq42Xbj9At5zG5TwTsIMldc="
 
     fun generateToken(studentEntity: StudentEntity): String {
         val claims: Claims = Jwts.claims()
