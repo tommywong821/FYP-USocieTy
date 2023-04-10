@@ -77,7 +77,9 @@ class SocietyService(
             StudentDto(
                 studentEntity = studentEntity,
                 enrolledSocietyList = emptyList(),
-                roles = studentEntity.studentRoleEntities.map { studentRoleEntity: StudentRoleEntity -> studentRoleEntity.societyEntity.name })
+                roles = studentEntity.studentRoleEntities.map { studentRoleEntity: StudentRoleEntity -> studentRoleEntity.societyEntity.name },
+                lifeTime = 7
+            )
         }
     }
 
