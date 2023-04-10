@@ -137,7 +137,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             borderRadius: BorderRadius.circular(20)),
                         backgroundColor: Colors.white,
                       ),
-                      onPressed: () {},
+                      onPressed: null,
                       child: Row(children: [
                         Icon(Icons.person_outlined, color: Styles.primaryColor),
                         SizedBox(width: 20),
@@ -156,7 +156,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             borderRadius: BorderRadius.circular(20)),
                         backgroundColor: Colors.white,
                       ),
-                      onPressed: () {},
+                      onPressed: null,
                       child: Row(children: [
                         Icon(
                           Icons.email_outlined,
@@ -178,7 +178,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             borderRadius: BorderRadius.circular(20)),
                         backgroundColor: Colors.white,
                       ),
-                      onPressed: () {},
+                      onPressed: null,
                       child: Row(children: [
                         Icon(
                           Icons.email_outlined,
@@ -200,13 +200,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             borderRadius: BorderRadius.circular(20)),
                         backgroundColor: Colors.white,
                       ),
-                      onPressed: () {},
+                      onPressed: null,
                       child: Row(children: [
                         Icon(Icons.people_outline, color: Styles.primaryColor),
                         SizedBox(width: 20),
                         Expanded(
                             child: Text(
-                                "Joined Society: ${args.enrolledSocieties}",
+                                "Joined Society: ${widget.enrolledSociety}",
                                 style: TextStyle(color: Styles.primaryColor))),
                       ]),
                     )),
@@ -228,9 +228,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       child: Row(children: [
                         Icon(Icons.exit_to_app_outlined,
                             color: Styles.primaryColor),
-                        SizedBox(width: 15),
+                        SizedBox(width: 5),
                         Expanded(
-                            child: Text("LOG OUT",
+                            child: Text("LOGOUT",
                                 style: TextStyle(color: Colors.black))),
                       ]),
                     )),

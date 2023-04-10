@@ -18,7 +18,7 @@ class _HorizontalEventCardWidgetState extends State<HorizontalEventCardWidget> {
   Widget build(BuildContext context) {
     double cardImageWidth = MediaQuery.of(context).size.width / 2.5;
     final DateFormat dateFormatter = DateFormat('E , MMM d ');
-    final DateFormat parseDateFormatter = DateFormat('M/dd/y');
+    final DateFormat parseDateFormatter = DateFormat('dd/M/y');
 
     return Container(
       width: MediaQuery.of(context).size.width - 50,

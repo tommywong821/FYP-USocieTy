@@ -46,7 +46,7 @@ class _CalendarWidgetState extends State<CalendarWidget> {
     //count number to create flexible list dot in calendar
     var kEventSource = Map<DateTime, List<Event>>();
     eventList.forEach((element) {
-      DateTime elementDate = DateFormat('M/dd/y').parse(element.startDate);
+      DateTime elementDate = DateFormat('dd/M/y').parse(element.startDate);
       if (!kEventSource.containsKey(elementDate)) {
         kEventSource[elementDate] = List<Event>.generate(1, (index) => element);
       } else {

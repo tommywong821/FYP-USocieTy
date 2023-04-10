@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.ngok3fyp_frontend_flutter">
    <application
-        android:label="ngok3fyp_frontend_flutter"
+        android:label="USocieTy"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
