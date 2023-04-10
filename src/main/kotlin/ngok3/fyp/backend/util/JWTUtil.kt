@@ -12,17 +12,18 @@ import ngok3.fyp.backend.operation.student.StudentEntity
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.security.access.AccessDeniedException
 import org.springframework.stereotype.Component
-import java.security.Key
 import java.util.*
 
 @Component
 class JWTUtil(
-    private var KEY: String = "dPyvYoiMuI8jUsIbqL-m-Fw-mMhc149ey4fkdBxQK9o",
-    val secretKey: Key = Keys.hmacShaKeyFor(KEY.toByteArray()),
     private val studentRoleEntityRepository: StudentRoleEntityRepository
 ) {
     @Value("\${cookie.lifetime}")
     val lifetime: String = "1"
+
+    @Value("\${cookie.secretKey}")
+    val secretKey: String = ""
+
     fun generateToken(studentEntity: StudentEntity): String {
         val claims: Claims = Jwts.claims()
         claims["itsc"] = studentEntity.itsc
@@ -37,13 +38,14 @@ class JWTUtil(
         calendar.add(Calendar.DATE, Integer.parseInt(lifetime))
         claims.expiration = calendar.time
 
-        return Jwts.builder().setClaims(claims).signWith(secretKey).compact()
+        return Jwts.builder().setClaims(claims).signWith(Keys.hmacShaKeyFor(secretKey.toByteArray())).compact()
     }
 
     fun verifyToken(jwtToken: String): Claims {
         //Verifying JWT is signed from our backend server
         try {
-            return Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJws(jwtToken).body
+            return Jwts.parserBuilder().setSigningKey(Keys.hmacShaKeyFor(secretKey.toByteArray())).build()
+                .parseClaimsJws(jwtToken).body
         } catch (e: JwtException) {
             throw e
         } catch (e: ExpiredJwtException) {
