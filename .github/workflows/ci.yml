@@ -35,6 +35,7 @@ jobs:
         echo "heroku.frontend.url=heroku.frontend.url" >> application.properties
         echo "cors.originPatterns=cors.originPatterns" >> application.properties
         echo "cookie.lifetime=7" >> application.properties
+        echo "cookie.secretKey=key" >> application.properties
         echo "aws.region=region" >> application.properties
         echo "aws.credentials.accessKey=accessKey" >> application.properties
         echo "aws.credentials.secretKey=secretKey" >> application.properties

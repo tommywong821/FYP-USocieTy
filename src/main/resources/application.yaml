@@ -19,6 +19,7 @@ cors:
 
 cookie:
   lifetime: ${COOKIE_LENGTH}
+  secretKey: ${COOKIE_SECRET_KEY}
 
 aws:
   region: ${AWS_REGION}
