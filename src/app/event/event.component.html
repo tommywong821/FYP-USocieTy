@@ -18,6 +18,7 @@
       [nzTotal]="eventTotal"
       [nzPageIndex]="pageIndex"
       [nzPageSize]="pageSize"
+      (nzPageIndexChange)="changePageIndex()"
       [nzData]="events"
     >
       <thead>

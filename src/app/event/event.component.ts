@@ -1,7 +1,7 @@
 import {EventAction, EventProperty} from './../model/event';
-import {Component, HostListener, OnInit} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
-import {BehaviorSubject, filter, first, forkJoin, ReplaySubject, Subject, switchMap, takeUntil, tap} from 'rxjs';
+import {Component, OnInit} from '@angular/core';
+import {Router} from '@angular/router';
+import {delay, filter, ReplaySubject, Subject, switchMap, takeUntil, tap} from 'rxjs';
 import {AuthService} from 'src/app/services/auth.service';
 import {Path} from '../app-routing.module';
 import {ApiService} from '../services/api.service';
@@ -57,22 +57,15 @@ export class EventComponent implements OnInit {
 
   enrolledSocieties: string[] = [];
 
-  pageIndex$ = new BehaviorSubject<number>(1);
+  pageIndex = 1;
   pageSize = 15;
 
-  get pageIndex(): number {
-    return this.pageIndex$.value;
-  }
-
-  set pageIndex(update: number) {
-    this.pageIndex$.next(update);
-    this.refreshEvents$.next();
-  }
-
-  deleteEvent$ = new Subject<void>();
+  deleteEvent$ = new Subject();
   deleteEventId$ = new ReplaySubject<string>();
 
   showModal = false;
+
+  loadingMessage: NzMessageRef | null = null;
 
   messages: Record<EventAction, NzMessageRef | null> = {
     [EventAction.Create]: null,
@@ -81,10 +74,9 @@ export class EventComponent implements OnInit {
     [EventAction.Delete]: null,
   };
 
-  private destroyed$ = new Subject<void>();
+  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(
-    private route: ActivatedRoute,
     private router: Router,
     private ApiService: ApiService,
     private message: NzMessageService,
@@ -102,37 +94,14 @@ export class EventComponent implements OnInit {
       )
       .subscribe();
 
-    this.route.queryParams
-      .pipe(
-        first(),
-        filter(params => params['page']),
-        tap(params => this.pageIndex$.next(params['page'])),
-        takeUntil(this.destroyed$)
-      )
-      .subscribe();
-
-    this.pageIndex$
-      .pipe(
-        tap(pageIndex => {
-          this.router.navigate([], {
-            relativeTo: this.route,
-            queryParams: {page: pageIndex},
-            queryParamsHandling: 'merge',
-          });
-        }),
-        takeUntil(this.destroyed$)
-      )
-      .subscribe();
-
     this.refreshEvents$
       .pipe(
-        tap(() => console.log('refresh event triggered')),
+        delay(200),
         tap(() => (this.messages[EventAction.Fetch] = this.message.loading('Fetching events...'))),
-        switchMap(() => forkJoin([this.AuthService.user$, this.pageIndex$])),
-        switchMap(([user, pageIndex]) => this.ApiService.getEvents(user!.uuid, pageIndex, this.pageSize)),
+        switchMap(() => this.AuthService.user$),
+        switchMap(user => this.ApiService.getEvents(user!.uuid, this.pageIndex, this.pageSize)),
         tap(() => this.message.remove(this.messages[EventAction.Fetch]!.messageId)),
         tap(event => (this.events = ([] as Event[]).concat(event))),
-        tap(event => localStorage.setItem('events', JSON.stringify(event))),
         takeUntil(this.destroyed$)
       )
       .subscribe({
@@ -158,7 +127,12 @@ export class EventComponent implements OnInit {
   }
 
   ngOnDestroy(): void {
-    this.destroyed$.next();
+    this.destroyed$.next(true);
+    this.destroyed$.complete();
+  }
+
+  changePageIndex(): void {
+    this.refreshEvents$.next();
   }
 
   toggleCreateEvent(): void {
@@ -176,7 +150,7 @@ export class EventComponent implements OnInit {
 
   confirmEventDeletion(): void {
     this.showModal = false;
-    this.deleteEvent$.next();
+    this.deleteEvent$.next({});
   }
 
   cancelEventDeletion(): void {
