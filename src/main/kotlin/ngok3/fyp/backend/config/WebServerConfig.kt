@@ -7,7 +7,7 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 
 @Configuration
-class WebServerConfiguration {
+class WebServerConfig {
     @Value("\${cors.originPatterns:default}")
     private val corsOriginPatterns: String = ""
 
