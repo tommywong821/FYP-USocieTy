@@ -24,6 +24,12 @@ class RequestLoggingFilter : Filter {
 
         logger.info("Incoming request: $requestMethod $requestUrl, headers: $requestHeaders, body: $requestBody")
 
-        chain.doFilter(request, response)
+				val wrappedRequest = object : HttpServletRequestWrapper(httpRequest) {
+            override fun getReader(): BufferedReader {
+                return BufferedReader(request.inputStream.reader())
+            }
+        }
+
+        chain.doFilter(wrappedRequest, response)
     }
 }
