@@ -212,7 +212,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     )),
                 Padding(
                     padding:
-                        EdgeInsets.symmetric(horizontal: 140, vertical: 10),
+                        EdgeInsets.symmetric(horizontal: 120, vertical: 10),
                     child: TextButton(
                       style: TextButton.styleFrom(
                         side: BorderSide(color: Styles.primaryColor),
@@ -226,8 +226,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         logout();
                       },
                       child: Row(children: [
-                        Icon(Icons.exit_to_app_outlined,
-                            color: Styles.primaryColor),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 10),
+                          child: Icon(Icons.exit_to_app_outlined,
+                              color: Styles.primaryColor),
+                        ),
                         SizedBox(width: 5),
                         Expanded(
                             child: Text("LOGOUT",

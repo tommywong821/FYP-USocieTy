@@ -39,14 +39,15 @@ class _AppBarWidgetState extends State<AppBarWidget> {
       print(e);
     }
   }
-    @override
+
+  @override
   void initState() {
     super.initState();
     _loadImage();
   }
+
   @override
   Widget build(BuildContext context) {
-
     var args =
         ModalRoute.of(context)!.settings.arguments as ProfileScreenArguments;
     var now = new DateTime.now().toLocal();
@@ -74,16 +75,19 @@ class _AppBarWidgetState extends State<AppBarWidget> {
                     Text("Hi! " + args.fullname, style: Styles.appBarName),
                   ],
                 )),
-                    InkWell(
-                      child: profilePicLink == ""
-                          ? CircleAvatar(
-                              backgroundImage:
-                                  AssetImage("assets/images/avatar.png"),
-                            )
-                          : CircleAvatar(
-                              backgroundImage: NetworkImage(profilePicLink),
-                            ),
-                    ),
+                Padding(
+                  padding: const EdgeInsets.only(right: 10),
+                  child: InkWell(
+                    child: profilePicLink == ""
+                        ? CircleAvatar(
+                            backgroundImage:
+                                AssetImage("assets/images/avatar.png"),
+                          )
+                        : CircleAvatar(
+                            backgroundImage: NetworkImage(profilePicLink),
+                          ),
+                  ),
+                ),
               ],
             ),
           ),
