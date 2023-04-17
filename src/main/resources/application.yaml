@@ -29,3 +29,11 @@ aws:
   bucket:
     name: ${AWS_BUCKET_NAME}
     domain: ${AWS_BUCKET_DOMAIN}
+
+logging:
+  level:
+    org:
+      springframework:
+        web:
+          filter:
+            CommonsRequestLoggingFilter: DEBUG
