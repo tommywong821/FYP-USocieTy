@@ -58,7 +58,7 @@ export class EventComponent implements OnInit {
   enrolledSocieties: string[] = [];
 
   pageIndex = 1;
-  pageSize = 15;
+  pageSize = 10;
 
   deleteEvent$ = new Subject();
   deleteEventId$ = new ReplaySubject<string>();
