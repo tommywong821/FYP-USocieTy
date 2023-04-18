@@ -12,7 +12,7 @@
         >Society</nz-form-label
       >
       <nz-select
-        class="w-32"
+        class="w-96"
         formControlName="societyName"
       >
         <nz-option
@@ -23,10 +23,10 @@
       </nz-select>
     </div>
     <div class="grid grid-cols-12 gap-4">
-      <label class="col-start-2 flex justify-center"> Amount </label>
-      <label class="flex justify-center"> Category </label>
-      <label class="flex justify-center"> Description </label>
-      <label class="flex justify-center"> Date </label>
+      <label class="col-start-2 flex justify-center col-span-2"> Amount </label>
+      <label class="flex justify-center col-span-2"> Category </label>
+      <label class="flex justify-center col-span-2"> Description </label>
+      <label class="flex justify-center col-span-2"> Date </label>
 
       <div class="col-span-12">
         <div
@@ -36,7 +36,8 @@
           <div [formGroupName]="idx">
             <div class="grid grid-cols-12 py-4">
               <label class="flex justify-center">{{ idx + 1 }}</label>
-              <nz-form-control
+                <nz-form-control
+                class="col-span-2"
                 nzHasFeedback
                 nzErrorTip="Please input amount of this record."
               >
@@ -49,6 +50,7 @@
                 />
               </nz-form-control>
               <nz-form-control
+              class="col-span-2"
                 nzHasFeedback
                 nzErrorTip="Please input category of this record."
               >
@@ -61,6 +63,7 @@
                 />
               </nz-form-control>
               <nz-form-control
+              class="col-span-2"
                 nzHasFeedback
                 nzErrorTip="Please input description of this record."
               >
@@ -73,6 +76,7 @@
                 />
               </nz-form-control>
               <nz-form-control
+              class="col-span-2"
                 nzHasFeedback
                 nzErrorTip="Please input date of this record."
               >
