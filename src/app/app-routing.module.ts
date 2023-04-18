@@ -29,8 +29,8 @@ export enum Path {
 const routes: Routes = [
   {
     path: '',
-    component: AppComponent,
-    canActivate: [AuthGuard],
+    redirectTo: Path.Main,
+    pathMatch: 'full',
   },
   {
     path: Path.Main,
