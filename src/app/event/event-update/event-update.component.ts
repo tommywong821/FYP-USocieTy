@@ -120,6 +120,8 @@ export class EventUpdateComponent implements OnInit {
   loadDataToUpdateEventForm(event: Event): void {
     console.log(event.startDate);
     console.log(event.endDate);
+    console.log(new Date(event.startDate));
+    console.log(new Date(event.endDate));
     console.log(new Date());
 
     this.updateEventForm = this.formBuilder.group({
