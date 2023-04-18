@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {IconProp} from '@fortawesome/fontawesome-svg-core';
-import {faDoorOpen, faHouseUser, faPiggyBank, faUsers} from '@fortawesome/free-solid-svg-icons';
+import {faHouseUser, faPiggyBank, faPowerOff, faUsers} from '@fortawesome/free-solid-svg-icons';
 import {Path} from '../app-routing.module';
 import {User} from '../model/user';
 import {AuthService} from '../services/auth.service';
@@ -18,7 +18,7 @@ export interface SidebarOption {
   styleUrls: ['./main.component.scss'],
 })
 export class MainComponent implements OnInit {
-  faDoorOpen = faDoorOpen;
+  faPowerOff = faPowerOff;
   sidebarOptions: SidebarOption[] = [
     {
       name: 'Event',
