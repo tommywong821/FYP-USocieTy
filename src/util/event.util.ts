@@ -95,7 +95,8 @@ export function getPictureNameFromUrl(url: string): string {
   return url.substr(index).replace('/', '');
 }
 
-export function convertStringToDate(str: string): Date {
+export function convertStringToDate(date: Date): Date {
+  const str = date as unknown as string;
   const [day, month, year, hour, minute] = str.split(/[/\s:]/g);
   return new Date(`${year}-${month}-${day}T${hour}:${minute}:00`);
 }
