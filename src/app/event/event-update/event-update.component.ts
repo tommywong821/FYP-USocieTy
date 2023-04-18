@@ -118,13 +118,16 @@ export class EventUpdateComponent implements OnInit {
   }
 
   loadDataToUpdateEventForm(event: Event): void {
+    console.log(event.startDate);
+    console.log(event.endDate);
+
     this.updateEventForm = this.formBuilder.group({
       name: [event.name, [Validators.required]],
       location: [event.location, [Validators.required]],
       society: [event.society, [Validators.required]],
       maxParticipation: [event.maxParticipation, [Validators.required]],
       applyDeadline: [event.applyDeadline, [Validators.required]],
-      date: [[event.startDate, event.endDate], [Validators.required]],
+      date: [[new Date(event.startDate), new Date(event.endDate)], [Validators.required]],
       category: [event.category, [Validators.required]],
       description: [event.description, [Validators.required]],
       fee: [event.fee, [Validators.required]],
