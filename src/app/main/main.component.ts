@@ -5,6 +5,7 @@ import {faHouseUser, faPiggyBank, faUsers} from '@fortawesome/free-solid-svg-ico
 import {Path} from '../app-routing.module';
 import {User} from '../model/user';
 import {AuthService} from '../services/auth.service';
+import { environment } from 'src/environments/environment';
 
 export interface SidebarOption {
   name: string;
@@ -50,6 +51,8 @@ export class MainComponent implements OnInit {
 
   signOut(): void {
     this.authService.signOut();
-    this.router.navigate([Path.SignIn]);
+    const url = `${environment.cas_url}/logout?service=${encodeURIComponent(environment.app_url)}`;
+
+    window.location.assign(url);
   }
 }
