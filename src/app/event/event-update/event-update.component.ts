@@ -6,7 +6,7 @@ import {NzMessageRef, NzMessageService} from 'ng-zorro-antd/message';
 import {NzUploadChangeParam, NzUploadFile} from 'ng-zorro-antd/upload';
 import {Subject, filter, tap, switchMap, first} from 'rxjs';
 import {EventCategory} from 'src/app/model/event';
-import {convertFormDataToEvent, convertStringToDate, getPictureNameFromUrl} from 'src/util/event.util';
+import {convertFormDataToEvent, getPictureNameFromUrl} from 'src/util/event.util';
 import {Event} from '../../model/event';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Path} from 'src/app/app-routing.module';
@@ -118,18 +118,13 @@ export class EventUpdateComponent implements OnInit {
   }
 
   loadDataToUpdateEventForm(event: Event): void {
-    console.log(convertStringToDate(event.applyDeadline.toString()));
-
     this.updateEventForm = this.formBuilder.group({
       name: [event.name, [Validators.required]],
       location: [event.location, [Validators.required]],
       society: [event.society, [Validators.required]],
       maxParticipation: [event.maxParticipation, [Validators.required]],
-      applyDeadline: [convertStringToDate(event.applyDeadline.toString()), [Validators.required]],
-      date: [
-        [convertStringToDate(event.startDate.toString()), convertStringToDate(event.endDate.toString())],
-        [Validators.required],
-      ],
+      applyDeadline: [event.applyDeadline, [Validators.required]],
+      date: [[event.startDate, event.endDate], [Validators.required]],
       category: [event.category, [Validators.required]],
       description: [event.description, [Validators.required]],
       fee: [event.fee, [Validators.required]],
