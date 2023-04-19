@@ -87,16 +87,13 @@ export class EventComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    console.log(this.eventTotal);
-    console.log(this.pageIndex);
-    console.log(this.pageSize);
-
     this.AuthService.user$
       .pipe(
         filter(user => !!user),
         tap(user => (this.enrolledSocieties = [...user!.enrolledSocieties])),
         switchMap(user => this.ApiService.getEventCount(user!.uuid)),
         tap(total => this.eventTotal$.next(total)),
+        tap(total => console.log(total)),
         takeUntil(this.destroyed$)
       )
       .subscribe();

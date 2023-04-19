@@ -57,12 +57,15 @@
         </tr>
       </tbody>
     </nz-table>
-    <nz-pagination
-      [nzTotal]="11"
-      [nzPageIndex]="pageIndex"
-      [nzPageSize]="pageSize"
-      (nzPageIndexChange)="changePageIndex()"
-    ></nz-pagination>
+    <div class="flex w-full">
+      <nz-pagination
+        class="justify-end"
+        [nzTotal]="11"
+        [nzPageIndex]="pageIndex"
+        [nzPageSize]="pageSize"
+        (nzPageIndexChange)="changePageIndex()"
+      ></nz-pagination>
+    </div>
   </div>
 
   <nz-modal

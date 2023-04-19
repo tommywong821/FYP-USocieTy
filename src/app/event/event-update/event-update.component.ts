@@ -10,7 +10,6 @@ import {convertFormDataToEvent, convertStringToDate, getPictureNameFromUrl} from
 import {Event} from '../../model/event';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Path} from 'src/app/app-routing.module';
-import {log} from 'console';
 
 export enum UpdateEventFormFields {
   Name = 'name',
