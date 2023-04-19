@@ -14,6 +14,22 @@ export interface Event {
   version?: number;
 }
 
+export interface EventDto {
+  id?: string;
+  name: string;
+  poster: string;
+  maxParticipation: number;
+  applyDeadline: string;
+  location: string;
+  startDate: string;
+  endDate: string;
+  category: EventCategory;
+  description: string;
+  fee: number;
+  society?: string;
+  version?: number;
+}
+
 export enum EventProperty {
   Id = 'Id',
   Name = 'Name',

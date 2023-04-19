@@ -5,7 +5,7 @@ import {FormGroup, FormBuilder, Validators} from '@angular/forms';
 import {NzMessageRef, NzMessageService} from 'ng-zorro-antd/message';
 import {NzUploadChangeParam, NzUploadFile} from 'ng-zorro-antd/upload';
 import {Subject, filter, tap, switchMap, first} from 'rxjs';
-import {EventCategory} from 'src/app/model/event';
+import {EventCategory, EventDto} from 'src/app/model/event';
 import {convertFormDataToEvent, convertStringToDate, getPictureNameFromUrl} from 'src/util/event.util';
 import {Event} from '../../model/event';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -81,7 +81,7 @@ export class EventUpdateComponent implements OnInit {
           ),
           tap(event => console.log(event)),
           tap(event => (this.version = event.version)),
-          tap(event => this.loadDataToUpdateEventForm(event)),
+          tap(event => this.loadDataToUpdateEventForm(event as unknown as EventDto)),
           tap(() => this.message.remove(this.loadingMessage?.messageId))
         )
         .subscribe({
@@ -118,14 +118,14 @@ export class EventUpdateComponent implements OnInit {
     this.destroy$.next();
   }
 
-  loadDataToUpdateEventForm(event: Event): void {
+  loadDataToUpdateEventForm(event: EventDto): void {
     this.updateEventForm = this.formBuilder.group({
       name: [event.name, [Validators.required]],
       location: [event.location, [Validators.required]],
       society: [event.society, [Validators.required]],
       maxParticipation: [event.maxParticipation, [Validators.required]],
-      applyDeadline: [event.applyDeadline, [Validators.required]],
-      date: [[event.startDate, event.endDate], [Validators.required]],
+      applyDeadline: [convertStringToDate(event.applyDeadline), [Validators.required]],
+      date: [[convertStringToDate(event.startDate), convertStringToDate(event.endDate)], [Validators.required]],
       category: [event.category, [Validators.required]],
       description: [event.description, [Validators.required]],
       fee: [event.fee, [Validators.required]],
