@@ -119,6 +119,8 @@ export class EventUpdateComponent implements OnInit {
   }
 
   loadDataToUpdateEventForm(event: EventDto): void {
+    console.log(convertStringToDate(event.applyDeadline));
+
     this.updateEventForm = this.formBuilder.group({
       name: [event.name, [Validators.required]],
       location: [event.location, [Validators.required]],
