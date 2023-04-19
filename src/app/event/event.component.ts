@@ -87,6 +87,10 @@ export class EventComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    console.log(this.eventTotal);
+    console.log(this.pageIndex);
+    console.log(this.pageSize);
+
     this.AuthService.user$
       .pipe(
         filter(user => !!user),
