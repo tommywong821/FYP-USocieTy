@@ -96,6 +96,6 @@ export function getPictureNameFromUrl(url: string): string {
 }
 
 export function convertStringToDate(dateStr: string): Date {
-  const [day, month, year, hour, minute] = dateStr.split(/[/\s:]/g);
+  const [day, month, year, hour, minute] = dateStr.split(/[\/\s:]/g);
   return new Date(`${year}-${month}-${day}T${hour}:${minute}:00`);
 }
