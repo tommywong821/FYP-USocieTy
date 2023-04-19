@@ -16,10 +16,7 @@
     <nz-table
       #eventTable
       [nzFrontPagination]="false"
-      [nzTotal]="eventTotal"
-      [nzPageIndex]="pageIndex"
       [nzPageSize]="pageSize"
-      (nzPageIndexChange)="changePageIndex()"
       [nzData]="events"
     >
       <thead>
@@ -60,6 +57,12 @@
         </tr>
       </tbody>
     </nz-table>
+    <nz-pagination
+      [nzPageIndex]="pageIndex"
+      [nzTotal]="eventTotal"
+      [nzPageSize]="pageSize"
+      (nzPageIndexChange)="changePageIndex()"
+    ></nz-pagination>
   </div>
 
   <nz-modal

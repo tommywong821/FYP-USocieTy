@@ -1,7 +1,7 @@
 import {EventAction, EventProperty} from './../model/event';
 import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
-import {delay, filter, ReplaySubject, Subject, switchMap, takeUntil, tap} from 'rxjs';
+import {BehaviorSubject, delay, filter, ReplaySubject, Subject, switchMap, takeUntil, tap} from 'rxjs';
 import {AuthService} from 'src/app/services/auth.service';
 import {Path} from '../app-routing.module';
 import {ApiService} from '../services/api.service';
@@ -52,7 +52,10 @@ export class EventComponent implements OnInit {
   eventTableHeaders = EventTableColumn.map(col => col.title);
 
   events: Event[] = [];
-  eventTotal = 0;
+  eventTotal$ = new BehaviorSubject<number | undefined>(undefined);
+  get eventTotal(): number | undefined {
+    return this.eventTotal$.value;
+  }
   refreshEvents$ = new Subject<void>();
 
   enrolledSocieties: string[] = [];
@@ -89,7 +92,7 @@ export class EventComponent implements OnInit {
         filter(user => !!user),
         tap(user => (this.enrolledSocieties = [...user!.enrolledSocieties])),
         switchMap(user => this.ApiService.getEventCount(user!.uuid)),
-        tap(eventTotal => (this.eventTotal = eventTotal)),
+        tap(total => this.eventTotal$.next(total)),
         takeUntil(this.destroyed$)
       )
       .subscribe();
