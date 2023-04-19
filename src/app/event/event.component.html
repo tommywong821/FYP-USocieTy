@@ -57,14 +57,14 @@
         </tr>
       </tbody>
     </nz-table>
-    <nz-pagination
-      *ngIf="eventTotal"
-      [nzPageIndex]="pageIndex"
-      [nzTotal]="eventTotal"
-      [nzPageSize]="pageSize"
-      (nzPageIndexChange)="changePageIndex()"
-    ></nz-pagination>
   </div>
+  <nz-pagination
+    *ngIf="eventTotal"
+    [nzTotal]="eventTotal"
+    [nzPageIndex]="pageIndex"
+    [nzPageSize]="pageSize"
+    (nzPageIndexChange)="changePageIndex()"
+  ></nz-pagination>
 
   <nz-modal
     [(nzVisible)]="showModal"
