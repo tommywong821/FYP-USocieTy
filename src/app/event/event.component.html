@@ -58,6 +58,7 @@
       </tbody>
     </nz-table>
     <nz-pagination
+      *ngIf="eventTotal"
       [nzPageIndex]="pageIndex"
       [nzTotal]="eventTotal"
       [nzPageSize]="pageSize"
