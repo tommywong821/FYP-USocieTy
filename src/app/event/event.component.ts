@@ -51,10 +51,13 @@ export class EventComponent implements OnInit {
   EventTableColumn = EventTableColumn;
   eventTableHeaders = EventTableColumn.map(col => col.title);
 
-  events: Event[] = [];
+  events$ = new BehaviorSubject<Event[]>([]);
+  get events(): Event[] {
+    return this.events$.getValue();
+  }
   eventTotal$ = new BehaviorSubject<number | undefined>(undefined);
   get eventTotal(): number | undefined {
-    return this.eventTotal$.value;
+    return this.eventTotal$.getValue();
   }
   refreshEvents$ = new Subject<void>();
 
@@ -105,7 +108,7 @@ export class EventComponent implements OnInit {
         switchMap(() => this.AuthService.user$),
         switchMap(user => this.ApiService.getEvents(user!.uuid, this.pageIndex, this.pageSize)),
         tap(() => this.message.remove(this.messages[EventAction.Fetch]!.messageId)),
-        tap(event => (this.events = ([] as Event[]).concat(event))),
+        tap(events => this.events$.next(events)),
         takeUntil(this.destroyed$)
       )
       .subscribe({
