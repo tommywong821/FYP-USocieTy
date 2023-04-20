@@ -12,10 +12,10 @@ import {Event, EventFormData} from 'src/app/model/event';
 import {User} from 'src/app/model/user';
 
 export function convertFormDataToEvent(eventId: string, formData: EventFormData): Event {
-  const startDate = formData.date[0];
-  const endDate = formData.date[1];
-  // startDate.setHours(startDate.getHours() - 8);
-  // endDate.setHours(endDate.getHours() - 8);
+  const startDate = new Date(formData.date[0]);
+  const endDate = new Date(formData.date[1]);
+  startDate.setHours(startDate.getHours() - 8);
+  endDate.setHours(endDate.getHours() - 8);
   const event: Event = {
     id: eventId,
     name: formData.name,
