@@ -133,6 +133,10 @@ export class ApiService {
   }
 
   getEvents(studentId: string, pageIndex: number, pageSize: number): Observable<Event[]> {
+    console.groupCollapsed('pageIndex');
+    console.log(pageIndex);
+    console.groupEnd();
+
     const queryParams = new HttpParams().append('pageIndex', pageIndex).append('pageSize', pageSize);
 
     return this.restful.get<Event[]>(`${environment.backend_url}/student/${studentId}/event`, {params: queryParams});
