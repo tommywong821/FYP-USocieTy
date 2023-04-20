@@ -32,7 +32,7 @@ export class EventEnrollmentRecordTableComponent implements OnInit {
   updateEnrollmentRecord$ = new Subject<UpdateEventEnrollmentRecordPayload[]>();
   toBeUpdatedEnrollmentRecords: Record<string, EnrollmentStatus> = {};
 
-  recordTotal = 0;
+  recordTotal = 10;
 
   pageIndex = 1;
   pageSize = 15;

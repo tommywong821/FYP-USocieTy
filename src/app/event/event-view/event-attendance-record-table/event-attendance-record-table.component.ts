@@ -16,7 +16,7 @@ export class EventAttendanceRecordTableComponent implements OnInit {
 
   attendanceTableColumn = [{title: 'Itsc'}, {title: 'Name'}, {title: 'Attended At'}];
 
-  recordTotal = 0;
+  recordTotal = 10;
 
   pageIndex = 1;
   pageSize = 15;
