@@ -71,6 +71,7 @@ export class EventCreateComponent implements OnInit {
 
     this.event$
       .pipe(
+        tap(event => console.log(event)),
         switchMap(event => this.ApiService.createEvent(event, this.pictureFile!, this.createEventForm.value.society)),
         tap(() => this.message.remove(this.loadingMessage?.messageId)),
         tap(() => this.message.success('Successfully created event', {nzDuration: 2000})),
