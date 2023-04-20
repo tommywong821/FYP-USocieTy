@@ -10,6 +10,7 @@ import ngok3.fyp.backend.operation.enrolled.event_record.EnrolledEventRecordEnti
 import ngok3.fyp.backend.operation.enrolled.event_record.EnrolledEventRecordKey
 import ngok3.fyp.backend.operation.enrolled.event_record.PaymentStatus
 import ngok3.fyp.backend.operation.event.dto.EventDto
+import ngok3.fyp.backend.operation.event.dto.UpdateEventDto
 import ngok3.fyp.backend.operation.s3.S3BulkResponseEntity
 import ngok3.fyp.backend.operation.s3.S3Service
 import ngok3.fyp.backend.operation.society.SocietyEntity
@@ -193,14 +194,14 @@ class EventService(
         eventEntityRepository.save(eventEntity)
     }
 
-    fun getEventWithUuid(jwtToken: String, eventUuid: String): EventDto {
+    fun getEventWithUuid(jwtToken: String, eventUuid: String): UpdateEventDto {
         val eventEntity: EventEntity = eventEntityRepository.findById(UUID.fromString(eventUuid)).orElseThrow {
             Exception("event: $eventUuid does not exist")
         }
 
         jwtUtil.verifyUserMemberRoleOfSociety(jwtToken, eventEntity.societyEntity.name)
 
-        return EventDto().createFromEntity(eventEntity, s3BucketDomain)
+        return UpdateEventDto().createFromEntity(eventEntity, s3BucketDomain)
     }
 
     fun getEventWithSocietyName(jwtToken: String, societyName: String, pageNum: Int, pageSize: Int): List<EventDto> {

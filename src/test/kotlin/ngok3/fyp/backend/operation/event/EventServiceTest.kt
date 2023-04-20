@@ -15,6 +15,7 @@ import ngok3.fyp.backend.operation.enrolled.event_record.EnrolledEventRecordEnti
 import ngok3.fyp.backend.operation.enrolled.society_record.EnrolledSocietyRecordEntityRepository
 import ngok3.fyp.backend.operation.event.dto.EventCategory
 import ngok3.fyp.backend.operation.event.dto.EventDto
+import ngok3.fyp.backend.operation.event.dto.UpdateEventDto
 import ngok3.fyp.backend.operation.s3.S3BulkResponseEntity
 import ngok3.fyp.backend.operation.s3.S3Service
 import ngok3.fyp.backend.operation.society.SocietyEntity
@@ -217,7 +218,7 @@ class EventServiceTest {
             )
         } returns Optional.of(StudentRoleEntity())
 
-        val eventDto: EventDto = eventService.getEventWithUuid(mockAuthRepository.validUserCookieToken, uuid)
+        val eventDto: UpdateEventDto = eventService.getEventWithUuid(mockAuthRepository.validUserCookieToken, uuid)
 
         assertEquals(mockEventEntity.name, eventDto.name)
         assertEquals(mockEventEntity.societyEntity.name, eventDto.society)

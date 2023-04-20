@@ -7,6 +7,7 @@ import ngok3.fyp.backend.operation.TotalCountDto
 import ngok3.fyp.backend.operation.attendance.model.StudentAttendanceDto
 import ngok3.fyp.backend.operation.event.dto.EventCategory
 import ngok3.fyp.backend.operation.event.dto.EventDto
+import ngok3.fyp.backend.operation.event.dto.UpdateEventDto
 import ngok3.fyp.backend.operation.student.MockStudentRepository
 import ngok3.fyp.backend.util.DateUtil
 import org.junit.jupiter.api.Test
@@ -200,7 +201,7 @@ class EventControllerTest @Autowired constructor(
     @Test
     fun `should get event with event id`() {
         val uuid: String = UUID.randomUUID().toString()
-        val eventDto = EventDto(
+        val eventDto = UpdateEventDto(
             name = "update name",
             maxParticipation = 10,
             applyDeadline = "2022-01-12T12:10:10.222Z",
