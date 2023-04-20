@@ -22,7 +22,7 @@ export class EventAttendanceRecordTableComponent implements OnInit {
   pageSize = 15;
 
   attendanceRecords: EventAttendance[] = [];
-  refreshAttendanceRecords$ = new Subject();
+  refreshAttendanceRecords$ = new Subject<void>();
 
   messages: Record<EventAction, NzMessageRef | null> = {
     [EventAction.Create]: null,
@@ -51,11 +51,12 @@ export class EventAttendanceRecordTableComponent implements OnInit {
         },
       });
 
-    this.refreshAttendanceRecords$.next({});
+    this.refreshAttendanceRecords$.next();
   }
 
-  changePageIndex(): void {
-    this.refreshAttendanceRecords$.next({});
+  changePageIndex(pageIndex: number): void {
+    this.pageIndex = pageIndex;
+    this.refreshAttendanceRecords$.next();
   }
 
   toggleSwitchingToEnrollmentTable() {

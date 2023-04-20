@@ -24,10 +24,8 @@
   </div>
   <nz-table
     #enrollmentTable
-    [nzTotal]="recordTotal"
+    [nzFrontPagination]="false"
     [nzPageSize]="pageSize"
-    [nzPageIndex]="pageIndex"
-    (nzPageIndexChange)="changePageIndex()"
     [nzData]="enrollmentRecords"
   >
     <thead>
@@ -79,4 +77,13 @@
       </tr>
     </tbody>
   </nz-table>
+  <div class="flex w-full">
+    <nz-pagination
+      class="ml-auto"
+      [nzTotal]="recordTotal"
+      [nzPageIndex]="pageIndex"
+      [nzPageSize]="pageSize"
+      (nzPageIndexChange)="changePageIndex($event)"
+    ></nz-pagination>
+  </div>
 </div>

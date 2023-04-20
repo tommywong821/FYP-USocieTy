@@ -38,7 +38,7 @@ export class EventEnrollmentRecordTableComponent implements OnInit {
   pageSize = 15;
 
   enrollmentRecords: EventEnrollmentRecord[] = [];
-  refreshEnrollmentRecords$ = new Subject();
+  refreshEnrollmentRecords$ = new Subject<void>();
 
   messages: Record<EventAction, NzMessageRef | null> = {
     [EventAction.Create]: null,
@@ -50,7 +50,9 @@ export class EventEnrollmentRecordTableComponent implements OnInit {
   constructor(private ApiService: ApiService, private message: NzMessageService) {}
 
   ngOnInit(): void {
-    this.ApiService.getEventEnrollmentRecordCount(this.eventId).subscribe(total => (this.recordTotal = total));
+    this.ApiService.getEventEnrollmentRecordCount(this.eventId)
+      .pipe(tap(total => (this.recordTotal = total)))
+      .subscribe();
 
     this.updateEnrollmentRecord$
       .pipe(
@@ -58,7 +60,7 @@ export class EventEnrollmentRecordTableComponent implements OnInit {
         switchMap(records => this.ApiService.updateEventEnrollmentRecords(this.eventId, records)),
         tap(() => this.message.remove(this.messages[EventAction.Update]!.messageId)),
         tap(() => this.message.success('Successfully updated event enrollment records')),
-        tap(() => this.refreshEnrollmentRecords$.next({}))
+        tap(() => this.refreshEnrollmentRecords$.next())
       )
       .subscribe({
         error: err => {
@@ -88,11 +90,12 @@ export class EventEnrollmentRecordTableComponent implements OnInit {
         },
       });
 
-    this.refreshEnrollmentRecords$.next({});
+    this.refreshEnrollmentRecords$.next();
   }
 
-  changePageIndex(): void {
-    this.refreshEnrollmentRecords$.next({});
+  changePageIndex(pageIndex: number): void {
+    this.pageIndex = pageIndex;
+    this.refreshEnrollmentRecords$.next();
   }
 
   recordPaymentStatusChanges(paymentStatus: PaymentStatus, itsc: string): void {

@@ -170,7 +170,7 @@ export class ApiService {
   }
 
   getEventEnrollmentRecord(eventId: string, pageIndex: number, pageSize: number): Observable<EventEnrollmentRecord[]> {
-    const queryParams = new HttpParams().append('pageIndex', pageIndex).append('pageSize', pageSize);
+    const queryParams = new HttpParams().append('pageNum', pageIndex).append('pageSize', pageSize);
 
     return this.restful.get<EventEnrollmentRecord[]>(`${environment.backend_url}/enrolledEventRecord/${eventId}`, {
       params: queryParams,
@@ -190,7 +190,7 @@ export class ApiService {
   }
 
   getEventAttendanceRecords(eventId: string, pageIndex: number, pageSize: number): Observable<EventAttendance> {
-    const queryParams = new HttpParams().append('pageIndex', pageIndex).append('pageSize', pageSize);
+    const queryParams = new HttpParams().append('pageNum', pageIndex).append('pageSize', pageSize);
 
     return this.restful.get<EventAttendance>(`${environment.backend_url}/event/${eventId}/attendance`, {
       params: queryParams,
