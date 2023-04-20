@@ -145,7 +145,9 @@ export class EventUpdateComponent implements OnInit {
     }
 
     this.isProcessing = true;
-    this.event$.next(convertFormDataToEvent(this.eventId, {...this.updateEventForm.value}));
+    const event = convertFormDataToEvent(this.eventId, {...this.updateEventForm.value});
+    console.log(event);
+    this.event$.next(event);
   }
 
   saveFileBuffer({file}: NzUploadChangeParam): void {
