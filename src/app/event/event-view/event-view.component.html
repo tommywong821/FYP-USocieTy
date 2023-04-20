@@ -30,9 +30,13 @@
         <nz-descriptions-item nzTitle="Location">{{ event.location }}</nz-descriptions-item>
         <nz-descriptions-item nzTitle="Max Participates">{{ event.maxParticipation }}</nz-descriptions-item>
         <nz-descriptions-item nzTitle="Fee">{{ event.fee }}</nz-descriptions-item>
-        <nz-descriptions-item nzTitle="Application Deadline">{{ event.applyDeadline }} </nz-descriptions-item>
-        <nz-descriptions-item nzTitle="Start Date">{{ event.startDate }} </nz-descriptions-item>
-        <nz-descriptions-item nzTitle="End Date">{{ event.endDate }}</nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Application Deadline"
+          >{{ event.applyDeadline | date : 'dd/MM/yyyy HH:mm' }}
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Start Date"
+          >{{ event.startDate | date : 'dd/MM/yyyy HH:mm' }}
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="End Date">{{ event.endDate | date : 'dd/MM/yyyy HH:mm' }}</nz-descriptions-item>
         <nz-descriptions-item nzTitle="Description">
           {{ event.description }}
         </nz-descriptions-item>
