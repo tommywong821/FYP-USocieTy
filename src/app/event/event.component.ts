@@ -136,7 +136,8 @@ export class EventComponent implements OnInit {
     this.destroyed$.complete();
   }
 
-  changePageIndex(): void {
+  changePageIndex(pageIndex: number): void {
+    this.pageIndex = pageIndex;
     this.refreshEvents$.next();
   }
 
