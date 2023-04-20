@@ -5,6 +5,7 @@ import ngok3.fyp.backend.operation.TotalCountDto
 import ngok3.fyp.backend.operation.attendance.model.StudentAttendanceDto
 import ngok3.fyp.backend.operation.event.dto.EventDto
 import ngok3.fyp.backend.operation.event.dto.JoinEventDto
+import ngok3.fyp.backend.operation.event.dto.UpdateEventDto
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.multipart.MultipartFile
@@ -68,7 +69,7 @@ class EventController(
     fun getEventWithEventId(
         @CookieValue("token") jwtToken: String,
         @PathVariable eventId: String,
-    ): EventDto {
+    ): UpdateEventDto {
         return eventService.getEventWithUuid(jwtToken, eventId)
     }
 
