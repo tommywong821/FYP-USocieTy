@@ -55,10 +55,7 @@ export class EventComponent implements OnInit {
   get events(): Event[] {
     return this.events$.getValue();
   }
-  eventTotal$ = new BehaviorSubject<number | undefined>(undefined);
-  get eventTotal(): number | undefined {
-    return this.eventTotal$.getValue();
-  }
+  eventTotal = 0;
   refreshEvents$ = new Subject<void>();
 
   enrolledSocieties: string[] = [];
@@ -95,8 +92,8 @@ export class EventComponent implements OnInit {
         filter(user => !!user),
         tap(user => (this.enrolledSocieties = [...user!.enrolledSocieties])),
         switchMap(user => this.ApiService.getEventCount(user!.uuid)),
-        tap(total => this.eventTotal$.next(total)),
-        tap(total => console.log(total)),
+        tap(total => (this.eventTotal = total)),
+        tap(() => console.log(this.eventTotal)),
         takeUntil(this.destroyed$)
       )
       .subscribe();
@@ -109,6 +106,7 @@ export class EventComponent implements OnInit {
         switchMap(user => this.ApiService.getEvents(user!.uuid, this.pageIndex, this.pageSize)),
         tap(() => this.message.remove(this.messages[EventAction.Fetch]!.messageId)),
         tap(events => this.events$.next(events)),
+        tap(() => console.log(this.events)),
         takeUntil(this.destroyed$)
       )
       .subscribe({
