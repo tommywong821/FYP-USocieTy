@@ -79,6 +79,7 @@ export class EventCreateComponent implements OnInit {
       .subscribe({
         error: err => {
           this.message.error('Unable to create events', {nzDuration: 2000});
+          this.isProcessing = false;
         },
       });
   }

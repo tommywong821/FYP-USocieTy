@@ -102,12 +102,13 @@ export class EventUpdateComponent implements OnInit {
             )
           ),
           tap(() => this.message.remove(this.loadingMessage?.messageId)),
-          tap(() => this.message.success('Successfully created event', {nzDuration: 2000})),
+          tap(() => this.message.success('Successfully updated the event', {nzDuration: 2000})),
           tap(() => this.backToEventViewPage())
         )
         .subscribe({
           error: err => {
             this.message.error('Unable to update event details', {nzDuration: 2000});
+            this.isProcessing = false;
           },
         });
     }
@@ -129,7 +130,6 @@ export class EventUpdateComponent implements OnInit {
       description: [event.description, [Validators.required]],
       fee: [event.fee, [Validators.required]],
     });
-    console.log(this.updateEventForm);
   }
 
   updateEvent(): void {

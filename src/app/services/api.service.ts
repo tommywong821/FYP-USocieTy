@@ -153,6 +153,8 @@ export class ApiService {
   }
 
   updateEvent(eventDto: Event, societyName: string, poster?: File): Observable<void> {
+    console.log(eventDto);
+
     const formData: FormData = new FormData();
 
     const eventJson: Blob = new Blob([JSON.stringify(eventDto)], {type: 'application/json'});
