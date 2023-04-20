@@ -14,6 +14,10 @@ export interface Event {
   version?: number;
 }
 
+export interface EventCount {
+  totalNumber: number;
+}
+
 export enum EventProperty {
   Id = 'Id',
   Name = 'Name',

@@ -92,8 +92,7 @@ export class EventComponent implements OnInit {
         filter(user => !!user),
         tap(user => (this.enrolledSocieties = [...user!.enrolledSocieties])),
         switchMap(user => this.ApiService.getEventCount(user!.uuid)),
-        tap(total => (this.eventTotal = total)),
-        tap(() => console.log(this.eventTotal)),
+        tap(res => (this.eventTotal = res.totalNumber)),
         takeUntil(this.destroyed$)
       )
       .subscribe();
