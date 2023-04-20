@@ -29,6 +29,9 @@ export function convertFormDataToEvent(eventId: string, formData: EventFormData)
     description: formData.description,
     fee: formData.fee,
   };
+  console.groupCollapsed('event');
+  console.log(event);
+  console.groupEnd();
   return event;
 }
 

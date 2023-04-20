@@ -55,7 +55,7 @@ export class EventComponent implements OnInit {
   get events(): Event[] {
     return this.events$.getValue();
   }
-  eventTotal = 0;
+  eventTotal = 10;
   refreshEvents$ = new Subject<void>();
 
   enrolledSocieties: string[] = [];
