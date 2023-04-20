@@ -103,7 +103,7 @@ export class EventComponent implements OnInit {
         delay(200),
         tap(() => (this.messages[EventAction.Fetch] = this.message.loading('Fetching events...'))),
         switchMap(() => this.AuthService.user$),
-        switchMap(user => this.ApiService.getEvents(user!.uuid, this.pageIndex, this.pageSize)),
+        switchMap(user => this.ApiService.getEvents(user!.uuid, this.pageIndex - 1, this.pageSize)),
         tap(() => this.message.remove(this.messages[EventAction.Fetch]!.messageId)),
         tap(events => this.events$.next(events)),
         tap(() => console.log(this.events)),
@@ -136,8 +136,7 @@ export class EventComponent implements OnInit {
     this.destroyed$.complete();
   }
 
-  changePageIndex(index: number): void {
-    this.pageIndex = index;
+  changePageIndex(): void {
     this.refreshEvents$.next();
   }
 
