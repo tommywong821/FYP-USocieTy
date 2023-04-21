@@ -14,14 +14,18 @@ import {User} from 'src/app/model/user';
 export function convertFormDataToEvent(eventId: string, formData: EventFormData): Event {
   const startDate = new Date(formData.date[0]);
   const endDate = new Date(formData.date[1]);
+  const applyDeadline = new Date(formData.applyDeadline);
+
   startDate.setHours(startDate.getHours() - 8);
   endDate.setHours(endDate.getHours() - 8);
+  applyDeadline.setHours(applyDeadline.getHours() - 8);
+
   const event: Event = {
     id: eventId,
     name: formData.name,
     poster: formData.poster,
     maxParticipation: formData.maxParticipation,
-    applyDeadline: formData.applyDeadline,
+    applyDeadline,
     location: formData.location,
     startDate,
     endDate,

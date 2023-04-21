@@ -146,7 +146,6 @@ export class EventUpdateComponent implements OnInit {
 
     this.isProcessing = true;
     const event = convertFormDataToEvent(this.eventId, {...this.updateEventForm.value});
-    console.log(event);
     this.event$.next(event);
   }
 
