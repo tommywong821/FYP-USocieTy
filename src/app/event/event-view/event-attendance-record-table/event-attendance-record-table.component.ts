@@ -41,7 +41,7 @@ export class EventAttendanceRecordTableComponent implements OnInit {
     this.refreshAttendanceRecords$
       .pipe(
         tap(() => (this.messages[EventAction.Fetch] = this.message.loading('Fetching event attendance records...'))),
-        switchMap(() => this.ApiService.getEventAttendanceRecords(this.eventId!, this.pageIndex, this.pageSize)),
+        switchMap(() => this.ApiService.getEventAttendanceRecords(this.eventId!, this.pageIndex - 1, this.pageSize)),
         tap(record => (this.attendanceRecords = ([] as EventAttendance[]).concat(record)))
       )
       .subscribe({

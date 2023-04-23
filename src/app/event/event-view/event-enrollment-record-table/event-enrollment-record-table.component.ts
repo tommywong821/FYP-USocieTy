@@ -72,7 +72,7 @@ export class EventEnrollmentRecordTableComponent implements OnInit {
     this.refreshEnrollmentRecords$
       .pipe(
         tap(() => (this.messages[EventAction.Fetch] = this.message.loading('Fetching event enrollment records...'))),
-        switchMap(() => this.ApiService.getEventEnrollmentRecord(this.eventId!, this.pageIndex, this.pageSize)),
+        switchMap(() => this.ApiService.getEventEnrollmentRecord(this.eventId!, this.pageIndex - 1, this.pageSize)),
         map(
           records =>
             records.map(record => ({
