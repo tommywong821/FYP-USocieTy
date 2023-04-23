@@ -16,9 +16,9 @@ export function convertFormDataToEvent(eventId: string, formData: EventFormData)
   const endDate = new Date(formData.date[1]);
   const applyDeadline = new Date(formData.applyDeadline);
 
-  startDate.setHours(startDate.getHours() - 8);
-  endDate.setHours(endDate.getHours() - 8);
-  applyDeadline.setHours(applyDeadline.getHours() - 8);
+  startDate.setHours(startDate.getHours() + 8);
+  endDate.setHours(endDate.getHours() + 8);
+  applyDeadline.setHours(applyDeadline.getHours() + 8);
 
   const event: Event = {
     id: eventId,
