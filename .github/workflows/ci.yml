@@ -1,0 +1,53 @@
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+# This workflow will build a Java project with Gradle and cache/restore any dependencies to improve the workflow execution time
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-gradle
+
+name: Java CI with Gradle
+
+on:
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  test:
+    name: SpringBoot CI Test
+    runs-on: ubuntu-latest
+
+    steps:    
+    # Clone the repository
+    - name: Checkout
+      uses: actions/checkout@v3
+    
+    # Create dummy test properties file
+    - name: Write value to Properties-file
+      run: |
+        cd src/main/resources
+        touch application.properties
+        echo "spring.h2.console.enabled=true" >> application.properties
+        echo "spring.h2.console.path=/h2-console" >> application.properties
+        echo "spring.datasource.url=jdbc:h2:mem:test;DB_CLOSE_DELAY=-1" >> application.properties
+        echo "spring.datasource.username=test" >> application.properties
+        echo "spring.datasource.password=Test1234" >> application.properties
+        echo "spring.datasource.hikari.maximum-pool-size=10" >> application.properties
+        echo "heroku.frontend.url=heroku.frontend.url" >> application.properties
+        echo "cors.originPatterns=cors.originPatterns" >> application.properties
+        echo "cookie.lifetime=7" >> application.properties
+        echo "cookie.secretKey=U2WsdcBlHnnyNupc3z2vaq42Xbj9At5zG5TwTsIMldc=" >> application.properties
+        echo "aws.region=region" >> application.properties
+        echo "aws.credentials.accessKey=accessKey" >> application.properties
+        echo "aws.credentials.secretKey=secretKey" >> application.properties
+        echo "aws.bucket.name=bucketName" >> application.properties
+        echo "aws.bucket.domain=bucketDomain" >> application.properties
+        cd ../../..
+    
+    # Assembles and tests this project.
+    - name: Run gradle build
+      env: 
+        AWS_REGION: us-east-1
+      run: |
+        cat src/main/resources/application.properties
+        chmod +x gradlew
+        ./gradlew build

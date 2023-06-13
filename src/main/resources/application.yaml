@@ -1,0 +1,39 @@
+spring:
+  datasource:
+    url: ${JDBC_DATABASE_URL}
+    username: ${JDBC_DATABASE_USERNAME}
+    password: ${JDBC_DATABASE_PASSWORD}
+    hikari:
+      maximum-pool-size: ${JDBC_DATABASE_POOL}
+  jackson:
+    time-zone: Asia/Hong_Kong
+  jpa:
+    generate-ddl: true
+
+heroku:
+  frontend:
+    url: ${FRONTEND_URL}
+
+cors:
+  originPatterns: ${CORS_ORIGINS}
+
+cookie:
+  lifetime: ${COOKIE_LENGTH}
+  secretKey: ${COOKIE_SECRET_KEY}
+
+aws:
+  region: ${AWS_REGION}
+  credentials:
+    accessKey: ${AWS_ACCESS_KEY}
+    secretKey: ${AWS_SECRET_KEY}
+  bucket:
+    name: ${AWS_BUCKET_NAME}
+    domain: ${AWS_BUCKET_DOMAIN}
+
+logging:
+  level:
+    org:
+      springframework:
+        web:
+          filter:
+            CommonsRequestLoggingFilter: DEBUG
