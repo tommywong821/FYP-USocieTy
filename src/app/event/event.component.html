@@ -1,0 +1,99 @@
+<div class="m-5 px-8">
+  <div class="my-5 space-y-6 py-4">
+    <div class="flex bg-white">
+      <h1 class="text-xl">Event Management</h1>
+      <button
+        class="ml-auto"
+        nz-button
+        nzType="primary"
+        (click)="toggleCreateEvent()"
+      >
+        Create Event
+      </button>
+    </div>
+  </div>
+  <div>
+    <nz-table
+      #eventTable
+      [nzFrontPagination]="false"
+      [nzPageSize]="pageSize"
+      [nzData]="events"
+    >
+      <thead>
+        <tr>
+          <th
+            *ngFor="let column of EventTableColumn"
+            [nzColumnKey]="column.title"
+          >
+            {{ column.title }}
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          class="cursor-pointer"
+          *ngFor="let event of eventTable.data"
+        >
+          <td (click)="toggleViewEvent(event.id!!)">{{ event.society }}</td>
+          <td (click)="toggleViewEvent(event.id!!)">{{ event.name }}</td>
+          <td (click)="toggleViewEvent(event.id!!)">{{ event.category | lowercase }}</td>
+          <td (click)="toggleViewEvent(event.id!!)">{{ event.location }}</td>
+          <td (click)="toggleViewEvent(event.id!!)">{{ event.maxParticipation }}</td>
+          <td (click)="toggleViewEvent(event.id!!)">{{ event.fee }}</td>
+          <td (click)="toggleViewEvent(event.id!!)">{{ event.applyDeadline }}</td>
+          <td (click)="toggleViewEvent(event.id!!)">{{ event.startDate }}</td>
+          <td (click)="toggleViewEvent(event.id!!)">{{ event.endDate }}</td>
+          <td class="cursor-default">
+            <button
+              nz-button
+              nzDanger
+              nzType="primary"
+              nzGhost
+              (click)="toggleDeleteEvent(event.id!!)"
+            >
+              Remove
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </nz-table>
+    <div class="flex w-full">
+      <nz-pagination
+        class="ml-auto"
+        [nzTotal]="eventTotal"
+        [nzPageIndex]="pageIndex"
+        [nzPageSize]="pageSize"
+        (nzPageIndexChange)="changePageIndex($event)"
+      ></nz-pagination>
+    </div>
+  </div>
+
+  <nz-modal
+    [(nzVisible)]="showModal"
+    (nzOnCancel)="cancelEventDeletion()"
+    nzTitle="Warning"
+    [nzFooter]="modalFooter"
+  >
+    <ng-container *nzModalContent>
+      <span>This action is irreversible, are you sure?</span>
+    </ng-container>
+
+    <ng-template #modalFooter>
+      <button
+        nz-button
+        nzType="default"
+        (click)="cancelEventDeletion()"
+      >
+        Cancel
+      </button>
+      <button
+        nz-button
+        nzDanger
+        nzType="primary"
+        (click)="confirmEventDeletion()"
+      >
+        Confirm
+      </button>
+    </ng-template>
+  </nz-modal>
+</div>

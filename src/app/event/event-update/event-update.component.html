@@ -1,0 +1,236 @@
+<div class="h-full w-full">
+  <div class="m-5">
+    <form
+      nz-form
+      *ngIf="updateEventForm"
+      [formGroup]="updateEventForm"
+      (ngSubmit)="updateEvent()"
+    >
+      <div class="sm:overflow-hidden sm:rounded-md">
+        <div class="space-y-6 bg-white px-4 py-5 sm:p-6">
+          <div class="flex">
+            <h1 class="text-xl">Update Event</h1>
+            <button
+              class="ml-auto"
+              nz-button
+              nzType="primary"
+              nzGhost
+              (click)="backToEventViewPage()"
+            >
+              <span
+                nz-icon
+                nzType="left"
+              ></span>
+              back
+            </button>
+          </div>
+          <div class="col-span-6 sm:col-span-4">
+            <label class="mb-2 block text-sm font-medium text-gray-700">Event Title</label>
+            <nz-form-control
+              nzHasFeedback
+              [nzSpan]="14"
+              nzErrorTip="Input is required"
+            >
+              <input
+                nz-input
+                required
+                type="text"
+                [formControlName]="UpdateEventFormFields.Name"
+              />
+            </nz-form-control>
+          </div>
+          <div class="col-span-6 sm:col-span-4">
+            <label
+              for="location"
+              class="mb-2 block text-sm font-medium text-gray-700"
+              >Location</label
+            >
+            <nz-form-control
+              nzHasFeedback
+              [nzSpan]="14"
+              nzErrorTip="Input is required"
+            >
+              <input
+                nz-input
+                required
+                type="text"
+                [formControlName]="UpdateEventFormFields.Location"
+              />
+            </nz-form-control>
+          </div>
+          <div class="col-span-6 flex flex-row gap-4 sm:col-span-4">
+            <div class="flex-1">
+              <label
+                for="category"
+                class="mb-2 block text-sm font-medium text-gray-700"
+                >Category</label
+              >
+              <nz-form-control
+                nzHasFeedback
+                [nzSpan]="24"
+                nzErrorTip="Input is required"
+              >
+                <nz-select
+                  required
+                  [formControlName]="UpdateEventFormFields.Category"
+                >
+                  <nz-option
+                    *ngFor="let category of EventCategory | keyvalue"
+                    [nzLabel]="category.key"
+                    [nzValue]="category.value"
+                  ></nz-option>
+                </nz-select>
+              </nz-form-control>
+            </div>
+            <div class="flex-1">
+              <label
+                for="society"
+                class="mb-2 block text-sm font-medium text-gray-700"
+                >Society</label
+              >
+              <nz-form-control
+                nzHasFeedback
+                [nzSpan]="24"
+                nzErrorTip="Input is required"
+              >
+                <nz-select
+                  required
+                  [formControlName]="UpdateEventFormFields.Society"
+                >
+                  <nz-option
+                    *ngFor="let society of roles"
+                    [nzLabel]="society"
+                    [nzValue]="society"
+                  ></nz-option>
+                </nz-select>
+              </nz-form-control>
+            </div>
+            <div class="basis-9/12"></div>
+          </div>
+          <div class="col-span-6 flex flex-row gap-x-4 sm:col-span-4">
+            <div>
+              <label
+                for="max-participation"
+                class="mb-2 block text-sm font-medium text-gray-700"
+                >Max Participants</label
+              >
+              <nz-form-control
+                nzHasFeedback
+                nzErrorTip="Input is required"
+              >
+                <input
+                  nz-input
+                  required
+                  type="number"
+                  [formControlName]="UpdateEventFormFields.MaxParticipation"
+                  class="w-28"
+                />
+              </nz-form-control>
+            </div>
+            <div>
+              <label
+                for="fee"
+                class="mb-2 block text-sm font-medium text-gray-700"
+                >Fee(HKD)</label
+              >
+              <nz-form-control
+                nzHasFeedback
+                nzErrorTip="Input is required"
+              >
+                <input
+                  nz-input
+                  required
+                  type="number"
+                  [formControlName]="UpdateEventFormFields.Fee"
+                  class="w-28"
+                />
+              </nz-form-control>
+            </div>
+          </div>
+          <div class="col-span-6 flex flex-row gap-x-4 sm:col-span-4">
+            <div>
+              <label class="mb-2 block text-sm font-medium text-gray-700">Event Date</label>
+              <nz-form-control
+                nzHasFeedback
+                nzErrorTip="Input is required"
+              >
+                <nz-range-picker
+                  required
+                  [nzShowTime]="true"
+                  [formControlName]="UpdateEventFormFields.Date"
+                ></nz-range-picker>
+              </nz-form-control>
+            </div>
+            <div>
+              <label
+                for="application-deadline"
+                class="mb-2 block text-sm font-medium text-gray-700"
+                >Application Deadline</label
+              >
+              <nz-form-control
+                nzHasFeedback
+                nzErrorTip="Input is required"
+              >
+                <nz-date-picker
+                  required
+                  [nzShowTime]="true"
+                  [formControlName]="UpdateEventFormFields.ApplyDeadline"
+                ></nz-date-picker>
+              </nz-form-control>
+            </div>
+          </div>
+          <div>
+            <label
+              for="description"
+              class="mb-2 block text-sm font-medium text-gray-700"
+              >Description</label
+            >
+            <nz-form-control
+              nzHasFeedback
+              [nzSpan]="14"
+              nzErrorTip="Input is required"
+            >
+              <textarea
+                [formControlName]="UpdateEventFormFields.Description"
+                nz-input
+                rows="4"
+              ></textarea>
+            </nz-form-control>
+          </div>
+          <div>
+            <label class="mb-2 block text-sm font-medium text-gray-700">Cover Picture</label>
+            <div>
+              <nz-upload
+                nzType="drag"
+                nzListType="picture"
+                [nzLimit]="1"
+                [(nzFileList)]="fileList"
+                (nzChange)="saveFileBuffer($event)"
+              >
+                <p class="ant-upload-drag-icon">
+                  <span
+                    nz-icon
+                    nzType="inbox"
+                  ></span>
+                </p>
+                <p class="ant-upload-text">Click or drag file to this area to upload</p>
+                <p class="ant-upload-hint">Support for a single or bulk upload. PNG, JPG, GIF up to 10MB</p>
+              </nz-upload>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="px-4 py-3 text-right sm:px-6">
+        <nz-form-control>
+          <button
+            nz-button
+            nzType="primary"
+            [disabled]="isProcessing"
+          >
+            Publish
+          </button>
+        </nz-form-control>
+      </div>
+    </form>
+  </div>
+</div>

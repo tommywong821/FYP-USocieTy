@@ -1,0 +1,55 @@
+<div>
+  <div class="mb-2 flex">
+    <h1 class="mb-4 mr-2 text-xl">Event Attendance Record</h1>
+    <a
+      nz-button
+      nzType="link"
+      nzSize="small"
+      (click)="toggleSwitchingToEnrollmentTable()"
+    >
+      <span
+        nz-icon
+        nzType="swap"
+      ></span>
+    </a>
+  </div>
+  <nz-table
+    #attendanceTable
+    [nzFrontPagination]="false"
+    [nzPageSize]="pageSize"
+    [nzData]="attendanceRecords"
+  >
+    <thead>
+      <tr>
+        <th
+          *ngFor="let column of attendanceTableColumn"
+          [nzColumnKey]="column.title"
+        >
+          {{ column.title }}
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let attendanceRecord of attendanceTable.data">
+        <td>
+          {{ attendanceRecord.studentItsc }}
+        </td>
+        <td>
+          {{ attendanceRecord.studentName }}
+        </td>
+        <td>
+          {{ attendanceRecord.attendanceCreatedAt }}
+        </td>
+      </tr>
+    </tbody>
+  </nz-table>
+  <div class="flex w-full">
+    <nz-pagination
+      class="ml-auto"
+      [nzTotal]="recordTotal"
+      [nzPageIndex]="pageIndex"
+      [nzPageSize]="pageSize"
+      (nzPageIndexChange)="changePageIndex($event)"
+    ></nz-pagination>
+  </div>
+</div>
